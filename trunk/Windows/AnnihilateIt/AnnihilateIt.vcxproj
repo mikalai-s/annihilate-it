@@ -74,6 +74,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnnihilateIt.c" />
+    <ClCompile Include="Common\MsAnimation.c" />
+    <ClCompile Include="Common\MsAnimationBundle.c" />
+    <ClCompile Include="Common\MsBox.c" />
+    <ClCompile Include="Common\MsBoxGrid.c" />
+    <ClCompile Include="Common\MsCommon.c" />
+    <ClCompile Include="Common\MsGrid.c" />
+    <ClCompile Include="Common\MsList.c" />
+    <ClCompile Include="Common\MsPalette.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common\MsAnimation.h" />
+    <ClInclude Include="Common\MsAnimationBundle.h" />
+    <ClInclude Include="Common\MsBox.h" />
+    <ClInclude Include="Common\MsBoxGrid.h" />
+    <ClInclude Include="Common\MsCommon.h" />
+    <ClInclude Include="Common\MsGrid.h" />
+    <ClInclude Include="Common\MsList.h" />
+    <ClInclude Include="Common\MsPalette.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
