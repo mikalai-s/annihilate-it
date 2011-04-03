@@ -662,7 +662,6 @@ GLuint Uniform::getProgramHandle( const char8* name )
 int Uniform::getTextureId(const char* name)
 {
 	UniformDataIterator index;
-	int id, unit;
 	for ( index = m_uniforms.begin(); index != m_uniforms.end() ; ++index)
 	{
 		UniformData* current = *index;
@@ -678,7 +677,6 @@ int Uniform::getTextureId(const char* name)
 int Uniform::getTextureUnit(const char* name)
 {
 	UniformDataIterator index;
-	int id, unit;
 	for ( index = m_uniforms.begin(); index != m_uniforms.end() ; ++index)
 	{
 		UniformData* current = *index;

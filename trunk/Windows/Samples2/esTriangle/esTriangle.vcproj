@@ -375,58 +375,6 @@
 				RelativePath="..\ms\msTga.h"
 				>
 			</File>
-			<Filter
-				Name="ShaderProgram"
-				>
-				<File
-					RelativePath=".\msAttribute.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\msAttribute.h"
-					>
-				</File>
-				<File
-					RelativePath=".\msFrameBuffer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\msFrameBuffer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\msShaderProgram.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\msShaderProgram.h"
-					>
-				</File>
-				<File
-					RelativePath=".\msShaderPrograms.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\msShaderPrograms.h"
-					>
-				</File>
-				<File
-					RelativePath=".\msTexture.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\msTexture.h"
-					>
-				</File>
-				<File
-					RelativePath=".\msUniform.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\msUniform.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
