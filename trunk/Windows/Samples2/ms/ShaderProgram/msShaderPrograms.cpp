@@ -10,6 +10,13 @@ msShaderPrograms::~msShaderPrograms(void)
 {
 }
 
+inline char* copyString(string src)
+{
+	char *dest = new char [src.length() + 1];
+	strcpy_s( dest, src.length() + 1, src.c_str());
+	return dest;
+}
+
 bool msShaderPrograms::loadFile( const char *fileName )
 {
 	int currentLine = 0;
@@ -29,7 +36,6 @@ bool msShaderPrograms::loadFile( const char *fileName )
 	{		
 		string lineString;
 		string sItem;
-		bool addToVec = false;
 
 		getline( fin, lineString );
 		stringstream line( lineString );
@@ -43,12 +49,8 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			string sKey, vertShader, fragShader;
 			line >> sKey >> vertShader >> fragShader;
 
-			// copy name
-			char *programName = new char [sKey.length() + 1];
-			strcpy_s( programName, sKey.length() + 1, sKey.c_str());
-
 			// Create the one program we are going to use.
-			recentProgram = new msShaderProgram(programName, vertShader.c_str(), fragShader.c_str());
+			recentProgram = new msShaderProgram(copyString(sKey), vertShader.c_str(), fragShader.c_str());
 			m_shaderPrograms.push_back(recentProgram);
 		}
 		else if ( sItem == "link" )
@@ -73,10 +75,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 
 			line >> sKey >> fVal;
 
-			char *name = new char [sKey.length()+1];
-			strcpy_s( name, sKey.length()+1, sKey.c_str());
-
-			recentProgram->addUniform(new msUniform(name, fVal));
+			recentProgram->addUniform(new msUniform(copyString(sKey), fVal));
 		}
 		else if (sItem == "uniform_vec2")
 		{
@@ -84,10 +83,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			GLfloat vVal[2];
 			line >> sKey >> vVal[0] >> vVal[1];
 
-			char *name = new char [sKey.length()+1];
-			strcpy_s( name, sKey.length()+1, sKey.c_str());
-
-			recentProgram->addUniform(new msUniform(name, vVal));
+			recentProgram->addUniform(new msUniform(copyString(sKey), vVal));
 		}
 		else if (sItem == "uniform_vec3")
 		{
@@ -95,10 +91,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			GLfloat vVal[3];
 			line >> sKey >> vVal[0] >> vVal[1] >> vVal[2];
 
-			char *name = new char [sKey.length()+1];
-			strcpy_s( name, sKey.length()+1, sKey.c_str());
-
-			recentProgram->addUniform(new msUniform(name, vVal));
+			recentProgram->addUniform(new msUniform(copyString(sKey), vVal));
 		}
 		else if ( sItem == "uniform_vec4" )
 		{
@@ -106,10 +99,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			GLfloat vVal[4];
 			line >> sKey >> vVal[0] >> vVal[1] >> vVal[2] >> vVal[3]; 
 
-			char *name = new char [sKey.length()+1];
-			strcpy_s( name, sKey.length()+1, sKey.c_str());
-
-			recentProgram->addUniform(new msUniform(name, vVal));
+			recentProgram->addUniform(new msUniform(copyString(sKey), vVal));
 		}
 		else if ( sItem == "uniform_mat4" )
 		{
@@ -121,10 +111,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			for (int i=0; i < 4; ++i)
 				line >> matrix[i][0] >> matrix[i][1] >> matrix[i][2] >> matrix[i][3]; 
 
-			char *name = new char [sKey.length()+1];
-			strcpy_s( name, sKey.length()+1, sKey.c_str());
-
-			recentProgram->addUniform(new msUniform(name, matrix));
+			recentProgram->addUniform(new msUniform(copyString(sKey), matrix));
 		}
 		else if (sItem == "attribute")
 		{
@@ -133,10 +120,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 
 			line >> sKey >> location;
 
-			char *name = new char [sKey.length()+1];
-			strcpy_s( name, sKey.length()+1, sKey.c_str());
-
-			recentProgram->addAttribute(new msAttribute(name, location));
+			recentProgram->addAttribute(new msAttribute(copyString(sKey), location));
 		}
 		else if (sItem == "texture")
 		{
@@ -144,10 +128,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			GLuint texUnit;
 			line >> sKey >> texUnit >> sVal;
 
-			char *name = new char [sKey.length()+1];
-			strcpy_s( name, sKey.length()+1, sKey.c_str());
-
-			recentProgram->addTexture(new msTexture(name, texUnit, sVal.c_str()));
+			recentProgram->addTexture(new msTexture(copyString(sKey), texUnit, sVal.c_str()));
 		}
 		else if (sItem == "nullTexture")
 		{
@@ -155,49 +136,25 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			string sKey;
 			line >> sKey >> texUnit;
 
-			char *name = new char [sKey.length()+1];
-			strcpy_s( name, sKey.length()+1, sKey.c_str());
-
-			recentProgram->addTexture(new msTexture(name, texUnit));
+			recentProgram->addTexture(new msTexture(copyString(sKey), texUnit));
 		}
 		else if (sItem == "colorTexFbo")
-		{/*
-			GLuint texId, fboId;
+		{
 			GLuint texUnit;
 			string sKey;
 			line >> sKey >> texUnit;
 
-			addToVec = true;
-			newUniform->m_name = new char [sKey.length()+1];
-			strcpy_s( newUniform->m_name, sKey.length()+1, sKey.c_str());
-			newUniform->m_type = SAMPLE_INT;
-			newUniform->m_textureUnit = texUnit;
-			glGenTextures( 1, &texId );
-#ifdef USE_STANDARD_GL
-			glGenFramebuffersEXT( 1, &fboId );
-#else
-			glGenFramebuffers( 1, &fboId );
-#endif // USE_STANDARD_GL
-			newUniform->m_textureHandle = texId;
-			newUniform->m_fboHandle = fboId;
+			char *name = copyString(sKey);
 
-			glActiveTexture( GL_TEXTURE0 + texUnit );
-			glBindTexture( GL_TEXTURE_2D, texId );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );*/
+			recentProgram->addFrameBuffer(new msFrameBuffer(name, new msTexture(name, texUnit)));
 		}		
 		else if ( sItem.empty() || sItem[0]=='/' )
 		{
 			// Either an empty line or a comment
-			addToVec = false;
 		}
 		else
 		{
-			addToVec = false;
 			cout << "Unsupported keyword in uniform file." << endl;
-//			assert(0);
 		}
 	}
 	return true;
@@ -208,7 +165,7 @@ msShaderProgram* msShaderPrograms::getProgramByName( const char *name )
 	for (msShaderProgramIterator iterator = m_shaderPrograms.begin(); iterator != m_shaderPrograms.end() ; ++iterator)
 	{
 		msShaderProgram* current = *iterator;
-		if(current->getName() == name)
+		if(strcmp(current->getName(), name) == 0)
 			return current;
 	}	
 	return NULL;

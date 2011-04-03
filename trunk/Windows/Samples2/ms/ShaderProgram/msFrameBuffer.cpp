@@ -23,7 +23,4 @@ msFrameBuffer::~msFrameBuffer(void)
 	
 	// Delete the FBOs
 	//glDeleteFramebuffers(2, m_id);
-
-	
-	
 }

@@ -8,6 +8,8 @@ using namespace std;
 
 msShaderProgram::msShaderProgram(const char* name, const char *vertexShaderFileName, const char *fragmentShaderFileName)
 {
+	m_name = name;
+
 	m_handle = glCreateProgram();
 
 	m_vertexShaderHandle = glCreateShader( GL_VERTEX_SHADER );
@@ -20,6 +22,7 @@ msShaderProgram::msShaderProgram(const char* name, const char *vertexShaderFileN
 
 msShaderProgram::~msShaderProgram(void)
 {
+	delete m_name; 
 }
 
 GLuint msShaderProgram::getHandle()
@@ -27,7 +30,7 @@ GLuint msShaderProgram::getHandle()
 	return m_handle;
 }
 
-char* msShaderProgram::getName()
+const char* msShaderProgram::getName()
 {
 	return m_name;
 }
@@ -127,6 +130,12 @@ void msShaderProgram::addTexture( msTexture *texture)
 {
 	m_textures.push_back(*texture);
 	texture->setProgram(this);
+}
+
+void msShaderProgram::addFrameBuffer(msFrameBuffer *frameBuffer)
+{
+	m_frameBuffers.push_back(*frameBuffer);
+	//frameBuffer->setProgram(this);
 }
 
 void msShaderProgram::updateAllUniforms()

@@ -19,6 +19,8 @@
 #include "..\ms\msParticleEmitter.h"
 #include "Uniform.h"
 
+#include "..\ms\ShaderProgram\msShaderPrograms.h"
+
 msParticleEmitter *pe1;
 msParticleEmitter *pe2;
 msParticleEmitter *pe3;
@@ -99,6 +101,9 @@ GLuint _fbo;
 
 void Scene::Init()
 {
+	msShaderPrograms* shaders = new msShaderPrograms();
+	shaders->loadFile("./data/uniforms.txt");
+
 	pe1 = new msParticleEmitter("texture.png",
 		// explosion
 		Vector2fMake(0.0f, 0.0f),//position:
@@ -133,7 +138,7 @@ void Scene::Init()
 	// Bind and configure the texture
 	glActiveTexture(GL_TEXTURE0 + _renderTextureUnit);
 	glBindTexture(GL_TEXTURE_2D, _renderTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureSize, textureSize, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureSize, textureSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
