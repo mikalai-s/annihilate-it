@@ -1,0 +1,29 @@
+program texture_aftershock ./data/texture_aftershock_vertex.c ./data/texture_aftershock_fragment.c
+link texture_aftershock
+texture tex0 0 ./data/Fieldstone.tga
+texture ms0 1 ./data/ms.tga
+uniform_mat4 mvp 1.0 0.0 0.0 0.0     0.0 -1.0 0.0 0.0     0.0 0.0 1.0 0.0       0.0 0.0 0.0 1.0
+attribute position 0
+attribute color 1
+attribute texcoord 2
+// for aftershock animation
+texture ns0 2 ./data/noise.tga
+attribute radius 3
+attribute power 4
+uniform_vec2 ep 0.0 0.0
+link texture_aftershock
+
+program particle_create ./data/particle_create_vertex.c ./data/particle_create_fragment.c
+link particle_create
+texture u_texture 3 ./data/expl.tga
+attribute a_position 0
+attribute a_size 1
+attribute a_color 2
+link particle_create
+
+program particle_complete ./data/particle_complete_vertex.c ./data/particle_complete_fragment.c
+link particle_complete
+texture u2_texture 4 ./data/expl.tga
+attribute a2_position 0
+attribute a2_texcoord 1
+link particle_complete

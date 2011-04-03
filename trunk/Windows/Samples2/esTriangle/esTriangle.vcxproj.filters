@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{5ceae7fc-ac5a-4956-a32c-214bc0bfd2ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{d205cc8a-656a-4391-8a99-a70b1456d52d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{90b90027-00d1-499f-a936-d202080225ac}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Draw.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Misc.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\ImageObject.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\main.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\Scene.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\SimpleImageLoader.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\Tga.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\Uniform.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\UniformData.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Misc.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ArgDefines.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ImageObject.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Scene.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\SimpleImageLoader.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Tga.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Uniform.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\UniformData.h">
+      <Filter>common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\binary.dat">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\Fieldstone.tga">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\fragment.glsl">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\noise.jpg">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\uniforms.txt">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\vertex.glsl">
+      <Filter>data</Filter>
+    </None>
+  </ItemGroup>
+</Project>
