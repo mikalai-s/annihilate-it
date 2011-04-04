@@ -99,9 +99,11 @@ GLuint _renderTextureId;
 GLuint _renderTextureUnit = 10;
 GLuint _fbo;
 
+msShaderPrograms* shaders;
+
 void Scene::Init()
 {
-	msShaderPrograms* shaders = new msShaderPrograms();
+	shaders = new msShaderPrograms();
 	shaders->loadFile("./data/uniforms.txt");
 
 	pe1 = new msParticleEmitter("texture.png",
@@ -125,7 +127,7 @@ void Scene::Init()
 		-1,//0.125f,//duration:
 		GL_TRUE//blendAdditive:
 		);
-
+/*
 	// init framebuffer and texture to render to (for fire)
 
 	// Generate handles for two dynamically rendered texture maps
@@ -171,36 +173,25 @@ void Scene::drawBackground()
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
 
-	GLuint progHandle = m_uniforms.getProgramHandle( "texture_aftershock" );
-	glUseProgram( progHandle );
+	msShaderProgram *program = shaders->getProgramByName("texture_aftershock");
+	program->use();
 
-	glUniform1i(glGetUniformLocation( progHandle, "tex" ), m_uniforms.getTextureUnit("tex0") );
-
-	glVertexAttribPointer( glGetAttribLocation(progHandle, "position"), 4, GL_FLOAT, 0, 0, g_vertexPositions );
-	glEnableVertexAttribArray( glGetAttribLocation(progHandle, "position") );
-
-	glVertexAttribPointer( glGetAttribLocation(progHandle, "color"), 4, GL_FLOAT, 0, 0, g_vertexColors );
-	glEnableVertexAttribArray( glGetAttribLocation(progHandle, "color") );
-
-	glVertexAttribPointer( glGetAttribLocation(progHandle, "texcoord"), 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
-	glEnableVertexAttribArray( glGetAttribLocation(progHandle, "texcoord") );
-
+	program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
+	program->getAttribute("position")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexPositions );
+	program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
+	program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
 	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices );
 
+	program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
+	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
 
-
-	glUniform1i( glGetUniformLocation( progHandle, "tex" ), m_uniforms.getTextureUnit("ms0"));
-
-	glVertexAttribPointer(glGetAttribLocation(progHandle, "position"), 4, GL_FLOAT, 0, 0, prim);
-	glEnableVertexAttribArray(glGetAttribLocation(progHandle, "position"));
 	glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices);
 
-	glVertexAttrib1f(3, radius);
-	glVertexAttrib1f(4, power);
-
-	glUniform2f(glGetUniformLocation(progHandle, "ep"), ep[0], ep[1]);
+	program->getAttribute("radius")->set1f(radius);
+	program->getAttribute("power")->set1f(power);
+	program->getUniform("ep")->set2f(ep[0], ep[1]);
 
 	if(animate)
 	{

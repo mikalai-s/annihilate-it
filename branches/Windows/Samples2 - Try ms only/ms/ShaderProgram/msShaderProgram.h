@@ -12,16 +12,16 @@ class msUniform;
 class msTexture;
 class msFrameBuffer;
 
-typedef std::vector<msUniform> msUniformList;
+typedef std::vector<msUniform*> msUniformList;
 typedef msUniformList::iterator msUniformIterator;
 
-typedef std::vector<msAttribute> msAttributeList;
+typedef std::vector<msAttribute*> msAttributeList;
 typedef msAttributeList::iterator msAttributeIterator;
 
-typedef std::vector<msTexture> msTextureList;
+typedef std::vector<msTexture*> msTextureList;
 typedef msTextureList::iterator msTextureIterator;
 
-typedef std::vector<msFrameBuffer> msFrameBufferList;
+typedef std::vector<msFrameBuffer*> msFrameBufferList;
 typedef msFrameBufferList::iterator msFrameBufferIterator;
 
 class msShaderProgram
@@ -47,10 +47,17 @@ public:
 
 	bool link();
 
+	void linkAllDescriptors();
+
 	void addUniform( msUniform *uniform );
 	void addAttribute( msAttribute *attribute );
 	void addTexture( msTexture *texture );
 	void addFrameBuffer(msFrameBuffer *frameBuffer);
 
-	void updateAllUniforms();
+	msTexture* getTexture(const char *name);
+	msUniform* getUniform(const char *name);
+	msAttribute* getAttribute(const char *name);
+	msFrameBuffer* getFrameBuffer(const char *name);
+
+	void use();
 };

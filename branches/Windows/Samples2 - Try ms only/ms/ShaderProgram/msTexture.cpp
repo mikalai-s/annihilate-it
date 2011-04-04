@@ -47,11 +47,19 @@ msTexture::~msTexture(void)
 void msTexture::setProgram(msShaderProgram *program)
 {
 	m_program = program;
+}
 
-	m_location = glGetUniformLocation( program->getHandle(), m_name);
+void msTexture::link()
+{
+	m_location = glGetUniformLocation( m_program->getHandle(), m_name);
 }
 
 GLuint msTexture::getId()
 {
 	return m_id;
+}
+
+GLuint msTexture::getUnit()
+{
+	return m_unit;
 }

@@ -23,3 +23,12 @@ void msAttribute::setProgram(msShaderProgram *program)
 
 	glBindAttribLocation(program->getHandle(), m_location, m_name);
 }
+
+const char* msAttribute::getName()
+{
+	return m_name;
+}
+
+void msAttribute::link()
+{
+}

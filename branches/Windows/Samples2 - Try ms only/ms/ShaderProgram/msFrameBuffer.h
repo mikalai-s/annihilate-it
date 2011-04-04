@@ -12,4 +12,6 @@ class msFrameBuffer
 public:
 	msFrameBuffer(const char *name, msTexture *texture);
 	~msFrameBuffer(void);
+
+	const char* getName();
 };

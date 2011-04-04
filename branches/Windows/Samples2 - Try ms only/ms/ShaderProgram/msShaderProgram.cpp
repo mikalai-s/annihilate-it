@@ -101,7 +101,6 @@ bool msShaderProgram::link()
 	GLint linkResult = 0;
 	glGetProgramiv( m_handle, GL_LINK_STATUS, &linkResult );
 	glUseProgram( m_handle );
-	updateAllUniforms( );
 	if ( linkResult == 0 )
 	{
 		char log[1000];
@@ -111,37 +110,95 @@ bool msShaderProgram::link()
 		cout << "Failed to link program object." << log << endl;
 		return false;
 	}
+	linkAllDescriptors();
 	return true;
 }
 
 void msShaderProgram::addUniform( msUniform *uniform)
 {
-	m_uniforms.push_back(*uniform);
+	m_uniforms.push_back(uniform);
 	uniform->setProgram(this);
 }
 
 void msShaderProgram::addAttribute( msAttribute *attribute)
 {
-	m_attributes.push_back(*attribute);
+	m_attributes.push_back(attribute);
 	attribute->setProgram(this);
 }
 
 void msShaderProgram::addTexture( msTexture *texture)
 {
-	m_textures.push_back(*texture);
+	m_textures.push_back(texture);
 	texture->setProgram(this);
 }
 
 void msShaderProgram::addFrameBuffer(msFrameBuffer *frameBuffer)
 {
-	m_frameBuffers.push_back(*frameBuffer);
+	m_frameBuffers.push_back(frameBuffer);
 	//frameBuffer->setProgram(this);
 }
 
-void msShaderProgram::updateAllUniforms()
+msTexture* msShaderProgram::getTexture(const char *name)
 {
+	for(msTextureIterator i = m_textures.begin(); i != m_textures.end(); i ++)
+	{
+		msTexture* texture = *i;
+		if(strcmp(texture->getName(), name))
+			return texture;
+	}
+	return NULL;
+}
+
+msUniform* msShaderProgram::getUniform(const char *name)
+{
+	for(msUniformIterator i = m_uniforms.begin(); i != m_uniforms.end(); i ++)
+	{
+		msUniform *uniform = *i;
+		if(strcmp(uniform->getName(), name))
+			return uniform;
+	}
+	return NULL;
+}
+
+msAttribute* msShaderProgram::getAttribute(const char *name)
+{
+	for(msAttributeIterator i = m_attributes.begin(); i != m_attributes.end(); i ++)
+	{
+		msAttribute *attribute = *i;
+		if(strcmp(attribute->getName(), name))
+			return attribute;
+	}
+	return NULL;
+}
+
+msFrameBuffer* msShaderProgram::getFrameBuffer(const char *name)
+{
+	for(msFrameBufferIterator i = m_frameBuffers.begin(); i != m_frameBuffers.end(); i ++)
+	{
+		msFrameBuffer *frameBuffer = *i;
+		if(strcmp(frameBuffer->getName(), name))
+			return frameBuffer;
+	}
+	return NULL;
+}
+
+void msShaderProgram::use()
+{
+	glUseProgram(m_handle);
+}
+
+void msShaderProgram::linkAllDescriptors()
+{
+	for (msAttributeIterator ai = m_attributes.begin(); ai != m_attributes.end() ; ++ai)
+		(*ai)->link();
+
 	for (msUniformIterator ai = m_uniforms.begin(); ai != m_uniforms.end() ; ++ai)
-	{/*
+		(*ai)->link();
+
+	for (msTextureIterator ai = m_textures.begin(); ai != m_textures.end() ; ++ai)
+		(*ai)->link();
+
+		/*
 			switch( (*index)->m_type )
 			{
 			case SAMPLE_FLOAT:
@@ -172,5 +229,5 @@ void msShaderProgram::updateAllUniforms()
 				break;
 			}
 		*/
-	}
+	
 }

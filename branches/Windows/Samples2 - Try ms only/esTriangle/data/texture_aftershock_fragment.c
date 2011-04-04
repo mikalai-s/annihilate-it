@@ -16,14 +16,12 @@ varying vec4 fake_FragCoord1;
 
 varying vec2 buffersize1;
 
-float l = 50.0;
+float l = 150.0;
 float t = 0.1;
 
 vec4 testTexture()
 {
 	vec4 c = texture2D(tex, texcoord0.st);
-	c.a = (c.r+c.b+c.g)/1.0;
-
 	return c;
 }
 

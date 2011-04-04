@@ -1,14 +1,21 @@
 #include "msUniform.h"
 #include "msShaderProgram.h"
 
-#include "Uniform.h" // delete this
+#define SAMPLE_FLOAT 1
+#define SAMPLE_FLOAT_VEC2 1
+#define SAMPLE_FLOAT_VEC3 1
+#define SAMPLE_FLOAT_VEC4 1
+#define SAMPLE_FLOAT_MAT4 1
 
 msUniform::msUniform(const char *name, GLfloat v)
 {
     m_name = name;
-	m_floatData[0] = v;	
+
+	m_floatData[0] = v;
 	m_type = SAMPLE_FLOAT;
 }
+
+
 
 msUniform::msUniform(const char *name, GLfloat v[], GLuint size)
 {
@@ -40,6 +47,30 @@ msUniform::~msUniform(void)
 void msUniform::setProgram(msShaderProgram *program)
 {
 	m_program = program;
+}
 
-	m_location = glGetUniformLocation( program->getHandle(), m_name);
+void msUniform::link()
+{
+	m_location = glGetUniformLocation( m_program->getHandle(), m_name);
+
+	if(m_type == SAMPLE_FLOAT)
+	{
+		set1f(m_floatData[0]);
+	}
+	else if (m_type == SAMPLE_FLOAT_VEC2)
+	{
+		set2f(m_floatData[0], m_floatData[1]);
+	}
+	else if (m_type == SAMPLE_FLOAT_VEC3)
+	{
+		set3f(m_floatData[0], m_floatData[1], m_floatData[2]);
+	}
+	else if (m_type == SAMPLE_FLOAT_VEC4)
+	{
+		set4f(m_floatData[0], m_floatData[1], m_floatData[2], m_floatData[3]);
+	}
+	else if (m_type == SAMPLE_FLOAT_MAT4)
+	{
+		setMatrix4fv(1, GL_FALSE, m_floatData);
+	}
 }

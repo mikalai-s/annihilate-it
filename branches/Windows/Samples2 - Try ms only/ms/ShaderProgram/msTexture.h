@@ -17,5 +17,9 @@ public:
 
 	virtual void setProgram(msShaderProgram *program);
 
+	virtual void link();
+
 	GLuint getId();
+
+	GLuint getUnit();
 };
