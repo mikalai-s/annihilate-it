@@ -20,7 +20,6 @@
 
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
-#include "ArgDefines.h"
 
 #define MAX_EGL_ATTRIBUTES 64
 
@@ -40,8 +39,6 @@ void BuildAttribList( EGLint *attribList );
 /// \brief Does any special stuff we need at init time
 void MainFuncInit();
 
-/// \brief Sets up the textures including compression (located here for convienience
-GLuint LoadCompressedTexture( const char8 *filename, const char8 *sType, GLuint texUnit );
 
 #endif // _MISC_H_
 

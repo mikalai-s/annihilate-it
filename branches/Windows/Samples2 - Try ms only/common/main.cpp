@@ -23,7 +23,6 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <io.h>
-#include "ArgDefines.h"
 #include "Scene.h"
 #include "Misc.h"
 #include <windowsx.h>

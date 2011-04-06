@@ -32,9 +32,9 @@ using namespace std;
 ///
 /// \return void
 //=================================================================================================================================
-ImageObject::ImageObject( uint32 width, uint32 height, uint32 numChannels, uint32 bitsPerChannel )
+ImageObject::ImageObject( GLuint width, GLuint height, GLuint numChannels, GLuint bitsPerChannel )
 {
-   uint32 totalSize;
+   GLuint totalSize;
    assert ( width > 0 );
    assert ( height > 0 );
    assert ( ( numChannels > 0 ) && ( numChannels <= 4 ) );
@@ -45,9 +45,9 @@ ImageObject::ImageObject( uint32 width, uint32 height, uint32 numChannels, uint3
    m_numChannels = numChannels;
    m_bitsPerChannel = bitsPerChannel;
    
-   totalSize = m_width * m_height * m_numChannels * m_bitsPerChannel / sizeof(uint8);
+   totalSize = m_width * m_height * m_numChannels * m_bitsPerChannel / sizeof(unsigned char);
 
-   m_data = new uint8[totalSize];
+   m_data = new unsigned char[totalSize];
    assert( m_data );
 
    m_compressedType = IMG_NONE;
@@ -79,10 +79,10 @@ ImageObject::~ImageObject()
 ///
 /// \return a reference to the pixel
 //=================================================================================================================================
-uint8& ImageObject::Pixel( uint32 x, uint32 y, uint32 channel )
+unsigned char& ImageObject::Pixel( GLuint x, GLuint y, GLuint channel )
 {
-   uint32 pixelPitch = m_numChannels * m_bitsPerChannel / 8;
-   uint32 linePitch = m_width * pixelPitch;
+   GLuint pixelPitch = m_numChannels * m_bitsPerChannel / 8;
+   GLuint linePitch = m_width * pixelPitch;
    
    x = min( x, m_width );
    y = min( y, m_height );
@@ -135,13 +135,13 @@ bool ImageObject::SetupCompressedData( CompressedType type )
 ///
 /// \return void
 //=================================================================================================================================
-void ImageObject::SetCompressedSize( uint32 size )
+void ImageObject::SetCompressedSize( GLuint size )
 {
    if ( m_compressedData )
    {
       delete [] m_compressedData;
    }
-   m_compressedData = new uint8[size];
+   m_compressedData = new unsigned char[size];
    assert( m_compressedData );
 
    m_compressedSize = size;
@@ -158,7 +158,7 @@ void ImageObject::SetCompressedSize( uint32 size )
 //=================================================================================================================================
 void ImageObject::MakeImageRed()
 {
-   uint32 x, y, c;
+   GLuint x, y, c;
 
    for ( y = 0; y < m_height; ++y )
    {
@@ -184,7 +184,7 @@ void ImageObject::MakeImageRed()
 //=================================================================================================================================
 bool ImageObject::MakeImageARGB()
 {
-   uint32 x, y;
+   GLuint x, y;
 
    if ( m_numChannels != 3 && m_numChannels != 4 )
       return false;
@@ -195,10 +195,10 @@ bool ImageObject::MakeImageARGB()
       {
          for ( x = 0; x < m_height; ++x )
          {
-            uint8 r = Pixel( x, y, 0 );
-            uint8 g = Pixel( x, y, 1 );
-            uint8 b = Pixel( x, y, 2 );
-            uint8 a = Pixel( x, y, 3 );
+            unsigned char r = Pixel( x, y, 0 );
+            unsigned char g = Pixel( x, y, 1 );
+            unsigned char b = Pixel( x, y, 2 );
+            unsigned char a = Pixel( x, y, 3 );
             
             Pixel( x, y, 0 ) = b;
             Pixel( x, y, 1 ) = g;
@@ -210,19 +210,19 @@ bool ImageObject::MakeImageARGB()
    }
    else
    {      
-      uint32 nPixelSize = 4 * m_bitsPerChannel / 8;
-      uint8 *pNewData = new uint8[nPixelSize * m_width * m_height];
+      GLuint nPixelSize = 4 * m_bitsPerChannel / 8;
+      unsigned char *pNewData = new unsigned char[nPixelSize * m_width * m_height];
 
       for ( y = 0; y < m_height; ++y )
       {
          for ( x = 0; x < m_height; ++x )
          {
 
-            uint32 nOffset = y * m_width * nPixelSize + x * nPixelSize;
+            GLuint nOffset = y * m_width * nPixelSize + x * nPixelSize;
             
-            uint8 r = Pixel( x, y, 0 );
-            uint8 g = Pixel( x, y, 1 );
-            uint8 b = Pixel( x, y, 2 );
+            unsigned char r = Pixel( x, y, 0 );
+            unsigned char g = Pixel( x, y, 1 );
+            unsigned char b = Pixel( x, y, 2 );
             
             pNewData[nOffset + 0 ] = b;
             pNewData[nOffset + 1 ] = g;

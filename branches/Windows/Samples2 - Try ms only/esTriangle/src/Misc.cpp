@@ -64,18 +64,3 @@ void MainFuncInit()
 {
 
 }
-
-//=================================================================================================================================
-///
-/// Sets up the textures including compression (located here for convienience.
-///
-/// \param filename - The file name of the texture to be loaded
-/// \param texUnit - The texture unit we want to use for this texture
-///
-/// \return - The ES texture bind number
-//=================================================================================================================================
-GLuint LoadCompressedTexture( const char8 *filename, const char8 *sType, GLuint texUnit )
-{
-   assert( 0 );
-   return 0;
-}

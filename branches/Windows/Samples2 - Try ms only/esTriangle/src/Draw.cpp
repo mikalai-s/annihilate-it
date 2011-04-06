@@ -17,7 +17,6 @@
 
 #include "Scene.h"
 #include "..\ms\msParticleEmitter.h"
-#include "Uniform.h"
 
 #include "..\ms\ShaderProgram\msShaderPrograms.h"
 
@@ -25,51 +24,51 @@ msParticleEmitter *pe1;
 msParticleEmitter *pe2;
 msParticleEmitter *pe3;
 
-static const float g_fbVertexPositions[] = {
+static const GLfloat g_fbVertexPositions[] = {
 	-1.0f, -1.0f,  -1.0f,  1.0f,
 	1.0f, -1.0f,  -1.0f,  1.0f,
 	-1.0f,  1.0f,  -1.0f, 1.0f,
 	1.0f,  1.0f,  -1.0f, 1.0f,
 };
 
-static const float g_fbVertexTexcoord[] = {
+static const GLfloat g_fbVertexTexcoord[] = {
 	0.0f, 0.f,   
 	1.f,  0.f,    
 	0.0f, 1.f,    	
 	1.f,  1.f,   
 };
 
-static const uint32 g_fbIndices[] = {
+static const GLuint g_fbIndices[] = {
 	0, 1, 2, 3,
 };
 
 
-static const float g_vertexPositions[] = {
+static const GLfloat g_vertexPositions[] = {
 	-1.0f, -0.7f,  -1.0f,  1.0f,
 	0.7f, -0.7f,  -1.0f,  1.0f,
 	-0.7f,  0.7f,  -1.0f, 1.0f,
 	0.5f,  0.5f,  -1.0f, 1.0f,
 };
 
-static const float g_vertexColors[] = {
+static const GLfloat g_vertexColors[] = {
 	1.0f, 1.0f, 0.0f, 1.0f,
 	1.0f, 1.0f, 1.0f, 1.0f,
 	1.0f, 0.0f, 0.0f, 1.0f,
 	1.0f, 0.0f, 1.0f, 1.0f,
 };
 
-static const float g_vertexTexcoord[] = {
+static const GLfloat g_vertexTexcoord[] = {
 	0.0f, 0.f,   
 	1.f,  0.f,    
 	0.0f, 1.f,    	
 	1.f,  1.f,   
 };
 
-static const uint32 g_indices[] = {
+static const GLuint g_indices[] = {
 	0, 1, 2, 3,
 };
 
-static const float prim[] =
+static const GLfloat prim[] =
 {
 	0.f, 0.f, -1.f, 1.0f,
 	0.f, 1.f, -1.f, 1.0f,
@@ -89,7 +88,7 @@ static const float prim[] =
 float radius = -1.0f;
 float power = 1.0f;
 float ep[] = {0.0f, 0.0f};
-bool animate = FALSE;
+bool animate = 0;
 
 float radius_min = 0.0f;
 float radius_max = 1500.0f;
@@ -207,7 +206,7 @@ void Scene::drawBackground()
 		power -= radius_step / (radius_max - radius_min);
 		if(radius > radius_max)
 		{
-			animate = FALSE;
+			animate = 0;
 			radius = -1.0f;
 		}
 	}
@@ -277,7 +276,7 @@ void Scene::drawFrame()
 
 void Scene::mouseClick(int x, int y)
 {
-	animate = TRUE;
+	animate = 1;
 	radius = radius_min;
 	power = 1.0f;
 	ep[0] = (float)x;

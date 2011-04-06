@@ -18,7 +18,7 @@
 #ifndef _IMAGEOBJECT_H_
 #define _IMAGEOBJECT_H_
 
-#include "ArgDefines.h"
+#include "GLES2//gl2.h"
 
 enum CompressedType
 {
@@ -36,19 +36,19 @@ class ImageObject
 {
 public:
    /// \brief Constructor
-   ImageObject( uint32 width, uint32 height, uint32 numChannels, uint32 bitsPerChannel );
+   ImageObject( GLuint width, GLuint height, GLuint numChannels, GLuint bitsPerChannel );
 
    /// \brief Destructor
    ~ImageObject();
 
    /// \brief Access a single component of a single pixel
-   uint8& Pixel( uint32 x, uint32 y, uint32 channel );
+   unsigned char& Pixel( GLuint x, GLuint y, GLuint channel );
 
    /// \brief Sets up the type for compressed data
    bool SetupCompressedData( CompressedType type );
 
    /// \brief Sets up the size and data buffer for a compressed texture
-   void SetCompressedSize( uint32 size );
+   void SetCompressedSize( GLuint size );
 
    /// \brief Changes the main data (not compressed data) to red
    void MakeImageRed();
@@ -56,40 +56,40 @@ public:
    /// \brief Changes the main data from RGBA -> ARGB
    bool MakeImageARGB();
 
-   uint32 GetWidth()             { return m_width; }
-   uint32 GetHeight()            { return m_height; }
-   uint32 GetNumChannels()       { return m_numChannels; }
-   uint32 GetBitsPerChannel()    { return m_bitsPerChannel; }
-   uint32 GetBpp()               { return m_numChannels * m_bitsPerChannel; }
-   uint8* GetDataPtr()           { return m_data; }
-   uint32 GetCompressedType()    { return m_compressedType; }
-   uint32 GetCompressedSize()    { return m_compressedSize; }
-   uint8* GetCompressedDataPtr() { return m_compressedData; }
+   GLuint GetWidth()             { return m_width; }
+   GLuint GetHeight()            { return m_height; }
+   GLuint GetNumChannels()       { return m_numChannels; }
+   GLuint GetBitsPerChannel()    { return m_bitsPerChannel; }
+   GLuint GetBpp()               { return m_numChannels * m_bitsPerChannel; }
+   unsigned char* GetDataPtr()           { return m_data; }
+   GLuint GetCompressedType()    { return m_compressedType; }
+   GLuint GetCompressedSize()    { return m_compressedSize; }
+   unsigned char* GetCompressedDataPtr() { return m_compressedData; }
 
 private:
    /// The width of the texture
-   uint32 m_width;
+   GLuint m_width;
 
    /// The height of the texture
-   uint32 m_height;
+   GLuint m_height;
 
    /// The number of channels for the texture
-   uint32 m_numChannels;
+   GLuint m_numChannels;
 
    /// The bits per channel for the texture
-   uint32 m_bitsPerChannel;
+   GLuint m_bitsPerChannel;
 
    /// The data (not compressed) for the texture
-   uint8 *m_data;
+   unsigned char *m_data;
 
    /// The compressed texture type
    CompressedType m_compressedType;
 
    /// The size of the data for the compressed texture
-   uint32 m_compressedSize;
+   GLuint m_compressedSize;
 
    /// The compressed data for the texture
-   uint8  *m_compressedData;
+   unsigned char  *m_compressedData;
 };
 
 #endif // _IMAGEOBJECT_H_

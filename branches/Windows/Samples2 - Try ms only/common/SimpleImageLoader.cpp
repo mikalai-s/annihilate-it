@@ -56,11 +56,11 @@ SimpleImageLoader::~SimpleImageLoader()
 ///
 /// \return Pointer to a structure with all the FreeImage data in it
 //=================================================================================================================================
-ImageObject* SimpleImageLoader::LoadImageFile( const char8 *filename )
+ImageObject* SimpleImageLoader::LoadImageFile( const  char *filename )
 {
    int ret;
    char *buf;
-   int32 width, height, bpp, numChannels, bitsPerChannel;
+   GLint width, height, bpp, numChannels, bitsPerChannel;
 
    ret = TGALoad( filename, &buf, &width, &height, &bpp);
 
@@ -89,9 +89,9 @@ ImageObject* SimpleImageLoader::LoadImageFile( const char8 *filename )
    ImageObject *pImg = new ImageObject( width, height, numChannels, bitsPerChannel );
    assert( pImg != NULL );
 
-   for( uint32 y = 0; y < pImg->GetHeight(); y++ )
+   for( GLuint y = 0; y < pImg->GetHeight(); y++ )
    {
-      for( uint32 x = 0; x < pImg->GetWidth(); x++ )
+      for( GLuint x = 0; x < pImg->GetWidth(); x++ )
       {
          if ( pImg->GetNumChannels() == 3 )
          {
@@ -127,7 +127,7 @@ ImageObject* SimpleImageLoader::LoadImageFile( const char8 *filename )
 ///
 /// \return pass or fail bool
 //=================================================================================================================================
-bool SimpleImageLoader::SaveImage( const char8 *filename, ImageObject *imgObj )
+bool SimpleImageLoader::SaveImage( const char *filename, ImageObject *imgObj )
 {
    assert(0);
    return false;
