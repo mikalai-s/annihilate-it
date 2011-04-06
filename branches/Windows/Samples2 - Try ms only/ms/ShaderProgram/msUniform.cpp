@@ -7,6 +7,13 @@
 #define SAMPLE_FLOAT_VEC4 1
 #define SAMPLE_FLOAT_MAT4 1
 
+// constructor for uniform with no uinitial valu
+msUniform::msUniform(const char *name)
+{
+	m_name = name;
+	m_type = -1;
+}
+
 msUniform::msUniform(const char *name, GLfloat v)
 {
     m_name = name;

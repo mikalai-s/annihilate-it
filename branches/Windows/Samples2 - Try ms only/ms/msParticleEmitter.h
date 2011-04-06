@@ -4,6 +4,8 @@
 
 #include "uniform.h"
 
+class msShaderProgram;
+
 class msParticleEmitter
 {
 private:
@@ -78,7 +80,7 @@ public:
 
 	
 
-	void renderParticles(int positionLoc, int colorLoc, int textureLoc, int textureUnit, int textureId);
+	void renderParticles(msShaderProgram *particleProgram);
 	
 
 	void update(GLfloat delta);

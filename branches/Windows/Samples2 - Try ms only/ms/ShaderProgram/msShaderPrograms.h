@@ -12,8 +12,12 @@ using namespace std;
 typedef std::vector<msShaderProgram*>	   msShaderProgramList;
 typedef msShaderProgramList::iterator	msShaderProgramIterator;
 
+
+
 class msShaderPrograms
 {
+	msFrameBuffer *m_mainFrameBuffer;
+
 public:
 	msShaderPrograms(void);
 	~msShaderPrograms(void);
@@ -26,5 +30,7 @@ public:
 	bool loadFile(const char *fileName);
 
 	msShaderProgram* getProgramByName( const char *name );
+
+	msFrameBuffer* getMainFrameBuffer();
 
 };

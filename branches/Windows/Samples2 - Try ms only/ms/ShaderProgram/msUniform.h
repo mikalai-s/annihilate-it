@@ -14,6 +14,8 @@ class msUniform : public msAttribute
 
 
 public:
+	msUniform(const char *name);
+
 	msUniform(const char *name, GLfloat v);	
 
 	msUniform(const char *name, GLfloat v[], GLuint size = 1)	;

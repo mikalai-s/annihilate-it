@@ -1,5 +1,10 @@
 #include "msFrameBuffer.h"
 
+msFrameBuffer::msFrameBuffer(GLuint id)
+{
+	m_id = id;
+}
+
 msFrameBuffer::msFrameBuffer(const char *name, msTexture *texture)
 {
 	m_name = name;
@@ -28,4 +33,19 @@ msFrameBuffer::~msFrameBuffer(void)
 const char* msFrameBuffer::getName()
 {
 	return m_name;
+}
+
+void msFrameBuffer::bind()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, m_id);
+}
+
+bool msFrameBuffer::isComplete()
+{
+	return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+}
+
+msTexture* msFrameBuffer::getTexture()
+{
+	return m_texture;
 }

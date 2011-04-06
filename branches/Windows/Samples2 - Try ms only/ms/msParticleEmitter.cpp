@@ -4,6 +4,9 @@
 #include "math.h"
 #include "time.h"
 
+#include "ShaderProgram/msTexture.h"
+#include "ShaderProgram/msShaderProgram.h"
+
 
 msParticleEmitter::msParticleEmitter(char *inTextureName,
 									 Vector2f inPosition ,
@@ -127,13 +130,14 @@ static const uint32 g_indices[] = {
 
 
 
-void msParticleEmitter::renderParticles(int positionLoc, int colorLoc, int textureLoc, int textureUnit, int textureId)
+void msParticleEmitter::renderParticles(msShaderProgram *particleProgram)
 {
+	msTexture *particleTexture = particleProgram->getTexture("u_texture");
 	glEnable(GL_BLEND);
 	glEnable ( GL_TEXTURE_2D );
 
-	glActiveTexture( GL_TEXTURE0 + textureUnit );
-	glBindTexture( GL_TEXTURE_2D, textureId );
+	glActiveTexture( GL_TEXTURE0 + particleTexture->getUnit() );
+	glBindTexture( GL_TEXTURE_2D, particleTexture->getId() );
 
 	if(blendAdditive)
 	{
@@ -145,14 +149,9 @@ void msParticleEmitter::renderParticles(int positionLoc, int colorLoc, int textu
 	}
 
 	// Load the vertex attributes
-	glVertexAttribPointer ( positionLoc, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-
-	glVertexAttribPointer ( colorLoc, 4, GL_FLOAT, GL_FALSE, 0, colors); 
-
-	glEnableVertexAttribArray ( positionLoc );
-	glEnableVertexAttribArray ( colorLoc );    
-
-	glUniform1i ( textureLoc, textureUnit );
+	particleProgram->getAttribute("a_position")->setPointerAndEnable(3, GL_FLOAT, GL_FALSE, 0, vertices);
+	particleProgram->getAttribute("a_color")->setPointerAndEnable(4, GL_FLOAT, GL_FALSE, 0, colors);
+	particleProgram->getUniform("u_texture")->set1i(particleTexture->getUnit());
 
 	glDrawArrays( GL_POINTS, 0, particleCount );
 

@@ -168,7 +168,7 @@ void Scene::Init()
 
 void Scene::drawBackground()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	shaders->getMainFrameBuffer()->bind();
 
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
@@ -208,14 +208,14 @@ void Scene::drawBackground()
 void Scene::drawExplosion()
 {
 	// render fire into texture using particle shaders
-	GLuint progHandle = m_uniforms.getProgramHandle( "particle_create" );
-	glUseProgram( progHandle );
+	msShaderProgram *program = shaders->getProgramByName("particle_create");
+	program->use();
 
 	// Switch the render target to the current FBO to update the texture map
-	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
+	program->getFrameBuffer("renderTex")->bind();
 
 	// FBO attachment is complete?
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+	if (program->getFrameBuffer("renderTex")->isComplete())		
 	{
 		int textureSize = max(this->_width, this->_height);
 
@@ -225,17 +225,12 @@ void Scene::drawExplosion()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		// render particles
-		pe1->renderParticles(
-			glGetAttribLocation(progHandle, "a_position" ),
-			glGetAttribLocation(progHandle, "a_color" ),
-			glGetUniformLocation(progHandle, "u_texture" ),
-			m_uniforms.getTextureUnit("u_texture"),
-			m_uniforms.getTextureId("u_texture"));
+		pe1->renderParticles(program);
 		pe1->update(0.015f);
 	}
 
 	// Unbind the FBO so rendering will return to the backbuffer.
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	shaders->getMainFrameBuffer()->bind();
 
 	// usual renderer
 
@@ -246,18 +241,14 @@ void Scene::drawExplosion()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Bind updated texture map
-	glBindTexture(GL_TEXTURE_2D, _renderTextureId);
+	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
 
-	progHandle = m_uniforms.getProgramHandle( "particle_complete" );
-	glUseProgram( progHandle );
+	msShaderProgram *particleCompleteProgram = shaders->getProgramByName("particle_complete");
+	particleCompleteProgram->use();
 
-	glUniform1i(glGetUniformLocation( progHandle, "u2_texture" ), _renderTextureUnit);
-
-	glVertexAttribPointer( glGetAttribLocation(progHandle, "a2_position"), 4, GL_FLOAT, 0, 0, g_fbVertexPositions );
-	glEnableVertexAttribArray( glGetAttribLocation(progHandle, "a2_position") );
-
-	glVertexAttribPointer( glGetAttribLocation(progHandle, "a2_texcoord"), 2, GL_FLOAT, 0, 0, g_fbVertexTexcoord );
-	glEnableVertexAttribArray( glGetAttribLocation(progHandle, "a2_texcoord") );
+	particleCompleteProgram->getUniform("u2_texture")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
+	particleCompleteProgram->getAttribute("a2_position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions );
+	particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord );
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
 	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_fbIndices );	
@@ -270,9 +261,7 @@ void Scene::drawFrame()
 {
 	drawBackground();
 
-	drawExplosion();
-
-	
+	drawExplosion();	
 }
 
 void Scene::mouseClick(int x, int y)

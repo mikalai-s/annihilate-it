@@ -4,10 +4,12 @@ using namespace std;
 
 msShaderPrograms::msShaderPrograms(void)
 {
+	m_mainFrameBuffer = new msFrameBuffer(0);
 }
 
 msShaderPrograms::~msShaderPrograms(void)
 {
+	delete m_mainFrameBuffer;
 }
 
 inline char* copyString(string src)
@@ -169,6 +171,12 @@ msShaderProgram* msShaderPrograms::getProgramByName( const char *name )
 			return current;
 	}	
 	return NULL;
+}
+
+msFrameBuffer* msShaderPrograms::getMainFrameBuffer()
+{
+	return m_mainFrameBuffer;
+
 }
 
 

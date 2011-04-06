@@ -7,7 +7,7 @@ msAttribute::msAttribute()
 	m_location = -1;
 }
 
-msAttribute::msAttribute(const char *name, GLuint location)
+msAttribute::msAttribute(const char *name, GLint location)
 {
 	m_name = name;
 	m_location = location;
@@ -31,4 +31,9 @@ const char* msAttribute::getName()
 
 void msAttribute::link()
 {
+}
+
+const GLint msAttribute::getLocation()
+{
+	return m_location;
 }

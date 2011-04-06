@@ -10,6 +10,7 @@ texture ns0 2 ./data/noise.tga
 attribute radius 3
 attribute power 4
 uniform_vec2 ep 0.0 0.0
+//colorTexFbo renderTex 11
 link texture_aftershock
 
 program particle_create ./data/particle_create_vertex.c ./data/particle_create_fragment.c
@@ -17,6 +18,7 @@ texture u_texture 3 ./data/expl.tga
 attribute a_position 0
 attribute a_size 1
 attribute a_color 2
+colorTexFbo renderTex 10
 link particle_create
 
 program particle_complete ./data/particle_complete_vertex.c ./data/particle_complete_fragment.c

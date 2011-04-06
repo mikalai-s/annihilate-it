@@ -143,7 +143,7 @@ msTexture* msShaderProgram::getTexture(const char *name)
 	for(msTextureIterator i = m_textures.begin(); i != m_textures.end(); i ++)
 	{
 		msTexture* texture = *i;
-		if(strcmp(texture->getName(), name))
+		if(strcmp(texture->getName(), name) == 0)
 			return texture;
 	}
 	return NULL;
@@ -151,13 +151,28 @@ msTexture* msShaderProgram::getTexture(const char *name)
 
 msUniform* msShaderProgram::getUniform(const char *name)
 {
+	// try to find uniform in already declared uniforms
 	for(msUniformIterator i = m_uniforms.begin(); i != m_uniforms.end(); i ++)
 	{
 		msUniform *uniform = *i;
-		if(strcmp(uniform->getName(), name))
+		if(strcmp(uniform->getName(), name) == 0)
 			return uniform;
 	}
-	return NULL;
+	// if uniform is not found - try to create new uniform from shader code to resolve its location
+	msUniform *uniform = new msUniform(name); // create it
+	uniform->setProgram(this); // set parent
+	uniform->link(); // to ensure location
+	if(uniform->getLocation() >= 0)
+	{
+		// add this uniform into unifrom collection
+		m_uniforms.push_back(uniform);
+	}
+	else
+	{
+		// delete it because there is no such uniform in shader code
+		delete uniform;
+	}
+	return uniform;
 }
 
 msAttribute* msShaderProgram::getAttribute(const char *name)
@@ -165,7 +180,7 @@ msAttribute* msShaderProgram::getAttribute(const char *name)
 	for(msAttributeIterator i = m_attributes.begin(); i != m_attributes.end(); i ++)
 	{
 		msAttribute *attribute = *i;
-		if(strcmp(attribute->getName(), name))
+		if(strcmp(attribute->getName(), name) == 0)
 			return attribute;
 	}
 	return NULL;
@@ -176,7 +191,7 @@ msFrameBuffer* msShaderProgram::getFrameBuffer(const char *name)
 	for(msFrameBufferIterator i = m_frameBuffers.begin(); i != m_frameBuffers.end(); i ++)
 	{
 		msFrameBuffer *frameBuffer = *i;
-		if(strcmp(frameBuffer->getName(), name))
+		if(strcmp(frameBuffer->getName(), name) == 0)
 			return frameBuffer;
 	}
 	return NULL;

@@ -9,7 +9,7 @@ class msAttribute
 
 protected:
 	const char *m_name;
-	GLuint m_location;
+	GLint m_location;
 
 	msShaderProgram *m_program;
 
@@ -17,7 +17,7 @@ protected:
 
 public:
 
-	msAttribute(const char *name, GLuint location);
+	msAttribute(const char *name, GLint location);
 	~msAttribute(void);
 
 	virtual void setProgram(msShaderProgram *program);
@@ -26,6 +26,8 @@ public:
 	virtual void link();
 
 	const char *getName();
+
+	const GLint getLocation();
 
 	void enableVertexArray()
 	{
