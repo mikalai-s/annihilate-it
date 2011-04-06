@@ -168,26 +168,55 @@ void Scene::Init()
 
 void Scene::drawBackground()
 {
-	shaders->getMainFrameBuffer()->bind();
-
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
-
+	// render fire into texture using particle shaders
 	msShaderProgram *program = shaders->getProgramByName("texture_aftershock");
 	program->use();
 
-	program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
-	program->getAttribute("position")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexPositions );
-	program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
-	program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
+	// Switch the render target to the current FBO to update the texture map
+	program->getFrameBuffer("renderTex")->bind();
+
+	// FBO attachment is complete?
+	if (program->getFrameBuffer("renderTex")->isComplete())		
+	{
+		int textureSize = max(this->_width, this->_height);
+
+		// Set viewport to size of texture map and erase previous image
+		glViewport(0, 0, textureSize, textureSize);
+		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
+
+		// render background
+		program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
+		program->getAttribute("position")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexPositions );
+		program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
+		program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
+
+		// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
+		glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices );
+
+		program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
+		program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
+
+		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices);
+	}
+
+	// Unbind the FBO so rendering will return to the backbuffer.
+	shaders->getMainFrameBuffer()->bind();
+
+	// usual renderer
+
+	// Set viewport to size of framebuffer and clear color and depth buffers
+	glViewport(0, 0, _width, _height);	
+
+	// Bind updated texture map
+	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
+
+	program->getUniform("tex")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
+	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions );
+	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord );
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices );
-
-	program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
-	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
-
-	glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices);
+	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_fbIndices );	
 
 	program->getAttribute("radius")->set1f(radius);
 	program->getAttribute("power")->set1f(power);
