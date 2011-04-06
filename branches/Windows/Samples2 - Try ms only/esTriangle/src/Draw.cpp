@@ -127,42 +127,29 @@ void Scene::Init()
 		-1,//0.125f,//duration:
 		GL_TRUE//blendAdditive:
 		);
-/*
-	// init framebuffer and texture to render to (for fire)
 
-	// Generate handles for two dynamically rendered texture maps
-	glGenTextures(1, &_renderTextureId);
+	pe2 = new msParticleEmitter("texture.png",
+		// dust
+		Vector2fMake(0.0f, 0.0f),//position:
+		Vector2fMake(0.1f, 0.0f),//sourcePositionVariance:
+		0.001f,//speed:
+		0.00005f,//speedVariance:
+		0.5f,//particleLifeSpan:
+		0.5f,//particleLifespanVariance:
+		90.0f,//angle:
+		90.0f,//angleVariance:
+		Vector2fMake(0.0f, -0.0001f),//gravity:
+		Color4fMake(0.5f, 0.5f, 0.5f, 1.0f),//startColor:
+		Color4fMake(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
+		Color4fMake(0.1f, 0.1f, 0.1f, 0.0f),//finishColor:
+		Color4fMake(0.0f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
+		1000,//maxParticles:
+		20,//particleSize:
+		5,//particleSizeVariance:
+		-1,//0.125f,//duration:
+		GL_FALSE//blendAdditive:
+		);
 
-	//glActiveTexture(GL_TEXTURE_2D + _renderTextureUnit);
-
-	int textureSize = max(this->_width, this->_height);
-
-	// Bind and configure the texture
-	glActiveTexture(GL_TEXTURE0 + _renderTextureUnit);
-	glBindTexture(GL_TEXTURE_2D, _renderTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureSize, textureSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	// Generate handles for two Frame Buffer Objects
-	glGenFramebuffers(1, &_fbo);
-
-	// Attach the texture to the first color buffer of an FBO and clear it
-	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _renderTextureId, 0);
-	//glClear(GL_COLOR_BUFFER_BIT);
-
-	// don't forget release them:
-	/*
-	// Delete the FBOs
-	glDeleteFramebuffers(2, m_hFBO);
-
-	// Delete the textures
-	glDeleteTextures(2, m_hTexture);
-	*/
 }
 
 
@@ -254,8 +241,11 @@ void Scene::drawExplosion()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		// render particles
-		pe1->renderParticles(program);
+		//pe1->renderParticles(program);
 		pe1->update(0.015f);
+
+		pe2->renderParticles(program);
+		pe2->update(0.015f);
 	}
 
 	// Unbind the FBO so rendering will return to the backbuffer.
@@ -305,5 +295,10 @@ void Scene::mouseClick(int x, int y)
 	pe1->duration = 0.125f;
 	pe1->sourcePosition.x = (ep[0] / (float)this->_width * 2.0f) -1.0f;
 	pe1->sourcePosition.y = (ep[1] / (float)this->_height * 2.0f) -1.0f;
+
+	pe2->active = true;
+	pe2->duration = 0.125f;
+	pe2->sourcePosition.x = (ep[0] / (float)this->_width * 2.0f) -1.0f;
+	pe2->sourcePosition.y = (ep[1] / (float)this->_height * 2.0f) -1.0f;
 
 }
