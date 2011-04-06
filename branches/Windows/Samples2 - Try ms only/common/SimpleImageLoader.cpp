@@ -18,7 +18,7 @@
 #include "SimpleImageLoader.h"
 #include <iostream>
 #include <assert.h>
-#include "Tga.h"
+#include "..\ms\msTga.h"
 
 using namespace std;
 

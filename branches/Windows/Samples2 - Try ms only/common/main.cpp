@@ -392,6 +392,6 @@ int WINAPI WinMain( HINSTANCE  hInstance,
    eglDestroyContext( g_egl.dsp, g_egl.cxt );
    eglDestroySurface( g_egl.dsp, g_egl.surf );
    eglTerminate( g_egl.dsp );
-   g_scene.freeResources();
+   
    return 0;
 }

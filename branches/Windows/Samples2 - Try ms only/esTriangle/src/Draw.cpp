@@ -95,18 +95,10 @@ float radius_min = 0.0f;
 float radius_max = 1500.0f;
 float radius_step = 37.0f;
 
-GLuint _renderTextureId;
-GLuint _renderTextureUnit = 10;
-GLuint _fbo;
-
-msShaderPrograms* shaders;
-
 void Scene::Init()
 {
-	shaders = new msShaderPrograms();
-	shaders->loadFile("./data/uniforms.txt");
-
-	pe1 = new msParticleEmitter("texture.png",
+	
+	pe1 = new msParticleEmitter(
 		// explosion
 		Vector2fMake(0.0f, 0.0f),//position:
 		Vector2fMake(0.021f, 0.031f),//sourcePositionVariance:
@@ -128,7 +120,7 @@ void Scene::Init()
 		GL_TRUE//blendAdditive:
 		);
 
-	pe2 = new msParticleEmitter("texture.png",
+	pe2 = new msParticleEmitter(
 		// dust
 		Vector2fMake(0.0f, 0.0f),//position:
 		Vector2fMake(0.1f, 0.0f),//sourcePositionVariance:
@@ -156,7 +148,7 @@ void Scene::Init()
 void Scene::drawBackground()
 {
 	// render fire into texture using particle shaders
-	msShaderProgram *program = shaders->getProgramByName("texture_aftershock");
+	msShaderProgram *program = m_shaders->getProgramByName("texture_aftershock");
 	program->use();
 
 	// Switch the render target to the current FBO to update the texture map
@@ -188,7 +180,7 @@ void Scene::drawBackground()
 	}
 
 	// Unbind the FBO so rendering will return to the backbuffer.
-	shaders->getMainFrameBuffer()->bind();
+	m_shaders->getMainFrameBuffer()->bind();
 
 	// usual renderer
 
@@ -224,7 +216,7 @@ void Scene::drawBackground()
 void Scene::drawExplosion()
 {
 	// render fire into texture using particle shaders
-	msShaderProgram *program = shaders->getProgramByName("particle_create");
+	msShaderProgram *program = m_shaders->getProgramByName("particle_create");
 	program->use();
 
 	// Switch the render target to the current FBO to update the texture map
@@ -249,7 +241,7 @@ void Scene::drawExplosion()
 	}
 
 	// Unbind the FBO so rendering will return to the backbuffer.
-	shaders->getMainFrameBuffer()->bind();
+	m_shaders->getMainFrameBuffer()->bind();
 
 	// usual renderer
 
@@ -262,7 +254,7 @@ void Scene::drawExplosion()
 	// Bind updated texture map
 	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
 
-	msShaderProgram *particleCompleteProgram = shaders->getProgramByName("particle_complete");
+	msShaderProgram *particleCompleteProgram = m_shaders->getProgramByName("particle_complete");
 	particleCompleteProgram->use();
 
 	particleCompleteProgram->getUniform("u2_texture")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());

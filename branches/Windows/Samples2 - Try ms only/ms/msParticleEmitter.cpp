@@ -8,7 +8,7 @@
 #include "ShaderProgram/msShaderProgram.h"
 
 
-msParticleEmitter::msParticleEmitter(char *inTextureName,
+msParticleEmitter::msParticleEmitter(
 									 Vector2f inPosition ,
 									 Vector2f inSourcePositionVariance,
 									 GLfloat inSpeed,
@@ -103,28 +103,28 @@ msParticleEmitter::~msParticleEmitter(void)
 	[texture release];*/
 }
 
-static const float g_vertexPositions[] = {
+static const GLfloat g_vertexPositions[] = {
 	-1.0f, 1.0f,  0.0f,  1.0f,
 	1.0f, -1.0f,  0.0f,  1.0f,
 	-1.0f,  1.0f,  0.0f, 1.0f,
 	1.0f,  1.0f,  0.0f, 1.0f,
 };
 
-static const float g_vertexColors[] = {
+static const GLfloat g_vertexColors[] = {
 	1.0f, 1.0f, 0.0f, 1.0f,
 	1.0f, 1.0f, 1.0f, 1.0f,
 	1.0f, 0.0f, 0.0f, 1.0f,
 	1.0f, 0.0f, 1.0f, 1.0f,
 };
 
-static const float g_vertexTexcoord[] = {
+static const GLfloat g_vertexTexcoord[] = {
 	0.0f, 0.f,   
 	0.0f, 1.f,    
 	1.f,  0.f,    
 	1.f,  1.f,   
 };
 
-static const uint32 g_indices[] = {
+static const GLuint g_indices[] = {
 	0, 1, 2, 3,
 };
 

@@ -18,11 +18,13 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-#include "uniform.h"
+#include "GLES2/gl2.h"
+
 #include <iostream>
 #include <fstream>
 
-#include "ArgDefines.h"
+#include "..\ms\ShaderProgram\msShaderPrograms.h"
+
 
 //=================================================================================================================================
 /// Scene class - This class loads and draws the scene.
@@ -42,22 +44,22 @@ public:
    void drawFrame();
 
    /// \brief Loads all the data from the file (textures, attributes, uniforms, shaders...)
-   bool loadData(const char8* filename);
+   bool loadData(const char* filename);
 
    /// \brief Puts the named program in use
-   void useProgram( const char8* name );
+   void useProgram( const char* name );
 
    /// \brief Updates the value of a uniform
-   bool updateUniform( const char8* name, float32* vals );
+   bool updateUniform( const char* name, GLfloat* vals );
 
    /// \brief Deletes all the GL resources we have allocated
    void freeResources();
 
    /// \brief Binds a texture into GL
-   bool bindTexture( const char8* name, int32 width, int32 height );
+   bool bindTexture( const char* name, GLint width, GLint height );
 
    /// \brief Binds an FBO into GL
-   bool bindFbo( const char8* name, int32 width, int32 height );
+   bool bindFbo( const char* name, GLint width, GLint height );
 
    void mouseClick(int x, int y);
 
@@ -69,10 +71,10 @@ public:
 private:
 
    /// Contains all the uniform/texture/attribute/shader data
-   Uniform m_uniforms;
+   msShaderPrograms *m_shaders;
 
    /// Pointer to the clear color
-   float32 m_clearColor[4];
+   GLfloat m_clearColor[4];
 
    int _width;
    int _height;

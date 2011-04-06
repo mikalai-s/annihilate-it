@@ -2,8 +2,6 @@
 
 #include "msCommon.h"
 
-#include "uniform.h"
-
 class msShaderProgram;
 
 class msParticleEmitter
@@ -58,7 +56,6 @@ public:
 		GLboolean blendAdditive;
 
 	msParticleEmitter(
-		char *inTextureName,
 		Vector2f inPosition ,
 		Vector2f inSourcePositionVariance,
 		GLfloat inSpeed,

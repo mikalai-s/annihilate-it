@@ -296,10 +296,6 @@
 			Name="common"
 			>
 			<File
-				RelativePath="..\common\ArgDefines.h"
-				>
-			</File>
-			<File
 				RelativePath="..\common\ImageObject.cpp"
 				>
 			</File>
@@ -325,30 +321,6 @@
 			</File>
 			<File
 				RelativePath="..\common\SimpleImageLoader.h"
-				>
-			</File>
-			<File
-				RelativePath="..\common\Tga.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\common\Tga.h"
-				>
-			</File>
-			<File
-				RelativePath="..\common\Uniform.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\common\Uniform.h"
-				>
-			</File>
-			<File
-				RelativePath="..\common\UniformData.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\common\UniformData.h"
 				>
 			</File>
 		</Filter>

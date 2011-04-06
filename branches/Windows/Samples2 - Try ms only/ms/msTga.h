@@ -32,6 +32,6 @@ typedef struct tagRGBQUAD1 {
 } RGBQUAD1;
 
 
-int TGALoad1(const char *Filename, char **Buffer, int *Width, int *Height, int *Depth);
+int TGALoad(const char *Filename, char **Buffer, int *Width, int *Height, int *Depth);
 
 #endif // _TGA_H_

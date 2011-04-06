@@ -72,7 +72,7 @@ typedef struct
 ///
 //  TGALoad()
 //
-int TGALoad1(const char *Filename, char **Buffer, int *Width, int *Height, int *Depth)
+int TGALoad(const char *Filename, char **Buffer, int *Width, int *Height, int *Depth)
 {
     FILE        *fp = fopen( Filename, "rb" ) ;
     

@@ -18,7 +18,6 @@
 #ifndef _SIMPLEIMAGELOADER_H_
 #define _SIMPLEIMAGELOADER_H_
 
-#include "ArgDefines.h"
 #include "ImageObject.h"
 
 class SimpleImageLoader
@@ -31,10 +30,10 @@ public:
    ~SimpleImageLoader();
 
    /// \brief Loads an image from a file.
-   ImageObject* LoadImageFile( const char8 *fileName );
+   ImageObject* LoadImageFile( const char *fileName );
 
    /// \brief Saves an image to a file.
-   bool SaveImage( const char8 *fileName, ImageObject *imgObj );
+   bool SaveImage( const char *fileName, ImageObject *imgObj );
 };
 
 #endif // _SIMPLEIMAGELOADER_H_
