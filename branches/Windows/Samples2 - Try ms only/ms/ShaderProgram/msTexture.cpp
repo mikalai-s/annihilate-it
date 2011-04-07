@@ -3,6 +3,7 @@
 #include "SimpleImageLoader.h"
 #include "msShaderProgram.h"
 
+
 msTexture::msTexture(const char *name, GLuint unit, const char *fileName)
 {
 	m_name = name;
@@ -24,15 +25,17 @@ msTexture::msTexture(const char *name, GLuint unit, const char *fileName)
 		pImgObj = imgLoader.LoadImageFile( fileName );
 		if ( pImgObj != NULL )
 		{
+			m_width = pImgObj->GetWidth();
+			m_height = pImgObj->GetHeight();
 			if ( pImgObj->GetNumChannels() == 3 )
 			{
-				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, pImgObj->GetWidth(), pImgObj->GetHeight(),
+				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height,
 					0, GL_RGB, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
 			}
 			else
 			{
 				//			assert( pImgObj->GetNumChannels() == 4 );
-				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, pImgObj->GetWidth(), pImgObj->GetHeight(),
+				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height,
 					0, GL_RGBA, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
 			}
 			delete pImgObj;
@@ -62,4 +65,14 @@ GLuint msTexture::getId()
 GLuint msTexture::getUnit()
 {
 	return m_unit;
+}
+
+GLsizei msTexture::getWidth()
+{
+	return m_width;
+}
+
+GLsizei msTexture::getHeight()
+{
+	return m_height;
 }

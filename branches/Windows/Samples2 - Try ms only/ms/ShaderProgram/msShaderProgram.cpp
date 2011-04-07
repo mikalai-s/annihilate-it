@@ -212,37 +212,12 @@ void msShaderProgram::linkAllDescriptors()
 
 	for (msTextureIterator ai = m_textures.begin(); ai != m_textures.end() ; ++ai)
 		(*ai)->link();
+}
 
-		/*
-			switch( (*index)->m_type )
-			{
-			case SAMPLE_FLOAT:
-				glUniform1f( (*index)->m_location, (*index)->m_floatData[0] );
-				break;
-			case SAMPLE_FLOAT_VEC2:
-				glUniform2f( (*index)->m_location, (*index)->m_floatData[0], (*index)->m_floatData[1] );
-				break;
-			case SAMPLE_FLOAT_VEC3:
-				glUniform3f( (*index)->m_location, (*index)->m_floatData[0], (*index)->m_floatData[1], (*index)->m_floatData[2] );
-				break;
-			case SAMPLE_FLOAT_VEC4:
-				glUniform4f( (*index)->m_location, (*index)->m_floatData[0], (*index)->m_floatData[1], (*index)->m_floatData[2], (*index)->m_floatData[3] );
-				break;
-			case SAMPLE_FLOAT_MAT4:
-				glUniformMatrix4fv( (*index)->m_location, 1, GL_FALSE, &(*index)->m_matrixData[0][0] );
-				break;
-			case SAMPLE_INT:
-				if ( (*index)->m_location != 0 ) // Prevents error on nullTexture which has not yet been given a location (done at bind time)
-				{
-					glUniform1i( (*index)->m_location, (*index)->m_textureUnit );
-				}
-				break;
-			case SAMPLE_PROGRAM:
-				break;
-			default:
-				assert(0);
-				break;
-			}
-		*/
-	
+void msShaderProgram::notifySizeChanged( GLint width, GLint height )
+{
+	for(msFrameBufferIterator i = m_frameBuffers.begin(); i != m_frameBuffers.end(); i ++)
+	{
+		(*i)->setSize(width, height);
+	}
 }

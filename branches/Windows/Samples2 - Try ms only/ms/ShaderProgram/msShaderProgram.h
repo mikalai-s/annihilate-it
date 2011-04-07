@@ -60,4 +60,6 @@ public:
 	msFrameBuffer* getFrameBuffer(const char *name);
 
 	void use();
+	void notifyScreenChanged( GLint width, GLint height );
+	void notifySizeChanged( GLint width, GLint height );
 };

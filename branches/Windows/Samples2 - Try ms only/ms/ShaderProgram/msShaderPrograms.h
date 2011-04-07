@@ -32,5 +32,5 @@ public:
 	msShaderProgram* getProgramByName( const char *name );
 
 	msFrameBuffer* getMainFrameBuffer();
-
+	void notifySizeChanged( GLint width, GLint height );
 };

@@ -15,6 +15,9 @@ private:
 	msTexture *m_texture;
 	GLuint m_id;
 
+	GLsizei m_width;
+	GLsizei m_height;
+
 	msFrameBuffer(GLuint id);
 
 public:
@@ -27,6 +30,6 @@ public:
 	void bind();
 	bool isComplete();
 	msTexture* getTexture();
-
+	void setSize( GLint width, GLint height );
 	static msFrameBuffer *main;
 };

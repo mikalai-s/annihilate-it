@@ -176,7 +176,12 @@ msShaderProgram* msShaderPrograms::getProgramByName( const char *name )
 msFrameBuffer* msShaderPrograms::getMainFrameBuffer()
 {
 	return m_mainFrameBuffer;
+}
 
+void msShaderPrograms::notifySizeChanged( GLint width, GLint height )
+{
+	for (msShaderProgramIterator iterator = m_shaderPrograms.begin(); iterator != m_shaderPrograms.end() ; ++iterator)
+		(*iterator)->notifySizeChanged(width, height);
 }
 
 

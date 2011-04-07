@@ -96,6 +96,7 @@ float radius_step = 37.0f;
 
 void Scene::Init()
 {
+	m_shaders->notifySizeChanged(_width, _height);
 	
 	pe1 = new msParticleEmitter(
 		// explosion
@@ -142,7 +143,7 @@ void Scene::Init()
 		);
 
 }
-
+int c = 0;
 
 void Scene::drawBackground()
 {
@@ -156,10 +157,10 @@ void Scene::drawBackground()
 	// FBO attachment is complete?
 	if (program->getFrameBuffer("renderTex")->isComplete())		
 	{
-		int textureSize = max(this->_width, this->_height);
+		//int textureSize = max(this->_width, this->_height);
 
 		// Set viewport to size of texture map and erase previous image
-		glViewport(0, 0, textureSize, textureSize);
+		glViewport(0, 0, _width, _height);
 		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
 
@@ -184,9 +185,9 @@ void Scene::drawBackground()
 	// usual renderer
 
 	// Set viewport to size of framebuffer and clear color and depth buffers
-	glViewport(0, 0, _width, _height);	
 
 	// Bind updated texture map
+	glActiveTexture(GL_TEXTURE0 + program->getFrameBuffer("renderTex")->getTexture()->getUnit());
 	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
 
 	program->getUniform("tex")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
@@ -196,21 +197,29 @@ void Scene::drawBackground()
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
 	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_fbIndices );	
 
-	program->getAttribute("radius")->set1f(radius);
-	program->getAttribute("power")->set1f(power);
-	program->getUniform("ep")->set2f(ep[0], ep[1]);
+	
 
 	if(animate)
 	{
-		radius += radius_step;
-		power -= radius_step / (radius_max - radius_min);
-		if(radius > radius_max)
+		program->getAttribute("radius")->set1f(radius);
+		program->getAttribute("power")->set1f(power);
+		program->getUniform("ep")->set2f(ep[0], ep[1]);
+
+		c--;
+		if(c < 40)
 		{
-			animate = 0;
-			radius = -1.0f;
-		}
+			radius += radius_step;
+			power -= radius_step / (radius_max - radius_min);
+			if(radius > radius_max)
+			{
+				animate = 0;
+				radius = -1.0f;
+			}
+		}		
 	}
 }
+
+
 
 void Scene::drawExplosion()
 {
@@ -224,18 +233,16 @@ void Scene::drawExplosion()
 	// FBO attachment is complete?
 	if (program->getFrameBuffer("renderTex")->isComplete())		
 	{
-		int textureSize = max(this->_width, this->_height);
-
 		// Set viewport to size of texture map and erase previous image
-		glViewport(0, 0, textureSize, textureSize);
+		glViewport(0, 0, _width, _height);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		// render particles
-		//pe1->renderParticles(program);
+		pe1->renderParticles(program);
 		pe1->update(0.015f);
 
-		pe2->renderParticles(program);
+		//pe2->renderParticles(program);
 		pe2->update(0.015f);
 	}
 
@@ -245,12 +252,12 @@ void Scene::drawExplosion()
 	// usual renderer
 
 	// Set viewport to size of framebuffer and clear color and depth buffers
-	glViewport(0, 0, _width, _height);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Bind updated texture map
+	glActiveTexture(GL_TEXTURE0 + program->getFrameBuffer("renderTex")->getTexture()->getUnit());
 	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
 
 	msShaderProgram *particleCompleteProgram = m_shaders->getProgramByName("particle_complete");
@@ -269,6 +276,11 @@ void Scene::drawExplosion()
 
 void Scene::drawFrame()
 {
+	m_shaders->getMainFrameBuffer()->bind();
+
+	glViewport(0, 0, _width, _height);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 	drawBackground();
 
 	drawExplosion();	
@@ -276,6 +288,7 @@ void Scene::drawFrame()
 
 void Scene::mouseClick(int x, int y)
 {
+	c = 50;
 	animate = 1;
 	radius = radius_min;
 	power = 1.0f;

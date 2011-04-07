@@ -43,6 +43,8 @@ void Scene::newSize(GLint width, GLint height)
 {
 	_width = width;
 	_height = height;
+	
+	m_shaders->notifySizeChanged(width, height);
 }
 
 //=================================================================================================================================
