@@ -15,7 +15,7 @@
 //   (C) ATI Research, Inc. 2006 All rights reserved. 
 //=================================================================================================================================
 
-#include "..\ms\Scene.h"
+#include "..\ms\msScene.h"
 #include "..\ms\msParticleEmitter.h"
 
 #include "..\ms\ShaderProgram\msShaderPrograms.h"

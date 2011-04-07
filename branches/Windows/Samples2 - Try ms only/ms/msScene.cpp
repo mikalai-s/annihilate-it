@@ -15,7 +15,7 @@
 //   (C) ATI Research, Inc. 2006 All rights reserved. 
 //=================================================================================================================================
 
-#include "Scene.h"
+#include "msScene.h"
 #include "..\ms\ShaderProgram\msShaderPrograms.h"
 
 using namespace std;
