@@ -15,7 +15,7 @@
 //   (C) ATI Research, Inc. 2006 All rights reserved. 
 //=================================================================================================================================
 
-#include "Scene.h"
+#include "..\ms\Scene.h"
 #include "..\ms\msParticleEmitter.h"
 
 #include "..\ms\ShaderProgram\msShaderPrograms.h"
@@ -94,7 +94,7 @@ float radius_min = 0.0f;
 float radius_max = 1500.0f;
 float radius_step = 37.0f;
 
-void Scene::Init()
+void msScene::Init()
 {
 	m_shaders->notifySizeChanged(_width, _height);
 	
@@ -145,7 +145,7 @@ void Scene::Init()
 }
 int c = 0;
 
-void Scene::drawBackground()
+void msScene::drawBackground()
 {
 	// render fire into texture using particle shaders
 	msShaderProgram *program = m_shaders->getProgramByName("texture_aftershock");
@@ -221,7 +221,7 @@ void Scene::drawBackground()
 
 
 
-void Scene::drawExplosion()
+void msScene::drawExplosion()
 {
 	// render fire into texture using particle shaders
 	msShaderProgram *program = m_shaders->getProgramByName("particle_create");
@@ -274,7 +274,7 @@ void Scene::drawExplosion()
 }
 
 
-void Scene::drawFrame()
+void msScene::drawFrame()
 {
 	m_shaders->getMainFrameBuffer()->bind();
 
@@ -286,7 +286,7 @@ void Scene::drawFrame()
 	drawExplosion();	
 }
 
-void Scene::mouseClick(int x, int y)
+void msScene::mouseClick(int x, int y)
 {
 	c = 50;
 	animate = 1;

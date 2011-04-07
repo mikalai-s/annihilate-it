@@ -28,7 +28,7 @@ using namespace std;
 ///
 /// \return null
 //=================================================================================================================================
-Scene::Scene()
+msScene::msScene()
 {
    GLfloat color[] = { 0.3f, 0.3f, 0.7f, 1 };
    m_clearColor[0] = color[0];
@@ -39,7 +39,7 @@ Scene::Scene()
    m_shaders = new msShaderPrograms();
 }
 
-void Scene::newSize(GLint width, GLint height)
+void msScene::newSize(GLint width, GLint height)
 {
 	_width = width;
 	_height = height;
@@ -55,7 +55,7 @@ void Scene::newSize(GLint width, GLint height)
 ///
 /// \return void
 //=================================================================================================================================
-Scene::~Scene()
+msScene::~msScene()
 {
    freeResources();
 }
@@ -68,7 +68,7 @@ Scene::~Scene()
 ///
 /// \return bool saying whether we passed or failed
 //=================================================================================================================================
-bool Scene::loadData(const char* filename)
+bool msScene::loadData(const char* filename)
 {
    m_shaders->loadFile(filename);
    return true;
@@ -86,7 +86,7 @@ bool Scene::loadData(const char* filename)
 ///
 /// \return void
 //=================================================================================================================================
-void Scene::freeResources()
+void msScene::freeResources()
 {
    delete m_shaders;
 }

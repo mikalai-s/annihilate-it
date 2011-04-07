@@ -23,7 +23,7 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <io.h>
-#include "Scene.h"
+#include "..\ms\Scene.h"
 #include "Misc.h"
 #include <windowsx.h>
 
@@ -32,7 +32,7 @@
 bool  g_keys[256];               // Array Used For The Keyboard Routine
 bool  g_active=TRUE;             // Window Active Flag Set To TRUE By Default
 
-Scene g_scene;
+msScene g_scene;
 
 
 LRESULT  CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
