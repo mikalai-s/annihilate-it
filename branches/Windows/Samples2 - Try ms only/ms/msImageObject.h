@@ -32,14 +32,14 @@ enum CompressedType
    IMG_ETC5,
 };
 
-class ImageObject
+class msImageObject
 {
 public:
    /// \brief Constructor
-   ImageObject( GLuint width, GLuint height, GLuint numChannels, GLuint bitsPerChannel );
+   msImageObject( GLuint width, GLuint height, GLuint numChannels, GLuint bitsPerChannel );
 
    /// \brief Destructor
-   ~ImageObject();
+   ~msImageObject();
 
    /// \brief Access a single component of a single pixel
    unsigned char& Pixel( GLuint x, GLuint y, GLuint channel );

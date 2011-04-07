@@ -1,6 +1,6 @@
 #include "msTexture.h"
-#include "ImageObject.h"
-#include "SimpleImageLoader.h"
+#include "msImageObject.h"
+#include "msSimpleImageLoader.h"
 #include "msShaderProgram.h"
 
 
@@ -19,8 +19,8 @@ msTexture::msTexture(const char *name, GLuint unit, const char *fileName)
 
 	if(fileName != NULL)
 	{
-		SimpleImageLoader imgLoader;
-		ImageObject *pImgObj;
+		msSimpleImageLoader imgLoader;
+		msImageObject *pImgObj;
 
 		pImgObj = imgLoader.LoadImageFile( fileName );
 		if ( pImgObj != NULL )

@@ -18,22 +18,22 @@
 #ifndef _SIMPLEIMAGELOADER_H_
 #define _SIMPLEIMAGELOADER_H_
 
-#include "ImageObject.h"
+#include "msImageObject.h"
 
-class SimpleImageLoader
+class msSimpleImageLoader
 {
 public:
    /// \brief Constructor
-   SimpleImageLoader();
+   msSimpleImageLoader();
 
    /// \brief Deconstructor
-   ~SimpleImageLoader();
+   ~msSimpleImageLoader();
 
    /// \brief Loads an image from a file.
-   ImageObject* LoadImageFile( const char *fileName );
+   msImageObject* LoadImageFile( const char *fileName );
 
    /// \brief Saves an image to a file.
-   bool SaveImage( const char *fileName, ImageObject *imgObj );
+   bool SaveImage( const char *fileName, msImageObject *imgObj );
 };
 
 #endif // _SIMPLEIMAGELOADER_H_

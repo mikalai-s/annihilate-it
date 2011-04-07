@@ -15,7 +15,7 @@
 //   (C) ATI Research, Inc. 2006 All rights reserved. 
 //=================================================================================================================================
 
-#include "ImageObject.h"
+#include "msImageObject.h"
 #include <algorithm>
 #include "assert.h"
 
@@ -32,7 +32,7 @@ using namespace std;
 ///
 /// \return void
 //=================================================================================================================================
-ImageObject::ImageObject( GLuint width, GLuint height, GLuint numChannels, GLuint bitsPerChannel )
+msImageObject::msImageObject( GLuint width, GLuint height, GLuint numChannels, GLuint bitsPerChannel )
 {
    GLuint totalSize;
    assert ( width > 0 );
@@ -63,7 +63,7 @@ ImageObject::ImageObject( GLuint width, GLuint height, GLuint numChannels, GLuin
 ///
 /// \return void
 //=================================================================================================================================
-ImageObject::~ImageObject()
+msImageObject::~msImageObject()
 {
    delete [] m_data;
    delete [] m_compressedData;
@@ -79,7 +79,7 @@ ImageObject::~ImageObject()
 ///
 /// \return a reference to the pixel
 //=================================================================================================================================
-unsigned char& ImageObject::Pixel( GLuint x, GLuint y, GLuint channel )
+unsigned char& msImageObject::Pixel( GLuint x, GLuint y, GLuint channel )
 {
    GLuint pixelPitch = m_numChannels * m_bitsPerChannel / 8;
    GLuint linePitch = m_width * pixelPitch;
@@ -99,7 +99,7 @@ unsigned char& ImageObject::Pixel( GLuint x, GLuint y, GLuint channel )
 ///
 /// \return pass or fail bool
 //=================================================================================================================================
-bool ImageObject::SetupCompressedData( CompressedType type )
+bool msImageObject::SetupCompressedData( CompressedType type )
 {
    if ( m_compressedData )
    {
@@ -135,7 +135,7 @@ bool ImageObject::SetupCompressedData( CompressedType type )
 ///
 /// \return void
 //=================================================================================================================================
-void ImageObject::SetCompressedSize( GLuint size )
+void msImageObject::SetCompressedSize( GLuint size )
 {
    if ( m_compressedData )
    {
@@ -156,7 +156,7 @@ void ImageObject::SetCompressedSize( GLuint size )
 ///
 /// \return void
 //=================================================================================================================================
-void ImageObject::MakeImageRed()
+void msImageObject::MakeImageRed()
 {
    GLuint x, y, c;
 
@@ -182,7 +182,7 @@ void ImageObject::MakeImageRed()
 ///
 /// \return True if image has three or four channels, false otherwise
 //=================================================================================================================================
-bool ImageObject::MakeImageARGB()
+bool msImageObject::MakeImageARGB()
 {
    GLuint x, y;
 

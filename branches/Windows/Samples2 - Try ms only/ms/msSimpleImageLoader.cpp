@@ -15,7 +15,7 @@
 //   (C) ATI Research, Inc. 2006 All rights reserved. 
 //=================================================================================================================================
 
-#include "SimpleImageLoader.h"
+#include "msSimpleImageLoader.h"
 #include <iostream>
 #include <assert.h>
 #include "..\ms\msTga.h"
@@ -30,7 +30,7 @@ using namespace std;
 ///
 /// \return void
 //=================================================================================================================================
-SimpleImageLoader::SimpleImageLoader()
+msSimpleImageLoader::msSimpleImageLoader()
 {
 
 }
@@ -43,7 +43,7 @@ SimpleImageLoader::SimpleImageLoader()
 ///
 /// \return void
 //=================================================================================================================================
-SimpleImageLoader::~SimpleImageLoader()
+msSimpleImageLoader::~msSimpleImageLoader()
 {
 
 }
@@ -56,7 +56,7 @@ SimpleImageLoader::~SimpleImageLoader()
 ///
 /// \return Pointer to a structure with all the FreeImage data in it
 //=================================================================================================================================
-ImageObject* SimpleImageLoader::LoadImageFile( const  char *filename )
+msImageObject* msSimpleImageLoader::LoadImageFile( const  char *filename )
 {
    int ret;
    char *buf;
@@ -86,7 +86,7 @@ ImageObject* SimpleImageLoader::LoadImageFile( const  char *filename )
       return NULL;
    }
 
-   ImageObject *pImg = new ImageObject( width, height, numChannels, bitsPerChannel );
+   msImageObject *pImg = new msImageObject( width, height, numChannels, bitsPerChannel );
    assert( pImg != NULL );
 
    for( GLuint y = 0; y < pImg->GetHeight(); y++ )
@@ -127,7 +127,7 @@ ImageObject* SimpleImageLoader::LoadImageFile( const  char *filename )
 ///
 /// \return pass or fail bool
 //=================================================================================================================================
-bool SimpleImageLoader::SaveImage( const char *filename, ImageObject *imgObj )
+bool msSimpleImageLoader::SaveImage( const char *filename, msImageObject *imgObj )
 {
    assert(0);
    return false;

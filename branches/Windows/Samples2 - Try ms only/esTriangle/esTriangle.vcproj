@@ -296,31 +296,7 @@
 			Name="common"
 			>
 			<File
-				RelativePath="..\common\ImageObject.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\common\ImageObject.h"
-				>
-			</File>
-			<File
 				RelativePath="..\common\main.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\common\Scene.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\common\Scene.h"
-				>
-			</File>
-			<File
-				RelativePath="..\common\SimpleImageLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\common\SimpleImageLoader.h"
 				>
 			</File>
 		</Filter>
@@ -332,6 +308,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ms\msImageObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ms\msImageObject.h"
+				>
+			</File>
+			<File
 				RelativePath="..\ms\msParticleEmitter.cpp"
 				>
 			</File>
@@ -340,11 +324,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ms\msSimpleImageLoader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ms\msSimpleImageLoader.h"
+				>
+			</File>
+			<File
 				RelativePath="..\ms\msTga.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\ms\msTga.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ms\Scene.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ms\Scene.h"
 				>
 			</File>
 			<Filter
