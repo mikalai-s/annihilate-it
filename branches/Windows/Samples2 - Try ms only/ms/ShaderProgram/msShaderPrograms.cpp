@@ -15,7 +15,7 @@ msShaderPrograms::~msShaderPrograms(void)
 inline char* copyString(string src)
 {
 	char *dest = new char [src.length() + 1];
-	strcpy_s( dest, src.length() + 1, src.c_str());
+	memcpy( dest, src.c_str(), src.length() + 1);
 	return dest;
 }
 
