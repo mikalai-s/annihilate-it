@@ -18,7 +18,7 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-#include "GLES2/gl2.h"
+#include "msGL.h"
 
 #include <iostream>
 #include <fstream>

@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include <GLES2/gl2.h>
+#include "msGL.h"
+
 #include "math.h"
 
 

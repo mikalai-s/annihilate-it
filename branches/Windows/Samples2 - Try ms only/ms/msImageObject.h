@@ -18,7 +18,7 @@
 #ifndef _IMAGEOBJECT_H_
 #define _IMAGEOBJECT_H_
 
-#include "GLES2//gl2.h"
+#include "./msGL.h"
 
 enum CompressedType
 {

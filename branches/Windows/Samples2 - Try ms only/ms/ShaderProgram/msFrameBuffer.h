@@ -1,13 +1,13 @@
 #pragma once
 
-#include "GLES2/gl2.h"
+#include "../msGL.h"
 #include "msTexture.h"
 
 class msShaderPrograms;
 
 class msFrameBuffer
 {
-	friend msShaderPrograms;
+	friend class msShaderPrograms;
 
 private:
 

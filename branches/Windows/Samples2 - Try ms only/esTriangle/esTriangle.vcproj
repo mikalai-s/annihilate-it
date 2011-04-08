@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="./src;./../common;./../../include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;WINDOWS_GL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -305,6 +305,10 @@
 			>
 			<File
 				RelativePath="..\ms\msCommon.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ms\msGL.h"
 				>
 			</File>
 			<File
