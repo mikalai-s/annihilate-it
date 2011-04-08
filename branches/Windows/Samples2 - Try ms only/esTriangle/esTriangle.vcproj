@@ -180,10 +180,6 @@
 			Name="src"
 			>
 			<File
-				RelativePath=".\src\Draw.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\Misc.cpp"
 				>
 			</File>
