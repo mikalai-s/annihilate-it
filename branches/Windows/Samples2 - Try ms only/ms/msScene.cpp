@@ -16,7 +16,7 @@
 //=================================================================================================================================
 
 #include "msScene.h"
-#include "..\ms\ShaderProgram\msShaderPrograms.h"
+#include "ShaderProgram/msShaderPrograms.h"
 
 using namespace std;
 

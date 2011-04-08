@@ -1,6 +1,6 @@
 #include "msTexture.h"
-#include "..\ms\msImageObject.h"
-#include "..\ms\msSimpleImageLoader.h"
+#include "../msImageObject.h"
+#include "../msSimpleImageLoader.h"
 #include "msShaderProgram.h"
 
 

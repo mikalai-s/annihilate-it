@@ -23,7 +23,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "..\ms\ShaderProgram\msShaderPrograms.h"
+#include "ShaderProgram/msShaderPrograms.h"
 
 
 //=================================================================================================================================
