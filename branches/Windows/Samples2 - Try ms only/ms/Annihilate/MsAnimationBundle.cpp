@@ -42,6 +42,7 @@ void MsAnimationBundle::unitTest()
 	MsAnimationBundle bundle;
 MsAnimation<int> ia(0, 0, 0, 0, 0);
 
+
 /*
 	float from1 = 0, from2 = 1;
 	int times1 = 5, times2 = 10;
