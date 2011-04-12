@@ -38,7 +38,7 @@ public:
    /// \brief Destructor.
    ~msScene();
 
-   void Init();
+   void init();
 
    /// \brief Draws the frame.
    void drawFrame();

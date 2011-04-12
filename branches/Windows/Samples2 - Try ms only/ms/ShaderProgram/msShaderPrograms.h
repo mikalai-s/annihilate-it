@@ -13,7 +13,6 @@ typedef std::vector<msShaderProgram*>	   msShaderProgramList;
 typedef msShaderProgramList::iterator	msShaderProgramIterator;
 
 
-
 class msShaderPrograms
 {
 	msFrameBuffer *m_mainFrameBuffer;

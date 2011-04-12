@@ -326,7 +326,6 @@ LRESULT CALLBACK WndProc( HWND      hWnd,
    return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
 
-
 //=================================================================================================================================
 ///
 /// WinMain function for this simple ES app.
@@ -359,7 +358,7 @@ int WINAPI WinMain( HINSTANCE  hInstance,
 
    g_scene.loadData("./data/uniforms.txt");
 
-   g_scene.Init();
+   g_scene.init();
    
    while ( ! done )
    {

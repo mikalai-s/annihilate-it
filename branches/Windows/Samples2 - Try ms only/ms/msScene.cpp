@@ -184,7 +184,7 @@ float radius_min = 0.0f;
 float radius_max = 1500.0f;
 float radius_step = 37.0f;
 
-void msScene::Init()
+void msScene::init()
 {
 	m_shaders->notifySizeChanged(_width, _height);
 
@@ -374,6 +374,31 @@ void msScene::drawFrame()
 	drawBackground();
 
 	drawExplosion();	
+
+/*
+	msShaderProgram *program = m_shaders->getProgramByName("texture_aftershock");
+	program->use();
+
+	
+		// Set viewport to size of texture map and erase previous image
+		glViewport(0, 0, _width, _height);
+		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
+
+		// render background
+		program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
+		program->getAttribute("position")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexPositions );
+		program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
+		program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
+
+		// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
+		glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices );
+
+		program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
+		program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
+
+		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices);
+		*/
 }
 
 void msScene::mouseClick(int x, int y)
