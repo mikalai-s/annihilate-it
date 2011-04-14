@@ -17,8 +17,8 @@ void ms_gl_draw_box(MsPalette *palette, MsBox *box, color *c)
 {
     color  *boxColorTemp;
     
-    point l = box->location;
-    size s = box->size;
+    msPoint l = box->location;
+    msSize s = box->size;
     mBoxVertexesTemp[0][0] = l.x;               mBoxVertexesTemp[0][1] = l.y;               mBoxVertexesTemp[0][2] = l.z; 
     mBoxVertexesTemp[1][0] = l.x + s.width;     mBoxVertexesTemp[1][1] = l.y;               mBoxVertexesTemp[1][2] = l.z; 
     mBoxVertexesTemp[2][0] = l.x;               mBoxVertexesTemp[2][1] = l.y + s.height;    mBoxVertexesTemp[2][2] = l.z; 

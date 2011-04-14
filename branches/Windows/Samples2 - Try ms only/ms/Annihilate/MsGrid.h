@@ -5,8 +5,9 @@
 template <class T>
 class msGrid
 {
-	int m_rowCount;
-	int m_columnCount;
+public:
+	GLuint m_rowCount;
+	GLuint m_columnCount;
 	T* m_items;
 
 	GLuint getIndexByYX(GLuint y, GLuint x)

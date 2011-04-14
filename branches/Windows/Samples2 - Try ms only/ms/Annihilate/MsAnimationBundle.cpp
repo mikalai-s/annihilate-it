@@ -1,4 +1,5 @@
 #include "MsAnimationBundle.h"
+#include "MsAnimation.h"
 #include "stdlib.h"
 #include "stdio.h"
 
@@ -10,7 +11,7 @@ void MsAnimationBundle::performStep()
 {
 	for(msAnimationIterator i = m_list.begin(); i != m_list.end(); i ++)
 	{
-		MsAnimationBase *animation = *i;
+		msAnimationBase *animation = *i;
 		if(animation->performStep() == 0)
 		{
 			m_list.remove(animation);
@@ -23,13 +24,13 @@ MsAnimationBundle::~MsAnimationBundle()
 {
 	while(m_list.size() > 0)
 	{
-		MsAnimationBase *a = m_list.front();
+		msAnimationBase *a = m_list.front();
 		m_list.remove(a);
 		delete a;
 	}
 }
 
-void MsAnimationBundle::_lineStep2(MsAnimationBase *anim)
+void MsAnimationBundle::_lineStep2(msAnimationBase *anim)
 {
 	MsAnimation<float*> *a = (MsAnimation<float*>*)anim;
 	float *from = a->m_from;

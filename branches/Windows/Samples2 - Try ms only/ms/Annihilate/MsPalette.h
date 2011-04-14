@@ -20,7 +20,7 @@
 
 class msPalette
 {
-	color m_colors[MS_PALETTE_MAX_COLORS];
+	msColor m_colors[MS_PALETTE_MAX_COLORS];
 
 public:
 	msPalette();
@@ -28,15 +28,15 @@ public:
 
 	void init(GLfloat[][4], GLuint numColors);	
 
-	void setColor(GLuint index, color *color);
+	void setColor(GLuint index, msColor *color);
 
-	color* getColor(GLuint index);
+	msColor* getColor(GLuint index);
 
 	GLuint getFreeIndex();
 
 	void setFreeIndex(GLuint index);
 
-	color getEmptyColor();
+	msColor getEmptyColor();
 };
 
 

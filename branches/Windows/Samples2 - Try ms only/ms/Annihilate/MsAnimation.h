@@ -1,42 +1,25 @@
 #pragma once
 
 #include "msCommon.h"
-
-class MsAnimationBase
-{
-public:
-	GLint m_delayCount;
-	GLint m_count;
-
-	static void _defaultStep(MsAnimationBase *anim);
-
-public:
-
-	void (*m_performStep)(MsAnimationBase*);
-
-	MsAnimationBase(GLint delayCount, GLint count, void (*stepCallback)(MsAnimationBase*));
-
-	GLint performStep();
-};
-
+#include "msAnimationBase.h"
 
 
 template <class T>
-class MsAnimation : public MsAnimationBase
+class MsAnimation : public msAnimationBase
 {
 public:
 	T m_from;
 	T m_to;
 
 	GLfloat m_rAngle;
-	point m_rVector;
+	msPoint m_rVector;
 
-	static void _lineStep(MsAnimationBase *ab)
+	static void _lineStep(msAnimationBase *ab)
 	{
-		MsAnimation<point*> *anim = (MsAnimation<point*>*)ab;
-		point *from = ab->m_from;
-		point *to = ab->m_to;
-		point step;
+		MsAnimation<msPoint*> *anim = (MsAnimation<msPoint*>*)ab;
+		msPoint *from = ab->m_from;
+		msPoint *to = ab->m_to;
+		msPoint step;
 		step.x = (to->x - from->x) / m_count;
 		step.y = (to->y - from->y) / m_count;
 
@@ -44,7 +27,7 @@ public:
 		from->y += step.y;
 	}
 
-	MsAnimation(T from, T to, GLint delayCount, GLint count, void (*stepCallback)(MsAnimationBase*)) : MsAnimationBase(delayCount, count, stepCallback)
+	MsAnimation(T from, T to, GLint delayCount, GLint count, void (*stepCallback)(msAnimationBase*)) : msAnimationBase(delayCount, count, stepCallback)
 	{
 		m_from = from;
 		m_to = to;
@@ -62,10 +45,10 @@ public:
 /*
 	static void unitTest();
 	{
-		MsAnimation<point*>	*anim;
+		MsAnimation<msPoint*>	*anim;
 
-		point from;
-		point to;
+		msPoint from;
+		msPoint to;
 		int count = 10;
 
 		from.x = 0;
@@ -78,7 +61,7 @@ public:
 
 		do
 		{
-			printf("(%f, %f)\r\n", ((point*)anim->m_from)->x, ((point*)anim->m_from)->y);
+			printf("(%f, %f)\r\n", ((msPoint*)anim->m_from)->x, ((msPoint*)anim->m_from)->y);
 		}
 		while(anim->performStep(anim));
 

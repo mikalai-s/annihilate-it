@@ -1,41 +1,41 @@
-
-#ifndef _MsBox_H
-#define _MsBox_H
+#pragma once
 
 #include "MsAnimationBundle.h"
 #include "MsAnimation.h"
-#include "MsList.h"
 
 #define MS_BOX_INVISIBLE -1
 
-typedef struct MsBox
+class MsBox
 {
-	// appearance
-   	point location;
-	size size;
-	int colorIndex;
-//    color color;
-    
-    // copy of the current box. is used just for animation. can be refactored in the future.
-    struct MsBox *boxToAnimate;
+public:
+	msPoint m_location;
+	msSize m_size;
+	int m_colorIndex;
+	//    color color;
+
+	// copy of the current box. is used just for animation. can be refactored in the future.
+	MsBox *m_boxToAnimate;
 
 	// animations related
-	MsAnimationBundle *animations;
-    
-    // visibility of border
-    border border;
-} MsBox;
+	MsAnimationBundle *m_animations;
 
-MsBox* ms_box_create(float x, float y, float width, float height, int colorIndex);
+	// visibility of border
+	msBorder m_border;
 
-void ms_box_free(MsBox **box);
+private:
+	MsBox();
 
-void ms_box_copy(MsBox *b1, MsBox *b2);
+public:
+	MsBox(float x, float y, float width, float height, int colorIndex);
 
-void ms_box_make_invisible(MsBox *box);
+	~MsBox();
 
-int ms_box_is_visible(MsBox *box);
+	MsBox* copy(MsBox *target);
 
-void ms_box_unit_test();
+	void makeInvisible();
 
-#endif
+	GLboolean isVisible();
+
+//	void unitTest();
+
+};

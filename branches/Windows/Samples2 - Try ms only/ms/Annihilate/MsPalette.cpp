@@ -30,13 +30,13 @@ void msPalette::init(GLfloat colors[][4], GLuint numColors)
     }
 }
 
-void msPalette::setColor(GLuint index, color *color)
+void msPalette::setColor(GLuint index, msColor *color)
 {
     if(index < MS_PALETTE_MAX_COLORS)
         m_colors[index] = *color;
 }
 
-color* msPalette::getColor(GLuint index)
+msColor* msPalette::getColor(GLuint index)
 { 
     if(index < MS_PALETTE_MAX_COLORS)
         return &m_colors[index];
@@ -62,9 +62,9 @@ void msPalette::setFreeIndex(GLuint index)
 }
 
 
-color msPalette::getEmptyColor()
+msColor msPalette::getEmptyColor()
 {
-    color empty;
+    msColor empty;
     empty.r = MS_PALETTE_EMPTY_COLOR_R;
     empty.g = MS_PALETTE_EMPTY_COLOR_G;
     empty.b = MS_PALETTE_EMPTY_COLOR_B;

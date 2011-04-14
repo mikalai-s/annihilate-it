@@ -3,6 +3,9 @@
 #include "MsBox.h"
 #include "MsGrid.h"
 #include "MsPalette.h"
+#include <list>
+
+using namespace::std;
 
 
 #define MS_BOX_SHIFT_DOWN 0
@@ -10,30 +13,67 @@
 #define MS_BOX_SHIFT_TOP 2
 #define MS_BOX_SHIFT_RIGHT 3
 
+typedef list<MsBox*> msBoxList;
+typedef msBoxList::iterator msBoxIterator;
 
-typedef struct MsBoxGrid
+class MsBoxGrid
 {
-	size size;
+	msSize size;
 
-	MsGrid *grid;
-    
-    MsPalette *palette;
-} MsBoxGrid;
+	msGrid<MsBox*> *grid;
 
+	msPalette *palette;
 
+	void _ms_boxgrid_refresh_borders();
 
-MsBoxGrid *ms_boxgrid_create_from_pattern(MsPalette *palette, int *pattern, int numRows, int numCols, float screenHeight, float screenWidth);
+	int ms_boxgrid_check_neighbours(GLuint y1, GLuint x1, GLuint y2, GLuint x2);
 
-MsBoxGrid *ms_boxgrid_create_from_random_pattern(MsPalette *palette, int numColors, int numRows, int numCols, float gridHeight, float gridWidth);
+	GLint* _ms_boxgrid_generate_random_pattern(GLuint numRows, GLuint numCols, GLuint numColors);
 
-void ms_boxgrid_display(MsBoxGrid *grid);
+	int _ms_boxgrid_get_index_by_yx(GLuint y, GLuint x, GLuint numCols);
 
-void ms_boxgrid_free(MsBoxGrid **grid);
+	void display2();
 
-void ms_boxgrid_remove_similar_items(MsBoxGrid *grid, int y, int x);
+	void _hiding1(msAnimationBase *a);
 
-void ms_boxgrid_shift_pendent_boxes(MsBoxGrid *grid, int direction);
+	void _removeSimilarBoxes(GLuint y, GLuint x, GLuint c, msBoxList *removedBoxes);
 
-int ms_boxgrid_check_neighbours(MsBoxGrid *g, int y1, int x1, int y2, int x2);
+	int _ms_boxgrid_has_similar_neighbour(GLuint y, GLuint x, GLuint colorIndex);
 
-void ms_boxgrid_unit_test();
+	void _exchangeBoxes(GLuint y1, GLuint x1, GLuint y2, GLuint x2);
+
+	void _ms_boxgrid_animate_box_hiding(msBoxList *boxes);
+
+	static void _linearFalling(msAnimationBase *anim);
+
+	static void _linearFalling2(msAnimationBase *anim);
+
+	void _exchangeBoxesWithAnimation(GLuint y1, GLuint x1, GLuint y2, GLuint x2, int direction);
+
+	void _shiftDown();
+
+	void _shiftTop();
+
+	void _shiftLeft();
+
+	void _shiftRight();
+
+public:
+	void init(msPalette *palette, GLint *pattern, GLuint numRows, GLuint numCols, GLfloat screenHeight, GLfloat screenWidth);
+
+	MsBoxGrid(msPalette *palette, GLint *pattern, GLuint numRows, GLuint numCols, GLfloat screenHeight, GLfloat screenWidth);
+
+	MsBoxGrid(msPalette *palette, GLuint numColors, GLuint numRows, GLuint numCols, GLfloat gridHeight, GLfloat gridWidth);
+
+	~MsBoxGrid();
+
+	void display();	
+
+	void removeSimilarItems(GLuint y, GLuint x);
+
+	void shiftPendentBoxes(GLint direction);
+
+	GLint checkNeighbours(GLint y1, GLint x1, GLint y2, GLint x2);
+
+	void unitTest();
+};

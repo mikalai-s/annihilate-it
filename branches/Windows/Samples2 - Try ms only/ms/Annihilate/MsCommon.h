@@ -1,58 +1,62 @@
-#ifndef _MsCommon_H
-#define _MsCommon_H
+#pragma once
 
 #include "../msGL.h"
 
-typedef struct point
+struct msPoint
 {
-	float x;
-	float y;
-    float z;
-} point;
+	GLfloat x;
+	GLfloat y;
+    GLfloat z;
+};
 
-
-typedef struct size
+struct msSize
 {
-	float width;
-	float height;
-} size;
+	GLfloat width;
+	GLfloat height;
+};
 
-typedef struct color
+struct msColor
 {
-    float r;
-    float g;
-    float b;
-    float a;
-} color;
+    GLfloat r;
+    GLfloat g;
+    GLfloat b;
+    GLfloat a;
+};
 
 
-typedef struct border
+struct msBorder
 {
-    int left;
-    int top;
-    int right;
-    int bottom;
-} border;
+    GLint left;
+    GLint top;
+    GLint right;
+    GLint bottom;
+};
 
 
-typedef union generic
+union msGeneric
 {
-    float f;
-	unsigned int u;
-	int i;
+    GLfloat f;
+	GLuint u;
+	GLint i;
 	char c[4];
     void *p;
-} generic;
+};
 
 
-void ms_common_fill_color(color *color, float r, float g, float b, float a);
 
-generic _ftog(float f);
+void ms_common_fill_color(msColor *c, float r, float g, float b, float a);
 
-generic _itog(int i);
 
-generic _ptog(void *p);
+msGeneric _ftog(float f);
 
-generic ms_generic_empty();
 
-#endif
+
+msGeneric _itog(int i);
+
+
+
+msGeneric _ptog(void *p);
+
+
+
+msGeneric ms_generic_empty();
