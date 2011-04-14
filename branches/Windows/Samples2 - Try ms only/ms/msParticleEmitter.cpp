@@ -9,19 +9,19 @@
 
 
 msParticleEmitter::msParticleEmitter(
-									 Vector2f inPosition ,
-									 Vector2f inSourcePositionVariance,
+									 msVector inPosition ,
+									 msVector inSourcePositionVariance,
 									 GLfloat inSpeed,
 									 GLfloat inSpeedVariance,
 									 GLfloat inParticleLifeSpan,
 									 GLfloat inParticleLifeSpanVariance,
 									 GLfloat inAngle,
 									 GLfloat inAngleVariance,
-									 Vector2f inGravity,
-									 Color4f inStartColor,
-									 Color4f inStartColorVariance,
-									 Color4f inFinishColor ,
-									 Color4f inFinishColorVariance,
+									 msVector inGravity,
+									 msColor inStartColor,
+									 msColor inStartColorVariance,
+									 msColor inFinishColor ,
+									 msColor inFinishColorVariance,
 									 GLuint inMaxParticles ,
 									 GLfloat inParticleSize,
 									 GLfloat inParticleSizeVariance,
@@ -60,9 +60,9 @@ msParticleEmitter::msParticleEmitter(
 	blendAdditive = inBlendAdditive;
 
 	// Allocate the memory necessary for the particle emitter arrays
-	particles = (Particle*)calloc(maxParticles, sizeof(Particle));
-	vertices = (PointSprite*)calloc(maxParticles, sizeof(PointSprite));
-	colors = (Color4f*)calloc(maxParticles, sizeof(Color4f));
+	particles = (msParticle*)calloc(maxParticles, sizeof(msParticle));
+	vertices = (msPointSprite*)calloc(maxParticles, sizeof(msPointSprite));
+	colors = (msColor*)calloc(maxParticles, sizeof(msColor));
 
 	// If one of the arrays cannot be allocated, then report a warning and return nil
 	if(!(particles && vertices && colors))
@@ -185,7 +185,7 @@ void msParticleEmitter::update(GLfloat delta)
 	while(particleIndex < particleCount) {
 
 		// Get the particle for the current particle index
-		Particle *currentParticle = &particles[particleIndex];
+		msParticle *currentParticle = &particles[particleIndex];
 
 		// If the current particle is alive then update it
 		if(currentParticle->timeToLive > 0) {
@@ -206,10 +206,10 @@ void msParticleEmitter::update(GLfloat delta)
 			vertices[particleIndex].size = currentParticle->particleSize;
 
 			// Update the particles color
-			currentParticle->color.red += (currentParticle->deltaColor.red * delta);
-			currentParticle->color.green += (currentParticle->deltaColor.green * delta);
-			currentParticle->color.blue += (currentParticle->deltaColor.blue * delta);
-			currentParticle->color.alpha += (currentParticle->deltaColor.alpha * delta);
+			currentParticle->color.r += (currentParticle->deltaColor.r * delta);
+			currentParticle->color.g += (currentParticle->deltaColor.g * delta);
+			currentParticle->color.b += (currentParticle->deltaColor.b * delta);
+			currentParticle->color.a += (currentParticle->deltaColor.a * delta);
 
 			// Place the color of the current particle into the color array
 			colors[particleIndex] = currentParticle->color;
@@ -243,7 +243,7 @@ GLboolean msParticleEmitter::addParticle()
 		return GL_FALSE;
 
 	// Take the next particle out of the particle pool we have created and initialize it
-	Particle *particle = &particles[particleCount];
+	msParticle *particle = &particles[particleCount];
 	initParticle(particle);
 
 	// Increment the particle count
@@ -253,7 +253,7 @@ GLboolean msParticleEmitter::addParticle()
 	return GL_TRUE; 
 }
 
-void msParticleEmitter::initParticle(Particle* particle)
+void msParticleEmitter::initParticle(msParticle* particle)
 {
 	//srand((unsigned)time( NULL ));
 	// Init the position of the particle.  This is based on the source position of the particle emitter
@@ -267,7 +267,7 @@ void msParticleEmitter::initParticle(Particle* particle)
 	float newAngle = (GLfloat)DEGREES_TO_RADIANS(angle + angleVariance * RANDOM_MINUS_1_TO_1());
 
 	// Create a new Vector2f using the newAngle
-	Vector2f vector = Vector2fMake(cosf(newAngle), sinf(newAngle));
+	msVector vector = Vector2fMake(cosf(newAngle), sinf(newAngle));
 
 	// Calculate the vectorSpeed using the speed and speedVariance which has been passed in
 	float vectorSpeed = speed + speedVariance * RANDOM_MINUS_1_TO_1();
@@ -284,28 +284,28 @@ void msParticleEmitter::initParticle(Particle* particle)
 
 	// Calculate the color the particle should have when it starts its life.  All the elements
 	// of the start color passed in along with the variance as used to calculate the star color
-	Color4f start = {0, 0, 0, 0};
-	start.red = startColor.red + startColorVariance.red * RANDOM_MINUS_1_TO_1();
-	start.green = startColor.green + startColorVariance.green * RANDOM_MINUS_1_TO_1();
-	start.blue = startColor.blue + startColorVariance.blue * RANDOM_MINUS_1_TO_1();
-	start.alpha = startColor.alpha + startColorVariance.alpha * RANDOM_MINUS_1_TO_1();
+	msColor start = {0, 0, 0, 0};
+	start.r = startColor.r + startColorVariance.r * RANDOM_MINUS_1_TO_1();
+	start.g = startColor.g + startColorVariance.g * RANDOM_MINUS_1_TO_1();
+	start.b = startColor.b + startColorVariance.b * RANDOM_MINUS_1_TO_1();
+	start.a = startColor.a + startColorVariance.a * RANDOM_MINUS_1_TO_1();
 
 	// Calculate the color the particle should be when its life is over.  This is done the same
 	// way as the start color above
-	Color4f end = {0, 0, 0, 0};
-	end.red = finishColor.red + finishColorVariance.red * RANDOM_MINUS_1_TO_1();
-	end.green = finishColor.green + finishColorVariance.green * RANDOM_MINUS_1_TO_1();
-	end.blue = finishColor.blue + finishColorVariance.blue * RANDOM_MINUS_1_TO_1();
-	end.alpha = finishColor.alpha + finishColorVariance.alpha * RANDOM_MINUS_1_TO_1();
+	msColor end = {0, 0, 0, 0};
+	end.r = finishColor.r + finishColorVariance.r * RANDOM_MINUS_1_TO_1();
+	end.g = finishColor.g + finishColorVariance.g * RANDOM_MINUS_1_TO_1();
+	end.b = finishColor.b + finishColorVariance.b * RANDOM_MINUS_1_TO_1();
+	end.a = finishColor.a + finishColorVariance.a * RANDOM_MINUS_1_TO_1();
 
 	// Calculate the delta which is to be applied to the particles color during each cycle of its
 	// life.  The delta calculation uses the life space of the particle to make sure that the 
 	// particles color will transition from the start to end color during its life time.
 	particle->color = start;
-	particle->deltaColor.red = (end.red - start.red) / particle->timeToLive;
-	particle->deltaColor.green = (end.green - start.green) / particle->timeToLive;
-	particle->deltaColor.blue = (end.blue - start.blue) / particle->timeToLive;
-	particle->deltaColor.alpha= (end.alpha - start.alpha) / particle->timeToLive;
+	particle->deltaColor.r = (end.r - start.r) / particle->timeToLive;
+	particle->deltaColor.g = (end.g - start.g) / particle->timeToLive;
+	particle->deltaColor.b = (end.b - start.b) / particle->timeToLive;
+	particle->deltaColor.a= (end.a - start.a) / particle->timeToLive;
 }
 
 void msParticleEmitter::stopParticleEmitter()

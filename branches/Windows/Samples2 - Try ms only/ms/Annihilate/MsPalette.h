@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include "MsCommon.h"
+#include "../MsCommon.h"
 
 #define MS_PALETTE_MAX_COLORS 100
 

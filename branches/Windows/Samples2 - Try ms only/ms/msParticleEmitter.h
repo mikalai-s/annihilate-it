@@ -10,18 +10,18 @@ private:
 	//Image *texture;
 
 	
-	Vector2f sourcePositionVariance;
+	msVector sourcePositionVariance;
 	GLfloat angle;
 	GLfloat angleVariance;
 	GLfloat speed;
 	GLfloat speedVariance;
-	Vector2f gravity;
+	msVector gravity;
 	GLfloat particleLifespan;
 	GLfloat particleLifespanVariance;
-	Color4f startColor;
-	Color4f startColorVariance;
-	Color4f finishColor;
-	Color4f finishColorVariance;
+	msColor startColor;
+	msColor startColorVariance;
+	msColor finishColor;
+	msColor finishColorVariance;
 	GLfloat particleSize;
 	GLfloat particleSizeVariance;
 	GLuint maxParticles;
@@ -41,34 +41,34 @@ private:
 
 	GLboolean addParticle();
 
-	void initParticle(Particle* particle);
+	void initParticle(msParticle* particle);
 
 	void stopParticleEmitter();
 
 public:
-	Vector2f sourcePosition;
+	msVector sourcePosition;
 	GLfloat duration;
 	GLboolean active;
 		GLuint particleCount;
-		Particle *particles;
-		PointSprite *vertices;
-		Color4f *colors;
+		msParticle *particles;
+		msPointSprite *vertices;
+		msColor *colors;
 		GLboolean blendAdditive;
 
 	msParticleEmitter(
-		Vector2f inPosition ,
-		Vector2f inSourcePositionVariance,
+		msVector inPosition ,
+		msVector inSourcePositionVariance,
 		GLfloat inSpeed,
 		GLfloat inSpeedVariance,
 		GLfloat inParticleLifeSpan,
 		GLfloat inParticleLifeSpanVariance,
 		GLfloat inAngle,
 		GLfloat inAngleVariance,
-		Vector2f inGravity,
-		Color4f inStartColor,
-		Color4f inStartColorVariance,
-		Color4f inFinishColor ,
-		Color4f inFinishColorVariance,
+		msVector inGravity,
+		msColor inStartColor,
+		msColor inStartColorVariance,
+		msColor inFinishColor ,
+		msColor inFinishColorVariance,
 		GLuint inMaxParticles ,
 		GLfloat inParticleSize,
 		GLfloat inParticleSizeVariance,

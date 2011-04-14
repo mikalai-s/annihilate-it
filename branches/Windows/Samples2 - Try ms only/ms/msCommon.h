@@ -28,99 +28,124 @@
 // Macro which converts degrees into radians
 #define DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__) / 180.0f * GL_PI)
 
+struct msColor
+{
+	GLfloat r;
+	GLfloat g;
+	GLfloat b;
+	GLfloat a;
+};
 
-typedef struct _Color4f {
-	GLfloat red;
-	GLfloat green;
-	GLfloat blue;
-	GLfloat alpha;
-} Color4f;
-
-typedef struct _Vector2f {
+struct msVector {
 	GLfloat x;
 	GLfloat y;
-} Vector2f;
+};
 
-typedef struct _Quad2f {
+struct msQuad
+{
 	GLfloat bl_x, bl_y;
 	GLfloat br_x, br_y;
 	GLfloat tl_x, tl_y;
 	GLfloat tr_x, tr_y;
-} Quad2f;
+};
 
-typedef struct _Particle {
-	Vector2f position;
-	Vector2f direction;
-	Color4f color;
-	Color4f deltaColor;
+struct msParticle
+{
+	msVector position;
+	msVector direction;
+	msColor color;
+	msColor deltaColor;
 	GLfloat particleSize;
 	GLfloat timeToLive;
-} Particle;
+};
 
 
-typedef struct _PointSprite {
+struct msPointSprite
+{
 	GLfloat x;
 	GLfloat y;
 	GLfloat size;
-} PointSprite;
+};
 
-
-
-static const Vector2f Vector2fZero = {0.0f, 0.0f};
-
-static inline Vector2f Vector2fMake(GLfloat x, GLfloat y)
+struct msPoint
 {
-	Vector2f v;
+	GLfloat x;
+	GLfloat y;
+	GLfloat z;
+};
+
+struct msSize
+{
+	GLfloat width;
+	GLfloat height;
+};
+
+
+struct msBorder
+{
+	GLint left;
+	GLint top;
+	GLint right;
+	GLint bottom;
+};
+
+
+
+static const msVector Vector2fZero = {0.0f, 0.0f};
+
+static inline msVector Vector2fMake(GLfloat x, GLfloat y)
+{
+	msVector v;
 	v.x = x;
 	v.y = y;
 	return v;
 }
 
-static inline Color4f Color4fMake(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+static inline msColor colorMake(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
-	Color4f c;
-	c.red = red;
-	c.green = green;
-	c.blue = blue;
-	c.alpha = alpha;
+	msColor c;
+	c.r = red;
+	c.g = green;
+	c.b = blue;
+	c.a = alpha;
 	return c;
 }
 
-static inline Vector2f Vector2fMultiply(Vector2f v, GLfloat s)
+static inline msVector Vector2fMultiply(msVector v, GLfloat s)
 {
-	Vector2f vv;
+	msVector vv;
 	vv.x = v.x * s;
 	vv.y = v.y * s;
 	return vv;
 }
 
-static inline Vector2f Vector2fAdd(Vector2f v1, Vector2f v2)
+static inline msVector Vector2fAdd(msVector v1, msVector v2)
 {
-	Vector2f vr;
+	msVector vr;
 	vr.x = v1.x + v2.x;
 	vr.y = v1.y + v2.y;
 	return vr;
 }
 
-static inline Vector2f Vector2fSub(Vector2f v1, Vector2f v2)
+static inline msVector Vector2fSub(msVector v1, msVector v2)
 {
-	Vector2f vr;
+	msVector vr;
 	vr.x = v1.x - v2.x;
 	vr.y = v1.y - v2.y;
 	return vr;
 }
 
-static inline GLfloat Vector2fDot(Vector2f v1, Vector2f v2)
+static inline GLfloat Vector2fDot(msVector v1, msVector v2)
 {
 	return (GLfloat) v1.x * v2.x + v1.y * v2.y;
 }
 
-static inline GLfloat Vector2fLength(Vector2f v)
+static inline GLfloat Vector2fLength(msVector v)
 {
 	return (GLfloat) sqrt(Vector2fDot(v, v));
 }
 
-static inline Vector2f Vector2fNormalize(Vector2f v)
+static inline msVector Vector2fNormalize(msVector v)
 {
 	return Vector2fMultiply(v, 1.0f/Vector2fLength(v));
 } 

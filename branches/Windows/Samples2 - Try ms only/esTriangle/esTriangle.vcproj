@@ -450,13 +450,6 @@
 				<File
 					RelativePath="..\ms\Annihilate\MsBoxGrid.cpp"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\ms\Annihilate\MsBoxGrid.h"
@@ -468,25 +461,6 @@
 							Name="VCCustomBuildTool"
 						/>
 					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\MsCommon.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\MsCommon.h"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\MsGrid.cpp"
-					>
 				</File>
 				<File
 					RelativePath="..\ms\Annihilate\MsGrid.h"

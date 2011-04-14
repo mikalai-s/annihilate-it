@@ -1,6 +1,6 @@
 #pragma once
 
-#include "msCommon.h"
+#include "../msCommon.h"
 #include "msAnimationBase.h"
 
 

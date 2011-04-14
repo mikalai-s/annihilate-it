@@ -1,7 +1,7 @@
 #pragma once
 
 #include "msAnimationBase.h"
-#include "MsCommon.h"
+#include "../MsCommon.h"
 #include <list>
 
 using namespace::std;

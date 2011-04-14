@@ -199,10 +199,10 @@ void msScene::init()
 		0.0f,//angle:
 		360.0f,//angleVariance:
 		Vector2fMake(0.0f, -0.00025f),//gravity:
-		Color4fMake(1.0f, 0.5f, 0.05f, 1.0f),//startColor:
-		Color4fMake(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
-		Color4fMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColor:
-		Color4fMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
+		colorMake(1.0f, 0.5f, 0.05f, 1.0f),//startColor:
+		colorMake(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
+		colorMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColor:
+		colorMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
 		200,//maxParticles:
 		190,//particleSize:
 		30,//particleSizeVariance:
@@ -221,10 +221,10 @@ void msScene::init()
 		90.0f,//angle:
 		90.0f,//angleVariance:
 		Vector2fMake(0.0f, -0.0001f),//gravity:
-		Color4fMake(0.5f, 0.5f, 0.5f, 1.0f),//startColor:
-		Color4fMake(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
-		Color4fMake(0.1f, 0.1f, 0.1f, 0.0f),//finishColor:
-		Color4fMake(0.0f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
+		colorMake(0.5f, 0.5f, 0.5f, 1.0f),//startColor:
+		colorMake(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
+		colorMake(0.1f, 0.1f, 0.1f, 0.0f),//finishColor:
+		colorMake(0.0f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
 		1000,//maxParticles:
 		20,//particleSize:
 		5,//particleSizeVariance:
