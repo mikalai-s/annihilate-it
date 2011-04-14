@@ -7,8 +7,8 @@
  *
  */
 
-#include <OpenGLES/ES1/gl.h>
-#include "msCommon.h"
+#include "../msGL.h"
+#include "../msCommon.h"
 #include "msBox.h"
 #include "msBoxGrid.h"
 #include "msPalette.h"
