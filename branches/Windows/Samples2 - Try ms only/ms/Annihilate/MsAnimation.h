@@ -5,7 +5,7 @@
 
 
 template <class T>
-class MsAnimation : public msAnimationBase
+class msAnimation : public msAnimationBase
 {
 public:
 	T m_from;
@@ -16,7 +16,7 @@ public:
 
 	static void _lineStep(msAnimationBase *ab)
 	{
-		MsAnimation<msPoint*> *anim = (MsAnimation<msPoint*>*)ab;
+		msAnimation<msPoint*> *anim = (msAnimation<msPoint*>*)ab;
 		msPoint *from = ab->m_from;
 		msPoint *to = ab->m_to;
 		msPoint step;
@@ -27,7 +27,7 @@ public:
 		from->y += step.y;
 	}
 
-	MsAnimation(T from, T to, GLint delayCount, GLint count, void (*stepCallback)(msAnimationBase*)) : msAnimationBase(delayCount, count, stepCallback)
+	msAnimation(T from, T to, GLint delayCount, GLint count, void (*stepCallback)(msAnimationBase*)) : msAnimationBase(delayCount, count, stepCallback)
 	{
 		m_from = from;
 		m_to = to;
@@ -38,7 +38,7 @@ public:
 		m_rVector.z = 0.0f;
 	}
 
-	~MsAnimation()
+	~msAnimation()
 	{
 
 	}

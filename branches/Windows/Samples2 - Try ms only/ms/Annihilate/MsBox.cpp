@@ -3,12 +3,12 @@
 #include "stdio.h"
 #include "MsPalette.h"
 
-MsBox::MsBox()
+msBox::msBox()
 {
 
 }
 
-MsBox::MsBox(float x, float y, float width, float height, int colorIndex)
+msBox::msBox(float x, float y, float width, float height, int colorIndex)
 {	
 	m_location.x = x;
 	m_location.y = y;
@@ -20,9 +20,9 @@ MsBox::MsBox(float x, float y, float width, float height, int colorIndex)
     m_border.top = 0;
     m_border.right = 0;
     m_border.bottom = 0;
-	m_animations = new MsAnimationBundle();
+	m_animations = new msAnimationBundle();
     
-	MsBox *boxToAnimate = new MsBox();
+	msBox *boxToAnimate = new msBox();
 	boxToAnimate->m_location = m_location;
 	boxToAnimate->m_size = m_size;
 	boxToAnimate->m_colorIndex = m_colorIndex;
@@ -31,13 +31,13 @@ MsBox::MsBox(float x, float y, float width, float height, int colorIndex)
 }
 
 
-MsBox::~MsBox()
+msBox::~msBox()
 {
 	delete m_animations;
 	delete m_boxToAnimate;
 }
 
-MsBox* MsBox::copy(MsBox *target)
+msBox* msBox::copy(msBox *target)
 {
     target->m_location = m_location;
     target->m_size = m_size;
@@ -45,13 +45,13 @@ MsBox* MsBox::copy(MsBox *target)
 	return target;
 }
 
-void MsBox::makeInvisible()
+void msBox::makeInvisible()
 {
 	m_colorIndex = MS_BOX_INVISIBLE;
 }
 
 
-GLboolean MsBox::isVisible()
+GLboolean msBox::isVisible()
 {
 	return (m_colorIndex != MS_BOX_INVISIBLE);
 }

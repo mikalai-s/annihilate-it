@@ -5,7 +5,7 @@
 
 #define MS_BOX_INVISIBLE -1
 
-class MsBox
+class msBox
 {
 public:
 	msPoint m_location;
@@ -14,23 +14,23 @@ public:
 	//    color color;
 
 	// copy of the current box. is used just for animation. can be refactored in the future.
-	MsBox *m_boxToAnimate;
+	msBox *m_boxToAnimate;
 
 	// animations related
-	MsAnimationBundle *m_animations;
+	msAnimationBundle *m_animations;
 
 	// visibility of border
 	msBorder m_border;
 
 private:
-	MsBox();
+	msBox();
 
 public:
-	MsBox(float x, float y, float width, float height, int colorIndex);
+	msBox(float x, float y, float width, float height, int colorIndex);
 
-	~MsBox();
+	~msBox();
 
-	MsBox* copy(MsBox *target);
+	msBox* copy(msBox *target);
 
 	void makeInvisible();
 

@@ -15,7 +15,7 @@ msAnimationBase::~msAnimationBase()
 
 void msAnimationBase::_defaultStep(msAnimationBase *anim)
 {
-	MsAnimation<float> *a = (MsAnimation<float>*)anim;
+	msAnimation<float> *a = (msAnimation<float>*)anim;
 	float step = (a->m_to - a->m_from) / a->m_count;
 	a->m_from += step;
 }

@@ -13,11 +13,11 @@
 #include "MsBoxGrid.h"
 #include "MsPalette.h"
 
-void ms_gl_draw_box(MsPalette *palette, MsBox *box, color *color);
+void ms_gl_draw_box(MsPalette *palette, msBox *box, color *color);
 
-void ms_gl_draw_left_border(MsBox *box, color *color);
-void ms_gl_draw_top_border(MsBox *box, color *color);
-void ms_gl_draw_right_border(MsBox *box, color *color);
-void ms_gl_draw_bottom_border(MsBox *box, color *color);
+void ms_gl_draw_left_border(msBox *box, color *color);
+void ms_gl_draw_top_border(msBox *box, color *color);
+void ms_gl_draw_right_border(msBox *box, color *color);
+void ms_gl_draw_bottom_border(msBox *box, color *color);
 
-void ms_gl_draw_boxgrid(MsBoxGrid *boxGrid);
+void ms_gl_draw_boxgrid(msBoxGrid *boxGrid);

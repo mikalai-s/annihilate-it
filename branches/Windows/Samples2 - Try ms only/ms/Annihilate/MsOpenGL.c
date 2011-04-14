@@ -13,7 +13,7 @@ GLfloat mBoxVertexesTemp[6][3]; // 6 vertexes for defining quad by means of two 
 
 float mBoxBordersTemp[6]; // array of vertexes for box borders
 
-void ms_gl_draw_box(MsPalette *palette, MsBox *box, color *c)
+void ms_gl_draw_box(MsPalette *palette, msBox *box, color *c)
 {
     color  *boxColorTemp;
     
@@ -57,7 +57,7 @@ void _drawLine(float v[6], color *color)
     glDrawArrays(GL_LINES, 0, 2);
 }
 
-void ms_gl_draw_left_border(MsBox *box, color *color)
+void ms_gl_draw_left_border(msBox *box, color *color)
 {
     mBoxBordersTemp[0] = box->location.x;
     mBoxBordersTemp[1] = box->location.y;    
@@ -69,7 +69,7 @@ void ms_gl_draw_left_border(MsBox *box, color *color)
     _drawLine(mBoxBordersTemp, color);
 }
 
-void ms_gl_draw_top_border(MsBox *box, color *color)
+void ms_gl_draw_top_border(msBox *box, color *color)
 {
     mBoxBordersTemp[0] = box->location.x;
     mBoxBordersTemp[1] = box->location.y;    
@@ -80,7 +80,7 @@ void ms_gl_draw_top_border(MsBox *box, color *color)
     
     _drawLine(mBoxBordersTemp, color);}
 
-void ms_gl_draw_right_border(MsBox *box, color *color)
+void ms_gl_draw_right_border(msBox *box, color *color)
 {
     mBoxBordersTemp[0] = box->location.x+ box->size.width;;
     mBoxBordersTemp[1] = box->location.y;    
@@ -92,7 +92,7 @@ void ms_gl_draw_right_border(MsBox *box, color *color)
     _drawLine(mBoxBordersTemp, color);  
 }
 
-void ms_gl_draw_bottom_border(MsBox *box, color *color)
+void ms_gl_draw_bottom_border(msBox *box, color *color)
 {
     mBoxBordersTemp[0] = box->location.x + box->size.width;
     mBoxBordersTemp[1] = box->location.y + box->size.height;    
@@ -104,7 +104,7 @@ void ms_gl_draw_bottom_border(MsBox *box, color *color)
     _drawLine(mBoxBordersTemp, color);
 }
 
-void ms_gl_draw_boxgrid(MsBoxGrid *boxGrid)
+void ms_gl_draw_boxgrid(msBoxGrid *boxGrid)
 {
     color  *boxColorTemp;
     
@@ -112,7 +112,7 @@ void ms_gl_draw_boxgrid(MsBoxGrid *boxGrid)
     {
         for(int x = 0; x < boxGrid->grid->columnCount; x ++)
         {
-            MsBox* box = (MsBox*)ms_grid_get_item(boxGrid->grid, y, x).p;
+            msBox* box = (msBox*)ms_grid_get_item(boxGrid->grid, y, x).p;
             
             
             
@@ -124,11 +124,11 @@ void ms_gl_draw_boxgrid(MsBoxGrid *boxGrid)
                 boxColorTemp = ms_palette_get_color(boxGrid->palette, box->boxToAnimate->colorIndex);                
                 
                 // todo: refactor this
-                MsAnimation *animation;
+                msAnimation *animation;
                 MsListItem *item = box->animations->list->first;
                 while(item != 0)
                 {
-                    animation = (MsAnimation*)item->value.p;
+                    animation = (msAnimation*)item->value.p;
                     item = item->next;
                     
                     if(animation->rAngle != 0)

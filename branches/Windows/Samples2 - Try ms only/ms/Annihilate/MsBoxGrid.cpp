@@ -6,13 +6,13 @@
 #include "MsGrid.h"
 
 
-void MsBoxGrid::_ms_boxgrid_refresh_borders()
+void msBoxGrid::_ms_boxgrid_refresh_borders()
 {
     for(GLuint y = 0; y < grid->m_rowCount; y ++)
 	{
 		for(GLuint x = 0; x < grid->m_columnCount; x ++)
 		{
-			MsBox *box = grid->getItem(y, x);
+			msBox *box = grid->getItem(y, x);
             
             box->m_border.left = !ms_boxgrid_check_neighbours(y, x-1, y, x);
             box->m_border.top = !ms_boxgrid_check_neighbours(y-1, x, y, x);
@@ -23,22 +23,22 @@ void MsBoxGrid::_ms_boxgrid_refresh_borders()
 }
 
 
-MsBoxGrid::MsBoxGrid(msPalette *palette, GLint *pattern, GLuint numRows, GLuint numCols, GLfloat gridHeight, GLfloat gridWidth)
+msBoxGrid::msBoxGrid(msPalette *palette, GLint *pattern, GLuint numRows, GLuint numCols, GLfloat gridHeight, GLfloat gridWidth)
 {
 	init(palette, pattern, numRows, numCols, gridHeight, gridWidth);
 }
 
-MsBoxGrid::MsBoxGrid(msPalette *palette, GLuint numColors, GLuint numRows, GLuint numCols, GLfloat gridHeight, GLfloat gridWidth)
+msBoxGrid::msBoxGrid(msPalette *palette, GLuint numColors, GLuint numRows, GLuint numCols, GLfloat gridHeight, GLfloat gridWidth)
 {   
 	init(palette, _ms_boxgrid_generate_random_pattern(numRows, numCols, numColors), numRows, numCols, gridHeight, gridWidth) ;
 }
 
-void MsBoxGrid::init(msPalette *palette, GLint *pattern, GLuint numRows, GLuint numCols, GLfloat gridHeight, GLfloat gridWidth)
+void msBoxGrid::init(msPalette *palette, GLint *pattern, GLuint numRows, GLuint numCols, GLfloat gridHeight, GLfloat gridWidth)
 {
 	float width = gridWidth / numCols, height = gridHeight / numRows;
 	float curx = 0, cury = 0;
 
-	grid = new msGrid<MsBox*>(numRows, numCols);
+	grid = new msGrid<msBox*>(numRows, numCols);
 	palette = palette;
 
 	size.width = gridWidth;
@@ -49,7 +49,7 @@ void MsBoxGrid::init(msPalette *palette, GLint *pattern, GLuint numRows, GLuint 
 		curx = 0;
 		for(GLuint x = 0; x < numCols; x ++)
 		{
-			MsBox *box = new MsBox(curx, cury, width, height, pattern[y * numCols + x]);
+			msBox *box = new msBox(curx, cury, width, height, pattern[y * numCols + x]);
 			grid->setItem(y, x, box);
 
 			curx += width;
@@ -62,12 +62,12 @@ void MsBoxGrid::init(msPalette *palette, GLint *pattern, GLuint numRows, GLuint 
 }
 
 
-int MsBoxGrid::_ms_boxgrid_get_index_by_yx(GLuint y, GLuint x, GLuint numCols)
+int msBoxGrid::_ms_boxgrid_get_index_by_yx(GLuint y, GLuint x, GLuint numCols)
 {
 	return y * numCols + x;
 }
 
-GLint* MsBoxGrid::_ms_boxgrid_generate_random_pattern(GLuint numRows, GLuint numCols, GLuint numColors)
+GLint* msBoxGrid::_ms_boxgrid_generate_random_pattern(GLuint numRows, GLuint numCols, GLuint numColors)
 {
 	int *pattern = (int*)malloc(sizeof(int) * numRows * numCols);
    
@@ -82,13 +82,13 @@ GLint* MsBoxGrid::_ms_boxgrid_generate_random_pattern(GLuint numRows, GLuint num
 
 
 
-MsBoxGrid::~MsBoxGrid()
+msBoxGrid::~msBoxGrid()
 {
 	for(GLuint y = 0; y < grid->m_rowCount; y ++)
 	{
 		for(GLuint x = 0; x < grid->m_columnCount; x ++)
 		{
-			MsBox *item = grid->getItem(y, x);
+			msBox *item = grid->getItem(y, x);
 			delete item;
 		}
 	}
@@ -98,13 +98,13 @@ MsBoxGrid::~MsBoxGrid()
 
 
 
-void MsBoxGrid::display()
+void msBoxGrid::display()
 {
 	for(GLuint y = 0; y < grid->m_rowCount; y ++)
 	{
 		for(GLuint x = 0; x < grid->m_columnCount; x ++)
 		{
-			MsBox *box = grid->getItem(y, x);
+			msBox *box = grid->getItem(y, x);
 			if(box->isVisible())
 				printf("%d:(%3.0f,%3.0f)  ", box->m_colorIndex, box->m_location.y, box->m_location.x);
 			else
@@ -115,13 +115,13 @@ void MsBoxGrid::display()
 	printf("\r\n");
 }
 
-void MsBoxGrid::display2()
+void msBoxGrid::display2()
 {
 	for(GLuint y = 0; y < grid->m_rowCount; y ++)
 	{
 		for(GLuint x = 0; x < grid->m_columnCount; x ++)
 		{
-			MsBox *box = grid->getItem(y, x);
+			msBox *box = grid->getItem(y, x);
 			if(box->isVisible())
 				printf("%d", box->m_colorIndex);
 			else
@@ -133,10 +133,10 @@ void MsBoxGrid::display2()
 }
 
 
-void MsBoxGrid::_hiding1(msAnimationBase *a)
+void msBoxGrid::_hiding1(msAnimationBase *a)
 {
-	MsAnimation<MsBox*> *anim = (MsAnimation<MsBox*> *)a;
-    MsBox *box = anim->m_from;
+	msAnimation<msBox*> *anim = (msAnimation<msBox*> *)a;
+    msBox *box = anim->m_from;
     
     box->m_location.z = 1.0f;
     
@@ -149,7 +149,7 @@ void MsBoxGrid::_hiding1(msAnimationBase *a)
 
 
 
-void MsBoxGrid::_ms_boxgrid_animate_box_hiding(msBoxList *boxes)
+void msBoxGrid::_ms_boxgrid_animate_box_hiding(msBoxList *boxes)
 {    
     //ms_box_copy(box, box->boxToAnimate);
     
@@ -163,13 +163,13 @@ void MsBoxGrid::_ms_boxgrid_animate_box_hiding(msBoxList *boxes)
 
 
 
-void MsBoxGrid::_removeSimilarBoxes(GLuint y, GLuint x, GLuint c, msBoxList *removedBoxes)
+void msBoxGrid::_removeSimilarBoxes(GLuint y, GLuint x, GLuint c, msBoxList *removedBoxes)
 {
     // out of range
     if(x < 0 || y < 0 || x >= grid->m_columnCount || y >= grid->m_rowCount)
         return;
     
-    MsBox *box = grid->getItem(y, x);
+    msBox *box = grid->getItem(y, x);
 	if(!box->isVisible())
 		return;
     
@@ -190,9 +190,9 @@ void MsBoxGrid::_removeSimilarBoxes(GLuint y, GLuint x, GLuint c, msBoxList *rem
 }
 
 
-int MsBoxGrid::_ms_boxgrid_has_similar_neighbour(GLuint y, GLuint x, GLuint colorIndex)
+int msBoxGrid::_ms_boxgrid_has_similar_neighbour(GLuint y, GLuint x, GLuint colorIndex)
 {
-    MsBox *neighbour;
+    msBox *neighbour;
     
     if(x < 0 || x >= grid->m_columnCount || y < 0 || y >= grid->m_rowCount)
         return 0;
@@ -225,10 +225,10 @@ int MsBoxGrid::_ms_boxgrid_has_similar_neighbour(GLuint y, GLuint x, GLuint colo
 }
 
 
-void MsBoxGrid::removeSimilarItems(GLuint y, GLuint x)
+void msBoxGrid::removeSimilarItems(GLuint y, GLuint x)
 {
 	msBoxList removedBoxes;
-	MsBox *box = grid->getItem(y, x);
+	msBox *box = grid->getItem(y, x);
 	if(box->isVisible())
     {
         if(_ms_boxgrid_has_similar_neighbour(y, x, box->m_colorIndex))
@@ -241,18 +241,18 @@ void MsBoxGrid::removeSimilarItems(GLuint y, GLuint x)
 }
 
 
-void MsBoxGrid::_exchangeBoxes(GLuint y1, GLuint x1, GLuint y2, GLuint x2)
+void msBoxGrid::_exchangeBoxes(GLuint y1, GLuint x1, GLuint y2, GLuint x2)
 {
-	MsBox *box1 = grid->getItem(y1, x1);
-	MsBox *box2 = grid->getItem(y2, x2);
+	msBox *box1 = grid->getItem(y1, x1);
+	msBox *box2 = grid->getItem(y2, x2);
 
 	grid->setItem(y1, x1, box2);
 	grid->setItem(y2, x2, box1);
 }
 
-void MsBoxGrid::_linearFalling(msAnimationBase *anim)
+void msBoxGrid::_linearFalling(msAnimationBase *anim)
 {
-	MsAnimation<msPoint*> *animation = (MsAnimation<msPoint*> *)anim;
+	msAnimation<msPoint*> *animation = (msAnimation<msPoint*> *)anim;
 
 	msPoint *from = animation->m_from;
 	msPoint *to = animation->m_to;
@@ -261,11 +261,11 @@ void MsBoxGrid::_linearFalling(msAnimationBase *anim)
 	from->y += (to->y - from->y) / animation->m_count;
 }
 
-void MsBoxGrid::_linearFalling2(msAnimationBase *anim)
+void msBoxGrid::_linearFalling2(msAnimationBase *anim)
 {
-	MsAnimation<msPoint*> *animation = (MsAnimation<msPoint*> *)anim;
+	msAnimation<msPoint*> *animation = (msAnimation<msPoint*> *)anim;
 	msPoint *from = animation->m_from;
-    switch((int)animation->m_to)
+    switch((GLuint)animation->m_to)
     {
         case MS_BOX_SHIFT_TOP:
             from->y += 0.2f;
@@ -286,12 +286,12 @@ void MsBoxGrid::_linearFalling2(msAnimationBase *anim)
 }
 
 
-void MsBoxGrid::_exchangeBoxesWithAnimation(GLuint y1, GLuint x1, GLuint y2, GLuint x2, int direction)
+void msBoxGrid::_exchangeBoxesWithAnimation(GLuint y1, GLuint x1, GLuint y2, GLuint x2, int direction)
 {
 	int times = 10;	
 
-	MsBox *box1 = grid->getItem(y1, x1);
-	MsBox *box2 = grid->getItem(y2, x2);
+	msBox *box1 = grid->getItem(y1, x1);
+	msBox *box2 = grid->getItem(y2, x2);
     
 	grid->setItem(y1, x1, box2);
 	grid->setItem(y2, x2, box1);
@@ -302,17 +302,17 @@ void MsBoxGrid::_exchangeBoxesWithAnimation(GLuint y1, GLuint x1, GLuint y2, GLu
     
     box1->m_boxToAnimate->m_border = box1->m_border;
   
-	msAnimationBase *animation = new MsAnimation<msPoint*>(&box1->m_boxToAnimate->m_location, &box1->m_location, 0, times, _linearFalling);
+	msAnimationBase *animation = new msAnimation<msPoint*>(&box1->m_boxToAnimate->m_location, &box1->m_location, 0, times, _linearFalling);
 	box1->m_animations->m_list.push_back(animation);
     
-    animation = new MsAnimation<msPoint*>(&box1->m_boxToAnimate->m_location, (msPoint*)direction, times, 10, _linearFalling2);
+    animation = new msAnimation<msPoint*>(&box1->m_boxToAnimate->m_location, (msPoint*)direction, times, 10, _linearFalling2);
 	box1->m_animations->m_list.push_back(animation);
     
-    animation = new MsAnimation<msPoint*>(&box1->m_boxToAnimate->m_location, &box1->m_location, times + 10, 1, _linearFalling);
+    animation = new msAnimation<msPoint*>(&box1->m_boxToAnimate->m_location, &box1->m_location, times + 10, 1, _linearFalling);
 	box1->m_animations->m_list.push_back(animation);
 }
 
-void MsBoxGrid::_shiftDown()
+void msBoxGrid::_shiftDown()
 {
 	for(GLuint x = 0; x < grid->m_columnCount; x ++)
 	{
@@ -343,7 +343,7 @@ void MsBoxGrid::_shiftDown()
 }
 
 
-void MsBoxGrid::_shiftTop()
+void msBoxGrid::_shiftTop()
 {  
 	for(GLuint x = 0; x < grid->m_columnCount; x ++)
 	{
@@ -374,7 +374,7 @@ void MsBoxGrid::_shiftTop()
 }
 
 
-void MsBoxGrid::_shiftRight()
+void msBoxGrid::_shiftRight()
 {
 	for(GLuint y = 0; y < grid->m_rowCount; y ++)
 	{
@@ -405,7 +405,7 @@ void MsBoxGrid::_shiftRight()
 }
 
 
-void MsBoxGrid::_shiftLeft()
+void msBoxGrid::_shiftLeft()
 {
 	for(GLuint y = 0; y < grid->m_rowCount; y ++)
 	{
@@ -436,7 +436,7 @@ void MsBoxGrid::_shiftLeft()
 }
 
 
-void MsBoxGrid::shiftPendentBoxes(int direction)
+void msBoxGrid::shiftPendentBoxes(int direction)
 {
 	if(direction == MS_BOX_SHIFT_LEFT)
 		_shiftLeft();
@@ -452,10 +452,10 @@ void MsBoxGrid::shiftPendentBoxes(int direction)
 
 // returns 1 if two boxes are with the same color
 // todo: check - it can be private
-int MsBoxGrid::ms_boxgrid_check_neighbours(GLuint y1, GLuint x1, GLuint y2, GLuint x2)
+int msBoxGrid::ms_boxgrid_check_neighbours(GLuint y1, GLuint x1, GLuint y2, GLuint x2)
 {
-    MsBox *box1 = grid->getItem(y1, x1);
-    MsBox *box2 = grid->getItem(y2, x2);
+    msBox *box1 = grid->getItem(y1, x1);
+    msBox *box2 = grid->getItem(y2, x2);
     
     if(box1 == 0 && box2 == 0)
         return 1;
@@ -467,7 +467,7 @@ int MsBoxGrid::ms_boxgrid_check_neighbours(GLuint y1, GLuint x1, GLuint y2, GLui
 }
 
 
-void MsBoxGrid::unitTest()
+void msBoxGrid::unitTest()
 {/*
 	int pattern_vert[] = 
 	{

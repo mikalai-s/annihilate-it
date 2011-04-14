@@ -13,14 +13,14 @@ using namespace::std;
 #define MS_BOX_SHIFT_TOP 2
 #define MS_BOX_SHIFT_RIGHT 3
 
-typedef list<MsBox*> msBoxList;
+typedef list<msBox*> msBoxList;
 typedef msBoxList::iterator msBoxIterator;
 
-class MsBoxGrid
+class msBoxGrid
 {
 	msSize size;
 
-	msGrid<MsBox*> *grid;
+	msGrid<msBox*> *grid;
 
 	msPalette *palette;
 
@@ -61,11 +61,11 @@ class MsBoxGrid
 public:
 	void init(msPalette *palette, GLint *pattern, GLuint numRows, GLuint numCols, GLfloat screenHeight, GLfloat screenWidth);
 
-	MsBoxGrid(msPalette *palette, GLint *pattern, GLuint numRows, GLuint numCols, GLfloat screenHeight, GLfloat screenWidth);
+	msBoxGrid(msPalette *palette, GLint *pattern, GLuint numRows, GLuint numCols, GLfloat screenHeight, GLfloat screenWidth);
 
-	MsBoxGrid(msPalette *palette, GLuint numColors, GLuint numRows, GLuint numCols, GLfloat gridHeight, GLfloat gridWidth);
+	msBoxGrid(msPalette *palette, GLuint numColors, GLuint numRows, GLuint numCols, GLfloat gridHeight, GLfloat gridWidth);
 
-	~MsBoxGrid();
+	~msBoxGrid();
 
 	void display();	
 

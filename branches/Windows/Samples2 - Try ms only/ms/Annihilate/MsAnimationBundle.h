@@ -10,7 +10,7 @@ typedef std::list<msAnimationBase*>	msAnimationList;
 typedef msAnimationList::iterator	msAnimationIterator;
 
 // represents set of animations each animation autoreleases when it's done
-class MsAnimationBundle
+class msAnimationBundle
 {
 public:
 	msAnimationList m_list;
@@ -18,8 +18,8 @@ public:
 	static void _lineStep2(msAnimationBase *anim);
 
 public:
-	MsAnimationBundle();
-	~MsAnimationBundle();
+	msAnimationBundle();
+	~msAnimationBundle();
 
 	void performStep();
 

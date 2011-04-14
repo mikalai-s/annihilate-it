@@ -3,11 +3,11 @@
 #include "stdlib.h"
 #include "stdio.h"
 
-MsAnimationBundle::MsAnimationBundle()
+msAnimationBundle::msAnimationBundle()
 {
 }
 
-void MsAnimationBundle::performStep()
+void msAnimationBundle::performStep()
 {
 	for(msAnimationIterator i = m_list.begin(); i != m_list.end(); i ++)
 	{
@@ -20,7 +20,7 @@ void MsAnimationBundle::performStep()
 	}
 }
 
-MsAnimationBundle::~MsAnimationBundle()
+msAnimationBundle::~msAnimationBundle()
 {
 	while(m_list.size() > 0)
 	{
@@ -30,18 +30,18 @@ MsAnimationBundle::~MsAnimationBundle()
 	}
 }
 
-void MsAnimationBundle::_lineStep2(msAnimationBase *anim)
+void msAnimationBundle::_lineStep2(msAnimationBase *anim)
 {
-	MsAnimation<float*> *a = (MsAnimation<float*>*)anim;
+	msAnimation<float*> *a = (msAnimation<float*>*)anim;
 	float *from = a->m_from;
 	float *to = a->m_to;
 	*from += (*to - *from) / anim->m_count;
 }
 
-void MsAnimationBundle::unitTest()
+void msAnimationBundle::unitTest()
 {
-	MsAnimationBundle bundle;
-MsAnimation<int> ia(0, 0, 0, 0, 0);
+	msAnimationBundle bundle;
+msAnimation<int> ia(0, 0, 0, 0, 0);
 
 
 /*
