@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MsAnimationBundle.h"
-#include "MsAnimation.h"
+#include "msAnimationBundle.h"
+#include "msAnimation.h"
 
 #define MS_BOX_INVISIBLE -1
 

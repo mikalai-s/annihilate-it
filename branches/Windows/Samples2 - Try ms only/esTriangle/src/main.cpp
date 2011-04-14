@@ -23,7 +23,7 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <io.h>
-#include "..\ms\msScene.h"
+#include "../ms/msScene.h"
 #include "Misc.h"
 #include <windowsx.h>
 

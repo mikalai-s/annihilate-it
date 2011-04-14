@@ -7,7 +7,7 @@
  *
  */
 
-#include "MsOpenGL.h"
+#include "msOpenGL.h"
 
 GLfloat mBoxVertexesTemp[6][3]; // 6 vertexes for defining quad by means of two triangles (2 vertex for each)
 

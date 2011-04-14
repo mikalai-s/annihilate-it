@@ -1,7 +1,7 @@
-#include "MsBox.h"
+#include "msBox.h"
 #include "stdlib.h"
 #include "stdio.h"
-#include "MsPalette.h"
+#include "msPalette.h"
 
 msBox::msBox()
 {

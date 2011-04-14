@@ -1,8 +1,8 @@
 #pragma once
 
-#include "MsBox.h"
-#include "MsGrid.h"
-#include "MsPalette.h"
+#include "msBox.h"
+#include "msGrid.h"
+#include "msPalette.h"
 #include <list>
 
 using namespace::std;

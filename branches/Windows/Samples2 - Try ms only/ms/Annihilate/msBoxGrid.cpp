@@ -2,8 +2,8 @@
 #include "stdio.h"
 #include "time.h"
 
-#include "MsBoxGrid.h"
-#include "MsGrid.h"
+#include "msBoxGrid.h"
+#include "msGrid.h"
 
 
 void msBoxGrid::_ms_boxgrid_refresh_borders()

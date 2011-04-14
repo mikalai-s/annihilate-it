@@ -8,10 +8,10 @@
  */
 
 #include <OpenGLES/ES1/gl.h>
-#include "MsCommon.h"
-#include "MsBox.h"
-#include "MsBoxGrid.h"
-#include "MsPalette.h"
+#include "msCommon.h"
+#include "msBox.h"
+#include "msBoxGrid.h"
+#include "msPalette.h"
 
 void ms_gl_draw_box(MsPalette *palette, msBox *box, color *color);
 

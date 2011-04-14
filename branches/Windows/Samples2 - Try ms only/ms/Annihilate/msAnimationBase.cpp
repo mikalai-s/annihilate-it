@@ -1,5 +1,5 @@
 #include "msAnimationBase.h"
-#include "MsAnimation.h"
+#include "msAnimation.h"
 
 msAnimationBase::msAnimationBase(GLint delayCount, GLint count, void (*stepCallback)(msAnimationBase*))
 {

@@ -399,15 +399,8 @@
 				Name="Annihilate"
 				>
 				<File
-					RelativePath="..\ms\Annihilate\MsAnimation.h"
+					RelativePath="..\ms\Annihilate\msAnimation.h"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\ms\Annihilate\msAnimationBase.cpp"
@@ -418,99 +411,48 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ms\Annihilate\MsAnimationBundle.cpp"
+					RelativePath="..\ms\Annihilate\msAnimationBundle.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\ms\Annihilate\MsAnimationBundle.h"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\MsBox.cpp"
+					RelativePath="..\ms\Annihilate\msAnimationBundle.h"
 					>
 				</File>
 				<File
-					RelativePath="..\ms\Annihilate\MsBox.h"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\MsBoxGrid.cpp"
+					RelativePath="..\ms\Annihilate\msBox.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\ms\Annihilate\MsBoxGrid.h"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\MsGrid.h"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\MsOpenGL.c"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\MsOpenGL.h"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\MsPalette.cpp"
+					RelativePath="..\ms\Annihilate\msBox.h"
 					>
 				</File>
 				<File
-					RelativePath="..\ms\Annihilate\MsPalette.h"
+					RelativePath="..\ms\Annihilate\msBoxGrid.cpp"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\ms\Annihilate\msBoxGrid.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ms\Annihilate\msGrid.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ms\Annihilate\msOpenGL.c"
+					>
+				</File>
+				<File
+					RelativePath="..\ms\Annihilate\msOpenGL.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ms\Annihilate\msPalette.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ms\Annihilate\msPalette.h"
+					>
 				</File>
 			</Filter>
 		</Filter>

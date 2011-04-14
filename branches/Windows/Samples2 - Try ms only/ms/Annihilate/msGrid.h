@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../MsCommon.h"
+#include "../msCommon.h"
 
 template <class T>
 class msGrid

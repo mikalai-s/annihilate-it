@@ -1,5 +1,5 @@
-#include "MsAnimationBundle.h"
-#include "MsAnimation.h"
+#include "msAnimationBundle.h"
+#include "msAnimation.h"
 #include "stdlib.h"
 #include "stdio.h"
 
