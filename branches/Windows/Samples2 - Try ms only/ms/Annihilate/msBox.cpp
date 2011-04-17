@@ -5,7 +5,8 @@
 
 msBox::msBox()
 {
-
+	m_animations = 0;
+	m_boxToAnimate = 0;
 }
 
 msBox::msBox(float x, float y, float width, float height, int colorIndex)
@@ -33,8 +34,11 @@ msBox::msBox(float x, float y, float width, float height, int colorIndex)
 
 msBox::~msBox()
 {
-	delete m_animations;
-	delete m_boxToAnimate;
+	if(m_animations != 0)
+		delete m_animations;
+
+	if(m_boxToAnimate != 0)
+		delete m_boxToAnimate;
 }
 
 msBox* msBox::copy(msBox *target)
@@ -53,43 +57,32 @@ void msBox::makeInvisible()
 
 GLboolean msBox::isVisible()
 {
+	if(this == 0)
+		return GL_FALSE;
+
 	return (m_colorIndex != MS_BOX_INVISIBLE);
 }
 
-/*
-void ms_box_unit_test()
+
+void msBox::unitTest()
 {
-	MsBox *box = ms_box_create(0,0,100,100,2);
-	MsAnimation *anime;
-	MsListItem *next;
-	int i;
+	msBox *box = new msBox(0, 0, 100, 100, 2);
+	msAnimationBundle *anims = box->m_animations;
 
-	ms_list_add_item(box->animations->list, _ptog(ms_animation_create_default(0, 2.5, 0, 5)));
-	ms_list_add_item(box->animations->list, _ptog(ms_animation_create_default(1, 7, 0, 10)));
+	anims->m_list.push_back(new msAnimation<GLfloat>(0, 2.5, 0, 5, 0));
+	anims->m_list.push_back(new msAnimation<GLfloat>(1, 7, 0, 10, 0));
 
-	for(i = 0; i < 100; i ++)
+	for(GLuint i = 0; i < 100; i ++)
 	{
-		MsListItem *item = box->animations->list->first;
-		while(item != 0)
+		for(msAnimationIterator ai = anims->m_list.begin(); ai != anims->m_list.end(); ai ++)
 		{
-			next = item->next;
-
-			anime = (MsAnimation*)item->value.p;
+			msAnimation<GLfloat> *a = (msAnimation<GLfloat> *)*ai;
 			
-			if(next != 0)
-				printf("%f\r\n", anime->from.f);
-			else
-				printf("  %f\r\n", anime->from.f);
-
-			if(ms_animation_perform_step(anime) == 0)
-			{
-				ms_animation_free(&anime);
-				ms_list_remove_item(box->animations->list, item);
-			}
-
-			item = next;
+			printf("%f\t%f\r\n", a->m_from, a->m_to);			
 		}
+
+		anims->performStep();
 	}
 
-	ms_box_free(&box);
-}*/
+	delete box;
+}

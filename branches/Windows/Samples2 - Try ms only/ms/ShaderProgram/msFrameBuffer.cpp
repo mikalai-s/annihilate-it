@@ -1,25 +1,37 @@
 #include "msFrameBuffer.h"
 
+// The constructor is used to wrap existing FBO
 msFrameBuffer::msFrameBuffer(GLuint id)
 {
+	m_name = 0;
 	m_id = id;
+	m_texture = 0;
+
+	m_requiresBufferDeletion = false;
 }
 
-msFrameBuffer::msFrameBuffer(const char *name, msTexture *texture)
+// The constructor is used to create new FBO
+msFrameBuffer::msFrameBuffer(string &name, msTexture *texture)
 {
-	m_name = name;
+	m_name = copyString(name);
 	m_texture = texture;
 
 	// Generate handles for two Frame Buffer Objects
 	glGenFramebuffers(1, &m_id);
+
+	m_requiresBufferDeletion = true;
 }
 
 msFrameBuffer::~msFrameBuffer(void)
 {
-		// don't forget release them:
-	
-	// Delete the FBOs
-	//glDeleteFramebuffers(2, m_id);
+	if(m_name != 0)
+		delete m_name;
+
+	if(m_texture != 0)
+		delete m_texture;
+
+	if(m_requiresBufferDeletion)
+		glDeleteFramebuffers(1, &m_id);
 }
 
 const char* msFrameBuffer::getName()

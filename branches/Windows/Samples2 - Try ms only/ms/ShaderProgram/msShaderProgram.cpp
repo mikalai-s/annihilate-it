@@ -2,27 +2,36 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <string>
 
-using namespace std;
-
-msShaderProgram::msShaderProgram(const char* name, const char *vertexShaderFileName, const char *fragmentShaderFileName)
+msShaderProgram::msShaderProgram(string &name, string &vertexShaderFileName, string &fragmentShaderFileName)
 {
-	m_name = name;
+	m_name = copyString(name);
 
 	m_handle = glCreateProgram();
 
 	m_vertexShaderHandle = glCreateShader( GL_VERTEX_SHADER );
-	loadShader(vertexShaderFileName, m_vertexShaderHandle);
+	loadShader(vertexShaderFileName.c_str(), m_vertexShaderHandle);
 
 	m_fragmentShaderHandle = glCreateShader( GL_FRAGMENT_SHADER );
-	loadShader(fragmentShaderFileName, m_fragmentShaderHandle);
+	loadShader(fragmentShaderFileName.c_str(), m_fragmentShaderHandle);
 }
 
 
 msShaderProgram::~msShaderProgram(void)
 {
-	delete m_name; 
+	delete m_name;
+	for(msUniformIterator i = m_uniforms.begin(); i != m_uniforms.end(); i++)
+		delete (*i);
+	for(msAttributeIterator i = m_attributes.begin(); i != m_attributes.end(); i++)
+		delete (*i);
+	for(msTextureIterator i = m_textures.begin(); i != m_textures.end(); i++)
+		delete (*i);
+	for(msFrameBufferIterator i = m_frameBuffers.begin(); i != m_frameBuffers.end(); i++)
+		delete (*i);
+
+	glDeleteProgram(m_handle);
+	glDeleteShader(m_vertexShaderHandle);
+	glDeleteShader(m_fragmentShaderHandle);
 }
 
 GLuint msShaderProgram::getHandle()
@@ -41,21 +50,21 @@ bool msShaderProgram::loadShader( const char* fileName, GLuint shaderHandle )
 	char* source = NULL;
 
 
-		// Use file io to load the code of the shader.
-		std::ifstream fp( fileName , ios_base::binary );
-		if( fp.fail() ) 
-		{
-			cout << "Failed to open shader file: " << fileName << endl;
-			return false;
-		}
+	// Use file io to load the code of the shader.
+	std::ifstream fp( fileName , ios_base::binary );
+	if( fp.fail() ) 
+	{
+		cout << "Failed to open shader file: " << fileName << endl;
+		return false;
+	}
 
-		fp.seekg( 0, std::ios_base::end );
-		const long len = fp.tellg();
-		fp.seekg( 0, std::ios_base::beg );
-		// The +1 is optional, depending on how you call glShaderSourceARB
-		source = new char[len+1];
-		fp.read(source, sizeof(char)*len);
-		source[len] = NULL;
+	fp.seekg( 0, std::ios_base::end );
+	const long len = fp.tellg();
+	fp.seekg( 0, std::ios_base::beg );
+	// The +1 is optional, depending on how you call glShaderSourceARB
+	source = new char[len+1];
+	fp.read(source, sizeof(char)*len);
+	source[len] = NULL;
 
 
 	const char* gls[1] = { source };
@@ -159,7 +168,8 @@ msUniform* msShaderProgram::getUniform(const char *name)
 			return uniform;
 	}
 	// if uniform is not found - try to create new uniform from shader code to resolve its location
-	msUniform *uniform = new msUniform(name); // create it
+	string n(name);
+	msUniform *uniform = new msUniform(n); // create it
 	uniform->setProgram(this); // set parent
 	uniform->link(); // to ensure location
 	if(uniform->getLocation() >= 0)

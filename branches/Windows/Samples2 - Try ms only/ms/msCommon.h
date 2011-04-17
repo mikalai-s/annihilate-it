@@ -10,8 +10,10 @@
 #pragma once
 
 #include "msGL.h"
-
 #include "math.h"
+#include <String>
+
+using namespace std;
 
 
 
@@ -149,3 +151,10 @@ static inline msVector Vector2fNormalize(msVector v)
 {
 	return Vector2fMultiply(v, 1.0f/Vector2fLength(v));
 } 
+
+static inline char* copyString(string src)
+{
+	char *dest = new char [src.length() + 1];
+	memcpy( dest, src.c_str(), src.length() + 1);
+	return dest;
+}

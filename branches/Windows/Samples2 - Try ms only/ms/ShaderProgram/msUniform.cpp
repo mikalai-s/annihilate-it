@@ -7,26 +7,24 @@
 #define SAMPLE_FLOAT_VEC4 1
 #define SAMPLE_FLOAT_MAT4 1
 
-// constructor for uniform with no uinitial valu
-msUniform::msUniform(const char *name)
+// constructor for uniform with no initial value
+msUniform::msUniform(string &name)
 {
-	m_name = name;
+	m_name = copyString(name);
 	m_type = -1;
 }
 
-msUniform::msUniform(const char *name, GLfloat v)
+msUniform::msUniform(string &name, GLfloat v)
 {
-    m_name = name;
+    m_name = copyString(name);
 
 	m_floatData[0] = v;
 	m_type = SAMPLE_FLOAT;
 }
 
-
-
-msUniform::msUniform(const char *name, GLfloat v[], GLuint size)
+msUniform::msUniform(string &name, GLfloat v[], GLuint size)
 {
-	m_name = name;
+	m_name = copyString(name);
 
 	for(GLuint i = 0; i < size; i ++)
 		m_floatData[i] = v[i];
@@ -36,9 +34,9 @@ msUniform::msUniform(const char *name, GLfloat v[], GLuint size)
 			 (size == 4) ? SAMPLE_FLOAT_VEC4 : 0;
 }
 
-msUniform::msUniform(const char *name, GLfloat matrix[4][4])
+msUniform::msUniform(string &name, GLfloat matrix[4][4])
 {
-	m_name = name;
+	m_name = copyString(name);
 
 	for(GLuint i = 0; i < 4; i ++)
 		for(GLuint j = 0; j < 0; j ++)

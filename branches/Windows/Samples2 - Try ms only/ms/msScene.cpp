@@ -36,8 +36,6 @@ msScene::msScene()
    m_clearColor[1] = color[1];
    m_clearColor[2] = color[2];
    m_clearColor[3] = color[3];
-
-   m_shaders = new msShaderPrograms();
 }
 
 void msScene::newSize(GLint width, GLint height)
@@ -45,7 +43,7 @@ void msScene::newSize(GLint width, GLint height)
 	_width = width;
 	_height = height;
 	
-	m_shaders->notifySizeChanged(width, height);
+	m_shaders.notifySizeChanged(width, height);
 }
 
 //=================================================================================================================================
@@ -58,7 +56,12 @@ void msScene::newSize(GLint width, GLint height)
 //=================================================================================================================================
 msScene::~msScene()
 {
-   freeResources();
+	if(pe1 != 0)
+		delete pe1;
+	if(pe2 != 0)
+		delete pe2;
+	if(pe3 != 0)
+		delete pe3;
 }
 
 //=================================================================================================================================
@@ -71,26 +74,13 @@ msScene::~msScene()
 //=================================================================================================================================
 bool msScene::loadData(const char* filename)
 {
-   m_shaders->loadFile(filename);
+   m_shaders.loadFile(filename);
    return true;
 }
 
 
 
 
-
-//=================================================================================================================================
-///
-/// Deletes all the GL resources we have allocated
-///
-/// \param void
-///
-/// \return void
-//=================================================================================================================================
-void msScene::freeResources()
-{
-   delete m_shaders;
-}
 
 
 //=================================================================================================================================
@@ -110,9 +100,7 @@ void msScene::freeResources()
 //   (C) ATI Research, Inc. 2006 All rights reserved. 
 //=================================================================================================================================
 
-msParticleEmitter *pe1;
-msParticleEmitter *pe2;
-msParticleEmitter *pe3;
+
 
 static const GLfloat g_fbVertexPositions[] = {
 	-1.0f, -1.0f,  -1.0f,  1.0f,
@@ -186,7 +174,7 @@ float radius_step = 37.0f;
 
 void msScene::init()
 {
-	m_shaders->notifySizeChanged(_width, _height);
+	m_shaders.notifySizeChanged(_width, _height);
 
 	pe1 = new msParticleEmitter(
 		// explosion
@@ -231,6 +219,7 @@ void msScene::init()
 		-1,//0.125f,//duration:
 		GL_FALSE//blendAdditive:
 		);
+	pe3 = 0;
 
 }
 int c = 0;
@@ -238,7 +227,7 @@ int c = 0;
 void msScene::drawBackground()
 {
 	// render fire into texture using particle shaders
-	msShaderProgram *program = m_shaders->getProgramByName("texture_aftershock");
+	msShaderProgram *program = m_shaders.getProgramByName("texture_aftershock");
 	program->use();
 
 	// Switch the render target to the current FBO to update the texture map
@@ -270,7 +259,7 @@ void msScene::drawBackground()
 	}
 
 	// Unbind the FBO so rendering will return to the backbuffer.
-	m_shaders->getMainFrameBuffer()->bind();
+	m_shaders.getMainFrameBuffer()->bind();
 
 	// usual renderer
 
@@ -314,7 +303,7 @@ void msScene::drawBackground()
 void msScene::drawExplosion()
 {
 	// render fire into texture using particle shaders
-	msShaderProgram *program = m_shaders->getProgramByName("particle_create");
+	msShaderProgram *program = m_shaders.getProgramByName("particle_create");
 	program->use();
 
 	// Switch the render target to the current FBO to update the texture map
@@ -337,7 +326,7 @@ void msScene::drawExplosion()
 	}
 
 	// Unbind the FBO so rendering will return to the backbuffer.
-	m_shaders->getMainFrameBuffer()->bind();
+	m_shaders.getMainFrameBuffer()->bind();
 
 	// usual renderer
 
@@ -350,7 +339,7 @@ void msScene::drawExplosion()
 	glActiveTexture(GL_TEXTURE0 + program->getFrameBuffer("renderTex")->getTexture()->getUnit());
 	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
 
-	msShaderProgram *particleCompleteProgram = m_shaders->getProgramByName("particle_complete");
+	msShaderProgram *particleCompleteProgram = m_shaders.getProgramByName("particle_complete");
 	particleCompleteProgram->use();
 
 	particleCompleteProgram->getUniform("u2_texture")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
@@ -366,7 +355,7 @@ void msScene::drawExplosion()
 
 void msScene::drawFrame()
 {
-	m_shaders->getMainFrameBuffer()->bind();
+	m_shaders.getMainFrameBuffer()->bind();
 
 	glViewport(0, 0, _width, _height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -376,7 +365,7 @@ void msScene::drawFrame()
 	drawExplosion();	
 
 /*
-	msShaderProgram *program = m_shaders->getProgramByName("texture_aftershock");
+	msShaderProgram *program = m_shaders.getProgramByName("texture_aftershock");
 	program->use();
 
 	

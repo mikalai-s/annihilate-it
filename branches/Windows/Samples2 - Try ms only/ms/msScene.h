@@ -24,6 +24,7 @@
 #include <fstream>
 
 #include "ShaderProgram/msShaderPrograms.h"
+#include "msParticleEmitter.h"
 
 
 //=================================================================================================================================
@@ -31,6 +32,11 @@
 //=================================================================================================================================
 class msScene
 {
+private:
+	msParticleEmitter *pe1;
+	msParticleEmitter *pe2;
+	msParticleEmitter *pe3;
+
 public:
    /// \brief Constructor.
    msScene();
@@ -52,9 +58,6 @@ public:
    /// \brief Updates the value of a uniform
    bool updateUniform( const char* name, GLfloat* vals );
 
-   /// \brief Deletes all the GL resources we have allocated
-   void freeResources();
-
    /// \brief Binds a texture into GL
    bool bindTexture( const char* name, GLint width, GLint height );
 
@@ -71,7 +74,7 @@ public:
 private:
 
    /// Contains all the uniform/texture/attribute/shader data
-   msShaderPrograms *m_shaders;
+   msShaderPrograms m_shaders;
 
    /// Pointer to the clear color
    GLfloat m_clearColor[4];

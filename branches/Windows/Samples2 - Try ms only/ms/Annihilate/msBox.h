@@ -36,6 +36,6 @@ public:
 
 	GLboolean isVisible();
 
-//	void unitTest();
+	static void unitTest();
 
 };

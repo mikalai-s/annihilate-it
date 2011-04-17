@@ -2,10 +2,14 @@
 
 #include "../msGL.h"
 #include <vector>
+#include <string>
 #include "msUniform.h"
 #include "msAttribute.h"
 #include "msTexture.h"
 #include "msFrameBuffer.h"
+#include "../msCommon.h"
+
+using namespace std;
 
 class msAttribute;
 class msUniform;
@@ -39,7 +43,7 @@ class msShaderProgram
 	bool loadShader( const char* fileName, GLuint shaderHandle );
 
 public:
-	msShaderProgram(const char* name, const char *vertexShaderFileName, const char *fragmentShaderFileName);
+	msShaderProgram(string &name, string &vertexShaderFileName, string &fragmentShaderFileName);
 	~msShaderProgram(void);
 
 	GLuint getHandle();

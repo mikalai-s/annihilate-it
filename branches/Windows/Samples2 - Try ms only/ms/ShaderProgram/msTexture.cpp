@@ -4,9 +4,9 @@
 #include "msShaderProgram.h"
 
 
-msTexture::msTexture(const char *name, GLuint unit, const char *fileName)
+msTexture::msTexture(string &name, GLuint unit, const char *fileName)
 {
-	m_name = name;
+	m_name = copyString(name);
 	m_unit = unit;
 
 	glGenTextures( 1, &m_id );
@@ -29,14 +29,12 @@ msTexture::msTexture(const char *name, GLuint unit, const char *fileName)
 			m_height = pImgObj->GetHeight();
 			if ( pImgObj->GetNumChannels() == 3 )
 			{
-				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height,
-					0, GL_RGB, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
+				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
 			}
 			else
 			{
 				//			assert( pImgObj->GetNumChannels() == 4 );
-				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height,
-					0, GL_RGBA, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
+				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
 			}
 			delete pImgObj;
 		}
@@ -45,6 +43,7 @@ msTexture::msTexture(const char *name, GLuint unit, const char *fileName)
 
 msTexture::~msTexture(void)
 {
+	glDeleteTextures(1, &m_id);
 }
 
 void msTexture::setProgram(msShaderProgram *program)

@@ -2,6 +2,9 @@
 
 #include "../msGL.h"
 #include "msAttribute.h"
+#include <string>
+
+using namespace std;
 
 class msShaderProgram;
 
@@ -14,13 +17,13 @@ class msUniform : public msAttribute
 
 
 public:
-	msUniform(const char *name);
+	msUniform(string &name);
 
-	msUniform(const char *name, GLfloat v);	
+	msUniform(string &name, GLfloat v);	
 
-	msUniform(const char *name, GLfloat v[], GLuint size = 1)	;
+	msUniform(string &name, GLfloat v[], GLuint size = 1)	;
 
-	msUniform(const char *name, GLfloat matrix[4][4]);
+	msUniform(string &name, GLfloat matrix[4][4]);
 
 	~msUniform(void);
 

@@ -6,17 +6,17 @@ template <class T>
 class msGrid
 {
 public:
-	GLuint m_rowCount;
-	GLuint m_columnCount;
+	GLint m_rowCount;
+	GLint m_columnCount;
 	T* m_items;
 
-	GLuint getIndexByYX(GLuint y, GLuint x)
+	GLint getIndexByYX(GLint y, GLint x)
 	{
 		return y * m_columnCount + x;
 	}
 
 public:
-	msGrid(GLuint rowCount, GLuint colCount)
+	msGrid(GLint rowCount, GLint colCount)
 	{
 		m_rowCount = rowCount;
 		m_columnCount = colCount;
@@ -28,13 +28,13 @@ public:
 		free(m_items);
 	}
 
-	void setItem(GLuint y, GLuint x, T value)
+	void setItem(GLint y, GLint x, T value)
 	{
 		if(y < m_rowCount && x < m_columnCount)
 			m_items[getIndexByYX(y, x)] = value;
 	}
 
-	T getItem(GLuint y, GLuint x)
+	T getItem(GLint y, GLint x)
 	{
 		if(y >= 0 && y < m_rowCount && x >= 0 && x < m_columnCount)
 			return m_items[getIndexByYX(y, x)];
@@ -43,9 +43,9 @@ public:
 
 	void display()
 	{
-		for(GLuint y = 0; y < m_rowCount; y ++)
+		for(GLint y = 0; y < m_rowCount; y ++)
 		{
-			for(GLuint x = 0; x < m_columnCount; x ++)
+			for(GLint x = 0; x < m_columnCount; x ++)
 				printf("%d ", m_items[getIndexByYX(y, x)]);
 			printf("\r\n");
 		}		

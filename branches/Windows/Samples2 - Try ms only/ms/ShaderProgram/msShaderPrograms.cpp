@@ -9,14 +9,9 @@ msShaderPrograms::msShaderPrograms(void)
 
 msShaderPrograms::~msShaderPrograms(void)
 {
+	for(msShaderProgramIterator i = m_shaderPrograms.begin(); i != m_shaderPrograms.end(); i ++)
+		delete (*i);
 	delete m_mainFrameBuffer;
-}
-
-inline char* copyString(string src)
-{
-	char *dest = new char [src.length() + 1];
-	memcpy( dest, src.c_str(), src.length() + 1);
-	return dest;
 }
 
 bool msShaderPrograms::loadFile( const char *fileName )
@@ -52,7 +47,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			line >> sKey >> vertShader >> fragShader;
 
 			// Create the one program we are going to use.
-			recentProgram = new msShaderProgram(copyString(sKey), vertShader.c_str(), fragShader.c_str());
+			recentProgram = new msShaderProgram(sKey, vertShader, fragShader);
 			m_shaderPrograms.push_back(recentProgram);
 		}
 		else if ( sItem == "link" )
@@ -77,7 +72,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 
 			line >> sKey >> fVal;
 
-			recentProgram->addUniform(new msUniform(copyString(sKey), fVal));
+			recentProgram->addUniform(new msUniform(sKey, fVal));
 		}
 		else if (sItem == "uniform_vec2")
 		{
@@ -85,7 +80,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			GLfloat vVal[2];
 			line >> sKey >> vVal[0] >> vVal[1];
 
-			recentProgram->addUniform(new msUniform(copyString(sKey), vVal));
+			recentProgram->addUniform(new msUniform(sKey, vVal));
 		}
 		else if (sItem == "uniform_vec3")
 		{
@@ -93,7 +88,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			GLfloat vVal[3];
 			line >> sKey >> vVal[0] >> vVal[1] >> vVal[2];
 
-			recentProgram->addUniform(new msUniform(copyString(sKey), vVal));
+			recentProgram->addUniform(new msUniform(sKey, vVal));
 		}
 		else if ( sItem == "uniform_vec4" )
 		{
@@ -101,7 +96,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			GLfloat vVal[4];
 			line >> sKey >> vVal[0] >> vVal[1] >> vVal[2] >> vVal[3]; 
 
-			recentProgram->addUniform(new msUniform(copyString(sKey), vVal));
+			recentProgram->addUniform(new msUniform(sKey, vVal));
 		}
 		else if ( sItem == "uniform_mat4" )
 		{
@@ -113,7 +108,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			for (int i=0; i < 4; ++i)
 				line >> matrix[i][0] >> matrix[i][1] >> matrix[i][2] >> matrix[i][3]; 
 
-			recentProgram->addUniform(new msUniform(copyString(sKey), matrix));
+			recentProgram->addUniform(new msUniform(sKey, matrix));
 		}
 		else if (sItem == "attribute")
 		{
@@ -122,7 +117,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 
 			line >> sKey >> location;
 
-			recentProgram->addAttribute(new msAttribute(copyString(sKey), location));
+			recentProgram->addAttribute(new msAttribute(sKey, location));
 		}
 		else if (sItem == "texture")
 		{
@@ -130,7 +125,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			GLuint texUnit;
 			line >> sKey >> texUnit >> sVal;
 
-			recentProgram->addTexture(new msTexture(copyString(sKey), texUnit, sVal.c_str()));
+			recentProgram->addTexture(new msTexture(sKey, texUnit, sVal.c_str()));
 		}
 		else if (sItem == "nullTexture")
 		{
@@ -138,7 +133,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			string sKey;
 			line >> sKey >> texUnit;
 
-			recentProgram->addTexture(new msTexture(copyString(sKey), texUnit));
+			recentProgram->addTexture(new msTexture(sKey, texUnit));
 		}
 		else if (sItem == "colorTexFbo")
 		{
@@ -146,9 +141,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			string sKey;
 			line >> sKey >> texUnit;
 
-			char *name = copyString(sKey);
-
-			recentProgram->addFrameBuffer(new msFrameBuffer(name, new msTexture(name, texUnit)));
+			recentProgram->addFrameBuffer(new msFrameBuffer(sKey, new msTexture(sKey, texUnit)));
 		}		
 		else if ( sItem.empty() || sItem[0]=='/' )
 		{
@@ -180,8 +173,8 @@ msFrameBuffer* msShaderPrograms::getMainFrameBuffer()
 
 void msShaderPrograms::notifySizeChanged( GLint width, GLint height )
 {
-	for (msShaderProgramIterator iterator = m_shaderPrograms.begin(); iterator != m_shaderPrograms.end() ; ++iterator)
-		(*iterator)->notifySizeChanged(width, height);
+	for (msShaderProgramIterator i = m_shaderPrograms.begin(); i != m_shaderPrograms.end() ; i++)
+		(*i)->notifySizeChanged(width, height);
 }
 
 

@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../msGL.h"
+#include <string>
+
+using namespace std;
 
 class msShaderProgram;
 
@@ -17,7 +20,7 @@ protected:
 
 public:
 
-	msAttribute(const char *name, GLint location);
+	msAttribute(string &name, GLint location);
 	~msAttribute(void);
 
 	virtual void setProgram(msShaderProgram *program);

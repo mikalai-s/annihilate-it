@@ -15,6 +15,12 @@
 //   (C) ATI Research, Inc. 2006 All rights reserved. 
 //=================================================================================================================================
 
+#ifdef WINDOWS_GL
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
+
 #pragma comment( lib, "libEGL.lib" )
 #pragma comment( lib, "libGLESv2.lib" )
 
@@ -32,7 +38,7 @@
 bool  g_keys[256];               // Array Used For The Keyboard Routine
 bool  g_active=TRUE;             // Window Active Flag Set To TRUE By Default
 
-msScene g_scene;
+msScene *g_scene;
 
 
 LRESULT  CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -93,7 +99,7 @@ void RedirectIOToConsole()
 //=================================================================================================================================
 void ResizeScene( int nWidth, int nHeight )
 {
-	g_scene.newSize(nWidth, nHeight);
+	g_scene->newSize(nWidth, nHeight);
    glViewport( 0, 0, nWidth, nHeight);
 }
 
@@ -105,7 +111,7 @@ void ResizeScene( int nWidth, int nHeight )
 //=================================================================================================================================
 int DrawScene()
 {
-   g_scene.drawFrame();
+   g_scene->drawFrame();
 
    return TRUE;
 }
@@ -261,10 +267,7 @@ int CreateWind( int width, int height )
 ///
 /// \return void
 //=================================================================================================================================
-LRESULT CALLBACK WndProc( HWND      hWnd,
-                          UINT      uMsg,
-                          WPARAM    wParam,
-                          LPARAM    lParam)
+LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPARAM    lParam)
 {
    switch ( uMsg )      // Check For Windows Messages
    {
@@ -311,7 +314,7 @@ LRESULT CALLBACK WndProc( HWND      hWnd,
 
    case WM_LBUTTONDOWN:
 	   {
-		   g_scene.mouseClick(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		   g_scene->mouseClick(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		   return 0;
 	   }
 
@@ -325,6 +328,11 @@ LRESULT CALLBACK WndProc( HWND      hWnd,
    // Pass All Unhandled Messages To DefWindowProc
    return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
+
+#include "../ms/Annihilate/msBox.h"
+#include "../ms/Annihilate/msAnimation.h"
+#include "../ms/Annihilate/msAnimationBundle.h"
+#include "../ms/Annihilate/msBoxGrid.h"
 
 //=================================================================================================================================
 ///
@@ -345,8 +353,16 @@ int WINAPI WinMain( HINSTANCE  hInstance,
    MSG  msg;
    BOOL done=FALSE;
 
+   g_scene = new msScene();
+
    // redirect stdin/stdout to a console window
    RedirectIOToConsole();
+
+   // unit tests
+   //msBox::unitTest();
+   //msAnimation<msPoint*>::unitTest();
+   //msAnimationBundle::unitTest();
+   //msBoxGrid::unitTest();
 
    MainFuncInit();
 
@@ -354,11 +370,9 @@ int WINAPI WinMain( HINSTANCE  hInstance,
    {
       return 0;
    }
-
-
-   g_scene.loadData("./data/uniforms.txt");
-
-   g_scene.init();
+   
+   g_scene->loadData("./data/uniforms.txt"); 
+   g_scene->init();
    
    while ( ! done )
    {
@@ -390,6 +404,12 @@ int WINAPI WinMain( HINSTANCE  hInstance,
    eglDestroyContext( g_egl.dsp, g_egl.cxt );
    eglDestroySurface( g_egl.dsp, g_egl.surf );
    eglTerminate( g_egl.dsp );
+
+   delete g_scene;
+
+#ifdef WINDOWS_GL
+   _CrtDumpMemoryLeaks();
+#endif
    
    return 0;
 }

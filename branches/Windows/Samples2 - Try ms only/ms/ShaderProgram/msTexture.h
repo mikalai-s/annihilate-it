@@ -2,6 +2,10 @@
 
 #include "../msGL.h"
 #include "msAttribute.h"
+#include <string>
+#include "../msCommon.h"
+
+using namespace std;
 
 class msShaderProgram;
 
@@ -12,7 +16,7 @@ class msTexture : public msAttribute
 	GLsizei m_width;
 	GLsizei m_height;
 public:
-	msTexture(const char *name, GLuint unit, const char *fileName = 0);
+	msTexture(string &name, GLuint unit, const char *fileName = 0);
 
 	~msTexture(void);
 

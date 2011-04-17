@@ -17,11 +17,11 @@ public:
 	static void _lineStep(msAnimationBase *ab)
 	{
 		msAnimation<msPoint*> *anim = (msAnimation<msPoint*>*)ab;
-		msPoint *from = ab->m_from;
-		msPoint *to = ab->m_to;
+		msPoint *from = anim->m_from;
+		msPoint *to = anim->m_to;
 		msPoint step;
-		step.x = (to->x - from->x) / m_count;
-		step.y = (to->y - from->y) / m_count;
+		step.x = (to->x - from->x) / anim->m_count;
+		step.y = (to->y - from->y) / anim->m_count;
 
 		from->x += step.x;
 		from->y += step.y;
@@ -40,13 +40,10 @@ public:
 
 	~msAnimation()
 	{
-
 	}
-/*
-	static void unitTest();
-	{
-		MsAnimation<msPoint*>	*anim;
 
+	static void unitTest()
+	{
 		msPoint from;
 		msPoint to;
 		int count = 10;
@@ -57,17 +54,16 @@ public:
 		to.x = 10;
 		to.y = 5;
 
-		anim = new MsAnimation(&from, &to, 0, count, _lineStep);
+		msAnimation<msPoint*> *anim = new msAnimation(&from, &to, 0, count, _lineStep);
 
 		do
 		{
-			printf("(%f, %f)\r\n", ((msPoint*)anim->m_from)->x, ((msPoint*)anim->m_from)->y);
+			printf("(%f, %f)\r\n", anim->m_from->x, anim->m_from->y);
 		}
-		while(anim->performStep(anim));
+		while(anim->performStep());
 
 		delete anim;
 	}
-	*/
 };
 
 

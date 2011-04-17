@@ -2,6 +2,9 @@
 
 #include "../msGL.h"
 #include "msTexture.h"
+#include <string>
+
+using namespace std;
 
 class msShaderPrograms;
 
@@ -18,11 +21,13 @@ private:
 	GLsizei m_width;
 	GLsizei m_height;
 
+	GLboolean m_requiresBufferDeletion;
+
 	msFrameBuffer(GLuint id);
 
 public:
 	
-	msFrameBuffer(const char *name, msTexture *texture);
+	msFrameBuffer(string &name, msTexture *texture);
 	~msFrameBuffer(void);
 
 	const char* getName();
