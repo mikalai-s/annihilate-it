@@ -27,7 +27,7 @@ private:
 
 public:
 	
-	msFrameBuffer(string &name, msTexture *texture);
+	msFrameBuffer(string &name, GLuint textureUnit);
 	~msFrameBuffer(void);
 
 	const char* getName();

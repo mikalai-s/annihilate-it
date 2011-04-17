@@ -141,7 +141,7 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			string sKey;
 			line >> sKey >> texUnit;
 
-			recentProgram->addFrameBuffer(new msFrameBuffer(sKey, new msTexture(sKey, texUnit)));
+			recentProgram->addFrameBuffer(new msFrameBuffer(sKey, texUnit));
 		}		
 		else if ( sItem.empty() || sItem[0]=='/' )
 		{

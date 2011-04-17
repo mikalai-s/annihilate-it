@@ -11,10 +11,10 @@ msFrameBuffer::msFrameBuffer(GLuint id)
 }
 
 // The constructor is used to create new FBO
-msFrameBuffer::msFrameBuffer(string &name, msTexture *texture)
+msFrameBuffer::msFrameBuffer(string &name, GLuint textureUnit)
 {
 	m_name = copyString(name);
-	m_texture = texture;
+	m_texture = new msTexture(name, textureUnit);
 
 	// Generate handles for two Frame Buffer Objects
 	glGenFramebuffers(1, &m_id);
