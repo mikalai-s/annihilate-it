@@ -58,6 +58,8 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 	}
 
 	_ms_boxgrid_refresh_borders();
+
+	free(pattern);
 }
 
 

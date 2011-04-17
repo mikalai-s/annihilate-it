@@ -17,9 +17,10 @@
 class msBoxGridRenderer
 {
 	msBoxGrid *boxGrid;
+	msShaderProgram *m_program;
 
-	void drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msColor *color);
-	void _drawLine(float v[6], msColor *color);
+	void drawBox(msPalette *palette, msBox *box, msColor *color);
+	void _drawLine(msPoint &start, msPoint &end, msColor *color);
 	void drawLeftBorder(msBox *box, msColor *color);
 	void drawTopBorder(msBox *box, msColor *color);
 	void drawRightBorder(msBox *box, msColor *color);

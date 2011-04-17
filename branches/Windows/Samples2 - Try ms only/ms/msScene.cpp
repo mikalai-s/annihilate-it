@@ -31,7 +31,7 @@ using namespace std;
 //=================================================================================================================================
 msScene::msScene()
 {
-   GLfloat color[] = { 0.3f, 0.3f, 0.7f, 1 };
+   GLfloat color[] = { 0.3f, 0.3f, 0.7f, 1.0f };
    m_clearColor[0] = color[0];
    m_clearColor[1] = color[1];
    m_clearColor[2] = color[2];
@@ -243,12 +243,10 @@ void msScene::init()
 		// init palette
 		m_palette = new msPalette(colorMap, 8);
 
-
 		m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0, 1.0);
 
 		m_renderer = new msBoxGridRenderer(m_boxGrid);
 		//    _boxGrid = ms_boxgrid_create_from_pattern(_palette, boxes, 7, 5, viewBounds.size.height, viewBounds.size.width);
-
 }
 int c = 0;
 
@@ -388,7 +386,7 @@ void msScene::drawFrame()
 	glViewport(0, 0, _width, _height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	m_renderer->draw(m_shaders.getProgramByName("texture_aftershock"));
+	m_renderer->draw(m_shaders.getProgramByName("boxgrid"));
 
 	//drawBackground();
 

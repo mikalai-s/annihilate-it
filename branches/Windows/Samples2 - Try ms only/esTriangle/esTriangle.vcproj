@@ -196,6 +196,30 @@
 			Name="data"
 			>
 			<File
+				RelativePath=".\data\boxgrid_fragment.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\data\boxgrid_vertex.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\data\expl.tga"
 				>
 			</File>
@@ -445,13 +469,6 @@
 				<File
 					RelativePath="..\ms\Annihilate\msBoxGridRenderer.cpp"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\ms\Annihilate\msBoxGridRenderer.h"

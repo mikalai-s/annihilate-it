@@ -113,6 +113,6 @@ void main()
 	}
 	else
 	{
-		gl_FragColor = testColorVarying();// testTexture();
+		gl_FragColor = testTexture();
 	}
 }

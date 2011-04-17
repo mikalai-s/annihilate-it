@@ -26,3 +26,8 @@ texture u2_texture 4 ./data/expl.tga
 attribute a2_position 0
 attribute a2_texcoord 1
 link particle_complete
+
+program boxgrid ./data/boxgrid_vertex.c ./data/boxgrid_fragment.c
+attribute position 0
+attribute color 1
+link boxgrid
