@@ -20,9 +20,9 @@ class msBoxGrid
 {
 	msSize size;
 
-	msGrid<msBox*> *grid;
 
-	msPalette *palette;
+
+	
 
 	void _ms_boxgrid_refresh_borders();
 
@@ -59,6 +59,10 @@ class msBoxGrid
 	void _shiftRight();
 
 public:
+		msGrid<msBox*> *grid;
+
+		msPalette *m_palette;
+
 	void init(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat screenHeight, GLfloat screenWidth);
 
 	msBoxGrid(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat screenHeight, GLfloat screenWidth);

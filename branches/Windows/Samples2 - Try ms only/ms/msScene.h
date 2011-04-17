@@ -15,8 +15,7 @@
 //   (C) ATI Research, Inc. 2006 All rights reserved. 
 //=================================================================================================================================
 
-#ifndef _SCENE_H_
-#define _SCENE_H_
+#pragma once
 
 #include "msGL.h"
 
@@ -25,6 +24,15 @@
 
 #include "ShaderProgram/msShaderPrograms.h"
 #include "msParticleEmitter.h"
+#include "Annihilate/msPalette.h"
+#include "Annihilate/msBoxGrid.h"
+#include "Annihilate/msBoxGridRenderer.h"
+
+#define NUM_ROWS 14
+#define NUM_COLS 10
+
+
+
 
 
 //=================================================================================================================================
@@ -33,9 +41,23 @@
 class msScene
 {
 private:
-	msParticleEmitter *pe1;
+	msParticleEmitter *m_explosionParticles;
 	msParticleEmitter *pe2;
 	msParticleEmitter *pe3;
+
+	GLfloat m_afterShockRadius;
+	GLfloat m_afterShockPower;
+	GLfloat m_afterShockLocation[2];
+	GLboolean m_animate;
+
+	GLfloat m_afterShockRadiusMin;
+	GLfloat m_afterShockRadiusMax;
+	GLfloat m_afterShockRadiusStep;
+
+
+	msPalette *m_palette;
+	msBoxGrid *m_boxGrid;
+	msBoxGridRenderer *m_renderer;
 
 public:
    /// \brief Constructor.
@@ -71,6 +93,8 @@ public:
    void drawBackground();
    void drawExplosion();
 
+   void setMainFrameBuffer(GLint id);
+
 private:
 
    /// Contains all the uniform/texture/attribute/shader data
@@ -83,4 +107,4 @@ private:
    int _height;
 };
 
-#endif // _SCENE_H_
+

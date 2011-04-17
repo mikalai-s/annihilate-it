@@ -11,15 +11,7 @@
 #include "stdlib.h"
 
 
-msPalette::msPalette()
-{
-}
-
-msPalette::~msPalette()
-{
-}
-
-void msPalette::init(GLfloat colors[][4], GLuint numColors)
+msPalette::msPalette(GLfloat colors[][4], GLuint numColors)
 {
     for(GLuint i = 0; i < numColors; i ++)
     {
@@ -28,6 +20,10 @@ void msPalette::init(GLfloat colors[][4], GLuint numColors)
         m_colors[i].b = colors[i][2];
         m_colors[i].a = colors[i][3];
     }
+}
+
+msPalette::~msPalette()
+{
 }
 
 void msPalette::setColor(GLuint index, msColor *color)

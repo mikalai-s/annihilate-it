@@ -171,6 +171,15 @@ msFrameBuffer* msShaderPrograms::getMainFrameBuffer()
 	return m_mainFrameBuffer;
 }
 
+void msShaderPrograms::setMainFrameBuffer(GLint frameBufferId)
+{
+	if(m_mainFrameBuffer->m_id != frameBufferId)
+	{
+		delete m_mainFrameBuffer;
+		m_mainFrameBuffer = new msFrameBuffer(frameBufferId);
+	}
+}
+
 void msShaderPrograms::notifySizeChanged( GLint width, GLint height )
 {
 	for (msShaderProgramIterator i = m_shaderPrograms.begin(); i != m_shaderPrograms.end() ; i++)

@@ -44,6 +44,16 @@ void msScene::newSize(GLint width, GLint height)
 	_height = height;
 	
 	m_shaders.notifySizeChanged(width, height);
+
+	m_afterShockRadius = -1.0f;
+	m_afterShockPower = 1.0f;
+	m_afterShockLocation[0] = 0.0f;
+	m_afterShockLocation[1] = 0.0f;
+	m_animate = 0;
+
+	m_afterShockRadiusMin = 0.0f;
+	m_afterShockRadiusMax = 1500.0f;
+	m_afterShockRadiusStep = 37.0f;
 }
 
 //=================================================================================================================================
@@ -56,12 +66,16 @@ void msScene::newSize(GLint width, GLint height)
 //=================================================================================================================================
 msScene::~msScene()
 {
-	if(pe1 != 0)
-		delete pe1;
+	if(m_explosionParticles != 0)
+		delete m_explosionParticles;
 	if(pe2 != 0)
 		delete pe2;
 	if(pe3 != 0)
 		delete pe3;
+
+	delete m_palette;
+	delete m_boxGrid;
+	delete m_renderer;
 }
 
 //=================================================================================================================================
@@ -154,6 +168,19 @@ static const GLfloat prim[] =
 	1.f, 1.f, -1.f, 1.0f,	
 };
 
+GLfloat colorMap[][4] = 
+{
+	//{1.0f, 1.0f, 1.0f, 1.0f},//temp white
+	{0.000f, 0.000f, 0.000f, 1.0f}, // black
+	{0.502f, 0.824f, 0.776f, 1.0f}, // 7
+	{1.000f, 0.412f, 0.337f, 1.0f}, // 1    
+	{0.467f, 0.357f, 1.000f, 1.0f}, // 3
+	{1.000f, 0.757f, 0.369f, 1.0f}, // 2
+	{0.843f, 0.420f, 1.000f, 1.0f}, // 6
+	{0.478f, 0.824f, 1.000f, 1.0f}, // 5
+	{0.714f, 1.000f, 0.608f, 1.0f}, // 4    
+};
+
 //=================================================================================================================================
 ///
 /// Draws the current frame.
@@ -163,20 +190,11 @@ static const GLfloat prim[] =
 /// \return null
 //=================================================================================================================================
 
-float radius = -1.0f;
-float power = 1.0f;
-float ep[] = {0.0f, 0.0f};
-bool animate = 0;
-
-float radius_min = 0.0f;
-float radius_max = 1500.0f;
-float radius_step = 37.0f;
-
 void msScene::init()
 {
 	m_shaders.notifySizeChanged(_width, _height);
 
-	pe1 = new msParticleEmitter(
+	m_explosionParticles = new msParticleEmitter(
 		// explosion
 		Vector2fMake(0.0f, 0.0f),//position:
 		Vector2fMake(0.021f, 0.031f),//sourcePositionVariance:
@@ -220,6 +238,16 @@ void msScene::init()
 		GL_FALSE//blendAdditive:
 		);
 	pe3 = 0;
+
+
+		// init palette
+		m_palette = new msPalette(colorMap, 8);
+
+
+		m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0, 1.0);
+
+		m_renderer = new msBoxGridRenderer(m_boxGrid);
+		//    _boxGrid = ms_boxgrid_create_from_pattern(_palette, boxes, 7, 5, viewBounds.size.height, viewBounds.size.width);
 
 }
 int c = 0;
@@ -278,21 +306,21 @@ void msScene::drawBackground()
 
 
 
-	if(animate)
+	if(m_animate)
 	{
-		program->getAttribute("radius")->set1f(radius);
-		program->getAttribute("power")->set1f(power);
-		program->getUniform("ep")->set2f(ep[0], ep[1]);
+		program->getAttribute("radius")->set1f(m_afterShockRadius);
+		program->getAttribute("power")->set1f(m_afterShockPower);
+		program->getUniform("ep")->set2f(m_afterShockLocation[0], m_afterShockLocation[1]);
 
 		c--;
 		if(c < 40)
 		{
-			radius += radius_step;
-			power -= radius_step / (radius_max - radius_min);
-			if(radius > radius_max)
+			m_afterShockRadius += m_afterShockRadiusStep;
+			m_afterShockPower -= m_afterShockRadiusStep / (m_afterShockRadiusMax - m_afterShockRadiusMin);
+			if(m_afterShockRadius > m_afterShockRadiusMax)
 			{
-				animate = 0;
-				radius = -1.0f;
+				m_animate = 0;
+				m_afterShockRadius = -1.0f;
 			}
 		}		
 	}
@@ -318,8 +346,8 @@ void msScene::drawExplosion()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		// render particles
-		pe1->renderParticles(program);
-		pe1->update(0.015f);
+		m_explosionParticles->renderParticles(program);
+		m_explosionParticles->update(0.015f);
 
 		//pe2->renderParticles(program);
 		pe2->update(0.015f);
@@ -360,9 +388,11 @@ void msScene::drawFrame()
 	glViewport(0, 0, _width, _height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	drawBackground();
+	m_renderer->draw(m_shaders.getProgramByName("texture_aftershock"));
 
-	drawExplosion();	
+	//drawBackground();
+
+	//drawExplosion();	
 
 /*
 	msShaderProgram *program = m_shaders.getProgramByName("texture_aftershock");
@@ -393,20 +423,25 @@ void msScene::drawFrame()
 void msScene::mouseClick(int x, int y)
 {
 	c = 50;
-	animate = 1;
-	radius = radius_min;
-	power = 1.0f;
-	ep[0] = (float)x;
-	ep[1] = (float)this->_height - (float)y;
+	m_animate = 1;
+	m_afterShockRadius = m_afterShockRadiusMin;
+	m_afterShockPower = 1.0f;
+	m_afterShockLocation[0] = (float)x;
+	m_afterShockLocation[1] = (float)this->_height - (float)y;
 
-	pe1->active = true;
-	pe1->duration = 0.125f;
-	pe1->sourcePosition.x = (ep[0] / (float)this->_width * 2.0f) -1.0f;
-	pe1->sourcePosition.y = (ep[1] / (float)this->_height * 2.0f) -1.0f;
+	m_explosionParticles->active = true;
+	m_explosionParticles->duration = 0.125f;
+	m_explosionParticles->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) -1.0f;
+	m_explosionParticles->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) -1.0f;
 
 	pe2->active = true;
 	pe2->duration = 0.125f;
-	pe2->sourcePosition.x = (ep[0] / (float)this->_width * 2.0f) -1.0f;
-	pe2->sourcePosition.y = (ep[1] / (float)this->_height * 2.0f) -1.0f;
+	pe2->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) -1.0f;
+	pe2->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) -1.0f;
 
+}
+
+void msScene::setMainFrameBuffer(GLint id)
+{
+	m_shaders.setMainFrameBuffer(id);
 }

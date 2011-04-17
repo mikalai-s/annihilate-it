@@ -21,15 +21,14 @@ public:
 	msShaderPrograms(void);
 	~msShaderPrograms(void);
 
-
 	msShaderProgramList m_shaderPrograms;
-
 
 	// load programs description
 	bool loadFile(const char *fileName);
 
 	msShaderProgram* getProgramByName( const char *name );
-
 	msFrameBuffer* getMainFrameBuffer();
+	void setMainFrameBuffer(GLint frameBufferId);
+
 	void notifySizeChanged( GLint width, GLint height );
 };

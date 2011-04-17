@@ -23,10 +23,8 @@ class msPalette
 	msColor m_colors[MS_PALETTE_MAX_COLORS];
 
 public:
-	msPalette();
+	msPalette(GLfloat[][4], GLuint numColors);	
 	~msPalette();
-
-	void init(GLfloat[][4], GLuint numColors);	
 
 	void setColor(GLuint index, msColor *color);
 

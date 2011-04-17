@@ -38,7 +38,7 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 	float curx = 0, cury = 0;
 
 	grid = new msGrid<msBox*>(numRows, numCols);
-	palette = palette;
+	m_palette = palette;
 
 	size.width = gridWidth;
 	size.height = gridHeight;

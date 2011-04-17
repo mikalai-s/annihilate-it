@@ -443,15 +443,10 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ms\Annihilate\msGrid.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\msOpenGL.c"
+					RelativePath="..\ms\Annihilate\msBoxGridRenderer.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
-						ExcludedFromBuild="true"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -459,16 +454,19 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\ms\Annihilate\msOpenGL.h"
+					RelativePath="..\ms\Annihilate\msBoxGridRenderer.h"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
-						ExcludedFromBuild="true"
 						>
 						<Tool
 							Name="VCCustomBuildTool"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\ms\Annihilate\msGrid.h"
+					>
 				</File>
 				<File
 					RelativePath="..\ms\Annihilate\msPalette.cpp"
