@@ -4,12 +4,12 @@
 #include "msAnimationBase.h"
 
 
-template <class T>
+template <class FROM_T, class TO_T = FROM_T>
 class msAnimation : public msAnimationBase
 {
 public:
-	T m_from;
-	T m_to;
+	FROM_T m_from;
+	TO_T m_to;
 
 	GLfloat m_rAngle;
 	msPoint m_rVector;
@@ -27,7 +27,7 @@ public:
 		from->y += step.y;
 	}
 
-	msAnimation(T from, T to, GLint delayCount, GLint count, void (*stepCallback)(msAnimationBase*)) : msAnimationBase(delayCount, count, stepCallback)
+	msAnimation(FROM_T from, TO_T to, GLint delayCount, GLint count, void (*stepCallback)(msAnimationBase*)) : msAnimationBase(delayCount, count, stepCallback)
 	{
 		m_from = from;
 		m_to = to;

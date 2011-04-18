@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../msCommon.h"
 #include "msBox.h"
 #include "msGrid.h"
 #include "msPalette.h"
@@ -13,13 +14,15 @@ using namespace::std;
 #define MS_BOX_SHIFT_TOP 2
 #define MS_BOX_SHIFT_RIGHT 3
 
+#define MS_BOUNCE_OFFSET 0.002f 
+
 typedef list<msBox*> msBoxList;
 typedef msBoxList::iterator msBoxIterator;
 
 class msBoxGrid
 {
 	msSize size;
-	
+
 
 	void _ms_boxgrid_refresh_borders();
 

@@ -264,33 +264,30 @@ void msBoxGrid::_linearFalling(msAnimationBase *anim)
 
 void msBoxGrid::_linearFalling2(msAnimationBase *anim)
 {
-	msAnimation<msPoint*> *animation = (msAnimation<msPoint*> *)anim;
+	msAnimation<msPoint*, GLint> *animation = (msAnimation<msPoint*, GLint> *)anim;
 	msPoint *from = animation->m_from;
-    switch((GLint)animation->m_to)
+    switch(animation->m_to)
     {
         case MS_BOX_SHIFT_TOP:
-            from->y += 0.2f;
+            from->y += MS_BOUNCE_OFFSET;
             break;
             
         case MS_BOX_SHIFT_LEFT:
-            from->x += 0.2f;
+            from->x += MS_BOUNCE_OFFSET;
             break;
             
         case MS_BOX_SHIFT_RIGHT:
-            from->x -= 0.2f;
+            from->x -= MS_BOUNCE_OFFSET;
             break;
             
         default:
-            from->y -= 0.2f;
-    }
-    
+            from->y -= MS_BOUNCE_OFFSET;
+    }    
 }
 
 
 void msBoxGrid::_exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint x2, GLint direction)
 {
-	int times = 10;	
-
 	msBox *box1 = grid->getItem(y1, x1);
 	msBox *box2 = grid->getItem(y2, x2);
     
@@ -303,13 +300,16 @@ void msBoxGrid::_exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint 
     
     box1->m_boxToAnimate->m_border = box1->m_border;
   
+    int times = 10;
+
+    // moving from one position to another
 	msAnimationBase *animation = new msAnimation<msPoint*>(&box1->m_boxToAnimate->m_location, &box1->m_location, 0, times, _linearFalling);
 	box1->m_animations->m_list.push_back(animation);
     
-    animation = new msAnimation<msPoint*>(&box1->m_boxToAnimate->m_location, (msPoint*)direction, times, 10, _linearFalling2);
+    animation = new msAnimation<msPoint*, GLint>(&box1->m_boxToAnimate->m_location, direction, times, 4, _linearFalling2);
 	box1->m_animations->m_list.push_back(animation);
     
-    animation = new msAnimation<msPoint*>(&box1->m_boxToAnimate->m_location, &box1->m_location, times + 10, 1, _linearFalling);
+    animation = new msAnimation<msPoint*>(&box1->m_boxToAnimate->m_location, &box1->m_location, times + 4, 1, _linearFalling);
 	box1->m_animations->m_list.push_back(animation);
 }
 
@@ -555,7 +555,7 @@ void msBoxGrid::removeSimilarItemsAtPoint( msPoint screenPoint )
 	{
 		for(int x = 0; x < grid->m_columnCount; x ++)
 		{
-			msBox *box = grid->getItem(y, x);		
+			msBox *box = grid->getItem(y, x);
 
 			if((box->m_location.x <= point.x && point.x <= box->m_location.x + box->m_size.width) &&
 			   (box->m_location.y <= point.y && point.y <= box->m_location.y + box->m_size.height))
