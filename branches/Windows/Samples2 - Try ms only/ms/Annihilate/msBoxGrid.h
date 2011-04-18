@@ -19,9 +19,6 @@ typedef msBoxList::iterator msBoxIterator;
 class msBoxGrid
 {
 	msSize size;
-
-
-
 	
 
 	void _ms_boxgrid_refresh_borders();
@@ -59,9 +56,9 @@ class msBoxGrid
 	void _shiftRight();
 
 public:
-		msGrid<msBox*> *grid;
+	msGrid<msBox*> *grid;
 
-		msPalette *m_palette;
+	msPalette *m_palette;
 
 	void init(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat screenHeight, GLfloat screenWidth);
 
@@ -80,4 +77,6 @@ public:
 	GLint checkNeighbours(GLint y1, GLint x1, GLint y2, GLint x2);
 
 	static void unitTest();
+
+	void removeSimilarItemsAtPoint( msPoint touchPoint );
 };

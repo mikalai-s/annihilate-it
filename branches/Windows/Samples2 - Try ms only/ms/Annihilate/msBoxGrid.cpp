@@ -543,3 +543,26 @@ void msBoxGrid::unitTest()
 	//ms_boxgrid_display(grid);
 */
 }
+
+
+void msBoxGrid::removeSimilarItemsAtPoint( msPoint screenPoint )
+{
+	msPoint point;
+	point.x = screenPoint.x * this->size.width;
+	point.y = screenPoint.y * this->size.height;
+
+	for(int y = 0; y < grid->m_rowCount; y ++)
+	{
+		for(int x = 0; x < grid->m_columnCount; x ++)
+		{
+			msBox *box = grid->getItem(y, x);		
+
+			if((box->m_location.x <= point.x && point.x <= box->m_location.x + box->m_size.width) &&
+			   (box->m_location.y <= point.y && point.y <= box->m_location.y + box->m_size.height))
+			{
+				removeSimilarItems(y, x);
+				return;
+			}
+		}
+	}
+}

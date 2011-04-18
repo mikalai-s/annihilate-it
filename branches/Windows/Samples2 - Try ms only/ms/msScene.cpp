@@ -36,6 +36,16 @@ msScene::msScene()
    m_clearColor[1] = color[1];
    m_clearColor[2] = color[2];
    m_clearColor[3] = color[3];
+
+   m_afterShockRadius = -1.0f;
+   m_afterShockPower = 1.0f;
+   m_afterShockLocation[0] = 0.0f;
+   m_afterShockLocation[1] = 0.0f;
+   m_animate = 0;
+
+   m_afterShockRadiusMin = 0.0f;
+   m_afterShockRadiusMax = 1500.0f;
+   m_afterShockRadiusStep = 37.0f;
 }
 
 void msScene::newSize(GLint width, GLint height)
@@ -43,17 +53,7 @@ void msScene::newSize(GLint width, GLint height)
 	_width = width;
 	_height = height;
 	
-	m_shaders.notifySizeChanged(width, height);
-
-	m_afterShockRadius = -1.0f;
-	m_afterShockPower = 1.0f;
-	m_afterShockLocation[0] = 0.0f;
-	m_afterShockLocation[1] = 0.0f;
-	m_animate = 0;
-
-	m_afterShockRadiusMin = 0.0f;
-	m_afterShockRadiusMax = 1500.0f;
-	m_afterShockRadiusStep = 37.0f;
+	m_shaders.notifySizeChanged(width, height);	
 }
 
 //=================================================================================================================================
@@ -243,7 +243,7 @@ void msScene::init()
 		// init palette
 		m_palette = new msPalette(colorMap, 8);
 
-		m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0, 1.0);
+		m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
 
 		m_renderer = new msBoxGridRenderer(m_boxGrid);
 		//    _boxGrid = ms_boxgrid_create_from_pattern(_palette, boxes, 7, 5, viewBounds.size.height, viewBounds.size.width);
@@ -418,6 +418,11 @@ void msScene::drawFrame()
 		*/
 }
 
+int getShiftDirection()
+{
+	return MS_BOX_SHIFT_DOWN;
+}
+
 void msScene::mouseClick(int x, int y)
 {
 	c = 50;
@@ -437,7 +442,16 @@ void msScene::mouseClick(int x, int y)
 	pe2->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) -1.0f;
 	pe2->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) -1.0f;
 
+	msPoint touchPoint;
+	touchPoint.x = ((GLfloat)x / (GLfloat)_width);
+	touchPoint.y = ((GLfloat)y / (GLfloat)_height);
+	
+	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
+
+	m_boxGrid->shiftPendentBoxes(getShiftDirection());
 }
+
+
 
 void msScene::setMainFrameBuffer(GLint id)
 {

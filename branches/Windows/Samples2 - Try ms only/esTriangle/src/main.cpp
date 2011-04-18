@@ -251,7 +251,7 @@ int CreateWind( int width, int height )
    SetForegroundWindow( hWnd );  // Slightly Higher Priority
    SetFocus( hWnd );             // Sets Keyboard Focus To The Window
 
-   ResizeScene( width, height );
+   //ResizeScene( width, height );
 
    return TRUE;
 }
@@ -334,6 +334,9 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
 #include "../ms/Annihilate/msAnimationBundle.h"
 #include "../ms/Annihilate/msBoxGrid.h"
 
+#define SCR_WIDTH 320 + 16
+#define SCR_HEIGHT 480 + 38
+
 //=================================================================================================================================
 ///
 /// WinMain function for this simple ES app.
@@ -366,7 +369,7 @@ int WINAPI WinMain( HINSTANCE  hInstance,
 
    MainFuncInit();
 
-   if ( ! CreateWind( 1000, 1000 ) )
+   if ( ! CreateWind( SCR_WIDTH, SCR_HEIGHT ) )
    {
       return 0;
    }
