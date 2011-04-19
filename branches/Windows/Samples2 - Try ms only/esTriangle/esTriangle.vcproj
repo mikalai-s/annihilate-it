@@ -431,15 +431,11 @@
 				Name="Annihilate"
 				>
 				<File
+					RelativePath="..\ms\Annihilate\msAnimation.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\ms\Annihilate\msAnimation.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\msAnimationBase.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ms\Annihilate\msAnimationBase.h"
 					>
 				</File>
 				<File
@@ -448,6 +444,14 @@
 				</File>
 				<File
 					RelativePath="..\ms\Annihilate\msAnimationBundle.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ms\Annihilate\msAnimationContext.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ms\Annihilate\msAnimationContext.h"
 					>
 				</File>
 				<File

@@ -46,6 +46,14 @@ msScene::msScene()
    m_afterShockRadiusMin = 0.0f;
    m_afterShockRadiusMax = 1500.0f;
    m_afterShockRadiusStep = 37.0f;
+
+   m_explosionParticles = 0;
+   pe2 = 0;
+   pe3 = 0;
+
+   m_palette = 0;
+   m_boxGrid = 0;
+   m_renderer = 0;
 }
 
 void msScene::newSize(GLint width, GLint height)
@@ -73,9 +81,12 @@ msScene::~msScene()
 	if(pe3 != 0)
 		delete pe3;
 
-	delete m_palette;
-	delete m_boxGrid;
-	delete m_renderer;
+    if(m_palette != 0)
+	    delete m_palette;
+    if(m_boxGrid != 0)
+	    delete m_boxGrid;
+    if(m_renderer != 0)
+	    delete m_renderer;
 }
 
 //=================================================================================================================================

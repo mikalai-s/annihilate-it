@@ -362,10 +362,10 @@ int WINAPI WinMain( HINSTANCE  hInstance,
    RedirectIOToConsole();
 
    // unit tests
-   //msBox::unitTest();
-   //msAnimation<msPoint*>::unitTest();
-   //msAnimationBundle::unitTest();
-   //msBoxGrid::unitTest();
+   /*msBox::unitTest();
+   msAnimation::unitTest();
+   msAnimationBundle::unitTest();
+   msBoxGrid::unitTest();*/
 
    MainFuncInit();
 

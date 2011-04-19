@@ -69,16 +69,16 @@ void msBox::unitTest()
 	msBox *box = new msBox(0, 0, 100, 100, 2);
 	msAnimationBundle *anims = box->m_animations;
 
-	anims->m_list.push_back(new msAnimation<GLfloat>(0, 2.5, 0, 5, 0));
-	anims->m_list.push_back(new msAnimation<GLfloat>(1, 7, 0, 10, 0));
+	anims->m_list.push_back(new msAnimation(0, 5, new msFromToAnimationContext<GLfloat>(0, 2.5), 0));
+	anims->m_list.push_back(new msAnimation(0, 10, new msFromToAnimationContext<GLfloat>(1, 7), 0));
 
 	for(GLuint i = 0; i < 100; i ++)
 	{
 		for(msAnimationIterator ai = anims->m_list.begin(); ai != anims->m_list.end(); ai ++)
 		{
-			msAnimation<GLfloat> *a = (msAnimation<GLfloat> *)*ai;
+			msFromToAnimationContext<GLfloat> *c = (msFromToAnimationContext<GLfloat> *)(*ai)->getContext();
 			
-			printf("%f\t%f\r\n", a->m_from, a->m_to);			
+			printf("%f\t%f\r\n", c->getFrom(), c->getTo());			
 		}
 
 		anims->performStep();

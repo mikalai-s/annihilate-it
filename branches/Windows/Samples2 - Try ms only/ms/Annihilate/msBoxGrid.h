@@ -33,7 +33,7 @@ class msBoxGrid
 
 	void display2();
 
-	void _hiding1(msAnimationBase *a);
+	void _hiding1(msAnimationContext *c);
 
 	void _removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxList *removedBoxes);
 
@@ -43,9 +43,9 @@ class msBoxGrid
 
 	void _ms_boxgrid_animate_box_hiding(msBoxList *boxes);
 
-	static void _linearFalling(msAnimationBase *anim);
+	static void _linearFalling(msAnimationContext *c);
 
-	static void _linearFalling2(msAnimationBase *anim);
+	static void _linearFalling2(msAnimationContext *c);
 
 	void _exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint x2, GLint direction);
 

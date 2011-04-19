@@ -1,12 +1,13 @@
 #pragma once
 
-#include "msAnimationBase.h"
+#include "msAnimation.h"
+#include "msAnimationContext.h"
 #include "../MsCommon.h"
 #include <list>
 
 using namespace::std;
 
-typedef std::list<msAnimationBase*>	msAnimationList;
+typedef std::list<msAnimation*>	msAnimationList;
 typedef msAnimationList::iterator	msAnimationIterator;
 
 // represents set of animations each animation autoreleases when it's done
@@ -15,7 +16,7 @@ class msAnimationBundle
 public:
 	msAnimationList m_list;
 
-	static void _lineStep2(msAnimationBase *anim);
+	static void _lineStep2(msAnimationContext *context);
 
 public:
 	msAnimationBundle();
