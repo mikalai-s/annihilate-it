@@ -89,6 +89,8 @@ struct msBorder
 	GLint top;
 	GLint right;
 	GLint bottom;
+
+    msColor color;
 };
 
 

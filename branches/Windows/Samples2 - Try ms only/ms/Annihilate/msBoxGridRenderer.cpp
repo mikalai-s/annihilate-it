@@ -46,23 +46,19 @@ void msBoxGridRenderer::drawBox(msPalette *palette, msBox *box, msColor *c)
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     
-    // draw borders if need
-    msColor *borderColor = palette->getColor(0);
-    
+    // draw borders if need   
     if(box->m_border.left)
-        drawLeftBorder(box, borderColor);
+        drawLeftBorder(box, &box->m_border.color);
     
     if(box->m_border.top)
-        drawTopBorder(box, borderColor);
+        drawTopBorder(box, &box->m_border.color);
     
     if(box->m_border.right)
-        drawRightBorder(box, borderColor);
+        drawRightBorder(box, &box->m_border.color);
     
     if(box->m_border.bottom)
-        drawBottomBorder(box, borderColor);
+        drawBottomBorder(box, &box->m_border.color);
 }
-
-
 
 void msBoxGridRenderer::_drawLine(msPoint &start, msPoint &end, msColor *color)
 {

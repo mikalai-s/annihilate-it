@@ -13,8 +13,14 @@ void msBoxGrid::_ms_boxgrid_refresh_borders()
 		for(GLint x = 0; x < grid->m_columnCount; x ++)
 		{
 			msBox *box = grid->getItem(y, x);
-            
-            box->m_border.left = !ms_boxgrid_check_neighbours(y, x-1, y, x);
+
+            GLint left = !ms_boxgrid_check_neighbours(y, x-1, y, x);
+            if(left != box->m_border.left)
+            {
+                //msAnimation<msColor*> *animation = new msAnimation<msColor*>()
+            }            
+            box->m_border.left = left;
+
             box->m_border.top = !ms_boxgrid_check_neighbours(y-1, x, y, x);
             box->m_border.right = !ms_boxgrid_check_neighbours(y, x, y, x+1);
             box->m_border.bottom = !ms_boxgrid_check_neighbours(y, x, y+1, x);
@@ -49,6 +55,7 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 		for(GLint x = 0; x < numCols; x ++)
 		{
 			msBox *box = new msBox(curx, cury, width, height, pattern[y * numCols + x]);
+            box->m_border.color = *palette->getColor(0);
 			grid->setItem(y, x, box);
 
 			curx += width;

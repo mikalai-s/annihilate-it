@@ -23,7 +23,6 @@ class msBoxGrid
 {
 	msSize size;
 
-
 	void _ms_boxgrid_refresh_borders();
 
 	GLint ms_boxgrid_check_neighbours(GLint y1, GLint x1, GLint y2, GLint x2);
