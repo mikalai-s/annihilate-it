@@ -12,7 +12,7 @@ void msBoxGrid::_borderInvertion( msAnimationContext *c )
 }
 
 void msBoxGrid::_animateBorderInvertion( msBox * box, GLint positive ) 
-{
+{/*
     GLint count = 500;
     GLfloat step = 1.0f / count;
     if(!positive)
@@ -20,6 +20,7 @@ void msBoxGrid::_animateBorderInvertion( msBox * box, GLint positive )
     msBorderAnimationContext *context = new msBorderAnimationContext(&box->m_border->color, step); 
     msAnimation *animation = new msAnimation(0, count, context, _borderInvertion);
     box->m_animations->m_list.push_back(animation);
+    */
 }
 
 void msBoxGrid::_ms_boxgrid_refresh_borders()
