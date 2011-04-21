@@ -189,6 +189,39 @@ int CreateEGLContext( HWND hWnd, HINSTANCE hInstance )
    return TRUE;
 }
 
+
+/* Function CenterWindow(), Centers Window */
+VOID CenterWindow(HWND hwnd, HWND hwndParent, int Width, int Height)
+{
+
+    /* Variables */
+    RECT rc;
+
+    /* If Parent Window Is Set As Null, Get The Desktop Window */
+    if(hwndParent == NULL)
+    {
+
+        hwndParent = GetDesktopWindow();
+
+    }
+
+    /* Get Parent Client Area Measurements */
+    GetClientRect(hwndParent, &rc);
+
+    /* Center The Window */
+    MoveWindow(
+        hwnd,
+        (rc.right - rc.left - Width) / 2,
+        (rc.bottom - rc.top - Height) / 2,
+        Width,
+        Height,
+        TRUE
+        );
+
+    return;
+
+}
+
 //=================================================================================================================================
 ///
 /// Funtion to create Window.
@@ -246,14 +279,18 @@ int CreateWind( int width, int height )
       exit( 0 );
    }
 
+   CenterWindow(hWnd, NULL, width, height);
    ShowWindow( hWnd, SW_SHOW );
    SetForegroundWindow( hWnd );  // Slightly Higher Priority
    SetFocus( hWnd );             // Sets Keyboard Focus To The Window
+   
+
 
    //ResizeScene( width, height );
 
    return TRUE;
 }
+
 
 //=================================================================================================================================
 ///
