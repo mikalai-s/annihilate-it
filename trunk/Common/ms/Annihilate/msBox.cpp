@@ -23,10 +23,10 @@ msBox::msBox(float x, float y, float width, float height, int colorIndex)
 	m_size.height = height;
 	m_colorIndex = colorIndex;
     m_border = (msBorder*)malloc(sizeof(msBorder));
-    m_border->left = 1;
-    m_border->top = 1;
-    m_border->right = 1;
-    m_border->bottom = 1;
+    m_border->left = 0;
+    m_border->top = 0;
+    m_border->right = 0;
+    m_border->bottom = 0;
 
     m_colorDisturbance.a = 1.0f;
     m_colorDisturbance.r = 1.0f;

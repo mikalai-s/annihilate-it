@@ -67,10 +67,10 @@ void msBoxAnimation::fall(GLint delay, GLint direction)
 	getAnimations()->add(new msAnimation(delay, times, c1, _linearFalling));
     
     msPointMoveAnimationContext *c2 = new msPointMoveAnimationContext(&m_location, direction);
-    getAnimations()->add(new msAnimation(delay + times, 4, c2, _linearFalling2));
+    getAnimations()->add(new msAnimation(delay + times, 12, c2, _linearFalling2));
     
     msFromToAnimationContext<msPoint*> *c3 = new msFromToAnimationContext<msPoint*>(&m_location, &m_box->m_location);
-    getAnimations()->add(new msAnimation(delay + times + 4, 1, c3, _linearFalling));
+    getAnimations()->add(new msAnimation(delay + times + 12, 1, c3, _linearFalling));
 }
 
 

@@ -410,7 +410,7 @@ int WINAPI WinMain( HINSTANCE  hInstance,
       return 0;
    }
    
-   g_scene->loadData("./data/uniforms.txt"); 
+   g_scene->loadData("./../ms/Annihilate/data/uniforms.txt"); 
    g_scene->init();
    
    while ( ! done )
