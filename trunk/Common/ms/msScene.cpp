@@ -407,7 +407,7 @@ void msScene::drawFrame()
     msSize size;
     size.width = _width;
     size.height = _height;
-	m_renderer->draw(m_boxGrid,size);
+	m_renderer->draw(m_boxGrid, size);
 
 	//drawBackground();
 
@@ -469,7 +469,7 @@ void msScene::mouseClick(int x, int y)
 	
 	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
 
-	//m_boxGrid->shiftPendentBoxes(getShiftDirection());
+	m_boxGrid->shiftPendentBoxes(getShiftDirection());
 }
 
 

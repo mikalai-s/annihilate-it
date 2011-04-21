@@ -291,7 +291,7 @@ void msBoxGrid::_exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint 
     
     box1->getAnimated()->m_border = box1->m_border;
 
-    box1->getAnimated()->fall(100, direction);
+    box1->getAnimated()->fall(25, direction);
 }
 
 void msBoxGrid::_shiftDown()

@@ -314,3 +314,8 @@ void msParticleEmitter::stopParticleEmitter()
 	elapsedTime = 0;
 	emitCounter = 0; 
 }
+
+GLboolean msParticleEmitter::isAlive()
+{
+    return (particleCount != 1);
+}

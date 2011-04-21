@@ -94,19 +94,14 @@ void msBoxAnimation::_resetRequiresAnimation(msAnimationContext *c)
 
 
 void msBoxAnimation::hide(GLint delay)
-{
-    // add animation
-    //msFromToAnimationContext<msBoxAnimation*> *context = new msFromToAnimationContext<msBoxAnimation*>(this, 0);
-    //getAnimations()->add(new msAnimation(delay, 50, context, _hiding1));
-
-
+{/*
     // set requires explosion to make renderer know about that
     m_requiresExplosion = true;
 
     // the following animation will be called only once and it will just reset the requires explosion flag to stop its animation
     GLint duration = 10;
     msValueAnimationContext<msBoxAnimation*> *context = new msValueAnimationContext<msBoxAnimation*>(this);
-    getAnimations()->add(new msAnimation(duration, 1, context, _resetRequiresAnimation));
+    getAnimations()->add(new msAnimation(duration, 1, context, _resetRequiresAnimation));*/
 }
 
 

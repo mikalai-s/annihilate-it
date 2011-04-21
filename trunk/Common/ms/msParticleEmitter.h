@@ -82,5 +82,7 @@ public:
 
 	void update(GLfloat delta);
 
+    GLboolean isAlive();
+
 	~msParticleEmitter(void);
 };

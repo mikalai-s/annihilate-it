@@ -134,7 +134,7 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
             // first check for explosion and if box is required one put it into list to be used after grid rendering
             if(aBox->getRequiresExplosion())
             {
-                msPoint explosionLocation = box->m_location;
+                msPoint explosionLocation = box->getAnimated()->m_location;
                 explosionLocation.x += box->m_size.width / 2.0f;
                 explosionLocation.y += box->m_size.height / 2.0f;
                 m_explosions.push_back(_createExplosionPe(explosionLocation, size));
@@ -174,7 +174,7 @@ void msBoxGridRenderer::removeInactiveExplosions()
     msExplosionList explosionsToDelete;
 
     for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
-        if((*ei)->active == 0)
+        if(!(*ei)->isAlive())
             explosionsToDelete.push_back(*ei);
 
     for(msExplosionIterator ei = explosionsToDelete.begin(); ei != explosionsToDelete.end(); ei ++)
