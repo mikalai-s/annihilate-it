@@ -100,7 +100,6 @@ void msBoxAnimation::hide(GLint delay)
     //getAnimations()->add(new msAnimation(delay, 50, context, _hiding1));
 
 
-
     // set requires explosion to make renderer know about that
     m_requiresExplosion = true;
 

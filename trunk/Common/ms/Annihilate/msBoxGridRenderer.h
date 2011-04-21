@@ -16,18 +16,18 @@
 #include "../ShaderProgram/msShaderPrograms.h"
 #include "../ShaderProgram/msShaderProgram.h"
 #include "../msParticleEmitter.h"
-#include <map>
+#include <list>
 
 using namespace std;
 
-typedef map<msBox*, msParticleEmitter*> msExplosionMap;
-typedef msExplosionMap::iterator msExplosionIterator;
+typedef list<msParticleEmitter*> msExplosionList;
+typedef msExplosionList::iterator msExplosionIterator;
 
 class msBoxGridRenderer
 {
 	msShaderPrograms *m_shaders;
 
-    msExplosionMap m_explosions;
+    msExplosionList m_explosions;
 
     msSize m_size;
 
@@ -40,10 +40,13 @@ class msBoxGridRenderer
 
     void drawExplosions();
 
-    msParticleEmitter* _createExplosionPe(GLint _width, GLint _height);
+    msParticleEmitter* _createExplosionPe(msPoint location, msSize screenSize);
+
+    void removeInactiveExplosions();
 
 public:
 	msBoxGridRenderer(msShaderPrograms *shaders);
+    ~msBoxGridRenderer();
 
 	void draw(msBoxGrid *boxGrid, msSize size);
 };

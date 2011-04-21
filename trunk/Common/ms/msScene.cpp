@@ -235,8 +235,6 @@ void msScene::init()
 {
 	m_shaders.notifySizeChanged(_width, _height);
 
-	m_explosionParticles = _createExplosionPe(_width, _height);
-
 	pe2 = new msParticleEmitter(
 		// dust
 		Vector2fMake(0.0f, 0.0f),//position:

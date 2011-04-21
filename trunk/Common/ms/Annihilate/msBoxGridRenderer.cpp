@@ -8,7 +8,6 @@
  */
 
 #include "msBoxGridRenderer.h"
-#include <map>
 
 GLfloat mBoxVertexesTemp[4][3]; // 6 vertexes for defining quad by means of two triangles (2 vertex for each)
 GLfloat mBoxColorsTemp[4][4];
@@ -18,6 +17,14 @@ float mBoxBordersTemp[6]; // array of vertexes for box borders
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
 {
 	m_shaders = shaders;
+}
+
+msBoxGridRenderer::~msBoxGridRenderer()
+{
+    for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
+    {
+        delete (*ei);
+    }
 }
 
 static const GLuint g_indices[] = { 0, 1, 2, 3 };
@@ -127,17 +134,13 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
             // first check for explosion and if box is required one put it into list to be used after grid rendering
             if(aBox->getRequiresExplosion())
             {
-                m_explosions[box] = _createExplosionPe(320, 480);
+                msPoint explosionLocation = box->m_location;
+                explosionLocation.x += box->m_size.width / 2.0f;
+                explosionLocation.y += box->m_size.height / 2.0f;
+                m_explosions.push_back(_createExplosionPe(explosionLocation, size));
             }
             else
             {
-                // remove explosion object if we don't need it
-                msExplosionIterator ei = m_explosions.find(box);
-                if(ei != m_explosions.end())
-                {
-                    m_explosions.erase(box);
-                }
-
                 if(aBox->getAnimations()->getCount() > 0)
                 {
                     msColor  boxColorTemp;
@@ -162,6 +165,23 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
     }
 
     drawExplosions();
+
+    removeInactiveExplosions();
+}
+
+void msBoxGridRenderer::removeInactiveExplosions()
+{
+    msExplosionList explosionsToDelete;
+
+    for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
+        if((*ei)->active == 0)
+            explosionsToDelete.push_back(*ei);
+
+    for(msExplosionIterator ei = explosionsToDelete.begin(); ei != explosionsToDelete.end(); ei ++)
+    {
+        delete (*ei);
+        m_explosions.remove(*ei);
+    }
 }
 
 static const GLfloat g_fbVertexPositions2[] = {
@@ -202,8 +222,8 @@ void msBoxGridRenderer::drawExplosions()
 		// render particles
         for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
         {
-            (*ei).second->renderParticles(program);
-            (*ei).second->update(0.015f);
+            (*ei)->renderParticles(program);
+            (*ei)->update(0.015f);
         }
 	}
 
@@ -234,21 +254,21 @@ void msBoxGridRenderer::drawExplosions()
 	glDisable(GL_BLEND);
 }
 
-msParticleEmitter* msBoxGridRenderer::_createExplosionPe(GLint _width, GLint _height)
+msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPoint location, msSize screenSize)
 {
-    float k = (_width / 320.0f / 2.0f) + (_height / 480.0f / 2.0f);
+    float k = (screenSize.width / 320.0f / 2.0f) + (screenSize.height / 480.0f / 2.0f);
 
     return new msParticleEmitter(
 		// explosion
-		Vector2fMake(0.0f, 0.0f),//position:
+		Vector2fMake(location.x, location.y),//position:
 		Vector2fMake(0.031f, 0.031f),//sourcePositionVariance:
-		0.001f,//speed:
+		0.0001f,//speed:
 		0.007f,//speedVariance:
 		0.5f,//particleLifeSpan:
 		0.25f,//particleLifespanVariance:
 		0.0f,//angle:
 		360.0f,//angleVariance:
-		Vector2fMake(0.0f, -0.000025f),//gravity:
+		Vector2fMake(0.0f, -0.0000025f),//gravity:
 		colorMake(1.0f, 0.5f, 0.05f, 1.0f),//startColor:
 		colorMake(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
 		colorMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColor:
@@ -256,7 +276,7 @@ msParticleEmitter* msBoxGridRenderer::_createExplosionPe(GLint _width, GLint _he
 		200,//maxParticles:
 		50 * k,//particleSize:
 		3 * k,//particleSizeVariance:
-		-1,//0.125f,//duration:
+		0.125f,//duration:
 		GL_TRUE//blendAdditive:
 		);
 }
