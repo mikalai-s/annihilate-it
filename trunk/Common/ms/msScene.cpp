@@ -62,6 +62,9 @@ void msScene::newSize(GLint width, GLint height)
 	_height = height;
 	
 	m_shaders.notifySizeChanged(width, height);	
+
+    delete m_explosionParticles;
+    m_explosionParticles = _createExplosionPe(width, height);
 }
 
 //=================================================================================================================================
@@ -201,31 +204,38 @@ GLfloat colorMap[][4] =
 /// \return null
 //=================================================================================================================================
 
-void msScene::init()
+msParticleEmitter* msScene::_createExplosionPe(GLint _width, GLint _height)
 {
-	m_shaders.notifySizeChanged(_width, _height);
+    float k = (_width / 320.0f / 2.0f) + (_height / 480.0f / 2.0f);
 
-	m_explosionParticles = new msParticleEmitter(
+    return new msParticleEmitter(
 		// explosion
 		Vector2fMake(0.0f, 0.0f),//position:
-		Vector2fMake(0.021f, 0.031f),//sourcePositionVariance:
-		0.01f,//speed:
+		Vector2fMake(0.031f, 0.031f),//sourcePositionVariance:
+		0.001f,//speed:
 		0.007f,//speedVariance:
-		1.0f,//particleLifeSpan:
-		0.5f,//particleLifespanVariance:
+		0.5f,//particleLifeSpan:
+		0.25f,//particleLifespanVariance:
 		0.0f,//angle:
 		360.0f,//angleVariance:
-		Vector2fMake(0.0f, -0.00025f),//gravity:
+		Vector2fMake(0.0f, -0.000025f),//gravity:
 		colorMake(1.0f, 0.5f, 0.05f, 1.0f),//startColor:
 		colorMake(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
 		colorMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColor:
 		colorMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
 		200,//maxParticles:
-		190,//particleSize:
-		30,//particleSizeVariance:
+		50 * k,//particleSize:
+		3 * k,//particleSizeVariance:
 		-1,//0.125f,//duration:
 		GL_TRUE//blendAdditive:
 		);
+}
+
+void msScene::init()
+{
+	m_shaders.notifySizeChanged(_width, _height);
+
+	m_explosionParticles = _createExplosionPe(_width, _height);
 
 	pe2 = new msParticleEmitter(
 		// dust
@@ -248,17 +258,18 @@ void msScene::init()
 		-1,//0.125f,//duration:
 		GL_FALSE//blendAdditive:
 		);
+
 	pe3 = 0;
 
 
-		// init palette
-		m_palette = new msPalette(colorMap, 8);
+	// init palette
+	m_palette = new msPalette(colorMap, 8);
 
-		m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
+	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
 
-		m_renderer = new msBoxGridRenderer(m_boxGrid);
-		//    _boxGrid = ms_boxgrid_create_from_pattern(_palette, boxes, 7, 5, viewBounds.size.height, viewBounds.size.width);
+	m_renderer = new msBoxGridRenderer(&m_shaders);
 }
+
 int c = 0;
 
 void msScene::drawBackground()
@@ -335,8 +346,6 @@ void msScene::drawBackground()
 	}
 }
 
-
-
 void msScene::drawExplosion()
 {
 	// render fire into texture using particle shaders
@@ -397,7 +406,10 @@ void msScene::drawFrame()
 	glViewport(0, 0, _width, _height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	m_renderer->draw(m_shaders.getProgramByName("boxgrid"));
+    msSize size;
+    size.width = _width;
+    size.height = _height;
+	m_renderer->draw(m_boxGrid,size);
 
 	//drawBackground();
 
@@ -445,13 +457,13 @@ void msScene::mouseClick(int x, int y)
 
 	m_explosionParticles->active = true;
 	m_explosionParticles->duration = 0.125f;
-	m_explosionParticles->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) -1.0f;
-	m_explosionParticles->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) -1.0f;
+	m_explosionParticles->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) - 1.0f;
+	m_explosionParticles->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) - 1.0f;
 
 	pe2->active = true;
 	pe2->duration = 0.125f;
-	pe2->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) -1.0f;
-	pe2->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) -1.0f;
+	pe2->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) - 1.0f;
+	pe2->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) - 1.0f;
 
 	msPoint touchPoint;
 	touchPoint.x = ((GLfloat)x / (GLfloat)_width);
@@ -459,7 +471,7 @@ void msScene::mouseClick(int x, int y)
 	
 	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
 
-	m_boxGrid->shiftPendentBoxes(getShiftDirection());
+	//m_boxGrid->shiftPendentBoxes(getShiftDirection());
 }
 
 

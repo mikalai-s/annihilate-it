@@ -10,25 +10,41 @@
 #include "../msGL.h"
 #include "../msCommon.h"
 #include "msBox.h"
+#include "msBoxAnimation.h"
 #include "msBoxGrid.h"
 #include "msPalette.h"
+#include "../ShaderProgram/msShaderPrograms.h"
 #include "../ShaderProgram/msShaderProgram.h"
+#include "../msParticleEmitter.h"
+#include <map>
+
+using namespace std;
+
+typedef map<msBox*, msParticleEmitter*> msExplosionMap;
+typedef msExplosionMap::iterator msExplosionIterator;
 
 class msBoxGridRenderer
 {
-	msBoxGrid *boxGrid;
-	msShaderProgram *m_program;
+	msShaderPrograms *m_shaders;
 
-	void drawBox(msPalette *palette, msBox *box, msColor *color);
-	void _drawLine(msPoint &start, msPoint &end, msColor *color);
-	void drawLeftBorder(msBox *box, msColor *color);
-	void drawTopBorder(msBox *box, msColor *color);
-	void drawRightBorder(msBox *box, msColor *color);
-	void drawBottomBorder(msBox *box, msColor *color);
+    msExplosionMap m_explosions;
+
+    msSize m_size;
+
+	void drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *color);
+	void _drawLine(msShaderProgram *m_program, msPoint &start, msPoint &end, msColor *color);
+	void drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color);
+	void drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color);
+	void drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color);
+	void drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color);
+
+    void drawExplosions();
+
+    msParticleEmitter* _createExplosionPe(GLint _width, GLint _height);
 
 public:
-	msBoxGridRenderer(msBoxGrid *boxGrid);
+	msBoxGridRenderer(msShaderPrograms *shaders);
 
-	void draw(msShaderProgram *program);
+	void draw(msBoxGrid *boxGrid, msSize size);
 };
 

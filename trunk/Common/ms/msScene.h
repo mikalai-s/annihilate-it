@@ -57,6 +57,9 @@ private:
 	msBoxGrid *m_boxGrid;
 	msBoxGridRenderer *m_renderer;
 
+
+    msParticleEmitter* _createExplosionPe(GLint _width, GLint _height);
+
 public:
    /// \brief Constructor.
    msScene();

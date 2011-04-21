@@ -4,6 +4,7 @@
 
 #include "msBoxGrid.h"
 #include "msGrid.h"
+#include "msBoxAnimation.h"
 
 void msBoxGrid::_borderInvertion( msAnimationContext *c )
 {
@@ -171,33 +172,19 @@ void msBoxGrid::display2()
 	printf("\r\n");
 }
 
-
-void msBoxGrid::_hiding1(msAnimationContext *c)
-{/*
-	msAnimation<msBox*> *anim = (msAnimation<msBox*> *)a;
-    msBox *box = anim->m_from;
-    
-    box->m_location.z = 1.0f;
-    
-    anim->m_rAngle += 1.0f;
-    anim->m_rVector.x = 1.0f;
-    anim->m_rVector.y = 0.0f;
-    anim->m_rVector.z = 0.0f;*/
-}
-
-
-
-
 void msBoxGrid::_ms_boxgrid_animate_box_hiding(msBoxList *boxes)
-{    
-    //ms_box_copy(box, box->boxToAnimate);
-    
-    // add animation
-   // MsAnimation *sizeAnimation = ms_animation_create(_ptog(box->boxToAnimate), _itog(100), 0, 100, _hiding1);
-    //ms_list_add_item(box->animations->list, _ptog(sizeAnimation));    
-    
-    //sizeAnimation = ms_animation_create(_ptog(&box->boxToAnimate->location), _itog(100), 10, 20, _hiding2);
-    // ms_list_add_item(box->animations->list, _ptog(sizeAnimation));
+{
+    int offset = 0;
+    for(msBoxIterator i = boxes->begin(); i != boxes->end(); i ++)
+    {
+        msBox *box = *i;
+
+        box->copy((msBox*)box->getAnimated());
+
+        box->getAnimated()->hide(offset);        
+
+        offset += 5;
+    }
 }
 
 
@@ -273,7 +260,7 @@ void msBoxGrid::removeSimilarItems(GLint y, GLint x)
         if(_ms_boxgrid_has_similar_neighbour(y, x, box->m_colorIndex))
         {           
             _removeSimilarBoxes(y, x, box->m_colorIndex, &removedBoxes);
-           
+          
             _ms_boxgrid_animate_box_hiding(&removedBoxes);
         }
     }
@@ -289,40 +276,6 @@ void msBoxGrid::_exchangeBoxes(GLint y1, GLint x1, GLint y2, GLint x2)
 	grid->setItem(y2, x2, box1);
 }
 
-void msBoxGrid::_linearFalling(msAnimationContext *c)
-{
-	msFromToAnimationContext<msPoint*> *context = (msFromToAnimationContext<msPoint*> *)c;
-
-	msPoint *from = context->getFrom();
-	msPoint *to = context->getTo();
-	
-	from->x += (to->x - from->x) / context->getAnimation()->getCount();
-	from->y += (to->y - from->y) / context->getAnimation()->getCount();
-}
-
-void msBoxGrid::_linearFalling2(msAnimationContext *c)
-{
-	msPointMoveAnimationContext *context = (msPointMoveAnimationContext*)c;
-	msPoint *p = context->getPoint();
-    switch(context->getDirection())
-    {
-        case MS_BOX_SHIFT_TOP:
-            p->y += MS_BOUNCE_OFFSET;
-            break;
-            
-        case MS_BOX_SHIFT_LEFT:
-            p->x += MS_BOUNCE_OFFSET;
-            break;
-            
-        case MS_BOX_SHIFT_RIGHT:
-            p->x -= MS_BOUNCE_OFFSET;
-            break;
-            
-        default:
-            p->y -= MS_BOUNCE_OFFSET;
-    }    
-}
-
 
 void msBoxGrid::_exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint x2, GLint direction)
 {
@@ -336,19 +289,9 @@ void msBoxGrid::_exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint 
     box1->m_location = box2->m_location;
     box2->m_location = tempLocation;
     
-    box1->m_boxToAnimate->m_border = box1->m_border;
-  
-    int times = 10;
+    box1->getAnimated()->m_border = box1->m_border;
 
-    // moving from one position to another
-	msAnimation *animation = new msAnimation(0, times, new msFromToAnimationContext<msPoint*>(&box1->m_boxToAnimate->m_location, &box1->m_location), _linearFalling);
-	box1->m_animations->m_list.push_back(animation);
-    
-    animation = new msAnimation(times, 4, new msPointMoveAnimationContext(&box1->m_boxToAnimate->m_location, direction), _linearFalling2);
-	box1->m_animations->m_list.push_back(animation);
-    
-    animation = new msAnimation(times + 4, 1, new msFromToAnimationContext<msPoint*>(&box1->m_boxToAnimate->m_location, &box1->m_location), _linearFalling);
-	box1->m_animations->m_list.push_back(animation);
+    box1->getAnimated()->fall(100, direction);
 }
 
 void msBoxGrid::_shiftDown()

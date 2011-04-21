@@ -71,3 +71,23 @@ void msAnimationBundle::unitTest()
 		bundle.performStep();
 	}
 }
+
+GLint msAnimationBundle::getCount()
+{
+    return m_list.size();
+}
+
+void msAnimationBundle::add(msAnimation *animation)
+{
+    m_list.push_back(animation);
+}
+
+msAnimationIterator msAnimationBundle::getFirst()
+{
+    return m_list.begin();
+}
+
+msAnimationIterator msAnimationBundle::getLast()
+{
+    return m_list.end();
+}

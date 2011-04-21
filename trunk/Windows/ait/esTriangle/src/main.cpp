@@ -21,8 +21,7 @@
 #include <crtdbg.h>
 #endif
 
-#pragma comment( lib, "libEGL.lib" )
-#pragma comment( lib, "libGLESv2.lib" )
+#pragma comment( lib, "libGLES20.lib" )
 
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>

@@ -5,24 +5,24 @@
 
 #define MS_BOX_INVISIBLE -1
 
+class msBoxAnimation;
+
 class msBox
 {
 public:
 	msPoint m_location;
 	msSize m_size;
 	int m_colorIndex;
-	//    color color;
+	msColor m_colorDisturbance;
 
-	// copy of the current box. is used just for animation. can be refactored in the future.
-	msBox *m_boxToAnimate;
-
-	// animations related
-	msAnimationBundle *m_animations;
-
-	// visibility of border
+    // visibility of border
 	msBorder *m_border;
 
 private:
+	// copy of the current box. is used just for animation. can be refactored in the future.
+	msBoxAnimation *m_boxToAnimate;	
+
+protected:
 	msBox();
 
 public:
@@ -35,6 +35,8 @@ public:
 	void makeInvisible();
 
 	GLboolean isVisible();
+
+    msBoxAnimation *getAnimated();
 
 	static void unitTest();
 
