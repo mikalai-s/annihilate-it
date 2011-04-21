@@ -60,7 +60,7 @@ class msPointMoveAnimationContext : public msAnimationContext
     GLint m_direction;
 
 public:
-    msPointMoveAnimationContext::msPointMoveAnimationContext(msPoint *point, GLint direction);
+    msPointMoveAnimationContext(msPoint *point, GLint direction);
     ~msPointMoveAnimationContext();
 
     msPoint* getPoint();

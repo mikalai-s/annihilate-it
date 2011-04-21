@@ -14,6 +14,7 @@
 #import <OpenGLES/ES1/glext.h>
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
+#import "../ms/msScene.h"
 
 @interface aitViewController : UIViewController {
 @private

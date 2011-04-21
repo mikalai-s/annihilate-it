@@ -451,7 +451,7 @@ int msBoxGrid::ms_boxgrid_check_neighbours(GLint y1, GLint x1, GLint y2, GLint x
 
 void msBoxGrid::unitTest()
 {
-	GLint pattern_vert[] = 
+	/*GLint pattern_vert[] = 
 	{
 		-1,-1,-1,-1,-1,
 		-1,-1,-1,-1, 1,
@@ -485,7 +485,7 @@ void msBoxGrid::unitTest()
 		 1, 1, 1,-1, 1,
 		 1, 1, 1, 1,-1,
 		 1, 1, 1, 1, 1		
-	};
+	};*/
 	GLint pattern_horiz[] = 
 	{
 		-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,

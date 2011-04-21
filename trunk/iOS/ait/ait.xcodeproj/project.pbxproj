@@ -7,6 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE4C2D0E135FF8D70071F1C9 /* msAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CE3135FF8D70071F1C9 /* msAnimation.cpp */; };
+		CE4C2D0F135FF8D70071F1C9 /* msAnimationBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CE6135FF8D70071F1C9 /* msAnimationBundle.cpp */; };
+		CE4C2D10135FF8D70071F1C9 /* msAnimationContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CE8135FF8D70071F1C9 /* msAnimationContext.cpp */; };
+		CE4C2D11135FF8D70071F1C9 /* msBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CEA135FF8D70071F1C9 /* msBox.cpp */; };
+		CE4C2D12135FF8D70071F1C9 /* msBoxAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CEC135FF8D70071F1C9 /* msBoxAnimation.cpp */; };
+		CE4C2D13135FF8D70071F1C9 /* msBoxGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CEE135FF8D70071F1C9 /* msBoxGrid.cpp */; };
+		CE4C2D14135FF8D70071F1C9 /* msBoxGridRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CF0135FF8D70071F1C9 /* msBoxGridRenderer.cpp */; };
+		CE4C2D15135FF8D70071F1C9 /* msPalette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CF3135FF8D70071F1C9 /* msPalette.cpp */; };
+		CE4C2D16135FF8D70071F1C9 /* msImageObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CF7135FF8D70071F1C9 /* msImageObject.cpp */; };
+		CE4C2D17135FF8D70071F1C9 /* msParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CF9135FF8D70071F1C9 /* msParticleEmitter.cpp */; };
+		CE4C2D18135FF8D70071F1C9 /* msScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CFB135FF8D70071F1C9 /* msScene.cpp */; };
+		CE4C2D19135FF8D70071F1C9 /* msSimpleImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CFD135FF8D70071F1C9 /* msSimpleImageLoader.cpp */; };
+		CE4C2D1A135FF8D70071F1C9 /* msTga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CFF135FF8D70071F1C9 /* msTga.cpp */; };
+		CE4C2D1B135FF8D70071F1C9 /* msAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2D02135FF8D70071F1C9 /* msAttribute.cpp */; };
+		CE4C2D1C135FF8D70071F1C9 /* msFrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2D04135FF8D70071F1C9 /* msFrameBuffer.cpp */; };
+		CE4C2D1D135FF8D70071F1C9 /* msShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2D06135FF8D70071F1C9 /* msShaderProgram.cpp */; };
+		CE4C2D1E135FF8D70071F1C9 /* msShaderPrograms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2D08135FF8D70071F1C9 /* msShaderPrograms.cpp */; };
+		CE4C2D1F135FF8D70071F1C9 /* msTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2D0A135FF8D70071F1C9 /* msTexture.cpp */; };
+		CE4C2D20135FF8D70071F1C9 /* msUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2D0C135FF8D70071F1C9 /* msUniform.cpp */; };
 		CE8D89C8135E94B700C083EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C7135E94B700C083EA /* UIKit.framework */; };
 		CE8D89CA135E94B700C083EA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C9135E94B700C083EA /* Foundation.framework */; };
 		CE8D89CC135E94B700C083EA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89CB135E94B700C083EA /* CoreGraphics.framework */; };
@@ -14,12 +33,12 @@
 		CE8D89D0135E94B700C083EA /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89CF135E94B700C083EA /* OpenGLES.framework */; };
 		CE8D89D6135E94B700C083EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89D4135E94B700C083EA /* InfoPlist.strings */; };
 		CE8D89D9135E94B700C083EA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89D8135E94B700C083EA /* main.m */; };
-		CE8D89DC135E94B700C083EA /* aitAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89DB135E94B700C083EA /* aitAppDelegate.m */; };
+		CE8D89DC135E94B700C083EA /* aitAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89DB135E94B700C083EA /* aitAppDelegate.mm */; };
 		CE8D89DF135E94B700C083EA /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89DD135E94B700C083EA /* MainWindow.xib */; };
 		CE8D89E1135E94B700C083EA /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89E0135E94B700C083EA /* Shader.fsh */; };
 		CE8D89E3135E94B700C083EA /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89E2135E94B700C083EA /* Shader.vsh */; };
-		CE8D89E6135E94B700C083EA /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89E5135E94B700C083EA /* EAGLView.m */; };
-		CE8D89E9135E94B700C083EA /* aitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89E8135E94B700C083EA /* aitViewController.m */; };
+		CE8D89E6135E94B700C083EA /* EAGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89E5135E94B700C083EA /* EAGLView.mm */; };
+		CE8D89E9135E94B700C083EA /* aitViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89E8135E94B700C083EA /* aitViewController.mm */; };
 		CE8D89EC135E94B700C083EA /* aitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89EA135E94B700C083EA /* aitViewController.xib */; };
 		CE8D89F3135E94B700C083EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C7135E94B700C083EA /* UIKit.framework */; };
 		CE8D89F4135E94B700C083EA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C9135E94B700C083EA /* Foundation.framework */; };
@@ -40,6 +59,48 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CE4C2CE3135FF8D70071F1C9 /* msAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msAnimation.cpp; sourceTree = "<group>"; };
+		CE4C2CE4135FF8D70071F1C9 /* msAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAnimation.h; sourceTree = "<group>"; };
+		CE4C2CE5135FF8D70071F1C9 /* msAnimationBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAnimationBase.h; sourceTree = "<group>"; };
+		CE4C2CE6135FF8D70071F1C9 /* msAnimationBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msAnimationBundle.cpp; sourceTree = "<group>"; };
+		CE4C2CE7135FF8D70071F1C9 /* msAnimationBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAnimationBundle.h; sourceTree = "<group>"; };
+		CE4C2CE8135FF8D70071F1C9 /* msAnimationContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msAnimationContext.cpp; sourceTree = "<group>"; };
+		CE4C2CE9135FF8D70071F1C9 /* msAnimationContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAnimationContext.h; sourceTree = "<group>"; };
+		CE4C2CEA135FF8D70071F1C9 /* msBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msBox.cpp; sourceTree = "<group>"; };
+		CE4C2CEB135FF8D70071F1C9 /* msBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msBox.h; sourceTree = "<group>"; };
+		CE4C2CEC135FF8D70071F1C9 /* msBoxAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msBoxAnimation.cpp; sourceTree = "<group>"; };
+		CE4C2CED135FF8D70071F1C9 /* msBoxAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msBoxAnimation.h; sourceTree = "<group>"; };
+		CE4C2CEE135FF8D70071F1C9 /* msBoxGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msBoxGrid.cpp; sourceTree = "<group>"; };
+		CE4C2CEF135FF8D70071F1C9 /* msBoxGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msBoxGrid.h; sourceTree = "<group>"; };
+		CE4C2CF0135FF8D70071F1C9 /* msBoxGridRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msBoxGridRenderer.cpp; sourceTree = "<group>"; };
+		CE4C2CF1135FF8D70071F1C9 /* msBoxGridRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msBoxGridRenderer.h; sourceTree = "<group>"; };
+		CE4C2CF2135FF8D70071F1C9 /* msGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msGrid.h; sourceTree = "<group>"; };
+		CE4C2CF3135FF8D70071F1C9 /* msPalette.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msPalette.cpp; sourceTree = "<group>"; };
+		CE4C2CF4135FF8D70071F1C9 /* msPalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msPalette.h; sourceTree = "<group>"; };
+		CE4C2CF5135FF8D70071F1C9 /* msCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msCommon.h; sourceTree = "<group>"; };
+		CE4C2CF6135FF8D70071F1C9 /* msGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msGL.h; sourceTree = "<group>"; };
+		CE4C2CF7135FF8D70071F1C9 /* msImageObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msImageObject.cpp; sourceTree = "<group>"; };
+		CE4C2CF8135FF8D70071F1C9 /* msImageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msImageObject.h; sourceTree = "<group>"; };
+		CE4C2CF9135FF8D70071F1C9 /* msParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msParticleEmitter.cpp; sourceTree = "<group>"; };
+		CE4C2CFA135FF8D70071F1C9 /* msParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msParticleEmitter.h; sourceTree = "<group>"; };
+		CE4C2CFB135FF8D70071F1C9 /* msScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msScene.cpp; sourceTree = "<group>"; };
+		CE4C2CFC135FF8D70071F1C9 /* msScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msScene.h; sourceTree = "<group>"; };
+		CE4C2CFD135FF8D70071F1C9 /* msSimpleImageLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msSimpleImageLoader.cpp; sourceTree = "<group>"; };
+		CE4C2CFE135FF8D70071F1C9 /* msSimpleImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msSimpleImageLoader.h; sourceTree = "<group>"; };
+		CE4C2CFF135FF8D70071F1C9 /* msTga.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msTga.cpp; sourceTree = "<group>"; };
+		CE4C2D00135FF8D70071F1C9 /* msTga.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msTga.h; sourceTree = "<group>"; };
+		CE4C2D02135FF8D70071F1C9 /* msAttribute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msAttribute.cpp; sourceTree = "<group>"; };
+		CE4C2D03135FF8D70071F1C9 /* msAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAttribute.h; sourceTree = "<group>"; };
+		CE4C2D04135FF8D70071F1C9 /* msFrameBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msFrameBuffer.cpp; sourceTree = "<group>"; };
+		CE4C2D05135FF8D70071F1C9 /* msFrameBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msFrameBuffer.h; sourceTree = "<group>"; };
+		CE4C2D06135FF8D70071F1C9 /* msShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msShaderProgram.cpp; sourceTree = "<group>"; };
+		CE4C2D07135FF8D70071F1C9 /* msShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msShaderProgram.h; sourceTree = "<group>"; };
+		CE4C2D08135FF8D70071F1C9 /* msShaderPrograms.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msShaderPrograms.cpp; sourceTree = "<group>"; };
+		CE4C2D09135FF8D70071F1C9 /* msShaderPrograms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msShaderPrograms.h; sourceTree = "<group>"; };
+		CE4C2D0A135FF8D70071F1C9 /* msTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msTexture.cpp; sourceTree = "<group>"; };
+		CE4C2D0B135FF8D70071F1C9 /* msTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msTexture.h; sourceTree = "<group>"; };
+		CE4C2D0C135FF8D70071F1C9 /* msUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msUniform.cpp; sourceTree = "<group>"; };
+		CE4C2D0D135FF8D70071F1C9 /* msUniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msUniform.h; sourceTree = "<group>"; };
 		CE8D89C3135E94B700C083EA /* ait.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ait.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8D89C7135E94B700C083EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CE8D89C9135E94B700C083EA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -51,14 +112,14 @@
 		CE8D89D7135E94B700C083EA /* ait-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ait-Prefix.pch"; sourceTree = "<group>"; };
 		CE8D89D8135E94B700C083EA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE8D89DA135E94B700C083EA /* aitAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aitAppDelegate.h; sourceTree = "<group>"; };
-		CE8D89DB135E94B700C083EA /* aitAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aitAppDelegate.m; sourceTree = "<group>"; };
+		CE8D89DB135E94B700C083EA /* aitAppDelegate.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = aitAppDelegate.mm; sourceTree = "<group>"; };
 		CE8D89DE135E94B700C083EA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		CE8D89E0135E94B700C083EA /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
 		CE8D89E2135E94B700C083EA /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
 		CE8D89E4135E94B700C083EA /* EAGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
-		CE8D89E5135E94B700C083EA /* EAGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
+		CE8D89E5135E94B700C083EA /* EAGLView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = EAGLView.mm; sourceTree = "<group>"; };
 		CE8D89E7135E94B700C083EA /* aitViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aitViewController.h; sourceTree = "<group>"; };
-		CE8D89E8135E94B700C083EA /* aitViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aitViewController.m; sourceTree = "<group>"; };
+		CE8D89E8135E94B700C083EA /* aitViewController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = aitViewController.mm; sourceTree = "<group>"; };
 		CE8D89EB135E94B700C083EA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/aitViewController.xib; sourceTree = "<group>"; };
 		CE8D89F2135E94B700C083EA /* aitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = aitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8D89FA135E94B700C083EA /* aitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "aitTests-Info.plist"; sourceTree = "<group>"; };
@@ -94,9 +155,75 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE4C2CE1135FF8D70071F1C9 /* ms */ = {
+			isa = PBXGroup;
+			children = (
+				CE4C2CE2135FF8D70071F1C9 /* Annihilate */,
+				CE4C2CF5135FF8D70071F1C9 /* msCommon.h */,
+				CE4C2CF6135FF8D70071F1C9 /* msGL.h */,
+				CE4C2CF7135FF8D70071F1C9 /* msImageObject.cpp */,
+				CE4C2CF8135FF8D70071F1C9 /* msImageObject.h */,
+				CE4C2CF9135FF8D70071F1C9 /* msParticleEmitter.cpp */,
+				CE4C2CFA135FF8D70071F1C9 /* msParticleEmitter.h */,
+				CE4C2CFB135FF8D70071F1C9 /* msScene.cpp */,
+				CE4C2CFC135FF8D70071F1C9 /* msScene.h */,
+				CE4C2CFD135FF8D70071F1C9 /* msSimpleImageLoader.cpp */,
+				CE4C2CFE135FF8D70071F1C9 /* msSimpleImageLoader.h */,
+				CE4C2CFF135FF8D70071F1C9 /* msTga.cpp */,
+				CE4C2D00135FF8D70071F1C9 /* msTga.h */,
+				CE4C2D01135FF8D70071F1C9 /* ShaderProgram */,
+			);
+			path = ms;
+			sourceTree = "<group>";
+		};
+		CE4C2CE2135FF8D70071F1C9 /* Annihilate */ = {
+			isa = PBXGroup;
+			children = (
+				CE4C2CE3135FF8D70071F1C9 /* msAnimation.cpp */,
+				CE4C2CE4135FF8D70071F1C9 /* msAnimation.h */,
+				CE4C2CE5135FF8D70071F1C9 /* msAnimationBase.h */,
+				CE4C2CE6135FF8D70071F1C9 /* msAnimationBundle.cpp */,
+				CE4C2CE7135FF8D70071F1C9 /* msAnimationBundle.h */,
+				CE4C2CE8135FF8D70071F1C9 /* msAnimationContext.cpp */,
+				CE4C2CE9135FF8D70071F1C9 /* msAnimationContext.h */,
+				CE4C2CEA135FF8D70071F1C9 /* msBox.cpp */,
+				CE4C2CEB135FF8D70071F1C9 /* msBox.h */,
+				CE4C2CEC135FF8D70071F1C9 /* msBoxAnimation.cpp */,
+				CE4C2CED135FF8D70071F1C9 /* msBoxAnimation.h */,
+				CE4C2CEE135FF8D70071F1C9 /* msBoxGrid.cpp */,
+				CE4C2CEF135FF8D70071F1C9 /* msBoxGrid.h */,
+				CE4C2CF0135FF8D70071F1C9 /* msBoxGridRenderer.cpp */,
+				CE4C2CF1135FF8D70071F1C9 /* msBoxGridRenderer.h */,
+				CE4C2CF2135FF8D70071F1C9 /* msGrid.h */,
+				CE4C2CF3135FF8D70071F1C9 /* msPalette.cpp */,
+				CE4C2CF4135FF8D70071F1C9 /* msPalette.h */,
+			);
+			path = Annihilate;
+			sourceTree = "<group>";
+		};
+		CE4C2D01135FF8D70071F1C9 /* ShaderProgram */ = {
+			isa = PBXGroup;
+			children = (
+				CE4C2D02135FF8D70071F1C9 /* msAttribute.cpp */,
+				CE4C2D03135FF8D70071F1C9 /* msAttribute.h */,
+				CE4C2D04135FF8D70071F1C9 /* msFrameBuffer.cpp */,
+				CE4C2D05135FF8D70071F1C9 /* msFrameBuffer.h */,
+				CE4C2D06135FF8D70071F1C9 /* msShaderProgram.cpp */,
+				CE4C2D07135FF8D70071F1C9 /* msShaderProgram.h */,
+				CE4C2D08135FF8D70071F1C9 /* msShaderPrograms.cpp */,
+				CE4C2D09135FF8D70071F1C9 /* msShaderPrograms.h */,
+				CE4C2D0A135FF8D70071F1C9 /* msTexture.cpp */,
+				CE4C2D0B135FF8D70071F1C9 /* msTexture.h */,
+				CE4C2D0C135FF8D70071F1C9 /* msUniform.cpp */,
+				CE4C2D0D135FF8D70071F1C9 /* msUniform.h */,
+			);
+			path = ShaderProgram;
+			sourceTree = "<group>";
+		};
 		CE8D89B8135E94B600C083EA = {
 			isa = PBXGroup;
 			children = (
+				CE4C2CE1135FF8D70071F1C9 /* ms */,
 				CE8D89D1135E94B700C083EA /* ait */,
 				CE8D89F8135E94B700C083EA /* aitTests */,
 				CE8D89C6135E94B700C083EA /* Frameworks */,
@@ -129,14 +256,14 @@
 			isa = PBXGroup;
 			children = (
 				CE8D89DA135E94B700C083EA /* aitAppDelegate.h */,
-				CE8D89DB135E94B700C083EA /* aitAppDelegate.m */,
+				CE8D89DB135E94B700C083EA /* aitAppDelegate.mm */,
 				CE8D89DD135E94B700C083EA /* MainWindow.xib */,
 				CE8D89E0135E94B700C083EA /* Shader.fsh */,
 				CE8D89E2135E94B700C083EA /* Shader.vsh */,
 				CE8D89E4135E94B700C083EA /* EAGLView.h */,
-				CE8D89E5135E94B700C083EA /* EAGLView.m */,
+				CE8D89E5135E94B700C083EA /* EAGLView.mm */,
 				CE8D89E7135E94B700C083EA /* aitViewController.h */,
-				CE8D89E8135E94B700C083EA /* aitViewController.m */,
+				CE8D89E8135E94B700C083EA /* aitViewController.mm */,
 				CE8D89EA135E94B700C083EA /* aitViewController.xib */,
 				CE8D89D2135E94B700C083EA /* Supporting Files */,
 			);
@@ -282,9 +409,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE8D89D9135E94B700C083EA /* main.m in Sources */,
-				CE8D89DC135E94B700C083EA /* aitAppDelegate.m in Sources */,
-				CE8D89E6135E94B700C083EA /* EAGLView.m in Sources */,
-				CE8D89E9135E94B700C083EA /* aitViewController.m in Sources */,
+				CE8D89DC135E94B700C083EA /* aitAppDelegate.mm in Sources */,
+				CE8D89E6135E94B700C083EA /* EAGLView.mm in Sources */,
+				CE8D89E9135E94B700C083EA /* aitViewController.mm in Sources */,
+				CE4C2D0E135FF8D70071F1C9 /* msAnimation.cpp in Sources */,
+				CE4C2D0F135FF8D70071F1C9 /* msAnimationBundle.cpp in Sources */,
+				CE4C2D10135FF8D70071F1C9 /* msAnimationContext.cpp in Sources */,
+				CE4C2D11135FF8D70071F1C9 /* msBox.cpp in Sources */,
+				CE4C2D12135FF8D70071F1C9 /* msBoxAnimation.cpp in Sources */,
+				CE4C2D13135FF8D70071F1C9 /* msBoxGrid.cpp in Sources */,
+				CE4C2D14135FF8D70071F1C9 /* msBoxGridRenderer.cpp in Sources */,
+				CE4C2D15135FF8D70071F1C9 /* msPalette.cpp in Sources */,
+				CE4C2D16135FF8D70071F1C9 /* msImageObject.cpp in Sources */,
+				CE4C2D17135FF8D70071F1C9 /* msParticleEmitter.cpp in Sources */,
+				CE4C2D18135FF8D70071F1C9 /* msScene.cpp in Sources */,
+				CE4C2D19135FF8D70071F1C9 /* msSimpleImageLoader.cpp in Sources */,
+				CE4C2D1A135FF8D70071F1C9 /* msTga.cpp in Sources */,
+				CE4C2D1B135FF8D70071F1C9 /* msAttribute.cpp in Sources */,
+				CE4C2D1C135FF8D70071F1C9 /* msFrameBuffer.cpp in Sources */,
+				CE4C2D1D135FF8D70071F1C9 /* msShaderProgram.cpp in Sources */,
+				CE4C2D1E135FF8D70071F1C9 /* msShaderPrograms.cpp in Sources */,
+				CE4C2D1F135FF8D70071F1C9 /* msTexture.cpp in Sources */,
+				CE4C2D20135FF8D70071F1C9 /* msUniform.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,7 +495,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEBUG,
+					IOS_GL,
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -365,6 +514,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = IOS_GL;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -467,6 +617,7 @@
 				CE8D8A07135E94B700C083EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CE8D8A08135E94B700C083EA /* Build configuration list for PBXNativeTarget "aitTests" */ = {
 			isa = XCConfigurationList;
@@ -475,6 +626,7 @@
 				CE8D8A0A135E94B700C083EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
