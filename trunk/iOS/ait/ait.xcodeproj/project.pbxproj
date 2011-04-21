@@ -1,0 +1,482 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CE8D89C8135E94B700C083EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C7135E94B700C083EA /* UIKit.framework */; };
+		CE8D89CA135E94B700C083EA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C9135E94B700C083EA /* Foundation.framework */; };
+		CE8D89CC135E94B700C083EA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89CB135E94B700C083EA /* CoreGraphics.framework */; };
+		CE8D89CE135E94B700C083EA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89CD135E94B700C083EA /* QuartzCore.framework */; };
+		CE8D89D0135E94B700C083EA /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89CF135E94B700C083EA /* OpenGLES.framework */; };
+		CE8D89D6135E94B700C083EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89D4135E94B700C083EA /* InfoPlist.strings */; };
+		CE8D89D9135E94B700C083EA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89D8135E94B700C083EA /* main.m */; };
+		CE8D89DC135E94B700C083EA /* aitAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89DB135E94B700C083EA /* aitAppDelegate.m */; };
+		CE8D89DF135E94B700C083EA /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89DD135E94B700C083EA /* MainWindow.xib */; };
+		CE8D89E1135E94B700C083EA /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89E0135E94B700C083EA /* Shader.fsh */; };
+		CE8D89E3135E94B700C083EA /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89E2135E94B700C083EA /* Shader.vsh */; };
+		CE8D89E6135E94B700C083EA /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89E5135E94B700C083EA /* EAGLView.m */; };
+		CE8D89E9135E94B700C083EA /* aitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89E8135E94B700C083EA /* aitViewController.m */; };
+		CE8D89EC135E94B700C083EA /* aitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89EA135E94B700C083EA /* aitViewController.xib */; };
+		CE8D89F3135E94B700C083EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C7135E94B700C083EA /* UIKit.framework */; };
+		CE8D89F4135E94B700C083EA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C9135E94B700C083EA /* Foundation.framework */; };
+		CE8D89F5135E94B700C083EA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89CB135E94B700C083EA /* CoreGraphics.framework */; };
+		CE8D89FD135E94B700C083EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89FB135E94B700C083EA /* InfoPlist.strings */; };
+		CE8D8A00135E94B700C083EA /* aitTests.h in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89FF135E94B700C083EA /* aitTests.h */; };
+		CE8D8A02135E94B700C083EA /* aitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D8A01135E94B700C083EA /* aitTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CE8D89F6135E94B700C083EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE8D89BA135E94B600C083EA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE8D89C2135E94B700C083EA;
+			remoteInfo = ait;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CE8D89C3135E94B700C083EA /* ait.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ait.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE8D89C7135E94B700C083EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		CE8D89C9135E94B700C083EA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		CE8D89CB135E94B700C083EA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		CE8D89CD135E94B700C083EA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CE8D89CF135E94B700C083EA /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		CE8D89D3135E94B700C083EA /* ait-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ait-Info.plist"; sourceTree = "<group>"; };
+		CE8D89D5135E94B700C083EA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CE8D89D7135E94B700C083EA /* ait-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ait-Prefix.pch"; sourceTree = "<group>"; };
+		CE8D89D8135E94B700C083EA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CE8D89DA135E94B700C083EA /* aitAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aitAppDelegate.h; sourceTree = "<group>"; };
+		CE8D89DB135E94B700C083EA /* aitAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aitAppDelegate.m; sourceTree = "<group>"; };
+		CE8D89DE135E94B700C083EA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		CE8D89E0135E94B700C083EA /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
+		CE8D89E2135E94B700C083EA /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
+		CE8D89E4135E94B700C083EA /* EAGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
+		CE8D89E5135E94B700C083EA /* EAGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
+		CE8D89E7135E94B700C083EA /* aitViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aitViewController.h; sourceTree = "<group>"; };
+		CE8D89E8135E94B700C083EA /* aitViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aitViewController.m; sourceTree = "<group>"; };
+		CE8D89EB135E94B700C083EA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/aitViewController.xib; sourceTree = "<group>"; };
+		CE8D89F2135E94B700C083EA /* aitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = aitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE8D89FA135E94B700C083EA /* aitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "aitTests-Info.plist"; sourceTree = "<group>"; };
+		CE8D89FC135E94B700C083EA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CE8D89FE135E94B700C083EA /* aitTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aitTests-Prefix.pch"; sourceTree = "<group>"; };
+		CE8D89FF135E94B700C083EA /* aitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aitTests.h; sourceTree = "<group>"; };
+		CE8D8A01135E94B700C083EA /* aitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aitTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CE8D89C0135E94B700C083EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE8D89C8135E94B700C083EA /* UIKit.framework in Frameworks */,
+				CE8D89CA135E94B700C083EA /* Foundation.framework in Frameworks */,
+				CE8D89CC135E94B700C083EA /* CoreGraphics.framework in Frameworks */,
+				CE8D89CE135E94B700C083EA /* QuartzCore.framework in Frameworks */,
+				CE8D89D0135E94B700C083EA /* OpenGLES.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE8D89EE135E94B700C083EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE8D89F3135E94B700C083EA /* UIKit.framework in Frameworks */,
+				CE8D89F4135E94B700C083EA /* Foundation.framework in Frameworks */,
+				CE8D89F5135E94B700C083EA /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CE8D89B8135E94B600C083EA = {
+			isa = PBXGroup;
+			children = (
+				CE8D89D1135E94B700C083EA /* ait */,
+				CE8D89F8135E94B700C083EA /* aitTests */,
+				CE8D89C6135E94B700C083EA /* Frameworks */,
+				CE8D89C4135E94B700C083EA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CE8D89C4135E94B700C083EA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CE8D89C3135E94B700C083EA /* ait.app */,
+				CE8D89F2135E94B700C083EA /* aitTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CE8D89C6135E94B700C083EA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CE8D89C7135E94B700C083EA /* UIKit.framework */,
+				CE8D89C9135E94B700C083EA /* Foundation.framework */,
+				CE8D89CB135E94B700C083EA /* CoreGraphics.framework */,
+				CE8D89CD135E94B700C083EA /* QuartzCore.framework */,
+				CE8D89CF135E94B700C083EA /* OpenGLES.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CE8D89D1135E94B700C083EA /* ait */ = {
+			isa = PBXGroup;
+			children = (
+				CE8D89DA135E94B700C083EA /* aitAppDelegate.h */,
+				CE8D89DB135E94B700C083EA /* aitAppDelegate.m */,
+				CE8D89DD135E94B700C083EA /* MainWindow.xib */,
+				CE8D89E0135E94B700C083EA /* Shader.fsh */,
+				CE8D89E2135E94B700C083EA /* Shader.vsh */,
+				CE8D89E4135E94B700C083EA /* EAGLView.h */,
+				CE8D89E5135E94B700C083EA /* EAGLView.m */,
+				CE8D89E7135E94B700C083EA /* aitViewController.h */,
+				CE8D89E8135E94B700C083EA /* aitViewController.m */,
+				CE8D89EA135E94B700C083EA /* aitViewController.xib */,
+				CE8D89D2135E94B700C083EA /* Supporting Files */,
+			);
+			path = ait;
+			sourceTree = "<group>";
+		};
+		CE8D89D2135E94B700C083EA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CE8D89D3135E94B700C083EA /* ait-Info.plist */,
+				CE8D89D4135E94B700C083EA /* InfoPlist.strings */,
+				CE8D89D7135E94B700C083EA /* ait-Prefix.pch */,
+				CE8D89D8135E94B700C083EA /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CE8D89F8135E94B700C083EA /* aitTests */ = {
+			isa = PBXGroup;
+			children = (
+				CE8D89FF135E94B700C083EA /* aitTests.h */,
+				CE8D8A01135E94B700C083EA /* aitTests.m */,
+				CE8D89F9135E94B700C083EA /* Supporting Files */,
+			);
+			path = aitTests;
+			sourceTree = "<group>";
+		};
+		CE8D89F9135E94B700C083EA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CE8D89FA135E94B700C083EA /* aitTests-Info.plist */,
+				CE8D89FB135E94B700C083EA /* InfoPlist.strings */,
+				CE8D89FE135E94B700C083EA /* aitTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CE8D89C2135E94B700C083EA /* ait */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE8D8A05135E94B700C083EA /* Build configuration list for PBXNativeTarget "ait" */;
+			buildPhases = (
+				CE8D89BF135E94B700C083EA /* Sources */,
+				CE8D89C0135E94B700C083EA /* Frameworks */,
+				CE8D89C1135E94B700C083EA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ait;
+			productName = ait;
+			productReference = CE8D89C3135E94B700C083EA /* ait.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CE8D89F1135E94B700C083EA /* aitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE8D8A08135E94B700C083EA /* Build configuration list for PBXNativeTarget "aitTests" */;
+			buildPhases = (
+				CE8D89ED135E94B700C083EA /* Sources */,
+				CE8D89EE135E94B700C083EA /* Frameworks */,
+				CE8D89EF135E94B700C083EA /* Resources */,
+				CE8D89F0135E94B700C083EA /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CE8D89F7135E94B700C083EA /* PBXTargetDependency */,
+			);
+			name = aitTests;
+			productName = aitTests;
+			productReference = CE8D89F2135E94B700C083EA /* aitTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CE8D89BA135E94B600C083EA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = CE8D89BD135E94B600C083EA /* Build configuration list for PBXProject "ait" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CE8D89B8135E94B600C083EA;
+			productRefGroup = CE8D89C4135E94B700C083EA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CE8D89C2135E94B700C083EA /* ait */,
+				CE8D89F1135E94B700C083EA /* aitTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CE8D89C1135E94B700C083EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE8D89D6135E94B700C083EA /* InfoPlist.strings in Resources */,
+				CE8D89DF135E94B700C083EA /* MainWindow.xib in Resources */,
+				CE8D89E1135E94B700C083EA /* Shader.fsh in Resources */,
+				CE8D89E3135E94B700C083EA /* Shader.vsh in Resources */,
+				CE8D89EC135E94B700C083EA /* aitViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE8D89EF135E94B700C083EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE8D89FD135E94B700C083EA /* InfoPlist.strings in Resources */,
+				CE8D8A00135E94B700C083EA /* aitTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CE8D89F0135E94B700C083EA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CE8D89BF135E94B700C083EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE8D89D9135E94B700C083EA /* main.m in Sources */,
+				CE8D89DC135E94B700C083EA /* aitAppDelegate.m in Sources */,
+				CE8D89E6135E94B700C083EA /* EAGLView.m in Sources */,
+				CE8D89E9135E94B700C083EA /* aitViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE8D89ED135E94B700C083EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE8D8A02135E94B700C083EA /* aitTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CE8D89F7135E94B700C083EA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE8D89C2135E94B700C083EA /* ait */;
+			targetProxy = CE8D89F6135E94B700C083EA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		CE8D89D4135E94B700C083EA /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CE8D89D5135E94B700C083EA /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		CE8D89DD135E94B700C083EA /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CE8D89DE135E94B700C083EA /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		CE8D89EA135E94B700C083EA /* aitViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CE8D89EB135E94B700C083EA /* en */,
+			);
+			name = aitViewController.xib;
+			sourceTree = "<group>";
+		};
+		CE8D89FB135E94B700C083EA /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CE8D89FC135E94B700C083EA /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CE8D8A03135E94B700C083EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		CE8D8A04135E94B700C083EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		CE8D8A06135E94B700C083EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ait/ait-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "ait/ait-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		CE8D8A07135E94B700C083EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ait/ait-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "ait/ait-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		CE8D8A09135E94B700C083EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ait.app/ait";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "aitTests/aitTests-Prefix.pch";
+				INFOPLIST_FILE = "aitTests/aitTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		CE8D8A0A135E94B700C083EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ait.app/ait";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "aitTests/aitTests-Prefix.pch";
+				INFOPLIST_FILE = "aitTests/aitTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CE8D89BD135E94B600C083EA /* Build configuration list for PBXProject "ait" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE8D8A03135E94B700C083EA /* Debug */,
+				CE8D8A04135E94B700C083EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE8D8A05135E94B700C083EA /* Build configuration list for PBXNativeTarget "ait" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE8D8A06135E94B700C083EA /* Debug */,
+				CE8D8A07135E94B700C083EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		CE8D8A08135E94B700C083EA /* Build configuration list for PBXNativeTarget "aitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE8D8A09135E94B700C083EA /* Debug */,
+				CE8D8A0A135E94B700C083EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CE8D89BA135E94B600C083EA /* Project object */;
+}
