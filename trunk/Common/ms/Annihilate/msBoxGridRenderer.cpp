@@ -377,8 +377,11 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
             {
                 msPoint location;
                 location.x = box->getAnimated()->m_location.x + box->getAnimated()->m_size.width / 2.0;
+                location.x /= 2.0f;
                 location.x *= size.width;
                 location.y = box->getAnimated()->m_location.y + box->getAnimated()->m_size.height / 2.0;
+                location.y /= 2.0f;
+                location.y = 1.0f - location.y;
                 location.y *= size.height;
 
                 m_afterShockRadius = m_afterShockRadiusMin;

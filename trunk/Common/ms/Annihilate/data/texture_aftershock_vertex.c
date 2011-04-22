@@ -23,7 +23,7 @@ void main()
 
 	// invert y and center
 	//p.x = p.x - 1.0;	
-	//p.y = 1.0 - p.y;
+	//p.y = 2.0 - p.y;
 
     gl_Position = p;
     
