@@ -385,6 +385,8 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 	            m_afterShockPower = 1.0f;
 	            m_afterShockLocation[0] = location.x;
 	            m_afterShockLocation[1] = location.y;
+
+                break;
             }
             else if(box->getAnimated()->getRequiresWave())
             {
@@ -394,9 +396,9 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 
                 m_afterShockRadius += m_afterShockRadiusStep;
 			    m_afterShockPower -= m_afterShockRadiusStep / (m_afterShockRadiusMax - m_afterShockRadiusMin);
-            }
 
-            break;
+                break;
+            }
         }
     }
 
