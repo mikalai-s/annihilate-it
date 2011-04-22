@@ -124,11 +124,11 @@ void msBoxAnimation::wave(GLint delay)
     m_requiresWaveInit = false;
     m_requiresWave = false;
 
-    setFlag(10, &m_requiresWaveInit, true);
-    setFlag(11, &m_requiresWaveInit, false);
+    setFlag(5, &m_requiresWaveInit, true);
+    setFlag(6, &m_requiresWaveInit, false);
 
-    setFlag(12, &m_requiresWave, true);
-    setFlag(50, &m_requiresWave, false);
+    setFlag(7, &m_requiresWave, true);
+    setFlag(70, &m_requiresWave, false);
 }
 
 
