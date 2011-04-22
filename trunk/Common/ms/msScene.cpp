@@ -405,8 +405,8 @@ void msScene::drawFrame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     msSize size;
-    size.width = _width;
-    size.height = _height;
+    size.width = (GLfloat)_width;
+    size.height = (GLfloat)_height;
 	m_renderer->draw(m_boxGrid, size);
 
 	//drawBackground();
@@ -445,14 +445,14 @@ int getShiftDirection()
 }
 
 void msScene::mouseClick(int x, int y)
-{
+{/*
 	c = 50;
 	m_animate = 1;
 	m_afterShockRadius = m_afterShockRadiusMin;
 	m_afterShockPower = 1.0f;
 	m_afterShockLocation[0] = (float)x;
 	m_afterShockLocation[1] = (float)this->_height - (float)y;
-
+*/
 	m_explosionParticles->active = true;
 	m_explosionParticles->duration = 0.125f;
 	m_explosionParticles->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) - 1.0f;
@@ -470,6 +470,11 @@ void msScene::mouseClick(int x, int y)
 	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
 
 	m_boxGrid->shiftPendentBoxes(getShiftDirection());
+
+    msPoint p;
+    p.x = (float)x;
+    p.y = (float)this->_height - (float)y;
+    m_renderer->startWave(p);
 }
 
 

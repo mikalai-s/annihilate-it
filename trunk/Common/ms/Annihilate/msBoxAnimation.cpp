@@ -7,6 +7,8 @@ msBoxAnimation::msBoxAnimation(msBox *box)
     m_animations = new msAnimationBundle();
     m_box = box;
     m_requiresExplosion = false;
+    m_requiresWaveInit = false;
+    m_requiresWave = false;
 }
 
 
@@ -62,15 +64,21 @@ void msBoxAnimation::fall(GLint delay, GLint direction)
 {
     int times = 10;
 
-    // moving from one position to another
-    msFromToAnimationContext<msPoint*> *c1 = new msFromToAnimationContext<msPoint*>(&m_location, &m_box->m_location);
-	getAnimations()->add(new msAnimation(delay, times, c1, _linearFalling));
+    // move a little bit up - to look like explosion raise boxes
+    msPointMoveAnimationContext *c1 = new msPointMoveAnimationContext(&m_location, direction);
+	getAnimations()->add(new msAnimation(0, 4, c1, _linearFalling2));
+
+    // moving from top to bottom
+    msFromToAnimationContext<msPoint*> *c2 = new msFromToAnimationContext<msPoint*>(&m_location, &m_box->m_location);
+	getAnimations()->add(new msAnimation(delay + 4, times, c2, _linearFalling));
     
-    msPointMoveAnimationContext *c2 = new msPointMoveAnimationContext(&m_location, direction);
-    getAnimations()->add(new msAnimation(delay + times, 12, c2, _linearFalling2));
+    // move a litle bit up for effect of bounce
+    msPointMoveAnimationContext *c3 = new msPointMoveAnimationContext(&m_location, direction);
+    getAnimations()->add(new msAnimation(delay + times + 4, 4, c3, _linearFalling2));
     
-    msFromToAnimationContext<msPoint*> *c3 = new msFromToAnimationContext<msPoint*>(&m_location, &m_box->m_location);
-    getAnimations()->add(new msAnimation(delay + times + 12, 1, c3, _linearFalling));
+    // final falling (very quick)
+    msFromToAnimationContext<msPoint*> *c4 = new msFromToAnimationContext<msPoint*>(&m_location, &m_box->m_location);
+    getAnimations()->add(new msAnimation(delay + times + 4 + 4, 1, c4, _linearFalling));
 }
 
 
@@ -86,26 +94,55 @@ void msBoxAnimation::_hiding1(msAnimationContext *c)
     context->getFrom()->m_colorDisturbance.b -= k;
 }
 
-void msBoxAnimation::_resetRequiresAnimation(msAnimationContext *c)
+
+void msBoxAnimation::setFlag(GLint delay, GLboolean *flag, GLboolean value)
 {
-    msValueAnimationContext<msBoxAnimation*> *context = (msValueAnimationContext<msBoxAnimation*>*)c;
-    context->getValue()->m_requiresExplosion = false;
+    msKeyValueAnimationContext<GLboolean*, GLfloat> *context = new msKeyValueAnimationContext<GLboolean*, GLfloat>(flag, value);
+    getAnimations()->add(new msAnimation(delay, 1, context, setFlagCallback));
+}
+
+
+void msBoxAnimation::setFlagCallback(msAnimationContext *c)
+{
+    msKeyValueAnimationContext<GLboolean*, GLfloat> *context = (msKeyValueAnimationContext<GLboolean*, GLfloat>*)c;
+    *context->getKey() = context->getValue();
 }
 
 
 void msBoxAnimation::hide(GLint delay)
-{/*
+{
     // set requires explosion to make renderer know about that
     m_requiresExplosion = true;
 
     // the following animation will be called only once and it will just reset the requires explosion flag to stop its animation
-    GLint duration = 10;
-    msValueAnimationContext<msBoxAnimation*> *context = new msValueAnimationContext<msBoxAnimation*>(this);
-    getAnimations()->add(new msAnimation(duration, 1, context, _resetRequiresAnimation));*/
+    setFlag(10, &m_requiresExplosion, false);
+}
+
+
+void msBoxAnimation::wave(GLint delay)
+{
+    m_requiresWaveInit = false;
+    m_requiresWave = false;
+
+    setFlag(10, &m_requiresWaveInit, true);
+    setFlag(11, &m_requiresWaveInit, false);
+
+    setFlag(12, &m_requiresWave, true);
+    setFlag(50, &m_requiresWave, false);
 }
 
 
 GLboolean msBoxAnimation::getRequiresExplosion()
 {
     return m_requiresExplosion;
+}
+
+GLboolean msBoxAnimation::getRequiresWave()
+{
+    return m_requiresWave;
+}
+
+GLboolean msBoxAnimation::getRequiresWaveInit()
+{
+    return m_requiresWaveInit;
 }

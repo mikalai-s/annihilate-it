@@ -12,6 +12,10 @@ class msBoxAnimation : public msBox
 
     GLboolean m_requiresExplosion;
 
+    GLboolean m_requiresWave;
+
+    GLboolean m_requiresWaveInit;
+
 private:
     static void _linearFalling(msAnimationContext *c);
 
@@ -19,7 +23,9 @@ private:
 
     static void _hiding1(msAnimationContext *c);
 
-    static void _resetRequiresAnimation(msAnimationContext *c);
+    static void setFlagCallback(msAnimationContext *c);   
+
+    void setFlag(GLint delay, GLboolean *flag, GLboolean value);
 
 public:
     msBoxAnimation(msBox *box);
@@ -31,7 +37,11 @@ public:
 
     void hide(GLint delay);
 
+    void wave(GLint delay);
+
     GLboolean getRequiresExplosion();
 
-    void resetRequiresExplosion();
+    GLboolean getRequiresWave();
+
+    GLboolean getRequiresWaveInit();
 };

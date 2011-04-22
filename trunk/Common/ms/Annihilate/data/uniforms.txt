@@ -19,15 +19,19 @@ attribute a_position 0
 attribute a_size 1
 attribute a_color 2
 colorTexFbo renderTex 10
+uniform_mat4 mvp 1.0 0.0 0.0 0.0     0.0 -1.0 0.0 0.0     0.0 0.0 1.0 0.0       0.0 0.0 0.0 1.0
 link particle_create
 
 program particle_complete ./../ms/Annihilate/data/particle_complete_vertex.c ./../ms/Annihilate/data/particle_complete_fragment.c
 texture u2_texture 4 ./../ms/Annihilate/data/expl.tga
 attribute a2_position 0
 attribute a2_texcoord 1
+uniform_mat4 mvp 1.0 0.0 0.0 0.0     0.0 -1.0 0.0 0.0     0.0 0.0 1.0 0.0       0.0 0.0 0.0 1.0
 link particle_complete
 
 program boxgrid ./../ms/Annihilate/data/boxgrid_vertex.c ./../ms/Annihilate/data/boxgrid_fragment.c
 attribute position 0
 attribute color 1
+colorTexFbo renderTex 12
+uniform_mat4 mvp 1.0 0.0 0.0 0.0     0.0 -1.0 0.0 0.0     0.0 0.0 1.0 0.0       0.0 0.0 0.0 1.0
 link boxgrid

@@ -9,14 +9,19 @@
 
 #include "msBoxGridRenderer.h"
 
-GLfloat mBoxVertexesTemp[4][3]; // 6 vertexes for defining quad by means of two triangles (2 vertex for each)
-GLfloat mBoxColorsTemp[4][4];
-
-float mBoxBordersTemp[6]; // array of vertexes for box borders
-
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
 {
 	m_shaders = shaders;
+
+    m_afterShockRadius = -1.0f;
+    m_afterShockPower = 100.0f;
+    m_afterShockLocation[0] = 0.0f;
+    m_afterShockLocation[1] = 0.0f;
+    m_animate = 0;
+
+    m_afterShockRadiusMin = 0.0f;
+    m_afterShockRadiusMax = 500.0f;
+    m_afterShockRadiusStep = 10.0f;
 }
 
 msBoxGridRenderer::~msBoxGridRenderer()
@@ -33,6 +38,7 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 {
     msPoint l = box->m_location;
     msSize s = box->m_size;
+    
     mBoxVertexesTemp[0][0] = l.x;               mBoxVertexesTemp[0][1] = l.y;               mBoxVertexesTemp[0][2] = l.z; 
     mBoxVertexesTemp[1][0] = l.x + s.width;     mBoxVertexesTemp[1][1] = l.y;               mBoxVertexesTemp[1][2] = l.z; 
     mBoxVertexesTemp[2][0] = l.x;               mBoxVertexesTemp[2][1] = l.y + s.height;    mBoxVertexesTemp[2][2] = l.z; 
@@ -45,11 +51,12 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 		mBoxColorsTemp[i][2] = c->b;
 		mBoxColorsTemp[i][3] = c->a;
 	}
-	
+
 	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, mBoxVertexesTemp );
 	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, mBoxColorsTemp );
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    //glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices);
 
     
     // draw borders if need   
@@ -106,6 +113,7 @@ void msBoxGridRenderer::drawRightBorder(msShaderProgram *m_program, msBox *box, 
 	_drawLine(m_program, start, end, color);
 }
 
+
 void msBoxGridRenderer::drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
 	msPoint start = box->m_location;
@@ -117,13 +125,34 @@ void msBoxGridRenderer::drawBottomBorder(msShaderProgram *m_program, msBox *box,
 	_drawLine(m_program, start, end, color);
 }
 
+GLuint gi = 0;
+
 void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
 {
     m_size = size;
 
-	msShaderProgram *m_program = m_shaders->getProgramByName("boxgrid");
-    m_program->use();
-   
+    drawBoxesWithAfterShock(boxGrid, size);
+
+    drawExplosions();
+
+    removeInactiveExplosions();
+
+    // update all animations
+    for(int y = 0; y < boxGrid->grid->m_rowCount; y ++)
+    {
+        for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
+        {
+            msBox *box = boxGrid->grid->getItem(y, x);
+            box->getAnimated()->getAnimations()->performStep();
+        }
+    }
+
+    gi ++;
+}
+
+
+void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid, msSize size)
+{
     for(int y = 0; y < boxGrid->grid->m_rowCount; y ++)
     {
         for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
@@ -150,23 +179,17 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
                     boxColorTemp.g *= aBox->m_colorDisturbance.g;
                     boxColorTemp.b *= aBox->m_colorDisturbance.b;
                     
-                    drawBox(m_program, boxGrid->m_palette, aBox, &boxColorTemp);
+                    drawBox(program, boxGrid->m_palette, aBox, &boxColorTemp);
                 }
                 else if(box->isVisible())
                 {
                     msColor  boxColorTemp;
                     boxColorTemp = *boxGrid->m_palette->getColor(box->m_colorIndex);
-                    drawBox(m_program, boxGrid->m_palette, box, &boxColorTemp);
+                    drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
                 }
             }
-                        
-            aBox->getAnimations()->performStep();
         }
     }
-
-    drawExplosions();
-
-    removeInactiveExplosions();
 }
 
 void msBoxGridRenderer::removeInactiveExplosions()
@@ -215,7 +238,7 @@ void msBoxGridRenderer::drawExplosions()
 	if (program->getFrameBuffer("renderTex")->isComplete())		
 	{
 		// Set viewport to size of texture map and erase previous image
-		glViewport(0, 0, m_size.width, m_size.height);
+		glViewport(0, 0, (GLsizei)m_size.width, (GLsizei)m_size.height);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -279,5 +302,130 @@ msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPoint location, msSiz
 		0.125f,//duration:
 		GL_TRUE//blendAdditive:
 		);
+}
+
+static const GLfloat g_vertexPositions[] = {
+	-1.0f, -1.0f,  -1.0f,  1.0f,
+	1.0f, -1.0f,  -1.0f,  1.0f,
+	-1.0f,  1.0f,  -1.0f, 1.0f,
+	1.0f,  1.0f,  -1.0f, 1.0f,
+};
+
+static const GLfloat g_vertexTexcoord[] = {
+	0.0f, 0.f,   
+	1.f,  0.f,    
+	0.0f, 1.f,    	
+	1.f,  1.f,   
+};
+
+
+void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
+{
+    // render fire into texture using particle shaders
+	msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
+	program->use();
+
+	// Switch the render target to the current FBO to update the texture map
+	program->getFrameBuffer("renderTex")->bind();
+
+	// FBO attachment is complete?
+	if (program->getFrameBuffer("renderTex")->isComplete())
+	{
+		// Set viewport to size of texture map and erase previous image
+		glViewport(0, 0, size.width, size.height);
+		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
+
+		// render background
+        drawBoxGrid(program, boxGrid, size);
+	}
+
+	// Unbind the FBO so rendering will return to the backbuffer.
+	m_shaders->getMainFrameBuffer()->bind();
+
+	// usual renderer
+
+	// Set viewport to size of framebuffer and clear color and depth buffers
+
+	// Bind updated texture map
+	glActiveTexture(GL_TEXTURE0 + program->getFrameBuffer("renderTex")->getTexture()->getUnit());
+	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
+
+    GLuint u = program->getFrameBuffer("renderTex")->getTexture()->getUnit();
+
+    program = m_shaders->getProgramByName("texture_aftershock");
+    program->use();
+
+	program->getUniform("tex")->set1i(u);
+	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_vertexPositions );
+	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_vertexTexcoord );
+
+	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
+	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices );	
+
+
+    // wave
+
+    for(int y = 0; y < boxGrid->grid->m_rowCount; y ++)
+    {
+        for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
+        {
+            msBox *box = boxGrid->grid->getItem(y, x);
+            msBoxAnimation *aBox = box->getAnimated();
+
+            if(box->getAnimated()->getRequiresWaveInit())
+            {
+                msPoint location;
+                location.x = box->getAnimated()->m_location.x + box->getAnimated()->m_size.width / 2.0;
+                location.x *= size.width;
+                location.y = box->getAnimated()->m_location.y + box->getAnimated()->m_size.height / 2.0;
+                location.y *= size.height;
+
+                m_afterShockRadius = m_afterShockRadiusMin;
+	            m_afterShockPower = 1.0f;
+	            m_afterShockLocation[0] = location.x;
+	            m_afterShockLocation[1] = location.y;
+            }
+            else if(box->getAnimated()->getRequiresWave())
+            {
+                program->getAttribute("radius")->set1f(m_afterShockRadius);
+		        program->getAttribute("power")->set1f(m_afterShockPower);
+		        program->getUniform("ep")->set2f(m_afterShockLocation[0], m_afterShockLocation[1]);
+
+                m_afterShockRadius += m_afterShockRadiusStep;
+			    m_afterShockPower -= m_afterShockRadiusStep / (m_afterShockRadiusMax - m_afterShockRadiusMin);
+            }
+
+            break;
+        }
+    }
+
+
+/*	if(m_animate == 1)
+	{
+		
+
+		c--;
+		if(c < 40)
+		{
+            
+
+			
+		}		
+	}*/
+}
+
+
+
+void msBoxGridRenderer::startWave(msPoint location)
+{/*
+    //c = 50;
+    c = 50;
+	m_animate = 1;
+	m_afterShockRadius = m_afterShockRadiusMin;
+	m_afterShockPower = 1.0f;
+	m_afterShockLocation[0] = location.x;
+	m_afterShockLocation[1] = location.y;
+    */
 }
 

@@ -253,10 +253,14 @@ int msBoxGrid::_ms_boxgrid_has_similar_neighbour(GLint y, GLint x, GLint colorIn
 
 void msBoxGrid::removeSimilarItems(GLint y, GLint x)
 {
+
+
 	msBoxList removedBoxes;
 	msBox *box = grid->getItem(y, x);
+    box->getAnimated()->wave(0);
 	if(box->isVisible())
-    {
+    {       
+
         if(_ms_boxgrid_has_similar_neighbour(y, x, box->m_colorIndex))
         {           
             _removeSimilarBoxes(y, x, box->m_colorIndex, &removedBoxes);

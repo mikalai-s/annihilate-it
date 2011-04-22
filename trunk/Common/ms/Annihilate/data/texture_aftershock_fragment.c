@@ -16,7 +16,7 @@ varying vec4 fake_FragCoord1;
 
 varying vec2 buffersize1;
 
-float l = 150.0;
+float l = 50.0;
 float t = 0.1;
 
 vec4 testTexture()

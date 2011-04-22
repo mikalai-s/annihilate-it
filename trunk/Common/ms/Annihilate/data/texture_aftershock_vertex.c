@@ -19,7 +19,14 @@ void main()
     radius0 = radius;
 	power0 = power;
 
-    gl_Position = /*mvp * */position;
+  vec4 p = position;
+
+	// invert y and center
+	//p.x = p.x - 1.0;	
+	//p.y = 1.0 - p.y;
+
+    gl_Position = p;
+    
     
     outcolor = color;
     texcoord0 = texcoord;

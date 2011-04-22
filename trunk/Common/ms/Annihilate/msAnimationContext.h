@@ -87,3 +87,31 @@ public:
         return m_value;
     }
 };
+
+template <class TKey, class TValue>
+class msKeyValueAnimationContext: public msAnimationContext
+{
+    TKey m_key;
+    TValue m_value;
+
+public:
+    msKeyValueAnimationContext(TKey key, TValue value)
+    {
+        m_key = key;
+        m_value = value;
+    }
+
+    ~msKeyValueAnimationContext()
+    {
+    }
+
+    TKey getKey()
+    {
+        return m_key;
+    }
+
+    TValue getValue()
+    {
+        return m_value;
+    }
+};
