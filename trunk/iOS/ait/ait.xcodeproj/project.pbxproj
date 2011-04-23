@@ -26,6 +26,29 @@
 		CE4C2D1E135FF8D70071F1C9 /* msShaderPrograms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2D08135FF8D70071F1C9 /* msShaderPrograms.cpp */; };
 		CE4C2D1F135FF8D70071F1C9 /* msTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2D0A135FF8D70071F1C9 /* msTexture.cpp */; };
 		CE4C2D20135FF8D70071F1C9 /* msUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2D0C135FF8D70071F1C9 /* msUniform.cpp */; };
+		CE4C2E5713628C4B0071F1C9 /* msGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E5613628C4B0071F1C9 /* msGL.cpp */; };
+		CE4C2E6813628C6A0071F1C9 /* boxgrid_fragment.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E5A13628C6A0071F1C9 /* boxgrid_fragment.c */; };
+		CE4C2E6913628C6A0071F1C9 /* boxgrid_vertex.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E5B13628C6A0071F1C9 /* boxgrid_vertex.c */; };
+		CE4C2E6F13628C6A0071F1C9 /* particle_complete_fragment.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6113628C6A0071F1C9 /* particle_complete_fragment.c */; };
+		CE4C2E7013628C6A0071F1C9 /* particle_complete_vertex.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6213628C6A0071F1C9 /* particle_complete_vertex.c */; };
+		CE4C2E7113628C6A0071F1C9 /* particle_create_fragment.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6313628C6A0071F1C9 /* particle_create_fragment.c */; };
+		CE4C2E7213628C6A0071F1C9 /* particle_create_vertex.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6413628C6A0071F1C9 /* particle_create_vertex.c */; };
+		CE4C2E7313628C6A0071F1C9 /* texture_aftershock_fragment.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6513628C6A0071F1C9 /* texture_aftershock_fragment.c */; };
+		CE4C2E7413628C6A0071F1C9 /* texture_aftershock_vertex.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6613628C6A0071F1C9 /* texture_aftershock_vertex.c */; };
+		CE4C2E7713628CE30071F1C9 /* boxgrid_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5A13628C6A0071F1C9 /* boxgrid_fragment.c */; };
+		CE4C2E7813628CE30071F1C9 /* boxgrid_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5B13628C6A0071F1C9 /* boxgrid_vertex.c */; };
+		CE4C2E7913628CE30071F1C9 /* expl.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5C13628C6A0071F1C9 /* expl.tga */; };
+		CE4C2E7A13628CE30071F1C9 /* Fieldstone.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5D13628C6A0071F1C9 /* Fieldstone.tga */; };
+		CE4C2E7B13628CE30071F1C9 /* ms.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5E13628C6A0071F1C9 /* ms.tga */; };
+		CE4C2E7C13628CE30071F1C9 /* noise.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5F13628C6A0071F1C9 /* noise.jpg */; };
+		CE4C2E7D13628CE30071F1C9 /* noise.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6013628C6A0071F1C9 /* noise.tga */; };
+		CE4C2E7E13628CE30071F1C9 /* particle_complete_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6113628C6A0071F1C9 /* particle_complete_fragment.c */; };
+		CE4C2E7F13628CE30071F1C9 /* particle_complete_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6213628C6A0071F1C9 /* particle_complete_vertex.c */; };
+		CE4C2E8013628CE30071F1C9 /* particle_create_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6313628C6A0071F1C9 /* particle_create_fragment.c */; };
+		CE4C2E8113628CE30071F1C9 /* particle_create_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6413628C6A0071F1C9 /* particle_create_vertex.c */; };
+		CE4C2E8213628CE30071F1C9 /* texture_aftershock_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6513628C6A0071F1C9 /* texture_aftershock_fragment.c */; };
+		CE4C2E8313628CE30071F1C9 /* texture_aftershock_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6613628C6A0071F1C9 /* texture_aftershock_vertex.c */; };
+		CE4C2E8413628CE30071F1C9 /* uniforms.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6713628C6A0071F1C9 /* uniforms.txt */; };
 		CE8D89C8135E94B700C083EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C7135E94B700C083EA /* UIKit.framework */; };
 		CE8D89CA135E94B700C083EA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C9135E94B700C083EA /* Foundation.framework */; };
 		CE8D89CC135E94B700C083EA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89CB135E94B700C083EA /* CoreGraphics.framework */; };
@@ -35,8 +58,6 @@
 		CE8D89D9135E94B700C083EA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89D8135E94B700C083EA /* main.m */; };
 		CE8D89DC135E94B700C083EA /* aitAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89DB135E94B700C083EA /* aitAppDelegate.mm */; };
 		CE8D89DF135E94B700C083EA /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89DD135E94B700C083EA /* MainWindow.xib */; };
-		CE8D89E1135E94B700C083EA /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89E0135E94B700C083EA /* Shader.fsh */; };
-		CE8D89E3135E94B700C083EA /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89E2135E94B700C083EA /* Shader.vsh */; };
 		CE8D89E6135E94B700C083EA /* EAGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89E5135E94B700C083EA /* EAGLView.mm */; };
 		CE8D89E9135E94B700C083EA /* aitViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89E8135E94B700C083EA /* aitViewController.mm */; };
 		CE8D89EC135E94B700C083EA /* aitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89EA135E94B700C083EA /* aitViewController.xib */; };
@@ -57,6 +78,32 @@
 			remoteInfo = ait;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CE4C2E7613628CCD0071F1C9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = data;
+			dstSubfolderSpec = 7;
+			files = (
+				CE4C2E7713628CE30071F1C9 /* boxgrid_fragment.c in CopyFiles */,
+				CE4C2E7813628CE30071F1C9 /* boxgrid_vertex.c in CopyFiles */,
+				CE4C2E7913628CE30071F1C9 /* expl.tga in CopyFiles */,
+				CE4C2E7A13628CE30071F1C9 /* Fieldstone.tga in CopyFiles */,
+				CE4C2E7B13628CE30071F1C9 /* ms.tga in CopyFiles */,
+				CE4C2E7C13628CE30071F1C9 /* noise.jpg in CopyFiles */,
+				CE4C2E7D13628CE30071F1C9 /* noise.tga in CopyFiles */,
+				CE4C2E7E13628CE30071F1C9 /* particle_complete_fragment.c in CopyFiles */,
+				CE4C2E7F13628CE30071F1C9 /* particle_complete_vertex.c in CopyFiles */,
+				CE4C2E8013628CE30071F1C9 /* particle_create_fragment.c in CopyFiles */,
+				CE4C2E8113628CE30071F1C9 /* particle_create_vertex.c in CopyFiles */,
+				CE4C2E8213628CE30071F1C9 /* texture_aftershock_fragment.c in CopyFiles */,
+				CE4C2E8313628CE30071F1C9 /* texture_aftershock_vertex.c in CopyFiles */,
+				CE4C2E8413628CE30071F1C9 /* uniforms.txt in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		CE4C2CE3135FF8D70071F1C9 /* msAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msAnimation.cpp; sourceTree = "<group>"; };
@@ -101,6 +148,21 @@
 		CE4C2D0B135FF8D70071F1C9 /* msTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msTexture.h; sourceTree = "<group>"; };
 		CE4C2D0C135FF8D70071F1C9 /* msUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msUniform.cpp; sourceTree = "<group>"; };
 		CE4C2D0D135FF8D70071F1C9 /* msUniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msUniform.h; sourceTree = "<group>"; };
+		CE4C2E5613628C4B0071F1C9 /* msGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msGL.cpp; sourceTree = "<group>"; };
+		CE4C2E5A13628C6A0071F1C9 /* boxgrid_fragment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = boxgrid_fragment.c; sourceTree = "<group>"; };
+		CE4C2E5B13628C6A0071F1C9 /* boxgrid_vertex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = boxgrid_vertex.c; sourceTree = "<group>"; };
+		CE4C2E5C13628C6A0071F1C9 /* expl.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = expl.tga; sourceTree = "<group>"; };
+		CE4C2E5D13628C6A0071F1C9 /* Fieldstone.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fieldstone.tga; sourceTree = "<group>"; };
+		CE4C2E5E13628C6A0071F1C9 /* ms.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = ms.tga; sourceTree = "<group>"; };
+		CE4C2E5F13628C6A0071F1C9 /* noise.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = noise.jpg; sourceTree = "<group>"; };
+		CE4C2E6013628C6A0071F1C9 /* noise.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = noise.tga; sourceTree = "<group>"; };
+		CE4C2E6113628C6A0071F1C9 /* particle_complete_fragment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = particle_complete_fragment.c; sourceTree = "<group>"; };
+		CE4C2E6213628C6A0071F1C9 /* particle_complete_vertex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = particle_complete_vertex.c; sourceTree = "<group>"; };
+		CE4C2E6313628C6A0071F1C9 /* particle_create_fragment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = particle_create_fragment.c; sourceTree = "<group>"; };
+		CE4C2E6413628C6A0071F1C9 /* particle_create_vertex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = particle_create_vertex.c; sourceTree = "<group>"; };
+		CE4C2E6513628C6A0071F1C9 /* texture_aftershock_fragment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = texture_aftershock_fragment.c; sourceTree = "<group>"; };
+		CE4C2E6613628C6A0071F1C9 /* texture_aftershock_vertex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = texture_aftershock_vertex.c; sourceTree = "<group>"; };
+		CE4C2E6713628C6A0071F1C9 /* uniforms.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = uniforms.txt; sourceTree = "<group>"; };
 		CE8D89C3135E94B700C083EA /* ait.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ait.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8D89C7135E94B700C083EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CE8D89C9135E94B700C083EA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -160,6 +222,7 @@
 			children = (
 				CE4C2CE2135FF8D70071F1C9 /* Annihilate */,
 				CE4C2CF5135FF8D70071F1C9 /* msCommon.h */,
+				CE4C2E5613628C4B0071F1C9 /* msGL.cpp */,
 				CE4C2CF6135FF8D70071F1C9 /* msGL.h */,
 				CE4C2CF7135FF8D70071F1C9 /* msImageObject.cpp */,
 				CE4C2CF8135FF8D70071F1C9 /* msImageObject.h */,
@@ -179,6 +242,7 @@
 		CE4C2CE2135FF8D70071F1C9 /* Annihilate */ = {
 			isa = PBXGroup;
 			children = (
+				CE4C2E5913628C6A0071F1C9 /* data */,
 				CE4C2CE3135FF8D70071F1C9 /* msAnimation.cpp */,
 				CE4C2CE4135FF8D70071F1C9 /* msAnimation.h */,
 				CE4C2CE5135FF8D70071F1C9 /* msAnimationBase.h */,
@@ -218,6 +282,27 @@
 				CE4C2D0D135FF8D70071F1C9 /* msUniform.h */,
 			);
 			path = ShaderProgram;
+			sourceTree = "<group>";
+		};
+		CE4C2E5913628C6A0071F1C9 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				CE4C2E5A13628C6A0071F1C9 /* boxgrid_fragment.c */,
+				CE4C2E5B13628C6A0071F1C9 /* boxgrid_vertex.c */,
+				CE4C2E5C13628C6A0071F1C9 /* expl.tga */,
+				CE4C2E5D13628C6A0071F1C9 /* Fieldstone.tga */,
+				CE4C2E5E13628C6A0071F1C9 /* ms.tga */,
+				CE4C2E5F13628C6A0071F1C9 /* noise.jpg */,
+				CE4C2E6013628C6A0071F1C9 /* noise.tga */,
+				CE4C2E6113628C6A0071F1C9 /* particle_complete_fragment.c */,
+				CE4C2E6213628C6A0071F1C9 /* particle_complete_vertex.c */,
+				CE4C2E6313628C6A0071F1C9 /* particle_create_fragment.c */,
+				CE4C2E6413628C6A0071F1C9 /* particle_create_vertex.c */,
+				CE4C2E6513628C6A0071F1C9 /* texture_aftershock_fragment.c */,
+				CE4C2E6613628C6A0071F1C9 /* texture_aftershock_vertex.c */,
+				CE4C2E6713628C6A0071F1C9 /* uniforms.txt */,
+			);
+			path = data;
 			sourceTree = "<group>";
 		};
 		CE8D89B8135E94B600C083EA = {
@@ -311,6 +396,7 @@
 				CE8D89BF135E94B700C083EA /* Sources */,
 				CE8D89C0135E94B700C083EA /* Frameworks */,
 				CE8D89C1135E94B700C083EA /* Resources */,
+				CE4C2E7613628CCD0071F1C9 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -370,8 +456,6 @@
 			files = (
 				CE8D89D6135E94B700C083EA /* InfoPlist.strings in Resources */,
 				CE8D89DF135E94B700C083EA /* MainWindow.xib in Resources */,
-				CE8D89E1135E94B700C083EA /* Shader.fsh in Resources */,
-				CE8D89E3135E94B700C083EA /* Shader.vsh in Resources */,
 				CE8D89EC135E94B700C083EA /* aitViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -431,6 +515,15 @@
 				CE4C2D1E135FF8D70071F1C9 /* msShaderPrograms.cpp in Sources */,
 				CE4C2D1F135FF8D70071F1C9 /* msTexture.cpp in Sources */,
 				CE4C2D20135FF8D70071F1C9 /* msUniform.cpp in Sources */,
+				CE4C2E5713628C4B0071F1C9 /* msGL.cpp in Sources */,
+				CE4C2E6813628C6A0071F1C9 /* boxgrid_fragment.c in Sources */,
+				CE4C2E6913628C6A0071F1C9 /* boxgrid_vertex.c in Sources */,
+				CE4C2E6F13628C6A0071F1C9 /* particle_complete_fragment.c in Sources */,
+				CE4C2E7013628C6A0071F1C9 /* particle_complete_vertex.c in Sources */,
+				CE4C2E7113628C6A0071F1C9 /* particle_create_fragment.c in Sources */,
+				CE4C2E7213628C6A0071F1C9 /* particle_create_vertex.c in Sources */,
+				CE4C2E7313628C6A0071F1C9 /* texture_aftershock_fragment.c in Sources */,
+				CE4C2E7413628C6A0071F1C9 /* texture_aftershock_vertex.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
