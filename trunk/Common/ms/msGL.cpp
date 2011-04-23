@@ -29,6 +29,9 @@ void msGetExecutableDir(string &path)
     char buf[MAX_PATH];
     GetModuleFileName(0, buf, MAX_PATH);
     path = buf;
+
+    // Extract directory
+    path = path.substr(0, path.rfind("\\"));
 }
 
 #endif
@@ -38,11 +41,6 @@ void msMapDataFileName(string &fileName)
 {
     string executablePath = "";
     msGetExecutableDir(executablePath);
-    
-    printf(executablePath.c_str());
-
-    // Extract directory
-    executablePath = executablePath.substr(0, executablePath.rfind("\\"));
     
     printf(executablePath.c_str());
 
