@@ -30,7 +30,7 @@ enum {
 @interface aitViewController ()
 @property (nonatomic, retain) EAGLContext *context;
 @property (nonatomic, assign) CADisplayLink *displayLink;
-- (BOOL)loadShaders;
+- (BOOL)loadShaders:(GLuint)bufferId;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
 - (BOOL)validateProgram:(GLuint)prog;
@@ -57,10 +57,10 @@ enum {
 	[aContext release];
 	
     [(EAGLView *)self.view setContext:context];
-    [(EAGLView *)self.view setFramebuffer];
+    //[(EAGLView *)self.view setFramebuffer];
     
     if ([context API] == kEAGLRenderingAPIOpenGLES2)
-        [self loadShaders];
+        [self loadShaders:[(EAGLView *)self.view getFramebuffer]];
     
     animating = FALSE;
     animationFrameInterval = 1;
@@ -164,8 +164,9 @@ enum {
 
 - (void)drawFrame
 {
-    [(EAGLView *)self.view setFramebuffer];
+    //[(EAGLView *)self.view setFramebuffer];
     
+    m_scene.drawFrame();
     
     
     /*
@@ -227,11 +228,11 @@ enum {
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     */
-    [(EAGLView *)self.view presentFramebuffer];
+    //[(EAGLView *)self.view presentFramebuffer];
 }
 
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file
-{
+{/*
     GLint status;
     const GLchar *source;
     
@@ -264,12 +265,12 @@ enum {
         glDeleteShader(*shader);
         return FALSE;
     }
-    
+    */
     return TRUE;
 }
 
 - (BOOL)linkProgram:(GLuint)prog
-{
+{/*
     GLint status;
     
     glLinkProgram(prog);
@@ -289,12 +290,12 @@ enum {
     glGetProgramiv(prog, GL_LINK_STATUS, &status);
     if (status == 0)
         return FALSE;
-    
+    */
     return TRUE;
 }
 
 - (BOOL)validateProgram:(GLuint)prog
-{
+{/*
     GLint logLength, status;
     
     glValidateProgram(prog);
@@ -310,20 +311,19 @@ enum {
     glGetProgramiv(prog, GL_VALIDATE_STATUS, &status);
     if (status == 0)
         return FALSE;
-    
+    */
     return TRUE;
 }
 
-- (BOOL)loadShaders
+- (BOOL)loadShaders:(GLuint)frameId
 {
-    msScene *m_scene = new msScene();
-    
     string uniforms = "/data/uniforms.txt";
     msMapDataFileName(uniforms);
 
-    m_scene->loadData(uniforms);
-    
-    m_scene->init();
+    m_scene.loadData(uniforms);
+    m_scene.init();
+    m_scene.setMainFrameBuffer(1);//frameId);
+    m_scene.newSize(320, 480);
     
     /*
     GLuint vertShader, fragShader;

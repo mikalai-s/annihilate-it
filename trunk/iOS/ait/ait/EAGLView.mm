@@ -116,6 +116,11 @@
     }
 }
 
+- (GLuint)getFramebuffer
+{
+    return defaultFramebuffer;
+}
+
 - (BOOL)presentFramebuffer
 {
     BOOL success = FALSE;

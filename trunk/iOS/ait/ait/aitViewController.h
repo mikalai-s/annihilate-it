@@ -24,6 +24,7 @@
     BOOL animating;
     NSInteger animationFrameInterval;
     CADisplayLink *displayLink;
+    msScene m_scene;
 }
 
 @property (readonly, nonatomic, getter=isAnimating) BOOL animating;

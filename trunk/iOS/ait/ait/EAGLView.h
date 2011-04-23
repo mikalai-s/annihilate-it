@@ -31,6 +31,7 @@
 @property (nonatomic, retain) EAGLContext *context;
 
 - (void)setFramebuffer;
+- (GLuint)getFramebuffer;
 - (BOOL)presentFramebuffer;
 
 @end
