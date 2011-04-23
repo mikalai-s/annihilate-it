@@ -3,16 +3,32 @@
 
 #ifdef IOS_GL
 
-void msGetExecutableDir(char *buffer, int length)
-{
+#include "CoreFoundation/CoreFoundation.h"
 
+void msGetExecutableDir(string &path)
+{
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
+    char path1[PATH_MAX];
+
+    if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path1, PATH_MAX))
+    {
+        // error!
+    }
+    CFRelease(resourcesURL);
+    
+    path = path1;
 }
 
 #elif defined WINDOWS_GL
+                         
+#include <windows.h>
 
-void msGetExecutableDir(char *buffer, int length)
+void msGetExecutableDir(string &path)
 {
-    GetModuleFileName(0, buffer, length);
+    char buf[MAX_PATH];
+    GetModuleFileName(0, buf, MAX_PATH);
+    path = buf;
 }
 
 #endif
@@ -20,14 +36,19 @@ void msGetExecutableDir(char *buffer, int length)
 // modifies given fileName string to contains full path
 void msMapDataFileName(string &fileName)
 {
-    char buf[1024];
-    msGetExecutableDir(buf, 1024);
+    string executablePath = "";
+    msGetExecutableDir(executablePath);
+    
+    printf(executablePath.c_str());
 
     // Extract directory
-    string path = buf;
-    path = path.substr(0, path.rfind("\\"));
+    executablePath = executablePath.substr(0, executablePath.rfind("\\"));
+    
+    printf(executablePath.c_str());
 
-    fileName = path.append(fileName);
+    fileName = executablePath.append(fileName);
+    
+    printf(fileName.c_str());
 }
 
 

@@ -14,11 +14,9 @@ using namespace std;
 
 #include <GLES2/gl2.h>
 
-#include <windows.h>
-
 #endif
 
-void msGetExecutableDir(char *buffer, int length);
+void msGetExecutableDir(string &path);
 
 void msMapDataFileName(string &fileName);
 

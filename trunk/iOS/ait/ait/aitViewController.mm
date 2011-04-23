@@ -11,6 +11,8 @@
 #import "aitViewController.h"
 #import "EAGLView.h"
 
+#import "../ms/msGL.h"
+
 // Uniform index.
 enum {
     UNIFORM_TRANSLATE,
@@ -314,6 +316,16 @@ enum {
 
 - (BOOL)loadShaders
 {
+    msScene *m_scene = new msScene();
+    
+    string uniforms = "/data/uniforms.txt";
+    msMapDataFileName(uniforms);
+
+    m_scene->loadData(uniforms);
+    
+    m_scene->init();
+    
+    /*
     GLuint vertShader, fragShader;
     NSString *vertShaderPathname, *fragShaderPathname;
     
@@ -321,7 +333,7 @@ enum {
     program = glCreateProgram();
     
     // Create and compile vertex shader.
-    vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
+    vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"txt"];
     if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname])
     {
         NSLog(@"Failed to compile vertex shader");
@@ -379,7 +391,7 @@ enum {
         glDeleteShader(vertShader);
     if (fragShader)
         glDeleteShader(fragShader);
-    
+    */
     return TRUE;
 }
 
