@@ -11,13 +11,12 @@ void msGetExecutableDir(string &path)
     CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
     char path1[PATH_MAX];
 
-    if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path1, PATH_MAX))
+    if (CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path1, PATH_MAX))
     {
-        // error!
-    }
-    CFRelease(resourcesURL);
-    
-    path = path1;
+        CFRelease(resourcesURL);
+        
+        path = path1;
+    }    
 }
 
 #elif defined WINDOWS_GL
@@ -42,11 +41,11 @@ void msMapDataFileName(string &fileName)
     string executablePath = "";
     msGetExecutableDir(executablePath);
     
-    printf(executablePath.c_str());
+    //printf(executablePath.c_str());
 
     fileName = executablePath.append(fileName);
     
-    printf(fileName.c_str());
+    //printf(fileName.c_str());
 }
 
 
