@@ -20,8 +20,8 @@ void msGetExecutableDir(char *buffer, int length)
 // modifies given fileName string to contains full path
 void msMapDataFileName(string &fileName)
 {
-    char buf[MAX_PATH];
-    msGetExecutableDir(buf, MAX_PATH);
+    char buf[1024];
+    msGetExecutableDir(buf, 1024);
 
     // Extract directory
     string path = buf;
