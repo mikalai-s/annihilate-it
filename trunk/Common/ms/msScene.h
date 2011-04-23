@@ -73,7 +73,7 @@ public:
    void drawFrame();
 
    /// \brief Loads all the data from the file (textures, attributes, uniforms, shaders...)
-   bool loadData(const char* filename);
+   bool loadData(string filename);
 
    /// \brief Puts the named program in use
    void useProgram( const char* name );

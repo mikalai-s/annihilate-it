@@ -14,14 +14,14 @@ msShaderPrograms::~msShaderPrograms(void)
 	delete m_mainFrameBuffer;
 }
 
-bool msShaderPrograms::loadFile( const char *fileName )
+bool msShaderPrograms::loadFile(string fileName )
 {
 	int currentLine = 0;
 	msShaderProgram *recentProgram;
 
 	m_shaderPrograms.clear();
 
-	ifstream fin( fileName, std::ios_base::binary );
+	ifstream fin( fileName.c_str(), std::ios_base::binary );
 
 	if ( fin.fail() )
 	{
@@ -47,6 +47,8 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			line >> sKey >> vertShader >> fragShader;
 
 			// Create the one program we are going to use.
+            msMapDataFileName(vertShader);
+            msMapDataFileName(fragShader);
 			recentProgram = new msShaderProgram(sKey, vertShader, fragShader);
 			m_shaderPrograms.push_back(recentProgram);
 		}
@@ -125,7 +127,8 @@ bool msShaderPrograms::loadFile( const char *fileName )
 			GLuint texUnit;
 			line >> sKey >> texUnit >> sVal;
 
-			recentProgram->addTexture(new msTexture(sKey, texUnit, sVal.c_str()));
+            msMapDataFileName(sVal);
+			recentProgram->addTexture(new msTexture(sKey, texUnit, sVal));
 		}
 		else if (sItem == "nullTexture")
 		{

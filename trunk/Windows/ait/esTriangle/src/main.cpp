@@ -365,29 +365,16 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
    return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
 
+#include "../ms/msGL.h"
 #include "../ms/Annihilate/msBox.h"
 #include "../ms/Annihilate/msAnimation.h"
 #include "../ms/Annihilate/msAnimationBundle.h"
 #include "../ms/Annihilate/msBoxGrid.h"
-#include <string>
+
 
 #define SCR_WIDTH 320 + 16
 #define SCR_HEIGHT 480 + 38
 
-void GetUnifromsFileNameAndFixCurrnetDir(std::string &szAppPath) 
-{
-    char path[MAX_PATH] = "";
-
-    GetModuleFileName(0, path, MAX_PATH);
-
-    // Extract directory
-    szAppPath = path;
-    szAppPath = szAppPath.substr(0, szAppPath.rfind("\\"));
-
-    SetCurrentDirectory(szAppPath.c_str());
-
-    szAppPath = szAppPath.append("\\data\\Uniforms.txt");
-}
 
 //=================================================================================================================================
 ///
@@ -426,10 +413,10 @@ int WINAPI WinMain( HINSTANCE  hInstance,
       return 0;
    }
 
-   std::string *uniformsPath = new std::string();
-   GetUnifromsFileNameAndFixCurrnetDir(*uniformsPath);
+   string *uniformsPath = new string("\\data\\uniforms.txt");
+   msMapDataFileName(*uniformsPath);
 
-   g_scene->loadData(uniformsPath->c_str()); 
+   g_scene->loadData(*uniformsPath); 
 
    delete uniformsPath;
 

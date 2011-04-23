@@ -202,8 +202,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ms\msGL.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\ms\msGL.h"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\ms\msImageObject.cpp"

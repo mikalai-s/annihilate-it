@@ -100,7 +100,7 @@ msScene::~msScene()
 ///
 /// \return bool saying whether we passed or failed
 //=================================================================================================================================
-bool msScene::loadData(const char* filename)
+bool msScene::loadData(string filename)
 {
    m_shaders.loadFile(filename);
    return true;

@@ -15,8 +15,13 @@ class msTexture : public msAttribute
 	GLuint m_id;
 	GLsizei m_width;
 	GLsizei m_height;
+
+    void init(string &name, GLuint unit, const char *fileName = 0);
+
 public:
-	msTexture(string &name, GLuint unit, const char *fileName = 0);
+	msTexture(string &name, GLuint unit, string &fileName);
+
+    msTexture(string &name, GLuint unit);
 
 	~msTexture(void);
 

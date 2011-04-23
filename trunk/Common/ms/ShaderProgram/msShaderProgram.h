@@ -40,7 +40,7 @@ class msShaderProgram
 	msTextureList m_textures;
 	msFrameBufferList m_frameBuffers;
 
-	bool loadShader( const char* fileName, GLuint shaderHandle );
+	bool loadShader( string &fileName, GLuint shaderHandle );
 
 public:
 	msShaderProgram(string &name, string &vertexShaderFileName, string &fragmentShaderFileName);

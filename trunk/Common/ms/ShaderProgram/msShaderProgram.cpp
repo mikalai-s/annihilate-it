@@ -10,10 +10,10 @@ msShaderProgram::msShaderProgram(string &name, string &vertexShaderFileName, str
 	m_handle = glCreateProgram();
 
 	m_vertexShaderHandle = glCreateShader( GL_VERTEX_SHADER );
-	loadShader(vertexShaderFileName.c_str(), m_vertexShaderHandle);
+	loadShader(vertexShaderFileName, m_vertexShaderHandle);
 
 	m_fragmentShaderHandle = glCreateShader( GL_FRAGMENT_SHADER );
-	loadShader(fragmentShaderFileName.c_str(), m_fragmentShaderHandle);
+	loadShader(fragmentShaderFileName, m_fragmentShaderHandle);
 }
 
 
@@ -45,13 +45,12 @@ const char* msShaderProgram::getName()
 }
 
 
-bool msShaderProgram::loadShader( const char* fileName, GLuint shaderHandle )
+bool msShaderProgram::loadShader( string &fileName, GLuint shaderHandle )
 {
-	char* source = NULL;
-
+	char* source = NULL;    
 
 	// Use file io to load the code of the shader.
-	std::ifstream fp( fileName , ios_base::binary );
+	std::ifstream fp( fileName.c_str() , ios_base::binary );
 	if( fp.fail() ) 
 	{
 		cout << "Failed to open shader file: " << fileName << endl;

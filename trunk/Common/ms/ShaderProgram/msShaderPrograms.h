@@ -24,7 +24,7 @@ public:
 	msShaderProgramList m_shaderPrograms;
 
 	// load programs description
-	bool loadFile(const char *fileName);
+	bool loadFile(string fileName);
 
 	msShaderProgram* getProgramByName( const char *name );
 	msFrameBuffer* getMainFrameBuffer();
