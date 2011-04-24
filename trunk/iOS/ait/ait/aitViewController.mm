@@ -167,7 +167,6 @@ enum {
     
     m_scene.drawFrame();
     
-    
     [(EAGLView *)self.view presentFramebuffer];
 }
 
@@ -176,9 +175,10 @@ enum {
     string uniforms = "/data/uniforms.txt";
     msMapDataFileName(uniforms);
 
+    m_scene.newSize(320, 480);  
     m_scene.loadData(uniforms);
     m_scene.init();
-    m_scene.newSize(320, 480);    
+  
     
     return TRUE;
 }

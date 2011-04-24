@@ -56,7 +56,7 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, mBoxColorsTemp );
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    //glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices);
+    //glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
 
     
     // draw borders if need   
@@ -132,7 +132,7 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
     m_size = size;
 
     drawBoxesWithAfterShock(boxGrid, size);
-
+/*
     drawExplosions();
 
     removeInactiveExplosions();
@@ -147,7 +147,7 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
         }
     }
 
-    gi ++;
+    gi ++;*/
 }
 
 
@@ -221,7 +221,7 @@ static const GLfloat g_fbVertexTexcoord2[] = {
 	1.f,  1.f,   
 };
 
-static const GLuint g_fbIndices2[] = {
+static const GLubyte g_fbIndices2[] = {
 	0, 1, 2, 3,
 };
 
@@ -272,7 +272,7 @@ void msBoxGridRenderer::drawExplosions()
 	particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord2 );
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_fbIndices2 );	
+	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices2 );	
 
 	glDisable(GL_BLEND);
 }
@@ -361,8 +361,8 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_vertexTexcoord );
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices );	
-
+    glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );	
+/*
 
     // wave
 

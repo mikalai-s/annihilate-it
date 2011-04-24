@@ -46,6 +46,7 @@ class msBoxGridRenderer
 
     void drawExplosions();
 
+
     void drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size);
 
     msParticleEmitter* _createExplosionPe(msPoint location, msSize screenSize);

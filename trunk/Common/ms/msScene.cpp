@@ -144,7 +144,7 @@ static const GLfloat g_fbVertexTexcoord[] = {
 	1.f,  1.f,   
 };
 
-static const GLuint g_fbIndices[] = {
+static const GLubyte g_fbIndices[] = {
 	0, 1, 2, 3,
 };
 
@@ -170,7 +170,7 @@ static const GLfloat g_vertexTexcoord[] = {
 	1.f,  1.f,   
 };
 
-static const GLuint g_indices[] = {
+static const GLubyte g_indices[] = {
 	0, 1, 2, 3,
 };
 
@@ -263,7 +263,7 @@ void msScene::init()
 	// init palette
 	m_palette = new msPalette(colorMap, 8);
 
-	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
+	m_boxGrid = new msBoxGrid(m_palette, 4, 2, 2, 2.0, 2.0);
 
 	m_renderer = new msBoxGridRenderer(&m_shaders);
 }
@@ -296,12 +296,12 @@ void msScene::drawBackground()
 		program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
 
 		// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-		glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices );
+		glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );
 
 		program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
 		program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
 
-		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices);
+		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
 	}
 
 	// Unbind the FBO so rendering will return to the backbuffer.
@@ -320,9 +320,9 @@ void msScene::drawBackground()
 	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord );
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_fbIndices );	
+	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices );	
 
-
+/*
 
 	if(m_animate)
 	{
@@ -341,7 +341,7 @@ void msScene::drawBackground()
 				m_afterShockRadius = -1.0f;
 			}
 		}		
-	}
+	}*/
 }
 
 void msScene::drawExplosion()
@@ -391,7 +391,7 @@ void msScene::drawExplosion()
 	particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord );
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_fbIndices );	
+	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices );	
 
 	glDisable(GL_BLEND);
 }
@@ -399,44 +399,46 @@ void msScene::drawExplosion()
 
 void msScene::drawFrame()
 {
-	m_shaders.getMainFrameBuffer()->bind();
-
+    m_shaders.getMainFrameBuffer()->bind();
+    
 	glViewport(0, 0, _width, _height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     msSize size;
     size.width = (GLfloat)_width;
     size.height = (GLfloat)_height;
-	m_renderer->draw(m_boxGrid, size);
+	//m_renderer->draw(m_boxGrid, size);
+     
 
-	//drawBackground();
+   drawBackground();
 
-	//drawExplosion();	
-
+	drawExplosion();	
 /*
+
 	msShaderProgram *program = m_shaders.getProgramByName("texture_aftershock");
 	program->use();
-
 	
-		// Set viewport to size of texture map and erase previous image
-		glViewport(0, 0, _width, _height);
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
+    // Set viewport to size of texture map and erase previous image
+	glViewport(0, 0, _width, _height);
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
 
-		// render background
-		program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
-		program->getAttribute("position")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexPositions );
-		program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
-		program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
+	// render background
+	program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
+	program->getAttribute("position")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexPositions );
+	program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
+	program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
 
-		// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-		glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices );
+    // draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
+	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );
+    
+	program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
+	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
 
-		program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
-		program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
-
-		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices);
-		*/
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+ */
+ 
 }
 
 int getShiftDirection()
