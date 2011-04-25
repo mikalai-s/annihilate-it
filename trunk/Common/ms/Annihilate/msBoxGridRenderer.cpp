@@ -32,7 +32,7 @@ msBoxGridRenderer::~msBoxGridRenderer()
     }
 }
 
-static const GLuint g_indices[] = { 0, 1, 2, 3 };
+static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 
 void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *c)
 {
@@ -364,7 +364,7 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
 
-    glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices );	
+    glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );	
 
     //glDisable(GL_BLEND);
 
