@@ -14,9 +14,10 @@
 #import <OpenGLES/ES1/glext.h>
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
+#import "EAGLView.h"
 #import "../ms/msScene.h"
 
-@interface aitViewController : UIViewController {
+@interface aitViewController : UIViewController{
 @private
     EAGLContext *context;
     GLuint program;
@@ -25,6 +26,7 @@
     NSInteger animationFrameInterval;
     CADisplayLink *displayLink;
     msScene m_scene;
+        CGPoint touchStartLocation;
 }
 
 @property (readonly, nonatomic, getter=isAnimating) BOOL animating;

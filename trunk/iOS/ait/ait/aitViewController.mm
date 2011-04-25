@@ -183,4 +183,15 @@ enum {
     return TRUE;
 }
 
+- (void) touched:(CGPoint)point 
+{
+
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    touchStartLocation = [[touches anyObject] locationInView:self.view];
+    
+    m_scene.mouseClick(touchStartLocation.x, touchStartLocation.y);}
+
 @end

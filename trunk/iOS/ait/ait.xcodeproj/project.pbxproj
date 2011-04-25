@@ -176,8 +176,6 @@
 		CE8D89DA135E94B700C083EA /* aitAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aitAppDelegate.h; sourceTree = "<group>"; };
 		CE8D89DB135E94B700C083EA /* aitAppDelegate.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = aitAppDelegate.mm; sourceTree = "<group>"; };
 		CE8D89DE135E94B700C083EA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		CE8D89E0135E94B700C083EA /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
-		CE8D89E2135E94B700C083EA /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
 		CE8D89E4135E94B700C083EA /* EAGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
 		CE8D89E5135E94B700C083EA /* EAGLView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = EAGLView.mm; sourceTree = "<group>"; };
 		CE8D89E7135E94B700C083EA /* aitViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aitViewController.h; sourceTree = "<group>"; };
@@ -343,8 +341,6 @@
 				CE8D89DA135E94B700C083EA /* aitAppDelegate.h */,
 				CE8D89DB135E94B700C083EA /* aitAppDelegate.mm */,
 				CE8D89DD135E94B700C083EA /* MainWindow.xib */,
-				CE8D89E0135E94B700C083EA /* Shader.fsh */,
-				CE8D89E2135E94B700C083EA /* Shader.vsh */,
 				CE8D89E4135E94B700C083EA /* EAGLView.h */,
 				CE8D89E5135E94B700C083EA /* EAGLView.mm */,
 				CE8D89E7135E94B700C083EA /* aitViewController.h */,
