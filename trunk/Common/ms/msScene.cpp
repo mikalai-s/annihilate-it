@@ -274,7 +274,84 @@ static const GLfloat prim[] =
 
 
 
- 
+void msScene::drawBackground()
+{
+	// render fire into texture using particle shaders
+	msShaderProgram *program = m_shaders.getProgramByName("boxgrid");
+	program->use();
+
+	// Switch the render target to the current FBO to update the texture map
+	program->getFrameBuffer("renderTex")->bind();
+
+	// FBO attachment is complete?
+	if (program->getFrameBuffer("renderTex")->isComplete())
+	{
+		//int textureSize = max(this->_width, this->_height);
+
+		// Set viewport to size of texture map and erase previous image
+		glViewport(0, 0, _width, _height);
+		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
+
+		// render background
+		//program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
+		program->getAttribute("position")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexPositions );
+		program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
+		//program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
+
+		// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
+		glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );
+
+		//program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
+		//program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
+
+		//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
+	}
+
+	// Unbind the FBO so rendering will return to the backbuffer.
+	m_shaders.getMainFrameBuffer()->bind();
+    
+    msTexture *renderTex = program->getFrameBuffer("renderTex")->getTexture();
+    
+    program = m_shaders.getProgramByName("texture_aftershock");
+	program->use();
+
+	// usual renderer
+
+	// Set viewport to size of framebuffer and clear color and depth buffers
+
+	// Bind updated texture map
+	glActiveTexture(GL_TEXTURE0 + renderTex->getUnit());
+	glBindTexture(GL_TEXTURE_2D, renderTex->getId());
+
+	program->getUniform("tex")->set1i(renderTex->getUnit());
+	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions );
+	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord );
+
+	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
+	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices );	
+
+/*
+
+	if(m_animate)
+	{
+		program->getAttribute("radius")->set1f(m_afterShockRadius);
+		program->getAttribute("power")->set1f(m_afterShockPower);
+		program->getUniform("ep")->set2f(m_afterShockLocation[0], m_afterShockLocation[1]);
+
+		c--;
+		if(c < 40)
+		{
+			m_afterShockRadius += m_afterShockRadiusStep;
+			m_afterShockPower -= m_afterShockRadiusStep / (m_afterShockRadiusMax - m_afterShockRadiusMin);
+			if(m_afterShockRadius > m_afterShockRadiusMax)
+			{
+				m_animate = 0;
+				m_afterShockRadius = -1.0f;
+			}
+		}		
+	}*/
+}
 
 void msScene::drawExplosion()
 {
