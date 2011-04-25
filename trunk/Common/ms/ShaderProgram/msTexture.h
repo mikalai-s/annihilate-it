@@ -11,6 +11,8 @@ class msShaderProgram;
 
 class msTexture : public msAttribute
 {
+    friend class msFrameBuffer;
+    
 	GLuint m_unit;
 	GLuint m_id;
 	GLsizei m_width;
