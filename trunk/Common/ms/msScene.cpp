@@ -130,70 +130,7 @@ bool msScene::loadData(string filename)
 
 
 
-static const GLfloat g_fbVertexPositions[] = {
-	-1.0f, -1.0f,  -1.0f,  1.0f,
-	1.0f, -1.0f,  -1.0f,  1.0f,
-	-1.0f,  1.0f,  -1.0f, 1.0f,
-	1.0f,  1.0f,  -1.0f, 1.0f,
-};
 
-static const GLfloat g_fbVertexTexcoord[] = {
-	0.0f, 0.f,   
-	1.f,  0.f,    
-	0.0f, 1.f,    	
-	1.f,  1.f,   
-};
-
-static const GLubyte g_fbIndices[] = {
-	0, 1, 2, 3,
-};
-
-
-static const GLfloat g_vertexPositions[] = {
-	-1.0f, -0.7f,  -1.0f,  1.0f,
-	0.7f, -0.7f,  -1.0f,  1.0f,
-	-0.7f,  0.7f,  -1.0f, 1.0f,
-	0.5f,  0.5f,  -1.0f, 1.0f,
-};
-
-static const GLfloat g_vertexColors[] = {
-	1.0f, 1.0f, 0.0f, 1.0f,
-	1.0f, 1.0f, 1.0f, 1.0f,
-	1.0f, 0.0f, 0.0f, 1.0f,
-	1.0f, 0.0f, 1.0f, 1.0f,
-};
-
-static const GLfloat g_vertexTexcoord[] = {
-	0.0f, 0.f,   
-	1.f,  0.f,    
-	0.0f, 1.f,    	
-	1.f,  1.f,   
-};
-
-static const GLubyte g_indices[] = {
-	0, 1, 2, 3,
-};
-
-static const GLfloat prim[] =
-{
-	0.f, 0.f, -1.f, 1.0f,
-	0.f, 1.f, -1.f, 1.0f,
-	1.f, 0.f, -1.f, 1.0f,
-	1.f, 1.f, -1.f, 1.0f,	
-};
-
-GLfloat colorMap[][4] = 
-{
-	//{1.0f, 1.0f, 1.0f, 1.0f},//temp white
-	{0.000f, 0.000f, 0.000f, 1.0f}, // black
-	{0.502f, 0.824f, 0.776f, 1.0f}, // 7
-	{1.000f, 0.412f, 0.337f, 1.0f}, // 1    
-	{0.467f, 0.357f, 1.000f, 1.0f}, // 3
-	{1.000f, 0.757f, 0.369f, 1.0f}, // 2
-	{0.843f, 0.420f, 1.000f, 1.0f}, // 6
-	{0.478f, 0.824f, 1.000f, 1.0f}, // 5
-	{0.714f, 1.000f, 0.608f, 1.0f}, // 4    
-};
 
 //=================================================================================================================================
 ///
@@ -230,6 +167,19 @@ msParticleEmitter* msScene::_createExplosionPe(GLint _width, GLint _height)
 		GL_TRUE//blendAdditive:
 		);
 }
+
+GLfloat colorMap[][4] = 
+{
+	//{1.0f, 1.0f, 1.0f, 1.0f},//temp white
+	{0.000f, 0.000f, 0.000f, 1.0f}, // black
+	{0.502f, 0.824f, 0.776f, 1.0f}, // 7
+	{1.000f, 0.412f, 0.337f, 1.0f}, // 1    
+	{0.467f, 0.357f, 1.000f, 1.0f}, // 3
+	{1.000f, 0.757f, 0.369f, 1.0f}, // 2
+	{0.843f, 0.420f, 1.000f, 1.0f}, // 6
+	{0.478f, 0.824f, 1.000f, 1.0f}, // 5
+	{0.714f, 1.000f, 0.608f, 1.0f}, // 4    
+};
 
 void msScene::init()
 {
@@ -270,79 +220,61 @@ void msScene::init()
 
 int c = 0;
 
-void msScene::drawBackground()
+static const GLfloat g_fbVertexPositions[] = {
+	-1.0f, -1.0f,  -1.0f,  1.0f,
+	1.0f, -1.0f,  -1.0f,  1.0f,
+	-1.0f,  1.0f,  -1.0f, 1.0f,
+	1.0f,  1.0f,  -1.0f, 1.0f,
+};
+
+static const GLfloat g_fbVertexTexcoord[] = {
+	0.0f, 0.0f,   
+	1.0f,  0.0f,    
+	0.0f, 1.0f,    	
+	1.0f,  1.0f,   
+};
+
+static const GLubyte g_fbIndices[] = {
+	0, 1, 2, 3,
+};
+
+
+static const GLfloat g_vertexPositions[] = {
+	-1.0f, -0.7f,  -1.0f,  1.0f,
+	0.7f, -0.7f,  -1.0f,  1.0f,
+	-0.7f,  0.7f,  -1.0f, 1.0f,
+	0.5f,  0.5f,  -1.0f, 1.0f,
+};
+
+static const GLfloat g_vertexColors[] = {
+	1.0f, 0.0f, 0.0f, 1.0f,
+	0.0f, 1.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, 1.0f, 1.0f,
+	1.0f, 1.0f, 1.0f, 1.0f,
+};
+
+static const GLfloat g_vertexTexcoord[] = {
+	0.0f, 0.f,   
+	1.f,  0.f,    
+	0.0f, 1.f,    	
+	1.f,  1.f,   
+};
+
+static const GLubyte g_indices[] = {
+	0, 1, 2, 3,
+};
+
+static const GLfloat prim[] =
 {
-	// render fire into texture using particle shaders
-	msShaderProgram *program = m_shaders.getProgramByName("texture_aftershock");
-	program->use();
+	0.f, 0.f, -1.f, 1.0f,
+	0.f, 1.f, -1.f, 1.0f,
+	1.f, 0.f, -1.f, 1.0f,
+	1.f, 1.f, -1.f, 1.0f,	
+};
 
-	// Switch the render target to the current FBO to update the texture map
-	program->getFrameBuffer("renderTex")->bind();
 
-	// FBO attachment is complete?
-	if (program->getFrameBuffer("renderTex")->isComplete())		
-	{
-		//int textureSize = max(this->_width, this->_height);
 
-		// Set viewport to size of texture map and erase previous image
-		glViewport(0, 0, _width, _height);
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
-
-		// render background
-		program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
-		program->getAttribute("position")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexPositions );
-		program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
-		program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
-
-		// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-		glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );
-
-		program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
-		program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
-
-		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
-	}
-
-	// Unbind the FBO so rendering will return to the backbuffer.
-	m_shaders.getMainFrameBuffer()->bind();
-
-	// usual renderer
-
-	// Set viewport to size of framebuffer and clear color and depth buffers
-
-	// Bind updated texture map
-	glActiveTexture(GL_TEXTURE0 + program->getFrameBuffer("renderTex")->getTexture()->getUnit());
-	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
-
-	program->getUniform("tex")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
-	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions );
-	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord );
-
-	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices );	
-
-/*
-
-	if(m_animate)
-	{
-		program->getAttribute("radius")->set1f(m_afterShockRadius);
-		program->getAttribute("power")->set1f(m_afterShockPower);
-		program->getUniform("ep")->set2f(m_afterShockLocation[0], m_afterShockLocation[1]);
-
-		c--;
-		if(c < 40)
-		{
-			m_afterShockRadius += m_afterShockRadiusStep;
-			m_afterShockPower -= m_afterShockRadiusStep / (m_afterShockRadiusMax - m_afterShockRadiusMin);
-			if(m_afterShockRadius > m_afterShockRadiusMax)
-			{
-				m_animate = 0;
-				m_afterShockRadius = -1.0f;
-			}
-		}		
-	}*/
-}
+ 
 
 void msScene::drawExplosion()
 {
@@ -412,7 +344,7 @@ void msScene::drawFrame()
 
    drawBackground();
 
-	drawExplosion();	
+	//drawExplosion();	
 /*
 
 	msShaderProgram *program = m_shaders.getProgramByName("texture_aftershock");
