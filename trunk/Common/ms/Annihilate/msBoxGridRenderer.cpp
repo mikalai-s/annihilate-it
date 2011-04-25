@@ -132,7 +132,7 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
     m_size = size;
 
     drawBoxesWithAfterShock(boxGrid, size);
-/*
+
     drawExplosions();
 
     removeInactiveExplosions();
@@ -147,7 +147,7 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
         }
     }
 
-    gi ++;*/
+    gi ++;
 }
 
 
@@ -261,8 +261,8 @@ void msBoxGridRenderer::drawExplosions()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Bind updated texture map
-	glActiveTexture(GL_TEXTURE0 + program->getFrameBuffer("renderTex")->getTexture()->getUnit());
-	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
+	program->getFrameBuffer("renderTex")->getTexture()->active();
+	program->getFrameBuffer("renderTex")->getTexture()->bind();
 
 	msShaderProgram *particleCompleteProgram = m_shaders->getProgramByName("particle_complete");
 	particleCompleteProgram->use();
@@ -346,10 +346,12 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 	// usual renderer
 
 	// Set viewport to size of framebuffer and clear color and depth buffers
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Bind updated texture map
-	glActiveTexture(GL_TEXTURE0 + program->getFrameBuffer("renderTex")->getTexture()->getUnit());
-	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
+	program->getFrameBuffer("renderTex")->getTexture()->active();
+	program->getFrameBuffer("renderTex")->getTexture()->bind();
 
     GLuint u = program->getFrameBuffer("renderTex")->getTexture()->getUnit();
 
@@ -361,8 +363,11 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_vertexTexcoord );
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-    glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );	
-/*
+
+    glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, g_indices );	
+
+    //glDisable(GL_BLEND);
+
 
     // wave
 

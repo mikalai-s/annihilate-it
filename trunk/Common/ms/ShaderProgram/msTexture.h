@@ -36,4 +36,7 @@ public:
 	GLuint getUnit();
 	GLsizei getWidth();
 	GLsizei getHeight();
+
+    void bind();
+    void active();
 };

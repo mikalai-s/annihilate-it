@@ -213,7 +213,7 @@ void msScene::init()
 	// init palette
 	m_palette = new msPalette(colorMap, 8);
 
-	m_boxGrid = new msBoxGrid(m_palette, 4, 2, 2, 2.0, 2.0);
+	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
 
 	m_renderer = new msBoxGridRenderer(&m_shaders);
 }
@@ -221,10 +221,10 @@ void msScene::init()
 int c = 0;
 
 static const GLfloat g_fbVertexPositions[] = {
-	-1.0f, -1.0f,  -1.0f,  1.0f,
-	1.0f, -1.0f,  -1.0f,  1.0f,
-	-1.0f,  1.0f,  -1.0f, 1.0f,
-	1.0f,  1.0f,  -1.0f, 1.0f,
+	0.0f, 0.0f,  
+	1.0f, 0.0f,  
+	0.0f,  1.0f,  
+	1.0f,  1.0f,  
 };
 
 static const GLfloat g_fbVertexTexcoord[] = {
@@ -240,10 +240,10 @@ static const GLubyte g_fbIndices[] = {
 
 
 static const GLfloat g_vertexPositions[] = {
-	-1.0f, -0.7f,  -1.0f,  1.0f,
-	0.7f, -0.7f,  -1.0f,  1.0f,
-	-0.7f,  0.7f,  -1.0f, 1.0f,
-	0.5f,  0.5f,  -1.0f, 1.0f,
+	-1.0f, -0.7f,
+	0.7f, -0.7f,
+	-0.7f,  0.7f,
+	0.5f,  0.5f, 
 };
 
 static const GLfloat g_vertexColors[] = {
@@ -286,8 +286,6 @@ void msScene::drawBackground()
 	// FBO attachment is complete?
 	if (program->getFrameBuffer("renderTex")->isComplete())
 	{
-		//int textureSize = max(this->_width, this->_height);
-
 		// Set viewport to size of texture map and erase previous image
 		glViewport(0, 0, _width, _height);
 		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -295,7 +293,7 @@ void msScene::drawBackground()
 
 		// render background
 		//program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
-		program->getAttribute("position")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexPositions );
+		program->getAttribute("position")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexPositions );
 		program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
 		//program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
 
@@ -321,11 +319,11 @@ void msScene::drawBackground()
 	// Set viewport to size of framebuffer and clear color and depth buffers
 
 	// Bind updated texture map
-	glActiveTexture(GL_TEXTURE0 + renderTex->getUnit());
-	glBindTexture(GL_TEXTURE_2D, renderTex->getId());
+	renderTex->active();
+	renderTex->bind();
 
 	program->getUniform("tex")->set1i(renderTex->getUnit());
-	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions );
+	program->getAttribute("position")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexPositions );
 	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord );
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
@@ -389,8 +387,8 @@ void msScene::drawExplosion()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Bind updated texture map
-	glActiveTexture(GL_TEXTURE0 + program->getFrameBuffer("renderTex")->getTexture()->getUnit());
-	glBindTexture(GL_TEXTURE_2D, program->getFrameBuffer("renderTex")->getTexture()->getId());
+	program->getFrameBuffer("renderTex")->getTexture()->active();
+	program->getFrameBuffer("renderTex")->getTexture()->bind();
 
 	msShaderProgram *particleCompleteProgram = m_shaders.getProgramByName("particle_complete");
 	particleCompleteProgram->use();
@@ -416,10 +414,10 @@ void msScene::drawFrame()
     msSize size;
     size.width = (GLfloat)_width;
     size.height = (GLfloat)_height;
-	//m_renderer->draw(m_boxGrid, size);
+	m_renderer->draw(m_boxGrid, size);
      
 
-   drawBackground();
+  // drawBackground();
 
 	//drawExplosion();	
 /*

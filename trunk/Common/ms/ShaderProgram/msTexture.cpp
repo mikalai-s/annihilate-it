@@ -20,8 +20,8 @@ void msTexture::init(string &name, GLuint unit, const char *fileName)
     m_unit = unit;
 
     glGenTextures( 1, &m_id );
-    glActiveTexture( GL_TEXTURE0 + m_unit );
-    glBindTexture( GL_TEXTURE_2D, m_id );
+    active();
+    bind();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -84,4 +84,14 @@ GLsizei msTexture::getWidth()
 GLsizei msTexture::getHeight()
 {
 	return m_height;
+}
+
+void msTexture::bind()
+{
+    glBindTexture(GL_TEXTURE_2D, getId());
+}
+
+void msTexture::active()
+{
+    glActiveTexture(GL_TEXTURE0 + getUnit());
 }

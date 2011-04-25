@@ -136,8 +136,8 @@ void msParticleEmitter::renderParticles(msShaderProgram *particleProgram)
 	glEnable(GL_BLEND);
 	glEnable ( GL_TEXTURE_2D );
 
-	glActiveTexture( GL_TEXTURE0 + particleTexture->getUnit() );
-	glBindTexture( GL_TEXTURE_2D, particleTexture->getId() );
+	particleTexture->active();
+	particleTexture->bind();
 
 	if(blendAdditive)
 	{
