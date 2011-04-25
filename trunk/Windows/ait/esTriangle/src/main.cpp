@@ -193,16 +193,13 @@ int CreateEGLContext( HWND hWnd, HINSTANCE hInstance )
 /* Function CenterWindow(), Centers Window */
 VOID CenterWindow(HWND hwnd, HWND hwndParent, int Width, int Height)
 {
-
     /* Variables */
     RECT rc;
 
     /* If Parent Window Is Set As Null, Get The Desktop Window */
     if(hwndParent == NULL)
     {
-
         hwndParent = GetDesktopWindow();
-
     }
 
     /* Get Parent Client Area Measurements */
@@ -424,6 +421,7 @@ int WINAPI WinMain( HINSTANCE  hInstance,
    
    while ( ! done )
    {
+       //Sleep(10);
       if ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )  // Is There A Message Waiting?
       {
          if ( msg.message == WM_QUIT )

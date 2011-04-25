@@ -183,7 +183,7 @@ void msBoxGrid::_ms_boxgrid_animate_box_hiding(msBoxList *boxes)
 
         box->getAnimated()->hide(offset);        
 
-        offset += 5;
+        offset += 10;
     }
 }
 

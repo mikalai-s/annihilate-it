@@ -114,10 +114,10 @@ void msBoxAnimation::hide(GLint delay)
     // set requires explosion to make renderer know about that
     m_requiresExplosion = false;
 
-    setFlag(1, &m_requiresExplosion, true);
+    setFlag(delay + 1, &m_requiresExplosion, true);
 
     // the following animation will be called only once and it will just reset the requires explosion flag to stop its animation
-    setFlag(2, &m_requiresExplosion, false);
+    setFlag(delay + 2, &m_requiresExplosion, false);
 }
 
 
