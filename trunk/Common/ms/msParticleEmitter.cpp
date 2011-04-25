@@ -317,5 +317,5 @@ void msParticleEmitter::stopParticleEmitter()
 
 GLboolean msParticleEmitter::isAlive()
 {
-    return (particleCount != 1);
+    return (particleCount > 0);
 }

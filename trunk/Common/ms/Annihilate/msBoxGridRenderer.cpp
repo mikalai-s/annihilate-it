@@ -150,6 +150,15 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
     gi ++;
 }
 
+size_t m_lastExplosions = 0;
+
+void msBoxGridRenderer::showExplosions()
+{
+    for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
+    {
+        printf("explosions:\t%d\r\n", (*ei)->particleCount);
+    }
+}
 
 void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid, msSize size)
 {
@@ -167,6 +176,7 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
                 explosionLocation.x += box->m_size.width / 2.0f;
                 explosionLocation.y += box->m_size.height / 2.0f;
                 m_explosions.push_back(_createExplosionPe(explosionLocation, size));
+                //printf("frame: %d, box: (%d, %d) -> created explosion\r\n", gi, y, x);
             }
             else
             {
@@ -190,6 +200,13 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
             }
         }
     }
+
+    /*if(m_lastExplosions != m_explosions.size())
+    {
+        printf("%d\r\n", m_explosions.size());
+        m_lastExplosions = m_explosions.size();
+        showExplosions();
+    }*/
 }
 
 void msBoxGridRenderer::removeInactiveExplosions()

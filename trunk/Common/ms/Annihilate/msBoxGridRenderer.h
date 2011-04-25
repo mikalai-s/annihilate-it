@@ -53,6 +53,8 @@ class msBoxGridRenderer
 
     void removeInactiveExplosions();
 
+    void showExplosions();
+
 
     GLfloat m_afterShockRadius;
 	GLfloat m_afterShockPower;
