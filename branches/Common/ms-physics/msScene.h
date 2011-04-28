@@ -28,6 +28,10 @@
 #include "Annihilate/msBoxGrid.h"
 #include "Annihilate/msBoxGridRenderer.h"
 
+#include "../Box2D/Box2D.h"
+
+#include "msWorldRenderer.h"
+
 #define NUM_ROWS 14
 #define NUM_COLS 10
 
@@ -59,6 +63,11 @@ private:
 
 
     msParticleEmitter* _createExplosionPe(GLint _width, GLint _height);
+
+
+
+    b2World *m_world;
+    msWorldRenderer *m_worldRenderer;
 
 public:
    /// \brief Constructor.
