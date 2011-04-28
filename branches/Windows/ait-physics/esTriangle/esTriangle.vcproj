@@ -256,6 +256,14 @@
 				RelativePath="..\ms\msTga.h"
 				>
 			</File>
+			<File
+				RelativePath="..\ms\msWorldRenderer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ms\msWorldRenderer.h"
+				>
+			</File>
 			<Filter
 				Name="ShaderProgram"
 				>
