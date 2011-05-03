@@ -228,7 +228,7 @@ VOID CenterWindow(HWND hwnd, HWND hwndParent, int Width, int Height)
 ///
 /// \return 0=fail; 1=pass
 //=================================================================================================================================
-int CreateWind( int width, int height )
+HWND CreateWind( int width, int height )
 {
    WNDCLASS             wc;                  // Windows Class Structure
    HWND hWnd;
@@ -285,7 +285,7 @@ int CreateWind( int width, int height )
 
    //ResizeScene( width, height );
 
-   return TRUE;
+   return hWnd;
 }
 
 
@@ -356,6 +356,19 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
          ResizeScene( LOWORD( lParam ), HIWORD( lParam ) );  // LoWord=Width, HiWord=Height
          return 0;
       }
+
+   case WM_TIMER: 
+
+       switch (wParam) 
+       { 
+       case 43: 
+           // process the 60fps timer
+            DrawScene();
+
+            eglSwapBuffers( g_egl.dsp, g_egl.surf );
+
+           return 0;      
+       } 
    }
 
    // Pass All Unhandled Messages To DefWindowProc
@@ -405,7 +418,9 @@ int WINAPI WinMain( HINSTANCE  hInstance,
 
    MainFuncInit();
 
-   if ( ! CreateWind( SCR_WIDTH, SCR_HEIGHT ) )
+   HWND hWnd = CreateWind( SCR_WIDTH, SCR_HEIGHT ) ;
+
+   if ( !hWnd )
    {
       return 0;
    }
@@ -419,9 +434,13 @@ int WINAPI WinMain( HINSTANCE  hInstance,
 
    g_scene->init();
    
+   SetTimer(hWnd,             // handle to main window 
+       43,            // timer identifier 
+       16,                 // 10-second interval 
+       (TIMERPROC) NULL);     // no timer callback 
+   
    while ( ! done )
    {
-       //Sleep(10);
       if ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )  // Is There A Message Waiting?
       {
          if ( msg.message == WM_QUIT )
@@ -436,13 +455,9 @@ int WINAPI WinMain( HINSTANCE  hInstance,
       }
       else
       {
-         if ( ( g_active && !DrawScene() ) || g_keys[VK_ESCAPE] )
+         if ( ( g_active && FALSE ) || g_keys[VK_ESCAPE] )
          {
             done=TRUE;  // ESC or DrawGLScene Signalled A Quit
-         }
-         else
-         {
-            eglSwapBuffers( g_egl.dsp, g_egl.surf );
          }
       }
    }
