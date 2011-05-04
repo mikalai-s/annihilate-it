@@ -191,16 +191,18 @@ void msBoxGrid::_ms_boxgrid_animate_box_hiding(msBoxExplMap &boxesMap)
     for(msBoxExplIterator i = boxesMap.begin(); i != boxesMap.end(); i ++)
     {
         msBox *box = (*i).first;
-        int index = (*i).second;		
+        int index = (*i).second;
 
-        box->hide(offset + offsetStep * index);
+		int o = offset + offsetStep * index;
 
-		if(index > maxOffset)
-			maxOffset = index;
+        box->hide(o);
+
+		if(o > maxOffset)
+			maxOffset = o;
     }
 
 	msValueAnimationContext<msBoxGrid*> *c = new msValueAnimationContext<msBoxGrid*>(this);
-	msAnimation *a = new msAnimation(maxOffset + 50, 1, c, doBoxesFallingCallback);
+	msAnimation *a = new msAnimation(maxOffset + 25, 1, c, doBoxesFallingCallback);
 	m_animations.add(a);
 }
 
