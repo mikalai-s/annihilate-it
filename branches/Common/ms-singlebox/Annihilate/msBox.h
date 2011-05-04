@@ -75,7 +75,7 @@ public:
 
 	static void unitTest();
 
-	void fall(GLint delay, GLint direction);
+	void fall(GLint delay, GLint direction, msPoint newLocation);
 
     void hide(GLint delay);
 

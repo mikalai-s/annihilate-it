@@ -126,13 +126,13 @@ void msBox::unitTest()
 
 void msBox::_linearFalling(msAnimationContext *c)
 {
-	msFromToAnimationContext<msPoint*> *context = (msFromToAnimationContext<msPoint*> *)c;
+	msKeyValueAnimationContext<msPoint*, msPoint> *context = (msKeyValueAnimationContext<msPoint*, msPoint> *)c;
 
-	msPoint *from = context->getFrom();
-	msPoint *to = context->getTo();
+	msPoint *from = context->getKey();
+	msPoint to = context->getValue();
 	
-	from->x += (to->x - from->x) / context->getAnimation()->getCount();
-	from->y += (to->y - from->y) / context->getAnimation()->getCount();
+	from->x += (to.x - from->x) / context->getAnimation()->getCount();
+	from->y += (to.y - from->y) / context->getAnimation()->getCount();
 }
 
 
@@ -160,25 +160,25 @@ void msBox::_linearFalling2(msAnimationContext *c)
 }
 
 
-void msBox::fall(GLint delay, GLint direction)
+void msBox::fall(GLint delay, GLint direction, msPoint newLocation)
 {
     int times = 10;
 
     // move a little bit up - to look like explosion raise boxes
-    msPointMoveAnimationContext *c1 = new msPointMoveAnimationContext(&m_location, direction);
-	getAnimations()->add(new msAnimation(0, 4, c1, _linearFalling2));
+//    msPointMoveAnimationContext *c1 = new msPointMoveAnimationContext(&m_location, direction);
+//	getAnimations()->add(new msAnimation(0, 4, c1, _linearFalling2));
 
     // moving from top to bottom
-    msFromToAnimationContext<msPoint*> *c2 = new msFromToAnimationContext<msPoint*>(&m_location, &m_location);
-	getAnimations()->add(new msAnimation(delay + 4, times, c2, _linearFalling));
+    msKeyValueAnimationContext<msPoint*, msPoint> *c2 = new msKeyValueAnimationContext<msPoint*, msPoint>(&m_location, newLocation);
+	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
     
     // move a litle bit up for effect of bounce
     msPointMoveAnimationContext *c3 = new msPointMoveAnimationContext(&m_location, direction);
-    getAnimations()->add(new msAnimation(delay + times + 4, 4, c3, _linearFalling2));
+    getAnimations()->add(new msAnimation(delay + times, 4, c3, _linearFalling2));
     
     // final falling (very quick)
-    msFromToAnimationContext<msPoint*> *c4 = new msFromToAnimationContext<msPoint*>(&m_location, &m_location);
-    getAnimations()->add(new msAnimation(delay + times + 4 + 4, 1, c4, _linearFalling));
+    msKeyValueAnimationContext<msPoint*, msPoint> *c4 = new msKeyValueAnimationContext<msPoint*, msPoint>(&m_location, newLocation);
+    getAnimations()->add(new msAnimation(delay + times + 4, 1, c4, _linearFalling));
 }
 
 

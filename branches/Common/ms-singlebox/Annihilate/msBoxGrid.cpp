@@ -320,13 +320,10 @@ void msBoxGrid::_exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint 
     
 	grid->setItem(y1, x1, box2);
 	grid->setItem(y2, x2, box1);
+
+	box1->fall(0, direction, box2->m_location);
     
-    msPoint tempLocation = box1->m_location;
-    box1->m_location = box2->m_location;
-    box2->m_location = tempLocation;
-    
-   
-    box1->fall(25, direction);
+    box2->m_location = box1->m_location;
 }
 
 void msBoxGrid::_shiftDown()
