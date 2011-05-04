@@ -213,7 +213,27 @@ void msScene::init()
 	// init palette
 	m_palette = new msPalette(colorMap, 8);
 
-	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
+    GLint pattern[NUM_ROWS * NUM_COLS] = 
+    {
+        2, 2, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 2, 2, 1, 1, 1, 1,
+        1, 1, 1, 1, 2, 2, 1, 1, 1, 1,
+        1, 1, 1, 1, 2, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 2, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 2, 2, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        
+    };
+
+	//m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 2.0, 2.0);
+    m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
 
 	m_renderer = new msBoxGridRenderer(&m_shaders);
 }
@@ -478,7 +498,7 @@ void msScene::mouseClick(int x, int y)
 	
 	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
 
-	m_boxGrid->shiftPendentBoxes(getShiftDirection());
+	//m_boxGrid->shiftPendentBoxes(getShiftDirection());
 
     msPoint p;
     p.x = (float)x;

@@ -5,6 +5,8 @@
 #include "msGrid.h"
 #include "msPalette.h"
 #include <list>
+#include <map>
+
 
 using namespace::std;
 
@@ -18,6 +20,9 @@ using namespace::std;
 
 typedef list<msBox*> msBoxList;
 typedef msBoxList::iterator msBoxIterator;
+
+typedef map<msBox*, int> msBoxExplMap;
+typedef msBoxExplMap::iterator msBoxExplIterator;
 
 class msBoxGrid
 {
@@ -39,13 +44,13 @@ class msBoxGrid
 
 	static void _hiding1(msAnimationContext *c);
 
-	void _removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxList *removedBoxes);
+	void _removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &removedBoxes, GLint level);
 
 	GLint _ms_boxgrid_has_similar_neighbour(GLint y, GLint x, GLint colorIndex);
 
 	void _exchangeBoxes(GLint y1, GLint x1, GLint y2, GLint x2);
 
-	void _ms_boxgrid_animate_box_hiding(msBoxList *boxes);
+	void _ms_boxgrid_animate_box_hiding(msBoxExplMap &boxes);
 
 	void _exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint x2, GLint direction);
 
@@ -57,10 +62,16 @@ class msBoxGrid
 
 	void _shiftRight();
 
+	msAnimationBundle m_animations;
+
+	static void doBoxesFallingCallback(msAnimationContext *c);
+
 public:
 	msGrid<msBox*> *grid;
 
 	msPalette *m_palette;
+
+	msAnimationBundle *getAnimations();
 
 	void init(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat screenHeight, GLfloat screenWidth);
 
