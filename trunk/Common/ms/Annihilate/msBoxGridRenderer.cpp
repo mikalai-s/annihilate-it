@@ -39,10 +39,10 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
     msPoint l = box->m_location;
     msSize s = box->m_size;
     
-    mBoxVertexesTemp[0][0] = l.x;               mBoxVertexesTemp[0][1] = l.y;               mBoxVertexesTemp[0][2] = l.z; 
-    mBoxVertexesTemp[1][0] = l.x + s.width;     mBoxVertexesTemp[1][1] = l.y;               mBoxVertexesTemp[1][2] = l.z; 
-    mBoxVertexesTemp[2][0] = l.x;               mBoxVertexesTemp[2][1] = l.y + s.height;    mBoxVertexesTemp[2][2] = l.z; 
-    mBoxVertexesTemp[3][0] = l.x + s.width;     mBoxVertexesTemp[3][1] = l.y + s.height;    mBoxVertexesTemp[3][2] = l.z;    
+    mBoxVertexesTemp[0][0] = l.x;               mBoxVertexesTemp[0][1] = l.y;               mBoxVertexesTemp[0][2] = l.z;
+    mBoxVertexesTemp[1][0] = l.x + s.width;     mBoxVertexesTemp[1][1] = l.y;               mBoxVertexesTemp[1][2] = l.z;
+    mBoxVertexesTemp[2][0] = l.x;               mBoxVertexesTemp[2][1] = l.y + s.height;    mBoxVertexesTemp[2][2] = l.z;
+    mBoxVertexesTemp[3][0] = l.x + s.width;     mBoxVertexesTemp[3][1] = l.y + s.height;    mBoxVertexesTemp[3][2] = l.z;
 
 	for(int i = 0; i < 4; i ++)
 	{
@@ -58,17 +58,17 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     //glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
 
-    
-    // draw borders if need   
+
+    // draw borders if need
     if(box->m_border->left)
         drawLeftBorder(m_program, box, &box->m_border->color);
-    
+
     if(box->m_border->top)
         drawTopBorder(m_program, box, &box->m_border->color);
-    
+
     if(box->m_border->right)
         drawRightBorder(m_program, box, &box->m_border->color);
-    
+
     if(box->m_border->bottom)
         drawBottomBorder(m_program, box, &box->m_border->color);
 }
@@ -143,9 +143,11 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
         for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
         {
             msBox *box = boxGrid->grid->getItem(y, x);
-            box->getAnimated()->getAnimations()->performStep();
+            box->getAnimations()->performStep();
         }
     }
+
+	boxGrid->getAnimations()->performStep();
 
     gi ++;
 }
@@ -167,46 +169,21 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
         for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
         {
             msBox *box = boxGrid->grid->getItem(y, x);
-            msBoxAnimation *aBox = box->getAnimated();
 
             // first check for explosion and if box is required one put it into list to be used after grid rendering
-            if(aBox->getRequiresExplosion())
+            if(box->getRequiresExplosion())
             {
-                msPoint explosionLocation = box->getAnimated()->m_location;
-                explosionLocation.x += box->m_size.width / 2.0f;
-                explosionLocation.y += box->m_size.height / 2.0f;
-                m_explosions.push_back(_createExplosionPe(explosionLocation, size));
-                //printf("frame: %d, box: (%d, %d) -> created explosion\r\n", gi, y, x);
+                m_explosions.push_back(_createExplosionPe(box->m_explosionPoint, size));
             }
-            else
+
+			if(box->isVisible())
             {
-                if(aBox->getAnimations()->getCount() > 0)
-                {
-                    msColor  boxColorTemp;
-                    boxColorTemp = *boxGrid->m_palette->getColor(aBox->m_colorIndex);              
-                    boxColorTemp.a *= aBox->m_colorDisturbance.a;
-                    boxColorTemp.r *= aBox->m_colorDisturbance.r;
-                    boxColorTemp.g *= aBox->m_colorDisturbance.g;
-                    boxColorTemp.b *= aBox->m_colorDisturbance.b;
-                    
-                    drawBox(program, boxGrid->m_palette, aBox, &boxColorTemp);
-                }
-                else if(box->isVisible())
-                {
-                    msColor  boxColorTemp;
-                    boxColorTemp = *boxGrid->m_palette->getColor(box->m_colorIndex);
-                    drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
-                }
+                msColor  boxColorTemp;
+                boxColorTemp = *boxGrid->m_palette->getColor(box->m_colorIndex);
+                drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
             }
         }
     }
-
-    /*if(m_lastExplosions != m_explosions.size())
-    {
-        printf("%d\r\n", m_explosions.size());
-        m_lastExplosions = m_explosions.size();
-        showExplosions();
-    }*/
 }
 
 void msBoxGridRenderer::removeInactiveExplosions()
@@ -350,7 +327,7 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 	{
 		// Set viewport to size of texture map and erase previous image
 		glViewport(0, 0, size.width, size.height);
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
 
 		// render background
@@ -392,16 +369,15 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
     {
         for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
         {
-            msBox *box = boxGrid->grid->getItem(y, x);
-            msBoxAnimation *aBox = box->getAnimated();
+            msBox *box = boxGrid->grid->getItem(y, x);            
 
-            if(box->getAnimated()->getRequiresWaveInit())
+            if(box->getRequiresWaveInit())
             {
                 msPoint location;
-                location.x = box->getAnimated()->m_location.x + box->getAnimated()->m_size.width / 2.0;
+                location.x = box->m_location.x + box->m_size.width / 2.0;
                 location.x /= 2.0f;
                 location.x *= size.width;
-                location.y = box->getAnimated()->m_location.y + box->getAnimated()->m_size.height / 2.0;
+                location.y = box->m_location.y + box->m_size.height / 2.0;
                 location.y /= 2.0f;
                 location.y = 1.0f - location.y;
                 location.y *= size.height;
@@ -413,7 +389,7 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 
                 break;
             }
-            else if(box->getAnimated()->getRequiresWave())
+            else if(box->getRequiresWave())
             {
                 program->getAttribute("radius")->set1f(m_afterShockRadius);
 		        program->getAttribute("power")->set1f(m_afterShockPower);

@@ -172,47 +172,82 @@ void msBoxGrid::display2()
 	printf("\r\n");
 }
 
-void msBoxGrid::_ms_boxgrid_animate_box_hiding(msBoxList *boxes)
+msAnimationBundle* msBoxGrid::getAnimations()
 {
+	return &m_animations;
+}
+
+void msBoxGrid::doBoxesFallingCallback(msAnimationContext *c)
+{
+	msValueAnimationContext<msBoxGrid*> *context = (msValueAnimationContext<msBoxGrid*>*)c;
+	context->getValue()->shiftPendentBoxes(MS_BOX_SHIFT_DOWN);
+}
+
+void msBoxGrid::_ms_boxgrid_animate_box_hiding(msBoxExplMap &boxesMap)
+{
+	int maxOffset = 0;
     int offset = 0;
-    for(msBoxIterator i = boxes->begin(); i != boxes->end(); i ++)
+    int offsetStep = 2;
+    for(msBoxExplIterator i = boxesMap.begin(); i != boxesMap.end(); i ++)
     {
-        msBox *box = *i;
+        msBox *box = (*i).first;
+        int index = (*i).second;
 
-        box->copy((msBox*)box->getAnimated());
+		int o = offset + offsetStep * index;
 
-        box->getAnimated()->hide(offset);        
+        box->hide(o);
 
-        offset += 10;
+		if(o > maxOffset)
+			maxOffset = o;
     }
+
+	msValueAnimationContext<msBoxGrid*> *c = new msValueAnimationContext<msBoxGrid*>(this);
+	msAnimation *a = new msAnimation(maxOffset + 25, 1, c, doBoxesFallingCallback);
+	m_animations.add(a);
 }
 
 
+int contains(msBoxExplMap &removedBoxes, msBox *box)
+{
+    msBoxExplIterator b = removedBoxes.find(box);
+    if(b == removedBoxes.end())
+        return -1;
 
-void msBoxGrid::_removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxList *removedBoxes)
+    return (*b).second;
+}
+
+
+void msBoxGrid::_removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &removedBoxes, GLint level)
 {
     // out of range
     if(x < 0 || y < 0 || x >= grid->m_columnCount || y >= grid->m_rowCount)
         return;
-    
+  
     msBox *box = grid->getItem(y, x);
 	if(!box->isVisible())
+    {
 		return;
-    
-    // if the neighbour has different colour
-    if(box->m_colorIndex != c)
-        return;
-    
-	// make the box invisible
-	box->makeInvisible();
-    
-    // add it to list
-	removedBoxes->push_back(box);
+    }
+    else
+    {
+        // if the neighbour has different color
+        if(box->m_colorIndex != c)
+            return;
+    }
+
+	 // check, probably the same box is trying to be exploded from another recursion call, so, we need to check its level
+    // and if it's less than already stored then we use it
+    int l = contains(removedBoxes, box);
+	if(l != -1 && l <= level)
+		return;
+
+    if(l == -1 || level < l)
+        removedBoxes[box] = level;
        
-    _removeSimilarBoxes(y, x-1, c, removedBoxes);
-    _removeSimilarBoxes(y-1, x, c, removedBoxes);
-    _removeSimilarBoxes(y, x+1, c, removedBoxes);
-    _removeSimilarBoxes(y+1, x, c, removedBoxes);
+    _removeSimilarBoxes(y, x - 1, c, removedBoxes, level + 1);
+    _removeSimilarBoxes(y - 1, x, c, removedBoxes, level + 1);
+    _removeSimilarBoxes(y, x + 1, c, removedBoxes, level + 1);
+    _removeSimilarBoxes(y + 1, x, c, removedBoxes, level + 1);
 }
 
 
@@ -253,17 +288,18 @@ int msBoxGrid::_ms_boxgrid_has_similar_neighbour(GLint y, GLint x, GLint colorIn
 
 void msBoxGrid::removeSimilarItems(GLint y, GLint x)
 {
-	msBoxList removedBoxes;
 	msBox *box = grid->getItem(y, x);
 	if(box->isVisible())
     {
         if(_ms_boxgrid_has_similar_neighbour(y, x, box->m_colorIndex))
         {
-            box->getAnimated()->wave(0);
+            box->wave(0);
 
-            _removeSimilarBoxes(y, x, box->m_colorIndex, &removedBoxes);
+            msBoxExplMap removedBoxes;
+
+            _removeSimilarBoxes(y, x, box->m_colorIndex, removedBoxes, 0);
           
-            _ms_boxgrid_animate_box_hiding(&removedBoxes);
+            _ms_boxgrid_animate_box_hiding(removedBoxes);
         }
     }
 }
@@ -286,14 +322,10 @@ void msBoxGrid::_exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint 
     
 	grid->setItem(y1, x1, box2);
 	grid->setItem(y2, x2, box1);
-    
-    msPoint tempLocation = box1->m_location;
-    box1->m_location = box2->m_location;
-    box2->m_location = tempLocation;
-    
-    box1->getAnimated()->m_border = box1->m_border;
 
-    box1->getAnimated()->fall(25, direction);
+	box1->fall(0, direction, box2->m_location);
+    
+    box2->m_location = box1->m_location;
 }
 
 void msBoxGrid::_shiftDown()
