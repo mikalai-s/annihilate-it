@@ -202,7 +202,7 @@ void msBoxGrid::_ms_boxgrid_animate_box_hiding(msBoxExplMap &boxesMap)
     }
 
 	msValueAnimationContext<msBoxGrid*> *c = new msValueAnimationContext<msBoxGrid*>(this);
-	msAnimation *a = new msAnimation(maxOffset + 25, 1, c, doBoxesFallingCallback);
+	msAnimation *a = new msAnimation(maxOffset + 15, 1, c, doBoxesFallingCallback);
 	m_animations.add(a);
 }
 
@@ -291,7 +291,7 @@ void msBoxGrid::removeSimilarItems(GLint y, GLint x)
 	msBox *box = grid->getItem(y, x);
 	if(box->isVisible())
     {
-        if(_ms_boxgrid_has_similar_neighbour(y, x, box->m_colorIndex))
+       // if(_ms_boxgrid_has_similar_neighbour(y, x, box->m_colorIndex))
         {
             box->wave(0);
 

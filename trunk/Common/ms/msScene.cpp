@@ -215,20 +215,20 @@ void msScene::init()
 
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
-        2, 2, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 2, 2, 1, 1, 1, 1,
-        1, 1, 1, 1, 2, 2, 1, 1, 1, 1,
-        1, 1, 1, 1, 2, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 2, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 2, 2, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         
     };
 
@@ -331,7 +331,7 @@ void msScene::drawBackground()
     
     msTexture *renderTex = program->getFrameBuffer("renderTex")->getTexture();
     
-    program = m_shaders.getProgramByName("texture_aftershock");
+    program = m_shaders.getProgramByName("shockwave");
 	program->use();
 
 	// usual renderer
@@ -435,37 +435,6 @@ void msScene::drawFrame()
     size.width = (GLfloat)_width;
     size.height = (GLfloat)_height;
 	m_renderer->draw(m_boxGrid, size);
-     
-
-  // drawBackground();
-
-	//drawExplosion();	
-/*
-
-	msShaderProgram *program = m_shaders.getProgramByName("texture_aftershock");
-	program->use();
-	
-    // Set viewport to size of texture map and erase previous image
-	glViewport(0, 0, _width, _height);
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
-
-	// render background
-	program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
-	program->getAttribute("position")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexPositions );
-	program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
-	program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
-
-    // draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );
-    
-	program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
-	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
-
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
- */
- 
 }
 
 int getShiftDirection()
@@ -474,39 +443,13 @@ int getShiftDirection()
 }
 
 void msScene::mouseClick(int x, int y)
-{/*
-	c = 50;
-	m_animate = 1;
-	m_afterShockRadius = m_afterShockRadiusMin;
-	m_afterShockPower = 1.0f;
-	m_afterShockLocation[0] = (float)x;
-	m_afterShockLocation[1] = (float)this->_height - (float)y;
-*/
-	m_explosionParticles->active = true;
-	m_explosionParticles->duration = 0.125f;
-	m_explosionParticles->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) - 1.0f;
-	m_explosionParticles->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) - 1.0f;
-
-	pe2->active = true;
-	pe2->duration = 0.125f;
-	pe2->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) - 1.0f;
-	pe2->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) - 1.0f;
-
+{
 	msPoint touchPoint;
 	touchPoint.x = ((GLfloat)x / (GLfloat)_width);
 	touchPoint.y = ((GLfloat)y / (GLfloat)_height);
 	
 	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
-
-	//m_boxGrid->shiftPendentBoxes(getShiftDirection());
-
-    msPoint p;
-    p.x = (float)x;
-    p.y = (float)this->_height - (float)y;
-    m_renderer->startWave(p);
 }
-
-
 
 void msScene::setMainFrameBuffer(GLint id)
 {

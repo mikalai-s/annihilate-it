@@ -43,7 +43,7 @@ private:
 	static void setFlagCallback(msAnimationContext *c)
 	{
 		msKeyValueAnimationContext<T, GLfloat> *context = (msKeyValueAnimationContext<T, GLfloat>*)c;
-		*context->getKey() = context->getValue();
+		*(context->getKey()) = context->getValue();
 	}
 
     

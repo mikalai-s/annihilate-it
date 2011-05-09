@@ -72,7 +72,5 @@ public:
     ~msBoxGridRenderer();
 
 	void draw(msBoxGrid *boxGrid, msSize size);
-
-    void startWave(msPoint location);
 };
 
