@@ -339,17 +339,13 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 
 	// usual renderer
 
-	// Set viewport to size of framebuffer and clear color and depth buffers
-    //glEnable(GL_BLEND);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	// Bind updated texture map
 	program->getFrameBuffer("renderTex")->getTexture()->active();
 	program->getFrameBuffer("renderTex")->getTexture()->bind();
 
     GLuint u = program->getFrameBuffer("renderTex")->getTexture()->getUnit();
 
-    program = m_shaders->getProgramByName("texture_aftershock");
+    program = m_shaders->getProgramByName("shockwave");
     program->use();
 
 	program->getUniform("tex")->set1i(u);
@@ -359,8 +355,6 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
 
     glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );	
-
-    //glDisable(GL_BLEND);
 
 
     // wave
