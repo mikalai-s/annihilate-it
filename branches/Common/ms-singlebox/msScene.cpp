@@ -215,20 +215,20 @@ void msScene::init()
 
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
-        2, 2, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 2, 2, 1, 1, 1, 1,
-        1, 1, 1, 1, 2, 2, 1, 1, 1, 1,
-        1, 1, 1, 1, 2, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 2, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 2, 2, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         
     };
 
@@ -474,36 +474,12 @@ int getShiftDirection()
 }
 
 void msScene::mouseClick(int x, int y)
-{/*
-	c = 50;
-	m_animate = 1;
-	m_afterShockRadius = m_afterShockRadiusMin;
-	m_afterShockPower = 1.0f;
-	m_afterShockLocation[0] = (float)x;
-	m_afterShockLocation[1] = (float)this->_height - (float)y;
-*/
-	m_explosionParticles->active = true;
-	m_explosionParticles->duration = 0.125f;
-	m_explosionParticles->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) - 1.0f;
-	m_explosionParticles->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) - 1.0f;
-
-	pe2->active = true;
-	pe2->duration = 0.125f;
-	pe2->sourcePosition.x = (m_afterShockLocation[0] / (float)this->_width * 2.0f) - 1.0f;
-	pe2->sourcePosition.y = (m_afterShockLocation[1] / (float)this->_height * 2.0f) - 1.0f;
-
+{
 	msPoint touchPoint;
 	touchPoint.x = ((GLfloat)x / (GLfloat)_width);
 	touchPoint.y = ((GLfloat)y / (GLfloat)_height);
 	
 	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
-
-	//m_boxGrid->shiftPendentBoxes(getShiftDirection());
-
-    msPoint p;
-    p.x = (float)x;
-    p.y = (float)this->_height - (float)y;
-    m_renderer->startWave(p);
 }
 
 

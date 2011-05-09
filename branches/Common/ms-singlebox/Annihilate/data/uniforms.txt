@@ -1,15 +1,9 @@
 program texture_aftershock /data/texture_aftershock_vertex.c /data/texture_aftershock_fragment.c
-texture tex0 0 /data/Fieldstone.tga
-texture ms0 1 /data/ms.tga
-uniform_mat4 mvp 1.0 0.0 0.0 0.0     0.0 -1.0 0.0 0.0     0.0 0.0 1.0 0.0       0.0 0.0 0.0 1.0
 attribute position 0
-attribute color 1
-attribute texcoord 2
-// for aftershock animation
-texture ns0 2 /data/noise.tga
-attribute radius 3
-attribute power 4
-uniform_vec2 ep 0.0 0.0
+attribute texcoord 1
+uniform_float radius
+uniform_float power
+uniform_vec2 location
 colorTexFbo renderTex 11
 link texture_aftershock
 

@@ -227,7 +227,7 @@ void msBox::wave(GLint delay)
     setFlag<GLboolean>(6, &m_requiresWaveInit, false);
 
     setFlag<GLboolean>(7, &m_requiresWave, true);
-    setFlag<GLboolean>(70, &m_requiresWave, false);
+    setFlag<GLboolean>(200, &m_requiresWave, false);
 }
 
 

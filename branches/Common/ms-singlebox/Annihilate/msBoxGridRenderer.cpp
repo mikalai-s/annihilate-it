@@ -14,14 +14,14 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
 	m_shaders = shaders;
 
     m_afterShockRadius = -1.0f;
-    m_afterShockPower = 100.0f;
+    m_afterShockPower = 1.0f;
     m_afterShockLocation[0] = 0.0f;
     m_afterShockLocation[1] = 0.0f;
     m_animate = 0;
 
     m_afterShockRadiusMin = 0.0f;
-    m_afterShockRadiusMax = 500.0f;
-    m_afterShockRadiusStep = 10.0f;
+    m_afterShockRadiusMax = 100.0f;
+    m_afterShockRadiusStep = 0.025f;
 }
 
 msBoxGridRenderer::~msBoxGridRenderer()
@@ -391,44 +391,15 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
             }
             else if(box->getRequiresWave())
             {
-                program->getAttribute("radius")->set1f(m_afterShockRadius);
-		        program->getAttribute("power")->set1f(m_afterShockPower);
-		        program->getUniform("ep")->set2f(m_afterShockLocation[0], m_afterShockLocation[1]);
+                program->getUniform("radius")->set1f(m_afterShockRadius);
+		        program->getUniform("power")->set1f(m_afterShockPower);
+		        program->getUniform("location")->set2f(m_afterShockLocation[0] / m_size.width, m_afterShockLocation[1] / m_size.height);
 
                 m_afterShockRadius += m_afterShockRadiusStep;
-			    m_afterShockPower -= m_afterShockRadiusStep / (m_afterShockRadiusMax - m_afterShockRadiusMin);
+			    m_afterShockPower -= 0.005;
 
                 break;
             }
         }
     }
-
-
-/*	if(m_animate == 1)
-	{
-		
-
-		c--;
-		if(c < 40)
-		{
-            
-
-			
-		}		
-	}*/
 }
-
-
-
-void msBoxGridRenderer::startWave(msPoint location)
-{/*
-    //c = 50;
-    c = 50;
-	m_animate = 1;
-	m_afterShockRadius = m_afterShockRadiusMin;
-	m_afterShockPower = 1.0f;
-	m_afterShockLocation[0] = location.x;
-	m_afterShockLocation[1] = location.y;
-    */
-}
-
