@@ -1,5 +1,3 @@
-uniform mat4 mvp;
-
 attribute vec4 position;
 attribute vec4 color;
 

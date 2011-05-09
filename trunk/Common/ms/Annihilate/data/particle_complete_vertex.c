@@ -1,9 +1,5 @@
-uniform mat4 mvp;
-
 attribute vec4 a2_position;
 attribute vec4 a2_texcoord;
-
-
 
 varying vec4 texcoord;
 
