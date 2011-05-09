@@ -17,7 +17,6 @@ msBox::msBox()
 	m_animations = new msAnimationBundle();
 
 	m_requiresExplosion = false;
-    m_requiresWaveInit = false;
     m_requiresWave = false;
 
 }
@@ -44,24 +43,13 @@ msBox::msBox(float x, float y, float width, float height, int colorIndex)
 	m_animations = new msAnimationBundle();
 
 	m_requiresExplosion = false;
-    m_requiresWaveInit = false;
     m_requiresWave = false;
-    
-	//m_boxToAnimate = new msBoxAnimation(this);
-	//m_boxToAnimate->m_location = m_location;
-	//m_boxToAnimate->m_size = m_size;
-	//m_boxToAnimate->m_colorIndex = m_colorIndex;
- //   m_boxToAnimate->m_border = m_border;
 }
 
 
 msBox::~msBox()
 {
-//    if(m_boxToAnimate == 0)
-        free(m_border);
-
-	/*if(m_boxToAnimate != 0)
-		delete m_boxToAnimate;*/
+	free(m_border);
 
 	delete m_animations;
 }
@@ -87,11 +75,6 @@ GLboolean msBox::isVisible()
 
 	return (m_colorIndex != MS_BOX_INVISIBLE);
 }
-
-//msBoxAnimation* msBox::getAnimated()
-//{
-//    return m_boxToAnimate;
-//}
 
 msAnimationBundle* msBox::getAnimations()
 {
@@ -220,14 +203,10 @@ void msBox::hide(GLint delay)
 
 void msBox::wave(GLint delay)
 {
-    m_requiresWaveInit = false;
     m_requiresWave = false;
 
-    setFlag<GLboolean>(5, &m_requiresWaveInit, true);
-    setFlag<GLboolean>(6, &m_requiresWaveInit, false);
-
-    setFlag<GLboolean>(7, &m_requiresWave, true);
-    setFlag<GLboolean>(200, &m_requiresWave, false);
+    setFlag<GLboolean>(delay, &m_requiresWave, true);
+    setFlag<GLboolean>(delay + 1, &m_requiresWave, false);
 }
 
 
@@ -239,9 +218,4 @@ GLboolean msBox::getRequiresExplosion()
 GLboolean msBox::getRequiresWave()
 {
     return m_requiresWave;
-}
-
-GLboolean msBox::getRequiresWaveInit()
-{
-    return m_requiresWaveInit;
 }

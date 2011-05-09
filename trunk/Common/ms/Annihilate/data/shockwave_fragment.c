@@ -5,7 +5,7 @@ uniform sampler2D ns0;
 
 uniform vec2 location;
 uniform float radius;
-uniform float power;
+uniform float power; // make radius less in course of time
 
 varying vec4 texcoord0;
 
@@ -15,9 +15,9 @@ void main()
 	vec2 uv = texcoord0.xy;
 	vec2 texCoord = uv;
 	float distance = distance(uv, location);
-	if ( (distance <= (radius + shockParams.z)) && (distance >= (radius - shockParams.z)) )
+	float diff = (distance - radius);// * 320.0 / 480.0; // todo: check whether it gives better results
+	if (diff <= shockParams.z && diff >= -shockParams.z)
 	{
-		float diff = (distance - radius);
 		float powDiff = 1.0 - pow(abs(diff * shockParams.x), shockParams.y);
 		float diffRadius = diff  * powDiff;
 		vec2 diffUV = normalize(uv - location);

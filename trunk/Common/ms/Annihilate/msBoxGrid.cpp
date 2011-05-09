@@ -293,7 +293,7 @@ void msBoxGrid::removeSimilarItems(GLint y, GLint x)
     {
        // if(_ms_boxgrid_has_similar_neighbour(y, x, box->m_colorIndex))
         {
-            box->wave(0);
+            box->wave(MS_WAVE_DELAY);
 
             msBoxExplMap removedBoxes;
 

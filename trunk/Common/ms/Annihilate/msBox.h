@@ -25,8 +25,6 @@ public:
 
     GLboolean m_requiresWave;
 
-    GLboolean m_requiresWaveInit;
-
 private:
 	// copy of the current box. is used just for animation. can be refactored in the future.
 	//msBoxAnimation *m_boxToAnimate;	
@@ -84,7 +82,5 @@ public:
     GLboolean getRequiresExplosion();
 
     GLboolean getRequiresWave();
-
-    GLboolean getRequiresWaveInit();
 
 };

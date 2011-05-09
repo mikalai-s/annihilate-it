@@ -12,16 +12,8 @@
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
 {
 	m_shaders = shaders;
-
-    m_afterShockRadius = -1.0f;
-    m_afterShockPower = 1.0f;
-    m_afterShockLocation[0] = 0.0f;
-    m_afterShockLocation[1] = 0.0f;
+    
     m_animate = 0;
-
-    m_afterShockRadiusMin = 0.0f;
-    m_afterShockRadiusMax = 100.0f;
-    m_afterShockRadiusStep = 0.025f;
 }
 
 msBoxGridRenderer::~msBoxGridRenderer()
@@ -30,6 +22,11 @@ msBoxGridRenderer::~msBoxGridRenderer()
     {
         delete (*ei);
     }
+
+	for(msWaveIterator wi = m_waves.begin(); wi != m_waves.end(); wi ++)
+	{
+		delete (*wi);
+	}
 }
 
 static const GLubyte g_indices[] = { 0, 1, 2, 3 };
@@ -131,11 +128,11 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
 {
     m_size = size;
 
-    drawBoxesWithAfterShock(boxGrid, size);
+    drawBoxesWithShockWave(boxGrid);
 
     drawExplosions();
 
-    removeInactiveExplosions();
+    removeInactiveEmitters();
 
     // update all animations
     for(int y = 0; y < boxGrid->grid->m_rowCount; y ++)
@@ -176,6 +173,11 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
                 m_explosions.push_back(_createExplosionPe(box->m_explosionPoint, size));
             }
 
+			if(box->getRequiresWave())
+			{
+				m_waves.push_back(_createWave(box));
+			}
+
 			if(box->isVisible())
             {
                 msColor  boxColorTemp;
@@ -186,7 +188,7 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
     }
 }
 
-void msBoxGridRenderer::removeInactiveExplosions()
+void msBoxGridRenderer::removeInactiveEmitters()
 {
     msExplosionList explosionsToDelete;
 
@@ -199,20 +201,32 @@ void msBoxGridRenderer::removeInactiveExplosions()
         delete (*ei);
         m_explosions.remove(*ei);
     }
+
+	msWaveList wavesToDelete;
+
+	for(msWaveIterator wi = m_waves.begin(); wi != m_waves.end(); wi ++)
+		if(!(*wi)->isAlive())
+			wavesToDelete.push_back(*wi);
+
+	for(msWaveIterator wi = wavesToDelete.begin(); wi != wavesToDelete.end(); wi ++)
+	{
+		delete (*wi);
+		m_waves.remove(*wi);
+	}
 }
 
 static const GLfloat g_fbVertexPositions2[] = {
-	-1.0f, -1.0f,  -1.0f,  1.0f,
-	1.0f, -1.0f,  -1.0f,  1.0f,
-	-1.0f,  1.0f,  -1.0f, 1.0f,
-	1.0f,  1.0f,  -1.0f, 1.0f,
+	-1.f, -1.f, -1.f, 1.f,
+	 1.f, -1.f, -1.f, 1.f,
+	-1.f,  1.f, -1.f, 1.f,
+	 1.f,  1.f, -1.f, 1.f,
 };
 
 static const GLfloat g_fbVertexTexcoord2[] = {
-	0.0f, 0.f,   
-	1.f,  0.f,    
-	0.0f, 1.f,    	
-	1.f,  1.f,   
+	0.f, 0.f,   
+	1.f, 0.f,    
+	0.f, 1.f,    	
+	1.f, 1.f,   
 };
 
 static const GLubyte g_fbIndices2[] = {
@@ -313,7 +327,7 @@ static const GLfloat g_vertexTexcoord[] = {
 };
 
 
-void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
+void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 {
     // render fire into texture using particle shaders
 	msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
@@ -326,12 +340,12 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
 	if (program->getFrameBuffer("renderTex")->isComplete())
 	{
 		// Set viewport to size of texture map and erase previous image
-		glViewport(0, 0, size.width, size.height);
+		glViewport(0, 0, m_size.width, m_size.height);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
 
 		// render background
-        drawBoxGrid(program, boxGrid, size);
+        drawBoxGrid(program, boxGrid, m_size);
 	}
 
 	// Unbind the FBO so rendering will return to the backbuffer.
@@ -349,51 +363,31 @@ void msBoxGridRenderer::drawBoxesWithAfterShock(msBoxGrid *boxGrid, msSize size)
     program->use();
 
 	program->getUniform("tex")->set1i(u);
+	program->getUniform("tex")->set1i(u);
 	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_vertexPositions );
 	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_vertexTexcoord );
 
+	// wave
+	for(msWaveIterator i = m_waves.begin(); i != m_waves.end(); i ++)
+	{
+		(*i)->render(program);
+		(*i)->step();
+	}
+
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
+	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );
+}
 
-    glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );	
+msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
+{
+	msPoint location;
+	location.x = box->m_location.x + box->m_size.width / 2.0;
+	location.x /= 2.0f;
+	location.x *= m_size.width;
+	location.y = box->m_location.y + box->m_size.height / 2.0;
+	location.y /= 2.0f;
+	location.y = 1.0f - location.y;
+	location.y *= m_size.height;
 
-
-    // wave
-
-    for(int y = 0; y < boxGrid->grid->m_rowCount; y ++)
-    {
-        for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
-        {
-            msBox *box = boxGrid->grid->getItem(y, x);            
-
-            if(box->getRequiresWaveInit())
-            {
-                msPoint location;
-                location.x = box->m_location.x + box->m_size.width / 2.0;
-                location.x /= 2.0f;
-                location.x *= size.width;
-                location.y = box->m_location.y + box->m_size.height / 2.0;
-                location.y /= 2.0f;
-                location.y = 1.0f - location.y;
-                location.y *= size.height;
-
-                m_afterShockRadius = m_afterShockRadiusMin;
-	            m_afterShockPower = 1.0f;
-	            m_afterShockLocation[0] = location.x;
-	            m_afterShockLocation[1] = location.y;
-
-                break;
-            }
-            else if(box->getRequiresWave())
-            {
-                program->getUniform("radius")->set1f(m_afterShockRadius);
-		        program->getUniform("power")->set1f(m_afterShockPower);
-		        program->getUniform("location")->set2f(m_afterShockLocation[0] / m_size.width, m_afterShockLocation[1] / m_size.height);
-
-                m_afterShockRadius += m_afterShockRadiusStep;
-			    m_afterShockPower -= 0.005;
-
-                break;
-            }
-        }
-    }
+	return new msWaveEmitter(location, m_size);
 }

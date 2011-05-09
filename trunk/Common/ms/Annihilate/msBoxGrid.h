@@ -18,6 +18,10 @@ using namespace::std;
 
 #define MS_BOUNCE_OFFSET 0.002f 
 
+
+#define MS_WAVE_DELAY 5
+
+
 typedef list<msBox*> msBoxList;
 typedef msBoxList::iterator msBoxIterator;
 
