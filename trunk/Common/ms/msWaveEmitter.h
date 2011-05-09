@@ -15,6 +15,6 @@ public:
 	msPoint m_location;
 	msSize m_size;
 
-	    GLboolean isAlive();
+	GLboolean isAlive();
 };
 

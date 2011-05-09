@@ -1,8 +1,9 @@
 #include "msWaveEmitter.h"
 
 #define RADIUS_MIN 0.0f
-#define RADIUS_MAX 1.0f
-#define RADIUS_STEP 0.025f;
+#define RADIUS_MAX 5.0f
+#define RADIUS_STEP 0.025f
+#define POWER_STEP RADIUS_STEP / (RADIUS_MIN - RADIUS_MAX)
 
 msWaveEmitter::msWaveEmitter(msPoint location, msSize size)
 {
@@ -26,8 +27,8 @@ void msWaveEmitter::render( msShaderProgram * program )
 
 void msWaveEmitter::step()
 {
-	m_radius += RADIUS_STEP;
-	m_power -= 0.005;
+	m_radius += RADIUS_STEP;	
+	m_power += POWER_STEP;
 }
 
 GLboolean msWaveEmitter::isAlive()
