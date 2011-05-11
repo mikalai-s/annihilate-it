@@ -3,7 +3,7 @@
 
 msSpline::msSpline(void)
 {
-	m_resolution = 20;
+	m_resolution = 3;
 	m_count = 0;
 }
 
@@ -35,30 +35,35 @@ void msSpline::BSpline_ComputeCoeffs_Private(float c0, float c1, float c2, float
 {
 	*a = -c0 + 3.0f*c1 - 3.0f*c2 + c3;
 	*b = 3.0f*c0 - 6.0f*c1 + 3.0f*c2;
-	*c = -3.0f*c1 + 3.0f*c2;
+	*c = -3.0f*c0 + 3.0f*c2;
 	*d = c0 + 4.0f*c1 + c2;
 }
 
 void msSpline::draw()
 {
+	// duplicate two first points
 	CtrlPt[0] = CtrlPt[2];
-
 	CtrlPt[1] = CtrlPt[2];
 
-	CtrlPt[m_count+2] = CtrlPt[m_count+1];
+	// close b-spline
+	CtrlPt[m_count+2] = CtrlPt[2];
+	CtrlPt[m_count+3] = CtrlPt[3];
+	CtrlPt[m_count+4] = CtrlPt[4];
 
-	CtrlPt[m_count+3] = CtrlPt[m_count+1];
+	// duplicate last two points
+	CtrlPt[m_count+5] = CtrlPt[m_count+4];
+	CtrlPt[m_count+6] = CtrlPt[m_count+4];
 
 	msPoint Ap, Bp, Cp, Dp;
 	float Lx, Ly;
 
-	for(int i = 0; i < m_count; i ++)
+	for(int i = 2; i < m_count + 2; i ++)
 	{
 		BSpline_ComputeCoeffs(i, &Ap, &Bp, &Cp, &Dp);
 
 		msPoint p1 = Spline_Calc(Ap, Bp, Cp, Dp, 0.0f, 6.0f);
 
-		for(int j = 1; j < m_resolution; j ++)
+		for(int j = 1; j < m_resolution + 1; j ++)
 		{
 			msPoint p2 = Spline_Calc(Ap, Bp, Cp, Dp, (float)j / (float)m_resolution, 6.0f);
 
