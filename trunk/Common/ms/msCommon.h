@@ -74,6 +74,20 @@ struct msPoint
 	GLfloat x;
 	GLfloat y;
 	GLfloat z;
+
+	msPoint()
+	{
+		x = 0;
+		y = 0;
+		z = 0;
+	}
+
+	msPoint(float xx, float yy)
+	{
+		x = xx;
+		y = yy;
+		z = 0;
+	}
 };
 
 struct msSize
@@ -160,3 +174,4 @@ static inline char* copyString(string src)
 	memcpy( dest, src.c_str(), src.length() + 1);
 	return dest;
 }
+
