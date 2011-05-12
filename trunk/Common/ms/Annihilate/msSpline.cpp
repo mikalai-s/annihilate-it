@@ -74,6 +74,37 @@ void msSpline::draw()
 	}
 }
 
+void msSpline::getSplinePoints(int resolution, msPoint *points, int *count)
+{
+	// duplicate two first points
+	CtrlPt[0] = CtrlPt[2];
+	CtrlPt[1] = CtrlPt[2];
+
+	// close b-spline
+	CtrlPt[m_count+2] = CtrlPt[2];
+	CtrlPt[m_count+3] = CtrlPt[3];
+	CtrlPt[m_count+4] = CtrlPt[4];
+
+	// duplicate last two points
+	CtrlPt[m_count+5] = CtrlPt[m_count+4];
+	CtrlPt[m_count+6] = CtrlPt[m_count+4];
+
+	msPoint Ap, Bp, Cp, Dp;
+	float Lx, Ly;
+
+	*count = 0;
+
+	for(int i = 2; i < m_count + 2; i ++)
+	{
+		BSpline_ComputeCoeffs(i, &Ap, &Bp, &Cp, &Dp);
+
+		for(int j = 0; j < resolution; j ++)
+		{
+			points[(*count)++] = Spline_Calc(Ap, Bp, Cp, Dp, (float)j / (float)resolution, 6.0f);
+		}
+	}
+}
+
 void msSpline::addControlPoint(msPoint p)
 {
 	CtrlPt[m_count + 2] = p;

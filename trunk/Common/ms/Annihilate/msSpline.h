@@ -27,4 +27,6 @@ public:
 	void addControlPoint(msPoint p);
 
 	void addControlPoint(float x, float y);
+
+	void getSplinePoints(int resolution, msPoint *points, int *count);
 };
