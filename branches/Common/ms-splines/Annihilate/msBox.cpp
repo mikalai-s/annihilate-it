@@ -54,14 +54,6 @@ msBox::~msBox()
 	delete m_animations;
 }
 
-msBox* msBox::copy(msBox *target)
-{
-    target->m_location = m_location;
-    target->m_size = m_size;
-    target->m_border = m_border;
-	return target;
-}
-
 void msBox::makeInvisible()
 {
 	m_colorIndex = MS_BOX_INVISIBLE;

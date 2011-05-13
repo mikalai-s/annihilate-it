@@ -32,63 +32,33 @@ msBoxGridRenderer::~msBoxGridRenderer()
 
 static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 
-void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *c)
-{
-    msPoint l = box->m_location;
-    msSize s = box->m_size;
-    
-    mBoxVertexesTemp[0][0] = l.x;               mBoxVertexesTemp[0][1] = l.y;               mBoxVertexesTemp[0][2] = l.z;
-    mBoxVertexesTemp[1][0] = l.x + s.width;     mBoxVertexesTemp[1][1] = l.y;               mBoxVertexesTemp[1][2] = l.z;
-    mBoxVertexesTemp[2][0] = l.x;               mBoxVertexesTemp[2][1] = l.y + s.height;    mBoxVertexesTemp[2][2] = l.z;
-    mBoxVertexesTemp[3][0] = l.x + s.width;     mBoxVertexesTemp[3][1] = l.y + s.height;    mBoxVertexesTemp[3][2] = l.z;
 
-	for(int i = 0; i < 4; i ++)
-	{
-		mBoxColorsTemp[i][0] = c->r;
-		mBoxColorsTemp[i][1] = c->g;
-		mBoxColorsTemp[i][2] = c->b;
-		mBoxColorsTemp[i][3] = c->a;
-	}
-
-	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, mBoxVertexesTemp );
-	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, mBoxColorsTemp );
-
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    //glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
-
-
-    // draw borders if need
-    if(box->m_border->left)
-        drawLeftBorder(m_program, box, &box->m_border->color);
-
-    if(box->m_border->top)
-        drawTopBorder(m_program, box, &box->m_border->color);
-
-    if(box->m_border->right)
-        drawRightBorder(m_program, box, &box->m_border->color);
-
-    if(box->m_border->bottom)
-        drawBottomBorder(m_program, box, &box->m_border->color);
-}
-
-/*
 void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *c)
 {
 	msPoint l = box->m_location;
 	msSize s = box->m_size;
 
-	msSpline spl;
-
-	msPoint points[4];
 	float dx = s.width / 4.0f;
 	float dy = s.height / 4.0f;
 
-	points[0].x = l.x + dx;				points[0].y = l.y + dy;				points[0].z = l.z;
-	points[1].x = l.x + s.width - dx;	points[1].y = l.y + dy;				points[1].z = l.z;
-	points[2].x = l.x + dx;				points[2].y = l.y + s.height - dy;	points[2].z = l.z;
-	points[3].x = l.x + s.width - dx;	points[3].y = l.y + s.height - dy;	points[3].z = l.z;
+	msSpline spl;
+	spl.addControlPoint(l.x, l.y + dy);
+	spl.addControlPoint(l.x, l.y + s.height - dy);
+	spl.addControlPoint(l.x + dx, l.y + s.height);
+	spl.addControlPoint(l.x + s.width - dx, l.y + s.height);
+	spl.addControlPoint(l.x + s.width, l.y + s.height - dy);
+	spl.addControlPoint(l.x + s.width, l.y + dy);
+	spl.addControlPoint(l.x + s.width - dx, l.y);
+	spl.addControlPoint(l.x + dx, l.y);
 
-	for(int i = 0; i < 4; i ++)
+	msPoint points[1000];
+	points[0].x = l.x + s.width / 2.0;
+	points[0].y = l.y + s.height / 2.0;
+	int count = 1;
+
+	spl.getSplinePoints(7, points, &count);
+
+	for(int i = 0; i < count; i ++)
 	{
 		mBoxColorsTemp[i][0] = c->r;
 		mBoxColorsTemp[i][1] = c->g;
@@ -99,7 +69,7 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, points );
 	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, mBoxColorsTemp );
 
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, count);
 	//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
 
 
@@ -116,7 +86,8 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 	if(box->m_border->bottom)
 		drawBottomBorder(m_program, box, &box->m_border->color);
 }
-*/
+
+
 void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPoint &start, msPoint &end, msColor *color)
 {
 	GLfloat coords[] = {start.x, start.y, start.z /*+ 0.1f*/, end.x, end.y, end.z /*+ 0.1f*/};
@@ -182,11 +153,11 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
     removeInactiveEmitters();
 
     // update all animations
-    for(int y = 0; y < boxGrid->grid->m_rowCount; y ++)
+    for(int y = 0; y < boxGrid->m_rowCount; y ++)
     {
-        for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
+        for(int x = 0; x < boxGrid->m_columnCount; x ++)
         {
-            msBox *box = boxGrid->grid->getItem(y, x);
+            msBox *box = boxGrid->getItem(y, x);
             box->getAnimations()->performStep();
         }
     }
@@ -208,11 +179,11 @@ void msBoxGridRenderer::showExplosions()
 
 void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid, msSize size)
 {
-    for(int y = 0; y < boxGrid->grid->m_rowCount; y ++)
+    for(int y = 0; y < boxGrid->m_rowCount; y ++)
     {
-        for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
+        for(int x = 0; x < boxGrid->m_columnCount; x ++)
         {
-            msBox *box = boxGrid->grid->getItem(y, x);
+            msBox *box = boxGrid->getItem(y, x);
 
             // first check for explosion and if box is required one put it into list to be used after grid rendering
             if(box->getRequiresExplosion())

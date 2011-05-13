@@ -10,6 +10,7 @@ public:
 	GLint m_columnCount;
 	T* m_items;
 
+private: 
 	GLint getIndexByYX(GLint y, GLint x)
 	{
 		return y * m_columnCount + x;

@@ -38,7 +38,7 @@ class msBoxGridRenderer
     msSize m_size;
 
     GLfloat mBoxVertexesTemp[4][3]; // 6 vertexes for defining quad by means of two triangles (2 vertex for each)
-    GLfloat mBoxColorsTemp[4][4];
+    GLfloat mBoxColorsTemp[1000][4];
     GLfloat mBoxBordersTemp[6]; // array of vertexes for box borders
 
 	void drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *color);

@@ -8,7 +8,10 @@
 
 class msBox
 {
+	friend class  msBoxGrid;
+
 public:
+
 	msPoint m_location;
 	msSize m_size;
 	int m_colorIndex;
@@ -26,8 +29,14 @@ public:
     GLboolean m_requiresWave;
 
 private:
-	// copy of the current box. is used just for animation. can be refactored in the future.
-	//msBoxAnimation *m_boxToAnimate;	
+	// for figure structure
+	msBox *m_top;
+	msBox *m_right;
+	msBox *m_bottom;
+	msBox *m_left;
+	
+
+private:
 
 	static void _linearFalling(msAnimationContext *c);
 
@@ -60,8 +69,6 @@ public:
 	msBox(float x, float y, float width, float height, int colorIndex);
 
 	~msBox();
-
-	msBox* copy(msBox *target);
 
 	void makeInvisible();
 

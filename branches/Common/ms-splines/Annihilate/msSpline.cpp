@@ -92,7 +92,7 @@ void msSpline::getSplinePoints(int resolution, msPoint *points, int *count)
 	msPoint Ap, Bp, Cp, Dp;
 	float Lx, Ly;
 
-	*count = 0;
+	int firstIndex = *count;
 
 	for(int i = 2; i < m_count + 2; i ++)
 	{
@@ -103,6 +103,8 @@ void msSpline::getSplinePoints(int resolution, msPoint *points, int *count)
 			points[(*count)++] = Spline_Calc(Ap, Bp, Cp, Dp, (float)j / (float)resolution, 6.0f);
 		}
 	}
+
+	points[(*count)++] = points[firstIndex];
 }
 
 void msSpline::addControlPoint(msPoint p)
