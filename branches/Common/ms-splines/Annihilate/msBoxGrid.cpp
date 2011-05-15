@@ -247,36 +247,10 @@ void msBoxGrid::_removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &rem
 // checks whether a box with specified coordinates has given color
 int msBoxGrid::_checkBoxColor(GLint y, GLint x, GLint colorIndex)
 {
-    msBox *neighbour;
-    
-    if(x < 0 || x >= m_columnCount || y < 0 || y >= m_rowCount)
-        return 0;
-    
-    if(x-1 >= 0)
-    {
-        neighbour = getItem(y, x-1);
-        if(neighbour->m_colorIndex == colorIndex)
-            return 1;
-    }
-    if(x+1 < m_columnCount)
-    {
-        neighbour = getItem(y, x+1);
-        if(neighbour->m_colorIndex == colorIndex)
-            return 1;
-    }
-    if(y-1 >= 0)
-    {
-        neighbour = getItem(y-1, x);
-        if(neighbour->m_colorIndex == colorIndex)
-            return 1;
-    }
-    if(y+1 < m_rowCount)
-    {
-        neighbour = getItem(y+1, x);
-        if(neighbour->m_colorIndex == colorIndex)
-            return 1;
-    }
-    return 0;    
+	if(x < 0 || x >= m_columnCount || y < 0 || y >= m_rowCount)
+		return 0;
+
+	return getItem(y, x)->m_colorIndex == colorIndex;
 }
 
 

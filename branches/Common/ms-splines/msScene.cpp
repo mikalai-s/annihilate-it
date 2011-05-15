@@ -211,28 +211,30 @@ void msScene::init()
 
 	// init palette
 	m_palette = new msPalette(colorMap, 8);
-	/*
+	
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+       // 1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
+		1,2,2,
+		1,1,2,
+		2,2,2,
     };
-	//m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 2.0, 2.0);
-	*/
-    m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
+	m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 2.0, 2.0);
+	
+   // m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
 
 	m_renderer = new msBoxGridRenderer(&m_shaders);
 }
@@ -242,15 +244,15 @@ int c = 0;
 static const GLfloat g_fbVertexPositions[] = {
 	0.0f, 0.0f,  
 	1.0f, 0.0f,  
-	0.0f,  1.0f,  
-	1.0f,  1.0f,  
+	0.0f, 1.0f,  
+	1.0f, 1.0f,  
 };
 
 static const GLfloat g_fbVertexTexcoord[] = {
 	0.0f, 0.0f,   
-	1.0f,  0.0f,    
+	1.0f, 0.0f,    
 	0.0f, 1.0f,    	
-	1.0f,  1.0f,   
+	1.0f, 1.0f,   
 };
 
 static const GLubyte g_fbIndices[] = {

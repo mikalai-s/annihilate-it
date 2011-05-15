@@ -28,8 +28,8 @@
 #include "Annihilate/msBoxGrid.h"
 #include "Annihilate/msBoxGridRenderer.h"
 
-#define NUM_ROWS 2
-#define NUM_COLS 2
+#define NUM_ROWS 3
+#define NUM_COLS 3
 
 
 

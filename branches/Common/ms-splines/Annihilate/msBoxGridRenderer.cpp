@@ -8,7 +8,7 @@
  */
 
 #include "msBoxGridRenderer.h"
-#include "msSpline.h"
+
 
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
 {
@@ -32,30 +32,22 @@ msBoxGridRenderer::~msBoxGridRenderer()
 
 static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 
+#define MS_BOX_PART_NONE 0
+#define MS_BOX_PART_LEFT 1
+#define MS_BOX_PART_BOTTOM 2
+#define MS_BOX_PART_RIGHT 4
+#define MS_BOX_PART_TOP 8
 
-void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *c)
+
+void msBoxGridRenderer::_drawFigure(msBoxList &boxes, msBox *box, msPalette *palette, msShaderProgram *m_program)
 {
-	msPoint l = box->m_location;
-	msSize s = box->m_size;
-
-	float dx = s.width / 4.0f;
-	float dy = s.height / 4.0f;
+	msColor *c = palette->getColor(box->m_colorIndex);
 
 	msSpline spl;
-	spl.addControlPoint(l.x, l.y + dy);
-	spl.addControlPoint(l.x, l.y + s.height - dy);
-	spl.addControlPoint(l.x + dx, l.y + s.height);
-	spl.addControlPoint(l.x + s.width - dx, l.y + s.height);
-	spl.addControlPoint(l.x + s.width, l.y + s.height - dy);
-	spl.addControlPoint(l.x + s.width, l.y + dy);
-	spl.addControlPoint(l.x + s.width - dx, l.y);
-	spl.addControlPoint(l.x + dx, l.y);
+	_getBoxSplinePoints(boxes, box, spl, MS_BOX_PART_NONE);
 
-	msPoint points[1000];
-	points[0].x = l.x + s.width / 2.0;
-	points[0].y = l.y + s.height / 2.0;
-	int count = 1;
-
+	msPoint points[10000];
+	int count = 0;
 	spl.getSplinePoints(7, points, &count);
 
 	for(int i = 0; i < count; i ++)
@@ -69,22 +61,149 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, points );
 	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, mBoxColorsTemp );
 
-	glDrawArrays(GL_TRIANGLE_FAN, 0, count);
-	//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
+	glDrawArrays(GL_LINE_LOOP, 0, count);	
+}
 
 
-	// draw borders if need
-	if(box->m_border->left)
-		drawLeftBorder(m_program, box, &box->m_border->color);
+bool contains(msBoxList &list, msBox *item)
+{
+	for(msBoxIterator i = list.begin(); i != list.end(); i ++)
+		if(*i == item)
+			return true;
+	return false;
+}
 
-	if(box->m_border->top)
-		drawTopBorder(m_program, box, &box->m_border->color);
 
-	if(box->m_border->right)
-		drawRightBorder(m_program, box, &box->m_border->color);
 
-	if(box->m_border->bottom)
-		drawBottomBorder(m_program, box, &box->m_border->color);
+void msBoxGridRenderer::_getBoxSplinePoints( msBoxList & boxes, msBox * box, msSpline &spl, char from)
+{
+	msPoint l = box->m_location;
+	msSize s = box->m_size;
+
+	float dx = s.width / 4.0f;
+	float dy = s.height / 4.0f;
+
+	boxes.remove(box);
+
+	if((box->getLeft() == 0))
+	{
+		if(from == MS_BOX_PART_TOP)
+		{
+			spl.addControlPoint(l.x, l.y + dy);		
+			spl.addControlPoint(l.x, l.y + s.height - dy);
+			spl.addControlPoint(l.x + dx, l.y + s.height);
+		}
+		else if(from == MS_BOX_PART_RIGHT || from == MS_BOX_PART_BOTTOM || from == MS_BOX_PART_NONE)
+		{
+			spl.addControlPoint(l.x, l.y + s.height - dy);
+			spl.addControlPoint(l.x + dx, l.y + s.height);
+		}
+		else
+		{
+			spl.addControlPoint(l.x + dx, l.y);				
+			spl.addControlPoint(l.x, l.y + dy);		
+			spl.addControlPoint(l.x, l.y + s.height - dy);
+			spl.addControlPoint(l.x + dx, l.y + s.height);
+		}
+	}
+	else
+	{
+		if(contains(boxes, box->getLeft()))
+		{
+			_getBoxSplinePoints(boxes, box->getLeft(), spl, MS_BOX_PART_RIGHT);
+			from = MS_BOX_PART_LEFT;
+		}
+	}
+
+	if((box->getBottom() == 0))
+	{
+		if(from == MS_BOX_PART_LEFT)
+		{
+			spl.addControlPoint(l.x + dx, l.y + s.height);
+			spl.addControlPoint(l.x + s.width - dx, l.y + s.height);
+			spl.addControlPoint(l.x + s.width, l.y + s.height - dy);
+		}
+		else if(from == MS_BOX_PART_TOP || from == MS_BOX_PART_RIGHT || from == MS_BOX_PART_NONE)
+		{
+			spl.addControlPoint(l.x + s.width - dx, l.y + s.height);
+			spl.addControlPoint(l.x + s.width, l.y + s.height - dy);
+		}
+		else
+		{
+			spl.addControlPoint(l.x, l.y + s.height - dy);
+			spl.addControlPoint(l.x + dx, l.y + s.height);
+			spl.addControlPoint(l.x + s.width - dx, l.y + s.height);
+			spl.addControlPoint(l.x + s.width, l.y + s.height - dy);
+		}		
+	}
+	else
+	{
+		if(contains(boxes, box->getBottom()))
+		{
+			_getBoxSplinePoints(boxes, box->getBottom(), spl, MS_BOX_PART_TOP);
+			from = MS_BOX_PART_BOTTOM;
+		}
+	}
+
+	if((box->getRight() == 0))
+	{
+		if(from == MS_BOX_PART_BOTTOM)
+		{
+			spl.addControlPoint(l.x + s.width, l.y + s.height - dy);
+			spl.addControlPoint(l.x + s.width, l.y + dy);
+			spl.addControlPoint(l.x + s.width - dx, l.y);
+		}
+		else if(from == MS_BOX_PART_LEFT || from == MS_BOX_PART_TOP || from == MS_BOX_PART_NONE)
+		{
+			spl.addControlPoint(l.x + s.width, l.y + dy);
+			spl.addControlPoint(l.x + s.width - dx, l.y);
+		}
+		else
+		{
+			spl.addControlPoint(l.x + s.width - dx, l.y + s.height);
+			spl.addControlPoint(l.x + s.width, l.y + s.height - dy);
+			spl.addControlPoint(l.x + s.width, l.y + dy);
+			spl.addControlPoint(l.x + s.width - dx, l.y);
+		}
+	}
+	else
+	{
+		if(contains(boxes, box->getRight()))
+		{
+			_getBoxSplinePoints(boxes, box->getRight(), spl, MS_BOX_PART_LEFT);
+			from = MS_BOX_PART_RIGHT;
+		}
+	}
+
+	if((box->getTop() == 0))
+	{
+		if(from == MS_BOX_PART_RIGHT)
+		{
+			spl.addControlPoint(l.x + s.width - dx, l.y);
+			spl.addControlPoint(l.x + dx, l.y);
+			spl.addControlPoint(l.x, l.y + dy);
+		}
+		else if(from == MS_BOX_PART_BOTTOM || from == MS_BOX_PART_LEFT || from == MS_BOX_PART_NONE)
+		{
+			spl.addControlPoint(l.x + dx, l.y);
+			spl.addControlPoint(l.x, l.y + dy);
+		}
+		else
+		{		
+			spl.addControlPoint(l.x + s.width, l.y + dy);		
+			spl.addControlPoint(l.x + s.width - dx, l.y);
+			spl.addControlPoint(l.x + dx, l.y);
+			spl.addControlPoint(l.x, l.y + dy);
+		}
+	}
+	else
+	{
+		if(contains(boxes, box->getTop()))
+		{
+			_getBoxSplinePoints(boxes, box->getTop(), spl, MS_BOX_PART_BOTTOM);
+			from = MS_BOX_PART_TOP;
+		}
+	}
 }
 
 
@@ -179,31 +298,37 @@ void msBoxGridRenderer::showExplosions()
 
 void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid, msSize size)
 {
-    for(int y = 0; y < boxGrid->m_rowCount; y ++)
-    {
-        for(int x = 0; x < boxGrid->m_columnCount; x ++)
-        {
-            msBox *box = boxGrid->getItem(y, x);
+	msBoxList boxesToDraw;
 
-            // first check for explosion and if box is required one put it into list to be used after grid rendering
-            if(box->getRequiresExplosion())
-            {
-                m_explosions.push_back(_createExplosionPe(box->m_explosionPoint, size));
-            }
+    for(int y = 0; y < boxGrid->m_rowCount; y ++)
+	{
+        for(int x = 0; x < boxGrid->m_columnCount; x ++)
+		{
+			msBox *box = boxGrid->getItem(y, x);
+			boxesToDraw.push_back(box);
+
+			// first check for explosion and if box is required one put it into list to be used after grid rendering
+			if(box->getRequiresExplosion())
+			{
+				m_explosions.push_back(_createExplosionPe(box->m_explosionPoint, size));
+			}
 
 			if(box->getRequiresWave())
 			{
 				m_waves.push_back(_createWave(box));
 			}
+		}
+	}
 
-			if(box->isVisible())
-            {
-                msColor  boxColorTemp;
-                boxColorTemp = *boxGrid->m_palette->getColor(box->m_colorIndex);
-                drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
-            }
-        }
-    }
+	while(boxesToDraw.begin() != boxesToDraw.end())
+	{
+		msBox *box = *boxesToDraw.begin();
+
+		if(box->isVisible())
+		{
+			_drawFigure(boxesToDraw, box, boxGrid->m_palette, program);
+		}
+	}
 }
 
 void msBoxGridRenderer::removeInactiveEmitters()

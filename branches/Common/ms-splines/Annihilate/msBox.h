@@ -89,5 +89,25 @@ public:
     GLboolean getRequiresExplosion();
 
     GLboolean getRequiresWave();
+	void _init( float x, float y, float width, float height, int colorIndex );
 
+	msBox *getTop() const
+	{
+		return m_top;
+	}
+
+	msBox *getRight() const
+	{
+		return m_right;
+	}
+
+	msBox *getBottom() const
+	{
+		return m_bottom;
+	}
+
+	msBox *getLeft() const
+	{
+		return m_left;
+	}
 };
