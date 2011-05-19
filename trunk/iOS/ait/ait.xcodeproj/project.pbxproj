@@ -33,22 +33,6 @@
 		CE4C2E7013628C6A0071F1C9 /* particle_complete_vertex.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6213628C6A0071F1C9 /* particle_complete_vertex.c */; };
 		CE4C2E7113628C6A0071F1C9 /* particle_create_fragment.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6313628C6A0071F1C9 /* particle_create_fragment.c */; };
 		CE4C2E7213628C6A0071F1C9 /* particle_create_vertex.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6413628C6A0071F1C9 /* particle_create_vertex.c */; };
-		CE4C2E7313628C6A0071F1C9 /* texture_aftershock_fragment.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6513628C6A0071F1C9 /* texture_aftershock_fragment.c */; };
-		CE4C2E7413628C6A0071F1C9 /* texture_aftershock_vertex.c in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2E6613628C6A0071F1C9 /* texture_aftershock_vertex.c */; };
-		CE4C2E7713628CE30071F1C9 /* boxgrid_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5A13628C6A0071F1C9 /* boxgrid_fragment.c */; };
-		CE4C2E7813628CE30071F1C9 /* boxgrid_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5B13628C6A0071F1C9 /* boxgrid_vertex.c */; };
-		CE4C2E7913628CE30071F1C9 /* expl.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5C13628C6A0071F1C9 /* expl.tga */; };
-		CE4C2E7A13628CE30071F1C9 /* Fieldstone.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5D13628C6A0071F1C9 /* Fieldstone.tga */; };
-		CE4C2E7B13628CE30071F1C9 /* ms.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5E13628C6A0071F1C9 /* ms.tga */; };
-		CE4C2E7C13628CE30071F1C9 /* noise.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5F13628C6A0071F1C9 /* noise.jpg */; };
-		CE4C2E7D13628CE30071F1C9 /* noise.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6013628C6A0071F1C9 /* noise.tga */; };
-		CE4C2E7E13628CE30071F1C9 /* particle_complete_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6113628C6A0071F1C9 /* particle_complete_fragment.c */; };
-		CE4C2E7F13628CE30071F1C9 /* particle_complete_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6213628C6A0071F1C9 /* particle_complete_vertex.c */; };
-		CE4C2E8013628CE30071F1C9 /* particle_create_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6313628C6A0071F1C9 /* particle_create_fragment.c */; };
-		CE4C2E8113628CE30071F1C9 /* particle_create_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6413628C6A0071F1C9 /* particle_create_vertex.c */; };
-		CE4C2E8213628CE30071F1C9 /* texture_aftershock_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6513628C6A0071F1C9 /* texture_aftershock_fragment.c */; };
-		CE4C2E8313628CE30071F1C9 /* texture_aftershock_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6613628C6A0071F1C9 /* texture_aftershock_vertex.c */; };
-		CE4C2E8413628CE30071F1C9 /* uniforms.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6713628C6A0071F1C9 /* uniforms.txt */; };
 		CE8D89C8135E94B700C083EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C7135E94B700C083EA /* UIKit.framework */; };
 		CE8D89CA135E94B700C083EA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C9135E94B700C083EA /* Foundation.framework */; };
 		CE8D89CC135E94B700C083EA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89CB135E94B700C083EA /* CoreGraphics.framework */; };
@@ -67,6 +51,24 @@
 		CE8D89FD135E94B700C083EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89FB135E94B700C083EA /* InfoPlist.strings */; };
 		CE8D8A00135E94B700C083EA /* aitTests.h in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89FF135E94B700C083EA /* aitTests.h */; };
 		CE8D8A02135E94B700C083EA /* aitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8D8A01135E94B700C083EA /* aitTests.m */; };
+		CEA8499F1377AF140082C69B /* msWaveEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA8499D1377AF140082C69B /* msWaveEmitter.cpp */; };
+		CEA849A31377AF6A0082C69B /* shockwave_fragment.c in Sources */ = {isa = PBXBuildFile; fileRef = CEA849A11377AF6A0082C69B /* shockwave_fragment.c */; };
+		CEA849A41377AF6A0082C69B /* shockwave_vertex.c in Sources */ = {isa = PBXBuildFile; fileRef = CEA849A21377AF6A0082C69B /* shockwave_vertex.c */; };
+		CEA849A51377AF770082C69B /* shockwave_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEA849A11377AF6A0082C69B /* shockwave_fragment.c */; };
+		CEA849A61377AF770082C69B /* shockwave_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEA849A21377AF6A0082C69B /* shockwave_vertex.c */; };
+		CEA849A71377AF770082C69B /* boxgrid_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5A13628C6A0071F1C9 /* boxgrid_fragment.c */; };
+		CEA849A81377AF770082C69B /* boxgrid_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5B13628C6A0071F1C9 /* boxgrid_vertex.c */; };
+		CEA849A91377AF770082C69B /* expl.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E5C13628C6A0071F1C9 /* expl.tga */; };
+		CEA849AA1377AF770082C69B /* particle_complete_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6113628C6A0071F1C9 /* particle_complete_fragment.c */; };
+		CEA849AB1377AF770082C69B /* particle_complete_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6213628C6A0071F1C9 /* particle_complete_vertex.c */; };
+		CEA849AC1377AF770082C69B /* particle_create_fragment.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6313628C6A0071F1C9 /* particle_create_fragment.c */; };
+		CEA849AD1377AF770082C69B /* particle_create_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6413628C6A0071F1C9 /* particle_create_vertex.c */; };
+		CEA849AE1377AF770082C69B /* uniforms.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6713628C6A0071F1C9 /* uniforms.txt */; };
+		CEA849B11384C3130082C69B /* border-corner.tga in Resources */ = {isa = PBXBuildFile; fileRef = CEA849AF1384C3130082C69B /* border-corner.tga */; };
+		CEA849B21384C3130082C69B /* border-line.tga in Resources */ = {isa = PBXBuildFile; fileRef = CEA849B01384C3130082C69B /* border-line.tga */; };
+		CEA849B51384C3340082C69B /* msSpline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA849B31384C3340082C69B /* msSpline.cpp */; };
+		CEA849B61384C3620082C69B /* border-corner.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEA849AF1384C3130082C69B /* border-corner.tga */; };
+		CEA849B71384C3620082C69B /* border-line.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEA849B01384C3130082C69B /* border-line.tga */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,20 +88,18 @@
 			dstPath = data;
 			dstSubfolderSpec = 7;
 			files = (
-				CE4C2E7713628CE30071F1C9 /* boxgrid_fragment.c in CopyFiles */,
-				CE4C2E7813628CE30071F1C9 /* boxgrid_vertex.c in CopyFiles */,
-				CE4C2E7913628CE30071F1C9 /* expl.tga in CopyFiles */,
-				CE4C2E7A13628CE30071F1C9 /* Fieldstone.tga in CopyFiles */,
-				CE4C2E7B13628CE30071F1C9 /* ms.tga in CopyFiles */,
-				CE4C2E7C13628CE30071F1C9 /* noise.jpg in CopyFiles */,
-				CE4C2E7D13628CE30071F1C9 /* noise.tga in CopyFiles */,
-				CE4C2E7E13628CE30071F1C9 /* particle_complete_fragment.c in CopyFiles */,
-				CE4C2E7F13628CE30071F1C9 /* particle_complete_vertex.c in CopyFiles */,
-				CE4C2E8013628CE30071F1C9 /* particle_create_fragment.c in CopyFiles */,
-				CE4C2E8113628CE30071F1C9 /* particle_create_vertex.c in CopyFiles */,
-				CE4C2E8213628CE30071F1C9 /* texture_aftershock_fragment.c in CopyFiles */,
-				CE4C2E8313628CE30071F1C9 /* texture_aftershock_vertex.c in CopyFiles */,
-				CE4C2E8413628CE30071F1C9 /* uniforms.txt in CopyFiles */,
+				CEA849B61384C3620082C69B /* border-corner.tga in CopyFiles */,
+				CEA849B71384C3620082C69B /* border-line.tga in CopyFiles */,
+				CEA849A51377AF770082C69B /* shockwave_fragment.c in CopyFiles */,
+				CEA849A61377AF770082C69B /* shockwave_vertex.c in CopyFiles */,
+				CEA849A71377AF770082C69B /* boxgrid_fragment.c in CopyFiles */,
+				CEA849A81377AF770082C69B /* boxgrid_vertex.c in CopyFiles */,
+				CEA849A91377AF770082C69B /* expl.tga in CopyFiles */,
+				CEA849AA1377AF770082C69B /* particle_complete_fragment.c in CopyFiles */,
+				CEA849AB1377AF770082C69B /* particle_complete_vertex.c in CopyFiles */,
+				CEA849AC1377AF770082C69B /* particle_create_fragment.c in CopyFiles */,
+				CEA849AD1377AF770082C69B /* particle_create_vertex.c in CopyFiles */,
+				CEA849AE1377AF770082C69B /* uniforms.txt in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,19 +149,13 @@
 		CE4C2D0C135FF8D70071F1C9 /* msUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msUniform.cpp; sourceTree = "<group>"; };
 		CE4C2D0D135FF8D70071F1C9 /* msUniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msUniform.h; sourceTree = "<group>"; };
 		CE4C2E5613628C4B0071F1C9 /* msGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msGL.cpp; sourceTree = "<group>"; };
-		CE4C2E5A13628C6A0071F1C9 /* boxgrid_fragment.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = boxgrid_fragment.c; sourceTree = "<group>"; };
+		CE4C2E5A13628C6A0071F1C9 /* boxgrid_fragment.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = boxgrid_fragment.c; sourceTree = "<group>"; };
 		CE4C2E5B13628C6A0071F1C9 /* boxgrid_vertex.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = boxgrid_vertex.c; sourceTree = "<group>"; };
 		CE4C2E5C13628C6A0071F1C9 /* expl.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = expl.tga; sourceTree = "<group>"; };
-		CE4C2E5D13628C6A0071F1C9 /* Fieldstone.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fieldstone.tga; sourceTree = "<group>"; };
-		CE4C2E5E13628C6A0071F1C9 /* ms.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = ms.tga; sourceTree = "<group>"; };
-		CE4C2E5F13628C6A0071F1C9 /* noise.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = noise.jpg; sourceTree = "<group>"; };
-		CE4C2E6013628C6A0071F1C9 /* noise.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = noise.tga; sourceTree = "<group>"; };
 		CE4C2E6113628C6A0071F1C9 /* particle_complete_fragment.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = particle_complete_fragment.c; sourceTree = "<group>"; };
 		CE4C2E6213628C6A0071F1C9 /* particle_complete_vertex.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = particle_complete_vertex.c; sourceTree = "<group>"; };
 		CE4C2E6313628C6A0071F1C9 /* particle_create_fragment.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = particle_create_fragment.c; sourceTree = "<group>"; };
 		CE4C2E6413628C6A0071F1C9 /* particle_create_vertex.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = particle_create_vertex.c; sourceTree = "<group>"; };
-		CE4C2E6513628C6A0071F1C9 /* texture_aftershock_fragment.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = texture_aftershock_fragment.c; sourceTree = "<group>"; };
-		CE4C2E6613628C6A0071F1C9 /* texture_aftershock_vertex.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = texture_aftershock_vertex.c; sourceTree = "<group>"; };
 		CE4C2E6713628C6A0071F1C9 /* uniforms.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = uniforms.txt; sourceTree = "<group>"; };
 		CE8D89C3135E94B700C083EA /* ait.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ait.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8D89C7135E94B700C083EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -187,6 +181,14 @@
 		CE8D89FE135E94B700C083EA /* aitTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aitTests-Prefix.pch"; sourceTree = "<group>"; };
 		CE8D89FF135E94B700C083EA /* aitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aitTests.h; sourceTree = "<group>"; };
 		CE8D8A01135E94B700C083EA /* aitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aitTests.m; sourceTree = "<group>"; };
+		CEA8499D1377AF140082C69B /* msWaveEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msWaveEmitter.cpp; sourceTree = "<group>"; };
+		CEA8499E1377AF140082C69B /* msWaveEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msWaveEmitter.h; sourceTree = "<group>"; };
+		CEA849A11377AF6A0082C69B /* shockwave_fragment.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = shockwave_fragment.c; sourceTree = "<group>"; };
+		CEA849A21377AF6A0082C69B /* shockwave_vertex.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = shockwave_vertex.c; sourceTree = "<group>"; };
+		CEA849AF1384C3130082C69B /* border-corner.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "border-corner.tga"; sourceTree = "<group>"; };
+		CEA849B01384C3130082C69B /* border-line.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "border-line.tga"; sourceTree = "<group>"; };
+		CEA849B31384C3340082C69B /* msSpline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msSpline.cpp; sourceTree = "<group>"; };
+		CEA849B41384C3340082C69B /* msSpline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msSpline.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +235,8 @@
 				CE4C2CFE135FF8D70071F1C9 /* msSimpleImageLoader.h */,
 				CE4C2CFF135FF8D70071F1C9 /* msTga.cpp */,
 				CE4C2D00135FF8D70071F1C9 /* msTga.h */,
+				CEA8499D1377AF140082C69B /* msWaveEmitter.cpp */,
+				CEA8499E1377AF140082C69B /* msWaveEmitter.h */,
 			);
 			path = ms;
 			sourceTree = "<group>";
@@ -259,6 +263,8 @@
 				CE4C2CF2135FF8D70071F1C9 /* msGrid.h */,
 				CE4C2CF3135FF8D70071F1C9 /* msPalette.cpp */,
 				CE4C2CF4135FF8D70071F1C9 /* msPalette.h */,
+				CEA849B31384C3340082C69B /* msSpline.cpp */,
+				CEA849B41384C3340082C69B /* msSpline.h */,
 			);
 			path = Annihilate;
 			sourceTree = "<group>";
@@ -285,19 +291,17 @@
 		CE4C2E5913628C6A0071F1C9 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				CEA849AF1384C3130082C69B /* border-corner.tga */,
+				CEA849B01384C3130082C69B /* border-line.tga */,
+				CE4C2E5C13628C6A0071F1C9 /* expl.tga */,
+				CEA849A11377AF6A0082C69B /* shockwave_fragment.c */,
+				CEA849A21377AF6A0082C69B /* shockwave_vertex.c */,
 				CE4C2E5A13628C6A0071F1C9 /* boxgrid_fragment.c */,
 				CE4C2E5B13628C6A0071F1C9 /* boxgrid_vertex.c */,
-				CE4C2E5C13628C6A0071F1C9 /* expl.tga */,
-				CE4C2E5D13628C6A0071F1C9 /* Fieldstone.tga */,
-				CE4C2E5E13628C6A0071F1C9 /* ms.tga */,
-				CE4C2E5F13628C6A0071F1C9 /* noise.jpg */,
-				CE4C2E6013628C6A0071F1C9 /* noise.tga */,
 				CE4C2E6113628C6A0071F1C9 /* particle_complete_fragment.c */,
 				CE4C2E6213628C6A0071F1C9 /* particle_complete_vertex.c */,
 				CE4C2E6313628C6A0071F1C9 /* particle_create_fragment.c */,
 				CE4C2E6413628C6A0071F1C9 /* particle_create_vertex.c */,
-				CE4C2E6513628C6A0071F1C9 /* texture_aftershock_fragment.c */,
-				CE4C2E6613628C6A0071F1C9 /* texture_aftershock_vertex.c */,
 				CE4C2E6713628C6A0071F1C9 /* uniforms.txt */,
 			);
 			path = data;
@@ -453,6 +457,8 @@
 				CE8D89D6135E94B700C083EA /* InfoPlist.strings in Resources */,
 				CE8D89DF135E94B700C083EA /* MainWindow.xib in Resources */,
 				CE8D89EC135E94B700C083EA /* aitViewController.xib in Resources */,
+				CEA849B11384C3130082C69B /* border-corner.tga in Resources */,
+				CEA849B21384C3130082C69B /* border-line.tga in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,8 +524,10 @@
 				CE4C2E7013628C6A0071F1C9 /* particle_complete_vertex.c in Sources */,
 				CE4C2E7113628C6A0071F1C9 /* particle_create_fragment.c in Sources */,
 				CE4C2E7213628C6A0071F1C9 /* particle_create_vertex.c in Sources */,
-				CE4C2E7313628C6A0071F1C9 /* texture_aftershock_fragment.c in Sources */,
-				CE4C2E7413628C6A0071F1C9 /* texture_aftershock_vertex.c in Sources */,
+				CEA8499F1377AF140082C69B /* msWaveEmitter.cpp in Sources */,
+				CEA849A31377AF6A0082C69B /* shockwave_fragment.c in Sources */,
+				CEA849A41377AF6A0082C69B /* shockwave_vertex.c in Sources */,
+				CEA849B51384C3340082C69B /* msSpline.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
