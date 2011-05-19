@@ -252,11 +252,11 @@ void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
     removeInactiveEmitters();
 
     // update all animations
-    for(int y = 0; y < boxGrid->grid->m_rowCount; y ++)
+    for(int y = 0; y < boxGrid->m_rowCount; y ++)
     {
-        for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
+        for(int x = 0; x < boxGrid->m_columnCount; x ++)
         {
-            msBox *box = boxGrid->grid->getItem(y, x);
+            msBox *box = boxGrid->getItem(y, x);
             box->getAnimations()->performStep();
         }
     }
@@ -278,11 +278,11 @@ void msBoxGridRenderer::showExplosions()
 
 void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid, msSize size)
 {
-    for(int y = 0; y < boxGrid->grid->m_rowCount; y ++)
+    for(int y = 0; y < boxGrid->m_rowCount; y ++)
     {
-        for(int x = 0; x < boxGrid->grid->m_columnCount; x ++)
+        for(int x = 0; x < boxGrid->m_columnCount; x ++)
         {
-            msBox *box = boxGrid->grid->getItem(y, x);
+            msBox *box = boxGrid->getItem(y, x);
 
             // first check for explosion and if box is required one put it into list to be used after grid rendering
             if(box->getRequiresExplosion())
