@@ -23,6 +23,13 @@ link particle_complete
 
 program boxgrid /data/boxgrid_vertex.c /data/boxgrid_fragment.c
 attribute position 0
+attribute borderLineTexelLeft 2
+attribute borderLineTexelBottom 4
+attribute borderLineTexelRight 5
+attribute borderLineTexelTop 6
+attribute borderCornerTexel 3
 attribute color 1
+texture border_line_tex 5 /data/border-line.tga
+texture border_corner_tex 6 /data/border-corner.tga
 colorTexFbo renderTex 12
 link boxgrid

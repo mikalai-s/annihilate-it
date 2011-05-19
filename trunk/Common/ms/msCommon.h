@@ -36,6 +36,22 @@ struct msColor
 	GLfloat g;
 	GLfloat b;
 	GLfloat a;
+
+	msColor()
+	{
+		r = 0.0f;
+		g = 0.0f;
+		b = 0.0f;
+		a = 1.0f;
+	}
+
+	msColor(float rr, float gg, float bb, float aa)
+	{
+		r = rr;
+		g = gg;
+		b = bb;
+		a = aa;
+	}
 };
 
 struct msVector {

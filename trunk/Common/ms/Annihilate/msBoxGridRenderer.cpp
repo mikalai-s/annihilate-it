@@ -10,6 +10,53 @@
 #include "msBoxGridRenderer.h"
 #include "msSpline.h"
 
+static const GLfloat g_fbVertexPositions2[] = {
+	-1.f, -1.f, -1.f, 1.f,
+	 1.f, -1.f, -1.f, 1.f,
+	-1.f,  1.f, -1.f, 1.f,
+	 1.f,  1.f, -1.f, 1.f,
+};
+
+static const GLfloat g_fbVertexTexcoord2[] = {
+	0.f, 0.f,
+	1.f, 0.f, 
+	0.f, 1.f,
+	1.f, 1.f,
+};
+
+static const GLfloat borderOrientation_left[] = {
+	0.f, 0.f,
+	1.f, 0.f,
+	0.f, 1.f,
+	1.f, 1.f,
+};
+
+
+static const GLfloat borderOrientation_bottom[] = {
+	1.f, 0.f,
+	1.f, 1.f,
+	0.f, 0.f,	  
+	0.f, 1.f,    	
+};
+
+static const GLfloat borderOrientation_right[] = {
+	1.f, 1.f,
+	0.f, 1.f,
+	1.f, 0.f,
+	0.f, 0.f,
+};
+
+static const GLfloat borderOrientation_top[] = {
+	0.f, 1.f,
+	0.f, 0.f,
+	1.f, 1.f,
+	1.f, 0.f,
+};
+
+static const GLubyte g_fbIndices2[] = {
+	0, 1, 2, 3,
+};
+
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
 {
 	m_shaders = shaders;
@@ -32,41 +79,69 @@ msBoxGridRenderer::~msBoxGridRenderer()
 
 static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 
+#define MS_BORDER_LEFT 1
+#define MS_BORDER_TOP 2
+#define MS_BORDER_RIGTH 4
+#define MS_BORDER_BOTTOM 8
+
 void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *c)
 {
     msPoint l = box->m_location;
     msSize s = box->m_size;
-    
-    mBoxVertexesTemp[0][0] = l.x;               mBoxVertexesTemp[0][1] = l.y;               mBoxVertexesTemp[0][2] = l.z;
-    mBoxVertexesTemp[1][0] = l.x + s.width;     mBoxVertexesTemp[1][1] = l.y;               mBoxVertexesTemp[1][2] = l.z;
-    mBoxVertexesTemp[2][0] = l.x;               mBoxVertexesTemp[2][1] = l.y + s.height;    mBoxVertexesTemp[2][2] = l.z;
-    mBoxVertexesTemp[3][0] = l.x + s.width;     mBoxVertexesTemp[3][1] = l.y + s.height;    mBoxVertexesTemp[3][2] = l.z;
 
-	for(int i = 0; i < 4; i ++)
-	{
-		mBoxColorsTemp[i][0] = c->r;
-		mBoxColorsTemp[i][1] = c->g;
-		mBoxColorsTemp[i][2] = c->b;
-		mBoxColorsTemp[i][3] = c->a;
-	}
+	msPoint points[4];
+	points[0] = msPoint(l.x, l.y);
+	points[1] = msPoint(l.x + s.width, l.y);
+	points[2] = msPoint(l.x, l.y + s.height);
+	points[3] = msPoint(l.x + s.width, l.y + s.height);
 
-	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, mBoxVertexesTemp );
-	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, mBoxColorsTemp );
+	msColor colors[4];
+	colors[0] = colors[1] = colors[2] = colors[3] = *c;
 
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    //glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
+	glEnable(GL_BLEND);
 
+	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, points );
+	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, colors );
+	m_program->getAttribute("borderLineTexelLeft")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientation_left );
+	m_program->getAttribute("borderLineTexelBottom")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientation_bottom );
+	m_program->getAttribute("borderLineTexelRight")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientation_right );
+	m_program->getAttribute("borderLineTexelTop")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientation_top );
+	m_program->getUniform("border_line_tex")->set1i(m_program->getTexture("border_line_tex")->getUnit());
+
+	int bordersMask = 0;
+
+	if(box->m_border->left)
+		bordersMask |= MS_BORDER_LEFT;
+	if(box->m_border->top)
+		bordersMask |= MS_BORDER_TOP;
+	if(box->m_border->right)
+		bordersMask |= MS_BORDER_RIGTH;
+	if(box->m_border->bottom)
+		bordersMask |= MS_BORDER_BOTTOM;
+	
+	m_program->getUniform("border_line")->set1i(bordersMask);	
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	glDisable(GL_BLEND);
 
     // draw borders if need
+	msColor innerBorderColor(c->r * 0.8f, c->g * 0.8f, c->b * 0.8f, c->a);
+	if(!box->m_border->left)
+		drawLeftBorder(m_program, box, &innerBorderColor);
+	if(!box->m_border->top)
+		drawTopBorder(m_program, box, &innerBorderColor);
+	if(!box->m_border->right)
+		drawRightBorder(m_program, box, &innerBorderColor);
+	if(!box->m_border->bottom)
+		drawBottomBorder(m_program, box, &innerBorderColor);
+
     if(box->m_border->left)
         drawLeftBorder(m_program, box, &box->m_border->color);
-
     if(box->m_border->top)
         drawTopBorder(m_program, box, &box->m_border->color);
-
     if(box->m_border->right)
         drawRightBorder(m_program, box, &box->m_border->color);
-
     if(box->m_border->bottom)
         drawBottomBorder(m_program, box, &box->m_border->color);
 }
@@ -262,23 +337,7 @@ void msBoxGridRenderer::removeInactiveEmitters()
 	}
 }
 
-static const GLfloat g_fbVertexPositions2[] = {
-	-1.f, -1.f, -1.f, 1.f,
-	 1.f, -1.f, -1.f, 1.f,
-	-1.f,  1.f, -1.f, 1.f,
-	 1.f,  1.f, -1.f, 1.f,
-};
 
-static const GLfloat g_fbVertexTexcoord2[] = {
-	0.f, 0.f,   
-	1.f, 0.f,    
-	0.f, 1.f,    	
-	1.f, 1.f,   
-};
-
-static const GLubyte g_fbIndices2[] = {
-	0, 1, 2, 3,
-};
 
 void msBoxGridRenderer::drawExplosions()
 {

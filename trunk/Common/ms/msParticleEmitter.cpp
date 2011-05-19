@@ -284,7 +284,7 @@ void msParticleEmitter::initParticle(msParticle* particle)
 
 	// Calculate the color the particle should have when it starts its life.  All the elements
 	// of the start color passed in along with the variance as used to calculate the star color
-	msColor start = {0, 0, 0, 0};
+	msColor start;
 	start.r = startColor.r + startColorVariance.r * RANDOM_MINUS_1_TO_1();
 	start.g = startColor.g + startColorVariance.g * RANDOM_MINUS_1_TO_1();
 	start.b = startColor.b + startColorVariance.b * RANDOM_MINUS_1_TO_1();
@@ -292,7 +292,7 @@ void msParticleEmitter::initParticle(msParticle* particle)
 
 	// Calculate the color the particle should be when its life is over.  This is done the same
 	// way as the start color above
-	msColor end = {0, 0, 0, 0};
+	msColor end;
 	end.r = finishColor.r + finishColorVariance.r * RANDOM_MINUS_1_TO_1();
 	end.g = finishColor.g + finishColorVariance.g * RANDOM_MINUS_1_TO_1();
 	end.b = finishColor.b + finishColorVariance.b * RANDOM_MINUS_1_TO_1();
