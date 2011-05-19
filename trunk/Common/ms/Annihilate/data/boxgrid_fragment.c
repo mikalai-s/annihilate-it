@@ -19,16 +19,16 @@ void main()
 {
 	vec4 c = outcolor;
 	
-	if(border_line_texel_left.w != -1.0f)
+	if(border_line_texel_left.w != -1.0)
 		c *= texture2D(border_line_tex, border_line_texel_left.xy);
 	
-	if(border_line_texel_bottom.w != -1.0f)
+	if(border_line_texel_bottom.w != -1.0)
 		c *= texture2D(border_line_tex, border_line_texel_bottom.xy);
 
-	if(border_line_texel_right.w != -1.0f)
+	if(border_line_texel_right.w != -1.0)
 		c *= texture2D(border_line_tex, border_line_texel_right.xy);
 
-	if(border_line_texel_top.w != -1.0f)
+	if(border_line_texel_top.w != -1.0)
 		c *= texture2D(border_line_tex, border_line_texel_top.xy);
 
 	gl_FragColor = c;
