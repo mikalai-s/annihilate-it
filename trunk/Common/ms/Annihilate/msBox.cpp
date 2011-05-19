@@ -7,59 +7,49 @@
 
 msBox::msBox()
 {
-//	m_boxToAnimate = 0;
-
-    m_colorDisturbance.a = 1.0;
-    m_colorDisturbance.r = 1.0;
-    m_colorDisturbance.g = 1.0;
-    m_colorDisturbance.b = 1.0;
-
-	m_animations = new msAnimationBundle();
-
-	m_requiresExplosion = false;
-    m_requiresWave = false;
-
+	_init(0, 0, 0, 0, MS_BOX_INVISIBLE);	
 }
 
 msBox::msBox(float x, float y, float width, float height, int colorIndex)
 {	
+	_init(x, y, width, height, colorIndex);	
+}
+
+void msBox::_init( float x, float y, float width, float height, int colorIndex )
+{
 	m_location.x = x;
 	m_location.y = y;
-    m_location.z = 0.0f;
+	m_location.z = 0.0f;
 	m_size.width = width;
 	m_size.height = height;
 	m_colorIndex = colorIndex;
-    m_border = (msBorder*)malloc(sizeof(msBorder));
-    m_border->left = 0;
-    m_border->top = 0;
-    m_border->right = 0;
-    m_border->bottom = 0;
+	m_border = (msBorder*)malloc(sizeof(msBorder));
+	m_border->left = 0;
+	m_border->top = 0;
+	m_border->right = 0;
+	m_border->bottom = 0;
 
-    m_colorDisturbance.a = 1.0f;
-    m_colorDisturbance.r = 1.0f;
-    m_colorDisturbance.g = 1.0f;
-    m_colorDisturbance.b = 1.0f;
+	m_colorDisturbance.a = 1.0f;
+	m_colorDisturbance.r = 1.0f;
+	m_colorDisturbance.g = 1.0f;
+	m_colorDisturbance.b = 1.0f;
 
 	m_animations = new msAnimationBundle();
 
 	m_requiresExplosion = false;
-    m_requiresWave = false;
-}
+	m_requiresWave = false;
 
+	m_top = 0;
+	m_right = 0;
+	m_bottom = 0;
+	m_left = 0;
+}
 
 msBox::~msBox()
 {
 	free(m_border);
 
 	delete m_animations;
-}
-
-msBox* msBox::copy(msBox *target)
-{
-    target->m_location = m_location;
-    target->m_size = m_size;
-    target->m_border = m_border;
-	return target;
 }
 
 void msBox::makeInvisible()

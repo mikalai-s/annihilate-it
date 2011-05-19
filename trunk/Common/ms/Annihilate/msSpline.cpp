@@ -74,7 +74,7 @@ void msSpline::draw()
 	}
 }
 
-void msSpline::getSplinePoints(int resolution, msPoint *points, int *count)
+void msSpline::getSplinePoints(int resolution, msPoint *points, int *count, int startIndex, bool loop)
 {
 	// duplicate two first points
 	CtrlPt[0] = CtrlPt[2];
@@ -92,17 +92,21 @@ void msSpline::getSplinePoints(int resolution, msPoint *points, int *count)
 	msPoint Ap, Bp, Cp, Dp;
 	float Lx, Ly;
 
+	int firstIndex = startIndex;
 	*count = 0;
 
 	for(int i = 2; i < m_count + 2; i ++)
 	{
 		BSpline_ComputeCoeffs(i, &Ap, &Bp, &Cp, &Dp);
 
-		for(int j = 0; j < resolution; j ++)
+		for(int j = 1; j < resolution; j ++)
 		{
-			points[(*count)++] = Spline_Calc(Ap, Bp, Cp, Dp, (float)j / (float)resolution, 6.0f);
+			points[startIndex + (*count)++] = Spline_Calc(Ap, Bp, Cp, Dp, (float)j / (float)resolution, 6.0f);
 		}
 	}
+
+	if(loop)
+		points[startIndex + (*count)++] = points[firstIndex];
 }
 
 void msSpline::addControlPoint(msPoint p)

@@ -17,6 +17,7 @@
 #include "../ShaderProgram/msShaderProgram.h"
 #include "../msParticleEmitter.h"
 #include "../msWaveEmitter.h"
+#include "msSpline.h"
 #include <list>
 
 using namespace std;
@@ -42,7 +43,7 @@ class msBoxGridRenderer
     
     GLfloat mBoxBordersTemp[6]; // array of vertexes for box borders
 
-	void drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *color);
+	void _drawFigure(msBoxList &boxes, msBox *box, msPalette *palette, msShaderProgram *m_program);
 	void _drawLine(msShaderProgram *m_program, msPoint &start, msPoint &end, msColor *color);
 	void drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color);
 	void drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color);
@@ -63,12 +64,8 @@ class msBoxGridRenderer
     void removeInactiveEmitters();
 
     void showExplosions();
-
-
     
 	GLboolean m_animate;
-
-	
 
     GLint c;
 
@@ -77,5 +74,6 @@ public:
     ~msBoxGridRenderer();
 
 	void draw(msBoxGrid *boxGrid, msSize size);
+	void _getBoxSplinePoints( msBoxList & boxes, msBox * box, msSpline &spl, char direction);
 };
 

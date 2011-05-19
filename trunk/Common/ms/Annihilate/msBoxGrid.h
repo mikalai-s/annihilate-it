@@ -28,11 +28,11 @@ typedef msBoxList::iterator msBoxIterator;
 typedef map<msBox*, int> msBoxExplMap;
 typedef msBoxExplMap::iterator msBoxExplIterator;
 
-class msBoxGrid
+class msBoxGrid : public msGrid<msBox*>
 {
 	msSize size;
 
-	void _ms_boxgrid_refresh_borders();
+	void _refreshBorders();
 
     static void _borderInvertion( msAnimationContext *context );
 
@@ -40,9 +40,7 @@ class msBoxGrid
 
 	GLint ms_boxgrid_check_neighbours(GLint y1, GLint x1, GLint y2, GLint x2);
 
-	GLint* _ms_boxgrid_generate_random_pattern(GLint numRows, GLint numCols, GLint numColors);
-
-	GLint _ms_boxgrid_get_index_by_yx(GLint y, GLint x, GLint numCols);
+	GLint* _generate_random_pattern(GLint numRows, GLint numCols, GLint numColors);
 
 	void display2();
 
@@ -50,11 +48,11 @@ class msBoxGrid
 
 	void _removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &removedBoxes, GLint level);
 
-	GLint _ms_boxgrid_has_similar_neighbour(GLint y, GLint x, GLint colorIndex);
+	GLint _checkBoxColor(GLint y, GLint x, GLint colorIndex);
 
 	void _exchangeBoxes(GLint y1, GLint x1, GLint y2, GLint x2);
 
-	void _ms_boxgrid_animate_box_hiding(msBoxExplMap &boxes);
+	void _animateBoxHiding(msBoxExplMap &boxes);
 
 	void _exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint x2, GLint direction);
 
@@ -71,7 +69,6 @@ class msBoxGrid
 	static void doBoxesFallingCallback(msAnimationContext *c);
 
 public:
-	msGrid<msBox*> *grid;
 
 	msPalette *m_palette;
 
@@ -96,6 +93,9 @@ public:
 	static void unitTest();
 
 	void removeSimilarItemsAtPoint( msPoint touchPoint );
+
+	// goes through boxes and updates links between them
+	void _updateLinks();
 };
 
 class msBorderAnimationContext : public msAnimationContext
