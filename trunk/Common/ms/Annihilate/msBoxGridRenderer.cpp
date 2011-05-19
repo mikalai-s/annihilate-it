@@ -24,33 +24,33 @@ static const GLfloat g_fbVertexTexcoord2[] = {
 	1.f, 1.f,
 };
 
-static const GLfloat borderOrientation_left[] = {
-	0.f, 0.f,
-	1.f, 0.f,
-	0.f, 1.f,
-	1.f, 1.f,
+GLfloat borderOrientation_left[] = {
+	0.f, 0.f, 0.0f, -1.0f,
+	1.f, 0.f, 0.0f, -1.0f,
+	0.f, 1.f, 0.0f, -1.0f,
+	1.f, 1.f, 0.0f, -1.0f,
 };
 
 
-static const GLfloat borderOrientation_bottom[] = {
-	1.f, 0.f,
-	1.f, 1.f,
-	0.f, 0.f,	  
-	0.f, 1.f,    	
+GLfloat borderOrientation_bottom[] = {
+	1.f, 0.f, 0.0f, -1.0f,
+	1.f, 1.f, 0.0f, -1.0f,
+	0.f, 0.f, 0.0f, -1.0f,
+	0.f, 1.f, 0.0f, -1.0f,
 };
 
-static const GLfloat borderOrientation_right[] = {
-	1.f, 1.f,
-	0.f, 1.f,
-	1.f, 0.f,
-	0.f, 0.f,
+GLfloat borderOrientation_right[] = {
+	1.f, 1.f, 0.0f, -1.0f,
+	0.f, 1.f, 0.0f, -1.0f,
+	1.f, 0.f, 0.0f, -1.0f,
+	0.f, 0.f, 0.0f, -1.0f,
 };
 
-static const GLfloat borderOrientation_top[] = {
-	0.f, 1.f,
-	0.f, 0.f,
-	1.f, 1.f,
-	1.f, 0.f,
+GLfloat borderOrientation_top[] = {
+	0.f, 1.f, 0.0f, -1.0f,
+	0.f, 0.f, 0.0f, -1.0f,
+	1.f, 1.f, 0.0f, -1.0f,
+	1.f, 0.f, 0.0f, -1.0f,
 };
 
 static const GLubyte g_fbIndices2[] = {
@@ -102,24 +102,19 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 
 	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, points );
 	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, colors );
-	m_program->getAttribute("borderLineTexelLeft")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientation_left );
-	m_program->getAttribute("borderLineTexelBottom")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientation_bottom );
-	m_program->getAttribute("borderLineTexelRight")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientation_right );
-	m_program->getAttribute("borderLineTexelTop")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientation_top );
 	m_program->getUniform("border_line_tex")->set1i(m_program->getTexture("border_line_tex")->getUnit());
 
-	int bordersMask = 0;
+	borderOrientation_left[3] = borderOrientation_left[7] = borderOrientation_left[11] = borderOrientation_left[15] = box->m_border->left ? 1.0f : -1.0f;
+	m_program->getAttribute("borderLineTexelLeft")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_left );
 
-	if(box->m_border->left)
-		bordersMask |= MS_BORDER_LEFT;
-	if(box->m_border->top)
-		bordersMask |= MS_BORDER_TOP;
-	if(box->m_border->right)
-		bordersMask |= MS_BORDER_RIGTH;
-	if(box->m_border->bottom)
-		bordersMask |= MS_BORDER_BOTTOM;
-	
-	m_program->getUniform("border_line")->set1i(bordersMask);	
+	borderOrientation_bottom[3] = borderOrientation_bottom[7] = borderOrientation_bottom[11] = borderOrientation_bottom[15] = box->m_border->bottom ? 1.0f : -1.0f;
+	m_program->getAttribute("borderLineTexelBottom")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_bottom );
+
+	borderOrientation_right[3] = borderOrientation_right[7] = borderOrientation_right[11] = borderOrientation_right[15] = box->m_border->right ? 1.0f : -1.0f;
+	m_program->getAttribute("borderLineTexelRight")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_right );
+
+	borderOrientation_top[3] = borderOrientation_top[7] = borderOrientation_top[11] = borderOrientation_top[15] = box->m_border->top ? 1.0f : -1.0f;
+	m_program->getAttribute("borderLineTexelTop")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_top );
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

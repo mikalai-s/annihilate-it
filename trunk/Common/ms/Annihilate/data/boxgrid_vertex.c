@@ -8,7 +8,6 @@ attribute vec4 borderLineTexeltop;
 attribute vec4 borderCornerTexel;
 
 varying vec4 outcolor;
-varying vec4 texcoord0;
 
 varying vec4 border_line_texel_left;
 varying vec4 border_line_texel_bottom;
