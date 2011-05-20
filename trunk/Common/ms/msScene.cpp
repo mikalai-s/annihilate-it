@@ -213,8 +213,8 @@ void msScene::init()
 	// init palette
 	m_palette = new msPalette(colorMap, 8);
 
-#define NUM_ROWS 14
-#define NUM_COLS 10
+#define NUM_ROWS 3
+#define NUM_COLS 3
 	
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
@@ -237,8 +237,8 @@ void msScene::init()
 		1,2,1,
     };
 	
-	//m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 2.0, 2.0);
-    m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
+	m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 2.0, 2.0);
+   // m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
 
 	m_renderer = new msBoxGridRenderer(&m_shaders);
 }

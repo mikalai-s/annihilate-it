@@ -97,9 +97,8 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 		cury += height;
 	}
 
-	_updateLinks();
-
 	_refreshBorders();
+	_updateLinks();
 }
 
 
@@ -266,9 +265,7 @@ void msBoxGrid::removeSimilarItems(GLint y, GLint x)
             msBoxExplMap removedBoxes;
 
             _removeSimilarBoxes(y, x, box->m_colorIndex, removedBoxes, 0);
-
-			_updateLinks();
-          
+         
             _animateBoxHiding(removedBoxes);
         }
     }
@@ -434,6 +431,7 @@ void msBoxGrid::shiftPendentBoxes(GLint direction)
 		_shiftDown();
     
     _refreshBorders();
+	_updateLinks();
 }
 
 // returns 1 if two boxes are with the same color
@@ -561,17 +559,10 @@ void msBoxGrid::_updateLinks()
 		{
 			msBox *box = getItem(y, x);
 			
-			if(_checkBoxColor(y - 1, x, box->m_colorIndex))
-				box->m_top = getItem(y - 1, x);
-
-			if(_checkBoxColor(y, x + 1, box->m_colorIndex))
-				box->m_right = getItem(y, x + 1);
-
-			if(_checkBoxColor(y + 1, x, box->m_colorIndex))
-				box->m_bottom = getItem(y + 1, x);
-
-			if(_checkBoxColor(y, x - 1, box->m_colorIndex))
-				box->m_left = getItem(y, x - 1);
+			box->m_top = _checkBoxColor(y - 1, x, box->m_colorIndex) ? getItem(y - 1, x) : 0;
+			box->m_right = _checkBoxColor(y, x + 1, box->m_colorIndex) ? getItem(y, x + 1) : 0;
+			box->m_bottom = _checkBoxColor(y + 1, x, box->m_colorIndex) ? getItem(y + 1, x) : 0;
+			box->m_left = _checkBoxColor(y, x - 1, box->m_colorIndex) ? getItem(y, x - 1) : 0;
 		}
 	}
 }
