@@ -86,8 +86,8 @@ static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 
 void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *c)
 {
-    msPoint l = box->m_location;
-    msSize s = box->m_size;
+    msPoint l = box->getLocation();
+    msSize s = box->getSize();
 
 	msPoint points[4];
 	points[0] = msPoint(l.x, l.y);
@@ -148,63 +148,17 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 		drawRightBorder(m_program, box, &innerBorderColor);
 	if(box->getBottom())
 		drawBottomBorder(m_program, box, &innerBorderColor);
-
+	
     if(!box->getLeft())
-        drawLeftBorder(m_program, box, &box->m_border->color);
+        drawLeftBorder(m_program, box, palette->getColor(0));
     if(!box->getTop())
-        drawTopBorder(m_program, box, &box->m_border->color);
+        drawTopBorder(m_program, box, palette->getColor(0));
     if(!box->getRight())
-        drawRightBorder(m_program, box, &box->m_border->color);
+        drawRightBorder(m_program, box, palette->getColor(0));
     if(!box->getBottom())
-        drawBottomBorder(m_program, box, &box->m_border->color);
+        drawBottomBorder(m_program, box, palette->getColor(0));
 }
 
-/*
-void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *c)
-{
-	msPoint l = box->m_location;
-	msSize s = box->m_size;
-
-	msSpline spl;
-
-	msPoint points[4];
-	float dx = s.width / 4.0f;
-	float dy = s.height / 4.0f;
-
-	points[0].x = l.x + dx;				points[0].y = l.y + dy;				points[0].z = l.z;
-	points[1].x = l.x + s.width - dx;	points[1].y = l.y + dy;				points[1].z = l.z;
-	points[2].x = l.x + dx;				points[2].y = l.y + s.height - dy;	points[2].z = l.z;
-	points[3].x = l.x + s.width - dx;	points[3].y = l.y + s.height - dy;	points[3].z = l.z;
-
-	for(int i = 0; i < 4; i ++)
-	{
-		mBoxColorsTemp[i][0] = c->r;
-		mBoxColorsTemp[i][1] = c->g;
-		mBoxColorsTemp[i][2] = c->b;
-		mBoxColorsTemp[i][3] = c->a;
-	}
-
-	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, points );
-	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, mBoxColorsTemp );
-
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
-
-
-	// draw borders if need
-	if(box->m_border->left)
-		drawLeftBorder(m_program, box, &box->m_border->color);
-
-	if(box->m_border->top)
-		drawTopBorder(m_program, box, &box->m_border->color);
-
-	if(box->m_border->right)
-		drawRightBorder(m_program, box, &box->m_border->color);
-
-	if(box->m_border->bottom)
-		drawBottomBorder(m_program, box, &box->m_border->color);
-}
-*/
 void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPoint &start, msPoint &end, msColor *color)
 {
 	GLfloat coords[] = {start.x, start.y, start.z /*+ 0.1f*/, end.x, end.y, end.z /*+ 0.1f*/};
@@ -218,29 +172,29 @@ void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPoint &start, ms
 
 void msBoxGridRenderer::drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPoint start = box->m_location;
-	msPoint end = box->m_location;
-	end.y += box->m_size.height;
+	msPoint start = box->getLocation();
+	msPoint end = box->getLocation();
+	end.y += box->getSize().height;
     
     _drawLine(m_program, start, end, color);
 }
 
 void msBoxGridRenderer::drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPoint start = box->m_location;
-	msPoint end = box->m_location;
-	end.x += box->m_size.width;
+	msPoint start = box->getLocation();
+	msPoint end = box->getLocation();
+	end.x += box->getSize().width;
 
 	_drawLine(m_program, start, end, color);
 }
 
 void msBoxGridRenderer::drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPoint start = box->m_location;
-	start.x += box->m_size.width;
-	msPoint end = box->m_location;
-	end.x += box->m_size.width;
-	end.y += box->m_size.height;
+	msPoint start = box->getLocation();
+	start.x += box->getSize().width;
+	msPoint end = box->getLocation();
+	end.x += box->getSize().width;
+	end.y += box->getSize().height;
 
 	_drawLine(m_program, start, end, color);
 }
@@ -248,11 +202,11 @@ void msBoxGridRenderer::drawRightBorder(msShaderProgram *m_program, msBox *box, 
 
 void msBoxGridRenderer::drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPoint start = box->m_location;
-	start.x += box->m_size.width;
-	start.y += box->m_size.height;
-	msPoint end = box->m_location;
-	end.y += box->m_size.height;
+	msPoint start = box->getLocation();
+	start.x += box->getSize().width;
+	start.y += box->getSize().height;
+	msPoint end = box->getLocation();
+	end.y += box->getSize().height;
 
 	_drawLine(m_program, start, end, color);
 }
@@ -305,7 +259,7 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
             // first check for explosion and if box is required one put it into list to be used after grid rendering
             if(box->getRequiresExplosion())
             {
-                m_explosions.push_back(_createExplosionPe(box->m_explosionPoint, size));
+                m_explosions.push_back(_createExplosionPe(box->getExplosionPoint(), size));
             }
 
 			if(box->getRequiresWave())
@@ -316,7 +270,7 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
 			if(box->isVisible())
             {
                 msColor  boxColorTemp;
-                boxColorTemp = *boxGrid->m_palette->getColor(box->m_colorIndex);
+                boxColorTemp = *boxGrid->m_palette->getColor(box->getColorIndex());
                 drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
             }
         }
@@ -500,10 +454,10 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
 {
 	msPoint location;
-	location.x = box->m_location.x + box->m_size.width / 2.0;
+	location.x = box->getLocation().x + box->getSize().width / 2.0;
 	location.x /= 2.0f;
 	location.x *= m_size.width;
-	location.y = box->m_location.y + box->m_size.height / 2.0;
+	location.y = box->getLocation().y + box->getSize().height / 2.0;
 	location.y /= 2.0f;
 	location.y = 1.0f - location.y;
 	location.y *= m_size.height;

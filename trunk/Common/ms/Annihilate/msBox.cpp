@@ -168,11 +168,6 @@ void msBox::_hiding1(msAnimationContext *c)
 }
 
 
-
-
-
-
-
 void msBox::hide(GLint delay)
 {
     // set requires explosion to make renderer know about that
@@ -197,15 +192,4 @@ void msBox::wave(GLint delay)
 
     setFlag<GLboolean>(delay, &m_requiresWave, true);
     setFlag<GLboolean>(delay + 1, &m_requiresWave, false);
-}
-
-
-GLboolean msBox::getRequiresExplosion()
-{
-    return m_requiresExplosion;
-}
-
-GLboolean msBox::getRequiresWave()
-{
-    return m_requiresWave;
 }

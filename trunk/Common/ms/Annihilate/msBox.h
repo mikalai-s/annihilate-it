@@ -10,7 +10,7 @@ class msBox
 {
 	friend class  msBoxGrid;
 
-public:
+private:
 
 	msPoint m_location;
 	msSize m_size;
@@ -74,8 +74,6 @@ public:
 
 	GLboolean isVisible();
 
-   // msBoxAnimation *getAnimated();
-
 	msAnimationBundle *getAnimations();
 
 	static void unitTest();
@@ -86,9 +84,6 @@ public:
 
     void wave(GLint delay);
 
-    GLboolean getRequiresExplosion();
-
-    GLboolean getRequiresWave();
 	void _init( float x, float y, float width, float height, int colorIndex );
 
 	msBox *getTop() const
@@ -109,5 +104,35 @@ public:
 	msBox *getLeft() const
 	{
 		return m_left;
+	}
+
+	msPoint getLocation() const
+	{
+		return m_location;
+	}
+
+	msSize getSize() const
+	{
+		return m_size;
+	}
+
+	int getColorIndex() const 
+	{
+		return m_colorIndex;
+	}	
+	
+	msPoint getExplosionPoint() const
+	{
+		return m_explosionPoint;
+	}
+
+	GLboolean getRequiresExplosion()
+	{
+		return m_requiresExplosion;
+	}
+
+	GLboolean getRequiresWave()
+	{
+		return m_requiresWave;
 	}
 };

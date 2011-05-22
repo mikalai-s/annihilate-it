@@ -46,6 +46,5 @@ void main()
 	if(border_corner_texel_top.z != -1.0)
 		c *= texture2D(border_corner_tex, border_corner_texel_top.xy);
 
-
 	gl_FragColor = c;
 }
