@@ -15,7 +15,7 @@ msAnimation* msAnimationContext::getAnimation()
 
 
 
-msPointMoveAnimationContext::msPointMoveAnimationContext(msPoint *point, GLint direction)
+msPointMoveAnimationContext::msPointMoveAnimationContext(msPointf *point, GLint direction)
 {
     m_point = point;
     m_direction = direction;
@@ -25,7 +25,7 @@ msPointMoveAnimationContext::~msPointMoveAnimationContext()
 {
 }
 
-msPoint* msPointMoveAnimationContext::getPoint()
+msPointf* msPointMoveAnimationContext::getPoint()
 {
     return m_point;
 }

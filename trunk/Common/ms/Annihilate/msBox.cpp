@@ -99,10 +99,10 @@ void msBox::unitTest()
 
 void msBox::_linearFalling(msAnimationContext *c)
 {
-	msKeyValueAnimationContext<msPoint*, msPoint> *context = (msKeyValueAnimationContext<msPoint*, msPoint> *)c;
+	msKeyValueAnimationContext<msPointf*, msPointf> *context = (msKeyValueAnimationContext<msPointf*, msPointf> *)c;
 
-	msPoint *from = context->getKey();
-	msPoint to = context->getValue();
+	msPointf *from = context->getKey();
+	msPointf to = context->getValue();
 	
 	from->x += (to.x - from->x) / context->getAnimation()->getCount();
 	from->y += (to.y - from->y) / context->getAnimation()->getCount();
@@ -112,7 +112,7 @@ void msBox::_linearFalling(msAnimationContext *c)
 void msBox::_linearFalling2(msAnimationContext *c)
 {
 	msPointMoveAnimationContext *context = (msPointMoveAnimationContext*)c;
-	msPoint *p = context->getPoint();
+	msPointf *p = context->getPoint();
     switch(context->getDirection())
     {
         case MS_BOX_SHIFT_TOP:
@@ -133,7 +133,7 @@ void msBox::_linearFalling2(msAnimationContext *c)
 }
 
 
-void msBox::fall(GLint delay, GLint direction, msPoint newLocation)
+void msBox::fall(GLint delay, GLint direction, msPointf newLocation)
 {
     int times = 10;
 
@@ -142,7 +142,7 @@ void msBox::fall(GLint delay, GLint direction, msPoint newLocation)
 //	getAnimations()->add(new msAnimation(0, 4, c1, _linearFalling2));
 
     // moving from top to bottom
-    msKeyValueAnimationContext<msPoint*, msPoint> *c2 = new msKeyValueAnimationContext<msPoint*, msPoint>(&m_location, newLocation);
+    msKeyValueAnimationContext<msPointf*, msPointf> *c2 = new msKeyValueAnimationContext<msPointf*, msPointf>(&m_location, newLocation);
 	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
     
     // move a litle bit up for effect of bounce
@@ -150,7 +150,7 @@ void msBox::fall(GLint delay, GLint direction, msPoint newLocation)
     getAnimations()->add(new msAnimation(delay + times, 4, c3, _linearFalling2));
     
     // final falling (very quick)
-    msKeyValueAnimationContext<msPoint*, msPoint> *c4 = new msKeyValueAnimationContext<msPoint*, msPoint>(&m_location, newLocation);
+    msKeyValueAnimationContext<msPointf*, msPointf> *c4 = new msKeyValueAnimationContext<msPointf*, msPointf>(&m_location, newLocation);
     getAnimations()->add(new msAnimation(delay + times + 4, 1, c4, _linearFalling));
 }
 
@@ -192,4 +192,9 @@ void msBox::wave(GLint delay)
 
     _setFlag<GLboolean>(delay, &m_requiresWave, true);
     _setFlag<GLboolean>(delay + 1, &m_requiresWave, false);
+}
+
+void msBox::show( int colorIndex )
+{
+	m_colorIndex = colorIndex;
 }

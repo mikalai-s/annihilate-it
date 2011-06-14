@@ -88,14 +88,14 @@ static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 
 void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *c)
 {
-    msPoint l = box->getLocation();
+    msPointf l = box->getLocation();
     msSize s = box->getSize();
 
-	msPoint points[4];
-	points[0] = msPoint(l.x, l.y);
-	points[1] = msPoint(l.x + s.width, l.y);
-	points[2] = msPoint(l.x, l.y + s.height);
-	points[3] = msPoint(l.x + s.width, l.y + s.height);
+	msPointf points[4];
+	points[0] = msPointf(l.x, l.y);
+	points[1] = msPointf(l.x + s.width, l.y);
+	points[2] = msPointf(l.x, l.y + s.height);
+	points[3] = msPointf(l.x + s.width, l.y + s.height);
 
 	msColor colors[4];
 	colors[0] = colors[1] = colors[2] = colors[3] = *c;
@@ -161,7 +161,7 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
         drawBottomBorder(m_program, box, palette->getColor(0));
 }
 
-void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPoint &start, msPoint &end, msColor *color)
+void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color)
 {
 	GLfloat coords[] = {start.x, start.y, start.z /*+ 0.1f*/, end.x, end.y, end.z /*+ 0.1f*/};
 	GLfloat colors[] = {color->r, color->g, color->b, color->a, color->r, color->g, color->b, color->a};
@@ -174,8 +174,8 @@ void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPoint &start, ms
 
 void msBoxGridRenderer::drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPoint start = box->getLocation();
-	msPoint end = box->getLocation();
+	msPointf start = box->getLocation();
+	msPointf end = box->getLocation();
 	end.y += box->getSize().height;
     
     _drawLine(m_program, start, end, color);
@@ -183,8 +183,8 @@ void msBoxGridRenderer::drawLeftBorder(msShaderProgram *m_program, msBox *box, m
 
 void msBoxGridRenderer::drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPoint start = box->getLocation();
-	msPoint end = box->getLocation();
+	msPointf start = box->getLocation();
+	msPointf end = box->getLocation();
 	end.x += box->getSize().width;
 
 	_drawLine(m_program, start, end, color);
@@ -192,9 +192,9 @@ void msBoxGridRenderer::drawTopBorder(msShaderProgram *m_program, msBox *box, ms
 
 void msBoxGridRenderer::drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPoint start = box->getLocation();
+	msPointf start = box->getLocation();
 	start.x += box->getSize().width;
-	msPoint end = box->getLocation();
+	msPointf end = box->getLocation();
 	end.x += box->getSize().width;
 	end.y += box->getSize().height;
 
@@ -204,10 +204,10 @@ void msBoxGridRenderer::drawRightBorder(msShaderProgram *m_program, msBox *box, 
 
 void msBoxGridRenderer::drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPoint start = box->getLocation();
+	msPointf start = box->getLocation();
 	start.x += box->getSize().width;
 	start.y += box->getSize().height;
-	msPoint end = box->getLocation();
+	msPointf end = box->getLocation();
 	end.y += box->getSize().height;
 
 	_drawLine(m_program, start, end, color);
@@ -360,7 +360,7 @@ void msBoxGridRenderer::drawExplosions()
 	glDisable(GL_BLEND);
 }
 
-msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPoint location, msSize screenSize)
+msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPointf location, msSize screenSize)
 {
     float k = (screenSize.width / 320.0f) + (screenSize.height / 480.0f);
 
@@ -454,7 +454,7 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 
 msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
 {
-	msPoint location;
+	msPointf location;
 	location.x = box->getLocation().x + box->getSize().width / 2.0;
 	location.x *= m_size.width;
 	location.y = box->getLocation().y + box->getSize().height / 2.0;

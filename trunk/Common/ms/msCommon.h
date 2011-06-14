@@ -85,26 +85,49 @@ struct msPointSprite
 	GLfloat size;
 };
 
-struct msPoint
+struct msPointf
 {
 	GLfloat x;
 	GLfloat y;
 	GLfloat z;
 
-	msPoint()
+	msPointf()
 	{
 		x = 0;
 		y = 0;
 		z = 0;
 	}
 
-	msPoint(float xx, float yy)
+	msPointf(float xx, float yy)
 	{
 		x = xx;
 		y = yy;
 		z = 0;
 	}
 };
+
+struct msPointi
+{
+	int x;
+	int y;
+	int z;
+
+	msPointi()
+	{
+		x = 0;
+		y = 0;
+		z = 0;
+	}
+
+	msPointi(int xx, int yy)
+	{
+		x = xx;
+		y = yy;
+		z = 0;
+	}
+};
+
+
 
 struct msSize
 {

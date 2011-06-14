@@ -12,7 +12,7 @@ class msBox
 
 private:
 
-	msPoint m_location;
+	msPointf m_location;
 	msSize m_size;
 	int m_colorIndex;
 	msColor m_colorDisturbance;
@@ -24,7 +24,7 @@ private:
 	msAnimationBundle *m_animations;
 
 	GLboolean m_requiresExplosion;
-	msPoint m_explosionPoint;
+	msPointf m_explosionPoint;
 
     GLboolean m_requiresWave;
 
@@ -78,7 +78,7 @@ public:
 
 	static void unitTest();
 
-	void fall(GLint delay, GLint direction, msPoint newLocation);
+	void fall(GLint delay, GLint direction, msPointf newLocation);
 
     void hide(GLint delay);
 
@@ -106,7 +106,7 @@ public:
 		return m_left;
 	}
 
-	msPoint getLocation() const
+	msPointf getLocation() const
 	{
 		return m_location;
 	}
@@ -121,7 +121,7 @@ public:
 		return m_colorIndex;
 	}	
 	
-	msPoint getExplosionPoint() const
+	msPointf getExplosionPoint() const
 	{
 		return m_explosionPoint;
 	}
@@ -135,4 +135,5 @@ public:
 	{
 		return m_requiresWave;
 	}
+	void show( int colorIndex );
 };

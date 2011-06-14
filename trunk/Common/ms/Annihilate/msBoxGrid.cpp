@@ -264,52 +264,61 @@ void msBoxGrid::removeSimilarItems(GLint y, GLint x)
 
             msBoxExplMap removedBoxes;
 
+			// clear undo buffer
+			_lastHiddenBoxes.clear();
+
             _removeSimilarBoxes(y, x, box->m_colorIndex, removedBoxes, 0);
-         
+
+			// fill undo buffer
+			for(msBoxExplIterator i = removedBoxes.begin(); i != removedBoxes.end(); i ++)
+			{
+				_lastHiddenBoxes.push_back(msHideAction((*i).first));
+			}
+        
             _animateBoxHiding(removedBoxes);
         }
     }
 }
 
 
-void msBoxGrid::_exchangeBoxes(GLint y1, GLint x1, GLint y2, GLint x2)
+void msBoxGrid::_exchangeBoxes(msGrid<msBox*> *grid, GLint y1, GLint x1, GLint y2, GLint x2)
 {
-	msBox *box1 = getItem(y1, x1);
-	msBox *box2 = getItem(y2, x2);
+	msBox *box1 = grid->getItem(y1, x1);
+	msBox *box2 = grid->getItem(y2, x2);
 
-	setItem(y1, x1, box2);
-	setItem(y2, x2, box1);
+	grid->setItem(y1, x1, box2);
+	grid->setItem(y2, x2, box1);
 }
 
 
-void msBoxGrid::_exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint x2, GLint direction)
+void msBoxGrid::_moveBox(msMoveAction move)
 {
-	msBox *box1 = getItem(y1, x1);
-	msBox *box2 = getItem(y2, x2);
+	msBox *box1 = getItem(move.from.y, move.from.x);
+	msBox *box2 = getItem(move.to.y, move.to.x);
     
-	setItem(y1, x1, box2);
-	setItem(y2, x2, box1);
+	setItem(move.from.y, move.from.x, box2);
+	setItem(move.to.y, move.to.x, box1);
 
-	box1->fall(0, direction, box2->m_location);
+	box1->fall(0, move.direction, box2->m_location);
     
     box2->m_location = box1->m_location;
 }
 
-void msBoxGrid::_shiftDown()
+void msBoxGrid::_shiftDown(msGrid<msBox*> *grid, msMoveActionList *moves)
 {
 	for(GLint x = 0; x < m_columnCount; x ++)
 	{
 		GLint y = m_rowCount - 1;
 		while(y >= -1)
 		{
-			if(!getItem(y, x)->isVisible())
+			if(!grid->getItem(y, x)->isVisible())
 			{
 				// y < 0 when there are no empty boxes
 				if(y < 0)
 					break;
 
 				GLint yy = y - 1; // note: dependent on direction
-				while(yy >= -1 && !getItem(yy, x)->isVisible())
+				while(yy >= -1 && !grid->getItem(yy, x)->isVisible())
 					yy --;
 
 				// yy < -1 when there are no items to shift
@@ -317,7 +326,9 @@ void msBoxGrid::_shiftDown()
 					break;
                 
 				// shift found box
-				_exchangeBoxesWithAnimation(yy, x, y, x, MS_BOX_SHIFT_DOWN);
+				moves->push_back(msMoveAction(x, yy, x, y, MS_BOX_SHIFT_DOWN));
+				
+				_exchangeBoxes(grid, yy, x, y, x);
 			}
 			
 			y --;
@@ -326,7 +337,7 @@ void msBoxGrid::_shiftDown()
 }
 
 
-void msBoxGrid::_shiftTop()
+void msBoxGrid::_shiftTop(msGrid<msBox*> *grid, msMoveActionList *moves)
 {  
 	for(GLint x = 0; x < m_columnCount; x ++)
 	{
@@ -348,7 +359,8 @@ void msBoxGrid::_shiftTop()
 					break;
 
 				// shift found box
-				_exchangeBoxesWithAnimation(yy, x, y, x, MS_BOX_SHIFT_TOP);
+				moves->push_back(msMoveAction(x, yy, x, y, MS_BOX_SHIFT_TOP));
+				_exchangeBoxes(grid, yy, x, y, x);
 			}
 			
 			y ++;
@@ -357,7 +369,7 @@ void msBoxGrid::_shiftTop()
 }
 
 
-void msBoxGrid::_shiftRight()
+void msBoxGrid::_shiftRight(msGrid<msBox*> *grid, msMoveActionList *moves)
 {
 	for(GLint y = 0; y < m_rowCount; y ++)
 	{
@@ -379,7 +391,8 @@ void msBoxGrid::_shiftRight()
 					break;
 
 				// shift found box
-				_exchangeBoxesWithAnimation(y, xx, y, x, MS_BOX_SHIFT_RIGHT);
+				moves->push_back(msMoveAction(xx, y, x, y, MS_BOX_SHIFT_RIGHT));
+				_exchangeBoxes(grid, y, xx, y, x);
 			}
 			
 			x --;
@@ -388,7 +401,7 @@ void msBoxGrid::_shiftRight()
 }
 
 
-void msBoxGrid::_shiftLeft()
+void msBoxGrid::_shiftLeft(msGrid<msBox*> *grid, msMoveActionList *moves)
 {
 	for(GLint y = 0; y < m_rowCount; y ++)
 	{
@@ -410,7 +423,8 @@ void msBoxGrid::_shiftLeft()
 					break;
 
 				// shift found box
-				_exchangeBoxesWithAnimation(y, xx, y, x, MS_BOX_SHIFT_LEFT);
+				moves->push_back(msMoveAction(xx, y, x, y, MS_BOX_SHIFT_LEFT));
+				_exchangeBoxes(grid, y, xx, y, x);
 			}
 			
 			x ++;
@@ -421,15 +435,30 @@ void msBoxGrid::_shiftLeft()
 
 void msBoxGrid::shiftPendentBoxes(GLint direction)
 {
+	// create mirror grid that is going to be used for shifting investigation
+	msGrid<msBox*> mirrorGrid(m_rowCount, m_columnCount);
+	for(int y = 0; y < m_rowCount; y ++)
+		for(int x = 0; x < m_columnCount; x ++)
+			mirrorGrid.setItem(y, x, getItem(y, x));
+
+	// clear undo storage
+	_lastMovedBoxes.clear();
+
+	// collect movement data
 	if(direction == MS_BOX_SHIFT_LEFT)
-		_shiftLeft();
+		_shiftLeft(&mirrorGrid, &_lastMovedBoxes);
 	else if(direction == MS_BOX_SHIFT_TOP)
-		_shiftTop();
+		_shiftTop(&mirrorGrid, &_lastMovedBoxes);
 	else if(direction == MS_BOX_SHIFT_RIGHT)
-		_shiftRight();
+		_shiftRight(&mirrorGrid, &_lastMovedBoxes);
 	else 
-		_shiftDown();
+		_shiftDown(&mirrorGrid, &_lastMovedBoxes);
+
+	// iterate through all movements and apply them
+	for(msMoveActionIterator i = _lastMovedBoxes.begin(); i != _lastMovedBoxes.end(); i ++)
+		_moveBox(*i);
     
+	// refresh
     _refreshBorders();
 	_updateLinks();
 }
@@ -528,9 +557,9 @@ void msBoxGrid::unitTest()
 }
 
 
-void msBoxGrid::removeSimilarItemsAtPoint( msPoint screenPoint )
+void msBoxGrid::removeSimilarItemsAtPoint( msPointf screenPoint )
 {
-	msPoint point;
+	msPointf point;
 	point.x = screenPoint.x * this->size.width;
 	point.y = screenPoint.y * this->size.height;
 
@@ -569,5 +598,25 @@ void msBoxGrid::_updateLinks()
 
 void msBoxGrid::undo()
 {
-	
+	// iterate through all movements and apply them
+	_lastMovedBoxes.reverse();
+	for(msMoveActionIterator i = _lastMovedBoxes.begin(); i != _lastMovedBoxes.end(); i ++)
+	{
+		msMoveAction action = *i;
+		_moveBox(action.invert());
+	}
+
+	for(msHideActionIterator i = _lastHiddenBoxes.begin(); i != _lastHiddenBoxes.end(); i ++)
+	{
+		msHideAction action = *i;
+		action.box->show(action.colorIndex);
+	}
+
+	// clear undo buffer
+	_lastMovedBoxes.clear();
+	_lastHiddenBoxes.clear();
+
+	// refresh
+	_refreshBorders();
+	_updateLinks();
 }

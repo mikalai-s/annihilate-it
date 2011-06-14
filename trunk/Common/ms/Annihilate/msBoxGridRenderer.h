@@ -44,7 +44,7 @@ class msBoxGridRenderer
     GLfloat mBoxBordersTemp[6]; // array of vertexes for box borders
 
 	void _drawFigure(msBoxList &boxes, msBox *box, msPalette *palette, msShaderProgram *m_program);
-	void _drawLine(msShaderProgram *m_program, msPoint &start, msPoint &end, msColor *color);
+	void _drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color);
 	void drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color);
 	void drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color);
 	void drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color);
@@ -59,7 +59,7 @@ class msBoxGridRenderer
 
     void drawBoxesWithShockWave(msBoxGrid *boxGrid);
 
-    msParticleEmitter* _createExplosionPe(msPoint location, msSize screenSize);
+    msParticleEmitter* _createExplosionPe(msPointf location, msSize screenSize);
 
 	msWaveEmitter* _createWave(msBox *box);
 

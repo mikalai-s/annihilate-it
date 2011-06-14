@@ -28,9 +28,62 @@ typedef msBoxList::iterator msBoxIterator;
 typedef map<msBox*, int> msBoxExplMap;
 typedef msBoxExplMap::iterator msBoxExplIterator;
 
+
+struct msMoveAction
+{
+	msPointi from;
+	msPointi to;
+	int direction;
+
+	msMoveAction(int x1, int y1, int x2, int y2, int dir)
+	{
+		from = msPointi(x1, y1);
+		to = msPointi(x2, y2);
+		direction = dir;
+	}
+
+	msMoveAction invert()
+	{
+		int dir = direction;
+		if(dir == MS_BOX_SHIFT_DOWN)
+			dir = MS_BOX_SHIFT_TOP;
+		else if(dir == MS_BOX_SHIFT_LEFT)
+			dir = MS_BOX_SHIFT_RIGHT;
+		else if(dir == MS_BOX_SHIFT_TOP)
+			dir = MS_BOX_SHIFT_DOWN;
+		else if(dir == MS_BOX_SHIFT_RIGHT)
+			dir = MS_BOX_SHIFT_LEFT;
+
+		return msMoveAction(to.x, to.y, from.x, from.y, dir);
+	}
+};
+
+typedef list<msMoveAction> msMoveActionList;
+typedef msMoveActionList::iterator msMoveActionIterator;
+
+
+struct msHideAction
+{
+	msBox *box;
+	int colorIndex;
+
+	msHideAction(msBox *b)
+	{
+		box = b;
+		colorIndex = b->getColorIndex();
+	}
+};
+
+typedef list<msHideAction> msHideActionList;
+typedef msHideActionList::iterator msHideActionIterator;
+
+
 class msBoxGrid : public msGrid<msBox*>
 {
 	msSize size;
+
+	msMoveActionList _lastMovedBoxes;
+	msHideActionList _lastHiddenBoxes;
 
 	void _refreshBorders();
 
@@ -50,19 +103,19 @@ class msBoxGrid : public msGrid<msBox*>
 
 	GLint _checkBoxColor(GLint y, GLint x, GLint colorIndex);
 
-	void _exchangeBoxes(GLint y1, GLint x1, GLint y2, GLint x2);
+	void _exchangeBoxes(msGrid<msBox*> *grid, GLint y1, GLint x1, GLint y2, GLint x2);
 
 	void _animateBoxHiding(msBoxExplMap &boxes);
 
-	void _exchangeBoxesWithAnimation(GLint y1, GLint x1, GLint y2, GLint x2, GLint direction);
+	void _moveBox(msMoveAction move);
 
-	void _shiftDown();
+	void _shiftDown(msGrid<msBox*> *grid, msMoveActionList *moves);
 
-	void _shiftTop();
+	void _shiftTop(msGrid<msBox*> *grid, msMoveActionList *moves);
 
-	void _shiftLeft();
+	void _shiftLeft(msGrid<msBox*> *grid, msMoveActionList *moves);
 
-	void _shiftRight();
+	void _shiftRight(msGrid<msBox*> *grid, msMoveActionList *moves);
 
 	msAnimationBundle m_animations;
 
@@ -92,7 +145,7 @@ public:
 
 	static void unitTest();
 
-	void removeSimilarItemsAtPoint( msPoint touchPoint );
+	void removeSimilarItemsAtPoint( msPointf touchPoint );
 
 	// goes through boxes and updates links between them
 	void _updateLinks();

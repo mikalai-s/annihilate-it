@@ -316,7 +316,7 @@ void msScene::drawFrame()
 		spl.addControlPoint(controls[i], controls[i+1]);
 	}
 
-	msPoint points[1000];
+	msPointf points[1000];
 	int count;
 	spl.getSplinePoints(7, points, &count);
 
@@ -342,7 +342,7 @@ int getShiftDirection()
 
 void msScene::mouseClick(int x, int y)
 {
-	msPoint touchPoint;
+	msPointf touchPoint;
 	touchPoint.x = ((GLfloat)x / (GLfloat)_width);
 	touchPoint.y = ((GLfloat)y / (GLfloat)_height);
 	
