@@ -223,7 +223,7 @@ void msBoxGrid::_removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &rem
     }
     else
     {
-        // if the neighbour has different color
+        // if the neighbor has different color
         if(box->m_colorIndex != c)
             return;
     }
@@ -565,4 +565,9 @@ void msBoxGrid::_updateLinks()
 			box->m_left = _checkBoxColor(y, x - 1, box->m_colorIndex) ? getItem(y, x - 1) : 0;
 		}
 	}
+}
+
+void msBoxGrid::undo()
+{
+	
 }

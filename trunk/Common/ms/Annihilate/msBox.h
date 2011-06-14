@@ -47,7 +47,7 @@ private:
     
 
 	template <class T>
-	static void setFlagCallback(msAnimationContext *c)
+	static void _setFlagCallback(msAnimationContext *c)
 	{
 		msKeyValueAnimationContext<T, GLfloat> *context = (msKeyValueAnimationContext<T, GLfloat>*)c;
 		*(context->getKey()) = context->getValue();
@@ -56,10 +56,10 @@ private:
     
 
 	template <class T>
-	void setFlag(GLint delay, T *flag, T value)
+	void _setFlag(GLint delay, T *flag, T value)
 	{
 		msKeyValueAnimationContext<T*, GLfloat> *context = new msKeyValueAnimationContext<T*, GLfloat>(flag, value);
-		getAnimations()->add(new msAnimation(delay, 1, context, setFlagCallback<T*>));
+		getAnimations()->add(new msAnimation(delay, 1, context, _setFlagCallback<T*>));
 	}
 
 protected:

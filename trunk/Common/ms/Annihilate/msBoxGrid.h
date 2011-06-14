@@ -74,9 +74,9 @@ public:
 
 	msAnimationBundle *getAnimations();
 
-	void init(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat screenHeight, GLfloat screenWidth);
+	void init(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth);
 
-	msBoxGrid(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat screenHeight, GLfloat screenWidth);
+	msBoxGrid(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth);
 
 	msBoxGrid(msPalette *palette, GLint numColors, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth);
 
@@ -96,6 +96,7 @@ public:
 
 	// goes through boxes and updates links between them
 	void _updateLinks();
+	void undo();
 };
 
 class msBorderAnimationContext : public msAnimationContext

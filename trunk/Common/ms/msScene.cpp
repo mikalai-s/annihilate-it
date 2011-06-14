@@ -213,8 +213,8 @@ void msScene::init()
 	// init palette
 	m_palette = new msPalette(colorMap, 8);
 
-#define NUM_ROWS 3
-#define NUM_COLS 3
+#define NUM_ROWS 5
+#define NUM_COLS 5
 	
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
@@ -237,196 +237,13 @@ void msScene::init()
 		1,2,1,
     };
 	
-	m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 2.0, 2.0);
-   // m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 2.0, 2.0);
+	//m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS);
+	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
 	m_renderer = new msBoxGridRenderer(&m_shaders);
 }
 
 int c = 0;
-
-static const GLfloat g_fbVertexPositions[] = {
-	0.0f, 0.0f,  
-	1.0f, 0.0f,  
-	0.0f,  1.0f,  
-	1.0f,  1.0f,  
-};
-
-static const GLfloat g_fbVertexTexcoord[] = {
-	0.0f, 0.0f,   
-	1.0f,  0.0f,    
-	0.0f, 1.0f,    	
-	1.0f,  1.0f,   
-};
-
-static const GLubyte g_fbIndices[] = {
-	0, 1, 2, 3,
-};
-
-
-static const GLfloat g_vertexPositions[] = {
-	-1.0f, -0.7f,
-	0.7f, -0.7f,
-	-0.7f,  0.7f,
-	0.5f,  0.5f, 
-};
-
-static const GLfloat g_vertexColors[] = {
-	1.0f, 0.0f, 0.0f, 1.0f,
-	0.0f, 1.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f, 1.0f,
-	1.0f, 1.0f, 1.0f, 1.0f,
-};
-
-static const GLfloat g_vertexTexcoord[] = {
-	0.0f, 0.f,   
-	1.f,  0.f,    
-	0.0f, 1.f,    	
-	1.f,  1.f,   
-};
-
-static const GLubyte g_indices[] = {
-	0, 1, 2, 3,
-};
-
-static const GLfloat prim[] =
-{
-	0.f, 0.f, -1.f, 1.0f,
-	0.f, 1.f, -1.f, 1.0f,
-	1.f, 0.f, -1.f, 1.0f,
-	1.f, 1.f, -1.f, 1.0f,	
-};
-
-
-
-void msScene::drawBackground()
-{
-	// render fire into texture using particle shaders
-	msShaderProgram *program = m_shaders.getProgramByName("boxgrid");
-	program->use();
-
-	// Switch the render target to the current FBO to update the texture map
-	program->getFrameBuffer("renderTex")->bind();
-
-	// FBO attachment is complete?
-	if (program->getFrameBuffer("renderTex")->isComplete())
-	{
-		// Set viewport to size of texture map and erase previous image
-		glViewport(0, 0, _width, _height);
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
-
-		// render background
-		//program->getUniform("tex")->set1i(program->getTexture("tex0")->getUnit());
-		program->getAttribute("position")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexPositions );
-		program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, g_vertexColors );
-		//program->getAttribute("texcoord")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, g_vertexTexcoord );
-
-		// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-		glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );
-
-		//program->getUniform("tex")->set1i(program->getTexture("ms0")->getUnit());
-		//program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, prim);
-
-		//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices);
-	}
-
-	// Unbind the FBO so rendering will return to the backbuffer.
-	m_shaders.getMainFrameBuffer()->bind();
-    
-    msTexture *renderTex = program->getFrameBuffer("renderTex")->getTexture();
-    
-    program = m_shaders.getProgramByName("shockwave");
-	program->use();
-
-	// usual renderer
-
-	// Set viewport to size of framebuffer and clear color and depth buffers
-
-	// Bind updated texture map
-	renderTex->active();
-	renderTex->bind();
-
-	program->getUniform("tex")->set1i(renderTex->getUnit());
-	program->getAttribute("position")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexPositions );
-	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord );
-
-	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices );	
-
-/*
-
-	if(m_animate)
-	{
-		program->getAttribute("radius")->set1f(m_afterShockRadius);
-		program->getAttribute("power")->set1f(m_afterShockPower);
-		program->getUniform("ep")->set2f(m_afterShockLocation[0], m_afterShockLocation[1]);
-
-		c--;
-		if(c < 40)
-		{
-			m_afterShockRadius += m_afterShockRadiusStep;
-			m_afterShockPower -= m_afterShockRadiusStep / (m_afterShockRadiusMax - m_afterShockRadiusMin);
-			if(m_afterShockRadius > m_afterShockRadiusMax)
-			{
-				m_animate = 0;
-				m_afterShockRadius = -1.0f;
-			}
-		}		
-	}*/
-}
-
-void msScene::drawExplosion()
-{
-	// render fire into texture using particle shaders
-	msShaderProgram *program = m_shaders.getProgramByName("particle_create");
-	program->use();
-
-	// Switch the render target to the current FBO to update the texture map
-	program->getFrameBuffer("renderTex")->bind();
-
-	// FBO attachment is complete?
-	if (program->getFrameBuffer("renderTex")->isComplete())		
-	{
-		// Set viewport to size of texture map and erase previous image
-		glViewport(0, 0, _width, _height);
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-		// render particles
-		m_explosionParticles->renderParticles(program);
-		m_explosionParticles->update(0.015f);
-
-		//pe2->renderParticles(program);
-		pe2->update(0.015f);
-	}
-
-	// Unbind the FBO so rendering will return to the backbuffer.
-	m_shaders.getMainFrameBuffer()->bind();
-
-	// usual renderer
-
-	// Set viewport to size of framebuffer and clear color and depth buffers
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	// Bind updated texture map
-	program->getFrameBuffer("renderTex")->getTexture()->active();
-	program->getFrameBuffer("renderTex")->getTexture()->bind();
-
-	msShaderProgram *particleCompleteProgram = m_shaders.getProgramByName("particle_complete");
-	particleCompleteProgram->use();
-
-	particleCompleteProgram->getUniform("u2_texture")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
-	particleCompleteProgram->getAttribute("a2_position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions );
-	particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord );
-
-	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices );	
-
-	glDisable(GL_BLEND);
-}
 
 
 void msScene::drawFrame()
@@ -535,4 +352,9 @@ void msScene::mouseClick(int x, int y)
 void msScene::setMainFrameBuffer(GLint id)
 {
 	m_shaders.setMainFrameBuffer(id);
+}
+
+void msScene::undoLastMove()
+{
+	m_boxGrid->undo();
 }

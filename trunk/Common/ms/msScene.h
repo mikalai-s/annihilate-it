@@ -95,6 +95,8 @@ public:
 
    void setMainFrameBuffer(GLint id);
 
+   void undoLastMove();
+
 private:
 
    /// Contains all the uniform/texture/attribute/shader data

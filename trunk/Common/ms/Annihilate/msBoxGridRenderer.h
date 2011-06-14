@@ -71,11 +71,15 @@ class msBoxGridRenderer
 
     GLint c;
 
+	void _getBoxSplinePoints( msBoxList & boxes, msBox * box, msSpline &spl, char direction);
+
+	// % part of screen that is used for menu bar
+	float _menuBarHeight;
+
 public:
 	msBoxGridRenderer(msShaderPrograms *shaders);
     ~msBoxGridRenderer();
 
 	void draw(msBoxGrid *boxGrid, msSize size);
-	void _getBoxSplinePoints( msBoxList & boxes, msBox * box, msSpline &spl, char direction);
 };
 

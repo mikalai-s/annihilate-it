@@ -177,12 +177,12 @@ void msBox::hide(GLint delay)
 	m_explosionPoint.x = m_location.x + m_size.width / 2.0f;
 	m_explosionPoint.y = m_location.y + m_size.height / 2.0f;
 
-    setFlag<GLboolean>(delay + 1, &m_requiresExplosion, true);
+    _setFlag<GLboolean>(delay + 1, &m_requiresExplosion, true);
 
     // the following animation will be called only once and it will just reset the requires explosion flag to stop its animation
-    setFlag<GLboolean>(delay + 2, &m_requiresExplosion, false);
+    _setFlag<GLboolean>(delay + 2, &m_requiresExplosion, false);
 
-	setFlag<int>(delay + 2, &m_colorIndex, MS_BOX_INVISIBLE);
+	_setFlag<int>(delay + 2, &m_colorIndex, MS_BOX_INVISIBLE);
 }
 
 
@@ -190,6 +190,6 @@ void msBox::wave(GLint delay)
 {
     m_requiresWave = false;
 
-    setFlag<GLboolean>(delay, &m_requiresWave, true);
-    setFlag<GLboolean>(delay + 1, &m_requiresWave, false);
+    _setFlag<GLboolean>(delay, &m_requiresWave, true);
+    _setFlag<GLboolean>(delay + 1, &m_requiresWave, false);
 }

@@ -62,6 +62,8 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
 	m_shaders = shaders;
     
     m_animate = 0;
+
+	_menuBarHeight = 0.1;
 }
 
 msBoxGridRenderer::~msBoxGridRenderer()
@@ -360,7 +362,7 @@ void msBoxGridRenderer::drawExplosions()
 
 msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPoint location, msSize screenSize)
 {
-    float k = (screenSize.width / 320.0f / 2.0f) + (screenSize.height / 480.0f / 2.0f);
+    float k = (screenSize.width / 320.0f) + (screenSize.height / 480.0f);
 
     return new msParticleEmitter(
 		// explosion
@@ -393,10 +395,10 @@ static const GLfloat g_vertexPositions[] = {
 };
 
 static const GLfloat g_vertexTexcoord[] = {
-	0.0f, 0.f,   
-	1.f,  0.f,    
-	0.0f, 1.f,    	
-	1.f,  1.f,   
+	0.f, 0.f,
+	1.f, 0.f,
+	0.f, 1.f,
+	1.f, 1.f,
 };
 
 
@@ -436,7 +438,6 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
     program->use();
 
 	program->getUniform("tex")->set1i(u);
-	program->getUniform("tex")->set1i(u);
 	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_vertexPositions );
 	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_vertexTexcoord );
 
@@ -455,10 +456,8 @@ msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
 {
 	msPoint location;
 	location.x = box->getLocation().x + box->getSize().width / 2.0;
-	location.x /= 2.0f;
 	location.x *= m_size.width;
 	location.y = box->getLocation().y + box->getSize().height / 2.0;
-	location.y /= 2.0f;
 	location.y = 1.0f - location.y;
 	location.y *= m_size.height;
 
