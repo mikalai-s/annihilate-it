@@ -114,6 +114,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ms\Annihilate\msSpline.cpp" />
+    <ClCompile Include="..\ms\msMatrix.cpp" />
     <ClCompile Include="..\ms\msWaveEmitter.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Misc.cpp" />
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ms\Annihilate\msSpline.h" />
+    <ClInclude Include="..\ms\msMatrix.h" />
     <ClInclude Include="..\ms\msWaveEmitter.h" />
     <ClInclude Include="src\Misc.h" />
     <ClInclude Include="..\ms\msCommon.h" />

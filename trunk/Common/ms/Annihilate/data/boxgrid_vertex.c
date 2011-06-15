@@ -1,3 +1,5 @@
+uniform mat4 mvp;
+
 attribute vec4 position;
 attribute vec4 color;
 
@@ -31,8 +33,9 @@ void main()
 	// invert y and center
 	p.x = p.x * 2.0 - 1.0;	
 	p.y = 1.0 - p.y * 2.0;
+	p.z = 1.0;
 
-    gl_Position = p;
+    gl_Position = mvp * p;
     
     outcolor = color;
 

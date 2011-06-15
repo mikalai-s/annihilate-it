@@ -304,6 +304,19 @@ void msBoxGrid::_moveBox(msMoveAction move)
     box2->m_location = box1->m_location;
 }
 
+void msBoxGrid::_moveBackBox( msMoveAction move )
+{
+	msBox *box1 = getItem(move.from.y, move.from.x);
+	msBox *box2 = getItem(move.to.y, move.to.x);
+
+	setItem(move.from.y, move.from.x, box2);
+	setItem(move.to.y, move.to.x, box1);
+
+	box1->unfall(0, move.direction, box2->m_location);
+
+	box2->m_location = box1->m_location;
+}
+
 void msBoxGrid::_shiftDown(msGrid<msBox*> *grid, msMoveActionList *moves)
 {
 	for(GLint x = 0; x < m_columnCount; x ++)
@@ -603,13 +616,13 @@ void msBoxGrid::undo()
 	for(msMoveActionIterator i = _lastMovedBoxes.begin(); i != _lastMovedBoxes.end(); i ++)
 	{
 		msMoveAction action = *i;
-		_moveBox(action.invert());
+		_moveBackBox(action.invert());
 	}
 
 	for(msHideActionIterator i = _lastHiddenBoxes.begin(); i != _lastHiddenBoxes.end(); i ++)
 	{
 		msHideAction action = *i;
-		action.box->show(action.colorIndex);
+		action.box->show(0);
 	}
 
 	// clear undo buffer
@@ -620,3 +633,5 @@ void msBoxGrid::undo()
 	_refreshBorders();
 	_updateLinks();
 }
+
+

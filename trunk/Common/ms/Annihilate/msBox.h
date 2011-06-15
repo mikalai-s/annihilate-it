@@ -15,6 +15,8 @@ private:
 	msPointf m_location;
 	msSize m_size;
 	int m_colorIndex;
+	int m_originalColorIndex;
+
 	msColor m_colorDisturbance;
 
     // visibility of border
@@ -34,7 +36,10 @@ private:
 	msBox *m_right;
 	msBox *m_bottom;
 	msBox *m_left;
+
+	float m_angle;
 	
+
 
 private:
 
@@ -43,6 +48,8 @@ private:
 	static void _linearFalling2(msAnimationContext *c);
 
     static void _hiding1(msAnimationContext *c);
+
+	static void _appearing(msAnimationContext *c);
 
     
 
@@ -80,7 +87,9 @@ public:
 
 	void fall(GLint delay, GLint direction, msPointf newLocation);
 
-    void hide(GLint delay);
+    void hide(int delay);
+
+	void show( int delay );
 
     void wave(GLint delay);
 
@@ -119,7 +128,12 @@ public:
 	int getColorIndex() const 
 	{
 		return m_colorIndex;
-	}	
+	}
+
+	msColor getColorDisturbance() const
+	{
+		return m_colorDisturbance;
+	}
 	
 	msPointf getExplosionPoint() const
 	{
@@ -135,5 +149,6 @@ public:
 	{
 		return m_requiresWave;
 	}
-	void show( int colorIndex );
+	void unfall( int delay, int  direction, msPointf location );
+
 };

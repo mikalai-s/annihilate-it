@@ -65,12 +65,10 @@ typedef msMoveActionList::iterator msMoveActionIterator;
 struct msHideAction
 {
 	msBox *box;
-	int colorIndex;
 
 	msHideAction(msBox *b)
 	{
 		box = b;
-		colorIndex = b->getColorIndex();
 	}
 };
 
@@ -150,6 +148,7 @@ public:
 	// goes through boxes and updates links between them
 	void _updateLinks();
 	void undo();
+	void _moveBackBox( msMoveAction action );
 };
 
 class msBorderAnimationContext : public msAnimationContext

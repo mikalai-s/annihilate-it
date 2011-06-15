@@ -9,12 +9,13 @@
 
 #include "msBoxGridRenderer.h"
 #include "msSpline.h"
+#include "../msMatrix.h"
 
 static const GLfloat g_fbVertexPositions2[] = {
-	-1.f, -1.f, -1.f, 1.f,
-	 1.f, -1.f, -1.f, 1.f,
-	-1.f,  1.f, -1.f, 1.f,
-	 1.f,  1.f, -1.f, 1.f,
+	-1.f, -1.f, 1.f, 1.f,
+	 1.f, -1.f, 1.f, 1.f,
+	-1.f,  1.f, 1.f, 1.f,
+	 1.f,  1.f, 1.f, 1.f,
 };
 
 static const GLfloat g_fbVertexTexcoord2[] = {
@@ -25,32 +26,32 @@ static const GLfloat g_fbVertexTexcoord2[] = {
 };
 
 GLfloat borderOrientation_left[] = {
-	0.f, 0.f, -1.0f, -1.0f,
-	1.f, 0.f, -1.0f, -1.0f,
-	0.f, 1.f, -1.0f, -1.0f,
-	1.f, 1.f, -1.0f, -1.0f,
+	0.f, 0.f, 1.0f, -1.0f,
+	1.f, 0.f, 1.0f, -1.0f,
+	0.f, 1.f, 1.0f, -1.0f,
+	1.f, 1.f, 1.0f, -1.0f,
 };
 
 
 GLfloat borderOrientation_bottom[] = {
-	1.f, 0.f, -1.0f, -1.0f,
-	1.f, 1.f, -1.0f, -1.0f,
-	0.f, 0.f, -1.0f, -1.0f,
-	0.f, 1.f, -1.0f, -1.0f,
+	1.f, 0.f, 1.0f, -1.0f,
+	1.f, 1.f, 1.0f, -1.0f,
+	0.f, 0.f, 1.0f, -1.0f,
+	0.f, 1.f, 1.0f, -1.0f,
 };
 
 GLfloat borderOrientation_right[] = {
-	1.f, 1.f, -1.0f, -1.0f,
-	0.f, 1.f, -1.0f, -1.0f,
-	1.f, 0.f, -1.0f, -1.0f,
-	0.f, 0.f, -1.0f, -1.0f,
+	1.f, 1.f, 1.0f, -1.0f,
+	0.f, 1.f, 1.0f, -1.0f,
+	1.f, 0.f, 1.0f, -1.0f,
+	0.f, 0.f, 1.0f, -1.0f,
 };
 
 GLfloat borderOrientation_top[] = {
-	0.f, 1.f, -1.0f, -1.0f,
-	0.f, 0.f, -1.0f, -1.0f,
-	1.f, 1.f, -1.0f, -1.0f,
-	1.f, 0.f, -1.0f, -1.0f,
+	0.f, 1.f, 1.0f, -1.0f,
+	0.f, 0.f, 1.0f, -1.0f,
+	1.f, 1.f, 1.0f, -1.0f,
+	1.f, 0.f, 1.0f, -1.0f,
 };
 
 static const GLubyte g_fbIndices2[] = {
@@ -97,8 +98,14 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 	points[2] = msPointf(l.x, l.y + s.height);
 	points[3] = msPointf(l.x + s.width, l.y + s.height);
 
+	msColor cc = *c;
+	cc.r *= box->getColorDisturbance().r;
+	cc.g *= box->getColorDisturbance().g;
+	cc.b *= box->getColorDisturbance().b;
+	cc.a *= box->getColorDisturbance().a;
+
 	msColor colors[4];
-	colors[0] = colors[1] = colors[2] = colors[3] = *c;
+	colors[0] = colors[1] = colors[2] = colors[3] = cc;
 
 	glEnable(GL_BLEND);
 
@@ -388,10 +395,10 @@ msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPointf location, msSi
 }
 
 static const GLfloat g_vertexPositions[] = {
-	-1.0f, -1.0f,  -1.0f,  1.0f,
-	1.0f, -1.0f,  -1.0f,  1.0f,
-	-1.0f,  1.0f,  -1.0f, 1.0f,
-	1.0f,  1.0f,  -1.0f, 1.0f,
+	-1.0f, -1.0f,  1.0f,  1.0f,
+	1.0f, -1.0f,  1.0f,  1.0f,
+	-1.0f,  1.0f,  1.0f, 1.0f,
+	1.0f,  1.0f,  1.0f, 1.0f,
 };
 
 static const GLfloat g_vertexTexcoord[] = {
@@ -407,6 +414,13 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
     // render fire into texture using particle shaders
 	msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
 	program->use();
+
+	msMatrix m;
+	m.identity();
+	//m.perspective(60, 0.66, 0.01, 10);
+	//m.ortho(0, 1, 0, 1, 0.01, 10);
+
+	program->getUniform("mvp")->setMatrix4fv(16, false, m.getArray());
 
 	// Switch the render target to the current FBO to update the texture map
 	program->getFrameBuffer("renderTex")->bind();

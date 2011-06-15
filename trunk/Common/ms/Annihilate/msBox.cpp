@@ -23,6 +23,7 @@ void msBox::_init( float x, float y, float width, float height, int colorIndex )
 	m_size.width = width;
 	m_size.height = height;
 	m_colorIndex = colorIndex;
+	m_originalColorIndex = colorIndex;
 	m_border = (msBorder*)malloc(sizeof(msBorder));
 	m_border->left = 0;
 	m_border->top = 0;
@@ -43,6 +44,8 @@ void msBox::_init( float x, float y, float width, float height, int colorIndex )
 	m_right = 0;
 	m_bottom = 0;
 	m_left = 0;
+
+	m_angle = 0.0f;
 }
 
 msBox::~msBox()
@@ -137,10 +140,6 @@ void msBox::fall(GLint delay, GLint direction, msPointf newLocation)
 {
     int times = 10;
 
-    // move a little bit up - to look like explosion raise boxes
-//    msPointMoveAnimationContext *c1 = new msPointMoveAnimationContext(&m_location, direction);
-//	getAnimations()->add(new msAnimation(0, 4, c1, _linearFalling2));
-
     // moving from top to bottom
     msKeyValueAnimationContext<msPointf*, msPointf> *c2 = new msKeyValueAnimationContext<msPointf*, msPointf>(&m_location, newLocation);
 	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
@@ -152,6 +151,15 @@ void msBox::fall(GLint delay, GLint direction, msPointf newLocation)
     // final falling (very quick)
     msKeyValueAnimationContext<msPointf*, msPointf> *c4 = new msKeyValueAnimationContext<msPointf*, msPointf>(&m_location, newLocation);
     getAnimations()->add(new msAnimation(delay + times + 4, 1, c4, _linearFalling));
+}
+
+void msBox::unfall( int delay, int direction, msPointf newLocation )
+{
+	int times = 10;
+
+	// moving from top to bottom
+	msKeyValueAnimationContext<msPointf*, msPointf> *c2 = new msKeyValueAnimationContext<msPointf*, msPointf>(&m_location, newLocation);
+	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));	
 }
 
 
@@ -185,6 +193,28 @@ void msBox::hide(GLint delay)
 	_setFlag<int>(delay + 2, &m_colorIndex, MS_BOX_INVISIBLE);
 }
 
+void msBox::show( int delay )
+{
+	// restore original color after some delay
+	m_colorIndex = m_originalColorIndex;
+
+	// make 
+	m_colorDisturbance.a = 0.0;
+	
+	// moving from top to bottom
+	msKeyValueAnimationContext<float*, float> *c = new msKeyValueAnimationContext<float*, float>(&m_colorDisturbance.a, 1.0);
+	getAnimations()->add(new msAnimation(delay, 10, c, _appearing));	
+}
+
+void msBox::_appearing(msAnimationContext *c)
+{
+	msKeyValueAnimationContext<float*, float> *context = (msKeyValueAnimationContext<float*, float> *)c;
+
+	float *from = context->getKey();
+	float to = context->getValue();
+
+	*from += (to - *from) / context->getAnimation()->getCount();
+}
 
 void msBox::wave(GLint delay)
 {
@@ -194,7 +224,6 @@ void msBox::wave(GLint delay)
     _setFlag<GLboolean>(delay + 1, &m_requiresWave, false);
 }
 
-void msBox::show( int colorIndex )
-{
-	m_colorIndex = colorIndex;
-}
+
+
+
