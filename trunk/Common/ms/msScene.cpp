@@ -215,7 +215,7 @@ void msScene::init()
 
 #define NUM_ROWS 5
 #define NUM_COLS 5
-	
+	/*
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
@@ -237,7 +237,8 @@ void msScene::init()
 		1,2,1,
     };
 	
-	//m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS);
+	m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS);
+	*/
 	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
 	m_renderer = new msBoxGridRenderer(&m_shaders);

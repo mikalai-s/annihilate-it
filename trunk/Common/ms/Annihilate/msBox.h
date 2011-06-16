@@ -37,6 +37,7 @@ private:
 	msBox *m_bottom;
 	msBox *m_left;
 
+public:
 	float m_angle;
 	
 

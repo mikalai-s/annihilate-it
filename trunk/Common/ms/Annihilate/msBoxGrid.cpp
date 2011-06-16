@@ -71,6 +71,8 @@ msBoxGrid::msBoxGrid(msPalette *palette, GLint numColors, GLint numRows, GLint n
     free(pattern);
 }
 
+
+
 void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth)
 {
 	float width = gridWidth / numCols, height = gridHeight / numRows;
@@ -92,6 +94,10 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 			setItem(y, x, box);
 
 			curx += width;
+			/*
+			msValueAnimationContext<float*> *c = new msValueAnimationContext<float*>(&box->m_angle);
+			msAnimation *a = new msAnimation((x+y)*2, 10000, c, rotate);
+			box->getAnimations()->add(a);*/
 		}
 
 		cury += height;

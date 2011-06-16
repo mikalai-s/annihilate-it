@@ -1,4 +1,5 @@
 #include <math.h>
+#include "msCommon.h"
 
 #pragma once
 class msMatrix
@@ -9,18 +10,22 @@ public:
 	msMatrix(void);
 	~msMatrix(void);
 
-	void scale(float sx, float sy, float sz);
-	void translate(float tx, float ty, float tz);
-	void rotate(float angle, float x, float y, float z);
-	void frustum(float left, float right, float bottom, float top, float nearZ, float farZ);
-	void perspective(float fovy, float aspect, float nearZ, float farZ);
-	void ortho(float left, float right, float bottom, float top, float nearZ, float farZ);
-	void multiply(msMatrix *srcA, msMatrix *srcB);
-	void identity();
+	msMatrix* scale(float sx, float sy, float sz);
+	msMatrix* translate(float tx, float ty, float tz);
+	msMatrix* rotate(float angle, float x, float y, float z);
+	msMatrix* frustum(float left, float right, float bottom, float top, float nearZ, float farZ);
+	msMatrix* perspective(float fovy, float aspect, float nearZ, float farZ);
+	msMatrix* ortho(float left, float right, float bottom, float top, float nearZ, float farZ);
+	msMatrix* multiply(msMatrix *srcB);
+	msMatrix* identity();
+
+	msPointf multiply(msPointf v);
 
 	float* getArray() const
 	{
 		return (float*)m_value;
 	}
+
+
 };
 

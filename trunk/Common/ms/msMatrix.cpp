@@ -16,7 +16,7 @@ msMatrix::~msMatrix(void)
 
 #define PI 3.1415926535897932384626433832795f
 
-void msMatrix::scale(float sx, float sy, float sz)
+msMatrix* msMatrix::scale(float sx, float sy, float sz)
 {
 	m_value[0][0] *= sx;
 	m_value[0][1] *= sx;
@@ -32,17 +32,19 @@ void msMatrix::scale(float sx, float sy, float sz)
 	m_value[2][1] *= sz;
 	m_value[2][2] *= sz;
 	m_value[2][3] *= sz;
+	return this;
 }
 
-void msMatrix::translate(float tx, float ty, float tz)
+msMatrix* msMatrix::translate(float tx, float ty, float tz)
 {
 	m_value[3][0] += (m_value[0][0] * tx + m_value[1][0] * ty + m_value[2][0] * tz);
 	m_value[3][1] += (m_value[0][1] * tx + m_value[1][1] * ty + m_value[2][1] * tz);
 	m_value[3][2] += (m_value[0][2] * tx + m_value[1][2] * ty + m_value[2][2] * tz);
 	m_value[3][3] += (m_value[0][3] * tx + m_value[1][3] * ty + m_value[2][3] * tz);
+	return this;
 }
 
-void msMatrix::rotate(float angle, float x, float y, float z)
+msMatrix* msMatrix::rotate(float angle, float x, float y, float z)
 {
 	float sinAngle, cosAngle;
 	float mag = sqrtf(x * x + y * y + z * z);
@@ -90,11 +92,12 @@ void msMatrix::rotate(float angle, float x, float y, float z)
 		rotMat.m_value[3][2] = 0.0F;
 		rotMat.m_value[3][3] = 1.0F;
 
-		multiply( &rotMat, this );
+		multiply( &rotMat );
 	}
+	return this;
 }
 
-void msMatrix::frustum(float left, float right, float bottom, float top, float nearZ, float farZ)
+msMatrix* msMatrix::frustum(float left, float right, float bottom, float top, float nearZ, float farZ)
 {
 	float       deltaX = right - left;
 	float       deltaY = top - bottom;
@@ -103,7 +106,7 @@ void msMatrix::frustum(float left, float right, float bottom, float top, float n
 
 	if ( (nearZ <= 0.0f) || (farZ <= 0.0f) ||
 		(deltaX <= 0.0f) || (deltaY <= 0.0f) || (deltaZ <= 0.0f) )
-		return;
+		return this;
 
 	frust.m_value[0][0] = 2.0f * nearZ / deltaX;
 	frust.m_value[0][1] = frust.m_value[0][2] = frust.m_value[0][3] = 0.0f;
@@ -119,28 +122,28 @@ void msMatrix::frustum(float left, float right, float bottom, float top, float n
 	frust.m_value[3][2] = -2.0f * nearZ * farZ / deltaZ;
 	frust.m_value[3][0] = frust.m_value[3][1] = frust.m_value[3][3] = 0.0f;
 
-	multiply(&frust, this);
+	return multiply(&frust);
 }
 
 
-void msMatrix::perspective(float fovy, float aspect, float nearZ, float farZ)
+msMatrix* msMatrix::perspective(float fovy, float aspect, float nearZ, float farZ)
 {
 	float frustumW, frustumH;
 
 	frustumH = tanf( fovy / 360.0f * PI ) * nearZ;
 	frustumW = frustumH * aspect;
 
-	frustum( -frustumW, frustumW, -frustumH, frustumH, nearZ, farZ );
+	return frustum( -frustumW, frustumW, -frustumH, frustumH, nearZ, farZ );
 }
 
-void msMatrix::ortho(float left, float right, float bottom, float top, float nearZ, float farZ)
+msMatrix* msMatrix::ortho(float left, float right, float bottom, float top, float nearZ, float farZ)
 {
 	float       deltaX = right - left;
 	float       deltaY = top - bottom;
 	float       deltaZ = farZ - nearZ;
 
 	if ( (deltaX == 0.0f) || (deltaY == 0.0f) || (deltaZ == 0.0f) )
-		return;
+		return this;
 
 	msMatrix    ortho;
 	ortho.identity();
@@ -152,12 +155,13 @@ void msMatrix::ortho(float left, float right, float bottom, float top, float nea
 	ortho.m_value[2][2] = -2.0f / deltaZ;
 	ortho.m_value[3][2] = -(nearZ + farZ) / deltaZ;
 
-	multiply(&ortho, this);
+	return multiply(&ortho);
 }
 
 
-void msMatrix::multiply(msMatrix *srcA, msMatrix *srcB)
+msMatrix* msMatrix::multiply(msMatrix *srcB)
 {
+	msMatrix *srcA = this;
 	msMatrix    tmp;
 	int         i;
 
@@ -184,15 +188,22 @@ void msMatrix::multiply(msMatrix *srcA, msMatrix *srcB)
 			(srcA->m_value[i][3] * srcB->m_value[3][3]) ;
 	}
 	memcpy(m_value, tmp.m_value, sizeof(float) * 4 * 4);
+	return this;
 }
 
 
-void msMatrix::identity()
+msMatrix* msMatrix::identity()
 {
 	memset(m_value, 0x0, sizeof(msMatrix));
 	m_value[0][0] = 1.0f;
 	m_value[1][1] = 1.0f;
 	m_value[2][2] = 1.0f;
 	m_value[3][3] = 1.0f;
+	return this;
+}
+
+msPointf msMatrix::multiply(msPointf v)
+{
+	return v;
 }
 

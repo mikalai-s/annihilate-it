@@ -87,16 +87,43 @@ static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 #define MS_BORDER_RIGTH 4
 #define MS_BORDER_BOTTOM 8
 
-void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msColor *c)
+void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msColor *c)
 {
-    msPointf l = box->getLocation();
-    msSize s = box->getSize();
+	msPointf l = box->getLocation();
+	msSize s = box->getSize();
 
+	msMatrix m ,  m1, m2, m3, m4, m5;
+
+	m.identity();
+	m1.identity();
+	m2.identity();
+	m3.identity();
+	m4.identity();
+	m5.identity();
+	
+	m.translate(-l.x - s.width/2, -l.y - s.height/2, 0);
+
+	m.rotate(box->m_angle, 1, 0, 0);
+
+	m1.translate(l.x + s.width/2, l.y + s.height/2, 0);
+	m.multiply(&m1);
+
+	m2.scale(2, -2 , 0);
+	m.multiply(&m2);
+
+	m3.translate(-1, 1, 0);
+	m.multiply(&m3);	
+
+
+
+	program->getUniform("mvp")->setMatrix4fv(16, false, m.getArray());
+
+	float z = 0;
 	msPointf points[4];
-	points[0] = msPointf(l.x, l.y);
-	points[1] = msPointf(l.x + s.width, l.y);
-	points[2] = msPointf(l.x, l.y + s.height);
-	points[3] = msPointf(l.x + s.width, l.y + s.height);
+	points[0] = msPointf(l.x, l.y, z);
+	points[1] = msPointf(l.x + s.width, l.y, z);
+	points[2] = msPointf(l.x, l.y + s.height, z);
+	points[3] = msPointf(l.x + s.width, l.y + s.height, z);
 
 	msColor cc = *c;
 	cc.r *= box->getColorDisturbance().r;
@@ -109,63 +136,67 @@ void msBoxGridRenderer::drawBox(msShaderProgram *m_program, msPalette *palette, 
 
 	glEnable(GL_BLEND);
 
-	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, points );
-	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, colors );
-	m_program->getUniform("border_line_tex")->set1i(m_program->getTexture("border_line_tex")->getUnit());
-	m_program->getUniform("border_corner_tex")->set1i(m_program->getTexture("border_corner_tex")->getUnit());
+	program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, points );
+	program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, colors );
+	program->getUniform("border_line_tex")->set1i(program->getTexture("border_line_tex")->getUnit());
+	program->getUniform("border_corner_tex")->set1i(program->getTexture("border_corner_tex")->getUnit());
 
 	borderOrientation_left[3] = borderOrientation_left[7] = borderOrientation_left[11] = borderOrientation_left[15] = box->getLeft() ? -1.0f : 1.0f;
-	m_program->getAttribute("borderLineTexelLeft")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_left );
+	program->getAttribute("borderLineTexelLeft")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_left );
 
 	borderOrientation_bottom[3] = borderOrientation_bottom[7] = borderOrientation_bottom[11] = borderOrientation_bottom[15] = box->getBottom() ? -1.0f : 1.0f;
-	m_program->getAttribute("borderLineTexelBottom")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_bottom );
+	program->getAttribute("borderLineTexelBottom")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_bottom );
 
 	borderOrientation_right[3] = borderOrientation_right[7] = borderOrientation_right[11] = borderOrientation_right[15] = box->getRight() ? -1.0f : 1.0f;
-	m_program->getAttribute("borderLineTexelRight")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_right );
+	program->getAttribute("borderLineTexelRight")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_right );
 
 	borderOrientation_top[3] = borderOrientation_top[7] = borderOrientation_top[11] = borderOrientation_top[15] = box->getTop() ? -1.0f : 1.0f;
-	m_program->getAttribute("borderLineTexelTop")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_top );
+	program->getAttribute("borderLineTexelTop")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_top );
 
 
 	bool isleft = box->getLeft() && !box->getLeft()->getTop() && box->getTop() && !box->getTop()->getLeft();
 	borderOrientation_left[2] = borderOrientation_left[6] = borderOrientation_left[10] = borderOrientation_left[14] = isleft ? 1.0f : -1.0f;
-	m_program->getAttribute("borderCornerTexelLeft")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_left );
+	program->getAttribute("borderCornerTexelLeft")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_left );
 
 	bool isBottom = box->getLeft() && !box->getLeft()->getBottom() && box->getBottom() && !box->getBottom()->getLeft();
 	borderOrientation_bottom[2] = borderOrientation_bottom[6] = borderOrientation_bottom[10] = borderOrientation_bottom[14] = isBottom ? 1.0f : -1.0f;
-	m_program->getAttribute("borderCornerTexelBottom")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_bottom );
+	program->getAttribute("borderCornerTexelBottom")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_bottom );
 
 	bool isRight = box->getRight() && !box->getRight()->getBottom() && box->getBottom() && !box->getBottom()->getRight();
 	borderOrientation_right[2] = borderOrientation_right[6] = borderOrientation_right[10] = borderOrientation_right[14] = isRight ? 1.0f : -1.0f;
-	m_program->getAttribute("borderCornerTexelRight")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_right );
+	program->getAttribute("borderCornerTexelRight")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_right );
 
 	bool isTop = box->getTop() && !box->getTop()->getRight() && box->getRight() && !box->getRight()->getTop();
 	borderOrientation_top[2] = borderOrientation_top[6] = borderOrientation_top[10] = borderOrientation_top[14] = isTop ? 1.0f : -1.0f;
-	m_program->getAttribute("borderCornerTexelTop")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_top );
+	program->getAttribute("borderCornerTexelTop")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_top );
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	glDisable(GL_BLEND);
 
     // draw borders if need
-	msColor innerBorderColor(c->r * 0.8f, c->g * 0.8f, c->b * 0.8f, c->a);
+	msColor innerBorderColor(
+		c->r * 0.8f * box->getColorDisturbance().r, 
+		c->g * 0.8f * box->getColorDisturbance().g, 
+		c->b * 0.8f * box->getColorDisturbance().b, 
+		c->a * box->getColorDisturbance().a);
 	if(box->getLeft())
-		drawLeftBorder(m_program, box, &innerBorderColor);
+		drawLeftBorder(program, box, &innerBorderColor);
 	if(box->getTop())
-		drawTopBorder(m_program, box, &innerBorderColor);
+		drawTopBorder(program, box, &innerBorderColor);
 	if(box->getRight())
-		drawRightBorder(m_program, box, &innerBorderColor);
+		drawRightBorder(program, box, &innerBorderColor);
 	if(box->getBottom())
-		drawBottomBorder(m_program, box, &innerBorderColor);
+		drawBottomBorder(program, box, &innerBorderColor);
 	
     if(!box->getLeft())
-        drawLeftBorder(m_program, box, palette->getColor(0));
+        drawLeftBorder(program, box, palette->getColor(0));
     if(!box->getTop())
-        drawTopBorder(m_program, box, palette->getColor(0));
+        drawTopBorder(program, box, palette->getColor(0));
     if(!box->getRight())
-        drawRightBorder(m_program, box, palette->getColor(0));
+        drawRightBorder(program, box, palette->getColor(0));
     if(!box->getBottom())
-        drawBottomBorder(m_program, box, palette->getColor(0));
+        drawBottomBorder(program, box, palette->getColor(0));
 }
 
 void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color)
@@ -259,6 +290,14 @@ void msBoxGridRenderer::showExplosions()
 
 void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid, msSize size)
 {
+	/*
+	msColor boxColorTemp = *boxGrid->m_palette->getColor(box.getColorIndex());
+
+	drawBox(program, boxGrid->m_palette, &box, &boxColorTemp);
+
+	box.getAnimations()->performStep();
+	*/
+	
     for(int y = 0; y < boxGrid->m_rowCount; y ++)
     {
         for(int x = 0; x < boxGrid->m_columnCount; x ++)
@@ -414,13 +453,6 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
     // render fire into texture using particle shaders
 	msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
 	program->use();
-
-	msMatrix m;
-	m.identity();
-	//m.perspective(60, 0.66, 0.01, 10);
-	//m.ortho(0, 1, 0, 1, 0.01, 10);
-
-	program->getUniform("mvp")->setMatrix4fv(16, false, m.getArray());
 
 	// Switch the render target to the current FBO to update the texture map
 	program->getFrameBuffer("renderTex")->bind();

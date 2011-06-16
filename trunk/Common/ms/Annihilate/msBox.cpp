@@ -15,6 +15,8 @@ msBox::msBox(float x, float y, float width, float height, int colorIndex)
 	_init(x, y, width, height, colorIndex);	
 }
 
+
+
 void msBox::_init( float x, float y, float width, float height, int colorIndex )
 {
 	m_location.x = x;
@@ -45,7 +47,7 @@ void msBox::_init( float x, float y, float width, float height, int colorIndex )
 	m_bottom = 0;
 	m_left = 0;
 
-	m_angle = 0.0f;
+	m_angle = 0.0f;	
 }
 
 msBox::~msBox()
@@ -193,6 +195,13 @@ void msBox::hide(GLint delay)
 	_setFlag<int>(delay + 2, &m_colorIndex, MS_BOX_INVISIBLE);
 }
 
+void rotate(msAnimationContext *c)
+{
+	msValueAnimationContext<float*> *con = (msValueAnimationContext<float*> *)c;
+	float *angle = con->getValue();
+	*angle -= 9;
+}
+
 void msBox::show( int delay )
 {
 	// restore original color after some delay
@@ -203,7 +212,13 @@ void msBox::show( int delay )
 	
 	// moving from top to bottom
 	msKeyValueAnimationContext<float*, float> *c = new msKeyValueAnimationContext<float*, float>(&m_colorDisturbance.a, 1.0);
-	getAnimations()->add(new msAnimation(delay, 10, c, _appearing));	
+	getAnimations()->add(new msAnimation(delay, 15, c, _appearing));	
+
+	m_angle = 90;
+
+	msValueAnimationContext<float*> *c2 = new msValueAnimationContext<float*>(&m_angle);
+	msAnimation *a = new msAnimation(0, 10, c2, rotate);
+	getAnimations()->add(a);
 }
 
 void msBox::_appearing(msAnimationContext *c)

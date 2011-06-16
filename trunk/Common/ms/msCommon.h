@@ -104,6 +104,13 @@ struct msPointf
 		y = yy;
 		z = 0;
 	}
+
+	msPointf(float xx, float yy, float zz)
+	{
+		x = xx;
+		y = yy;
+		z = zz;
+	}
 };
 
 struct msPointi

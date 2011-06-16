@@ -31,9 +31,9 @@ void main()
 	vec4 p = position;
 
 	// invert y and center
-	p.x = p.x * 2.0 - 1.0;	
-	p.y = 1.0 - p.y * 2.0;
-	p.z = 1.0;
+	//p.x = p.x * 2.0 - 1.0;	
+	//p.y = 1.0 - p.y * 2.0;
+	//p.z = 1.0;
 
     gl_Position = mvp * p;
     
