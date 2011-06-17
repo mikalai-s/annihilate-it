@@ -92,8 +92,15 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 	msPointf l = box->getLocation();
 	msSize s = box->getSize();
 
-	msMatrix m ,  m1, m2, m3, m4, m5;
+	msMatrixTransform transform;
+	transform
+		.translate(-l.x - s.width/2, -l.y - s.height/2, 0)
+		.rotate(box->m_angle, 1, 0, 0)
+		.translate(l.x + s.width/2, l.y + s.height/2, 0)
+		.scale(2, -2, 0)
+		.translate(-1, 1, 0);
 
+	/*
 	m.identity();
 	m1.identity();
 	m2.identity();
@@ -108,15 +115,13 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 	m1.translate(l.x + s.width/2, l.y + s.height/2, 0);
 	m.multiply(&m1);
 
-	m2.scale(2, -2 , 0);
+	m2.scale(2, -2, 0);
 	m.multiply(&m2);
 
 	m3.translate(-1, 1, 0);
-	m.multiply(&m3);	
-
-
-
-	program->getUniform("mvp")->setMatrix4fv(16, false, m.getArray());
+	m.multiply(&m3);
+	*/
+	program->getUniform("mvp")->setMatrix4fv(16, false, transform.getMatrix().getArray());
 
 	float z = 0;
 	msPointf points[4];
