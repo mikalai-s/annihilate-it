@@ -10,6 +10,7 @@
 #include "msBoxGridRenderer.h"
 #include "msSpline.h"
 #include "../msMatrix.h"
+#include "../msMatrixTransform.h"
 
 static const GLfloat g_fbVertexPositions2[] = {
 	-1.f, -1.f, 1.f, 1.f,
