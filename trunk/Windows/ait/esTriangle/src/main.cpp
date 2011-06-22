@@ -30,6 +30,7 @@
 #include <io.h>
 #include "../ms/msScene.h"
 #include "Misc.h"
+#include <ctime>
 #include <windowsx.h>
 
 
@@ -288,6 +289,9 @@ HWND CreateWind( int width, int height )
    return hWnd;
 }
 
+double start = static_cast <float> (clock ());
+double frameCount = 0;
+
 
 //=================================================================================================================================
 ///
@@ -368,9 +372,18 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
        { 
        case 43: 
            // process the 60fps timer
-            DrawScene();
+            /*DrawScene();
 
-            eglSwapBuffers( g_egl.dsp, g_egl.surf );
+            eglSwapBuffers( g_egl.dsp, g_egl.surf );*/		  
+
+		   double newstart = static_cast <double> (clock ());
+
+		   double time = frameCount / ( (newstart - start) / static_cast <double> (CLOCKS_PER_SEC));    
+
+		   printf("%f.2\r\n", time);
+
+		   frameCount = 0;
+		   start = newstart;
 
            return 0;      
        } 
@@ -389,6 +402,8 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
 
 #define SCR_WIDTH 320 + 16
 #define SCR_HEIGHT 480 + 38
+
+
 
 
 //=================================================================================================================================
@@ -443,7 +458,8 @@ int WINAPI WinMain( HINSTANCE  hInstance,
    
    SetTimer(hWnd,             // handle to main window 
        43,            // timer identifier 
-       16,                 // 10-second interval 
+      // 16,                 // 10-second interval 
+	  2000,
        (TIMERPROC) NULL);     // no timer callback 
    
    while ( ! done )
@@ -458,14 +474,22 @@ int WINAPI WinMain( HINSTANCE  hInstance,
          {
             TranslateMessage( &msg );
             DispatchMessage( &msg );
+
+
          }
       }
       else
       {
-         if ( ( g_active && FALSE ) || g_keys[VK_ESCAPE] )
-         {
-            done=TRUE;  // ESC or DrawGLScene Signalled A Quit
-         }
+		  if ( ( g_active && !DrawScene() ) || g_keys[VK_ESCAPE] )
+		  {
+			  done=TRUE;  // ESC or DrawGLScene Signalled A Quit
+		  }
+		  else
+		  {
+			  eglSwapBuffers( g_egl.dsp, g_egl.surf );
+
+			  frameCount ++;
+		  }
       }
    }
 

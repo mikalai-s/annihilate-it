@@ -7,6 +7,7 @@ uniform_vec2 location
 colorTexFbo renderTex 11
 link shockwave
 
+
 program particle_create /data/particle_create_vertex.c /data/particle_create_fragment.c
 texture u_texture 3 /data/expl.tga
 attribute a_position 0
@@ -15,27 +16,24 @@ attribute a_color 2
 colorTexFbo renderTex 10
 link particle_create
 
+
 program particle_complete /data/particle_complete_vertex.c /data/particle_complete_fragment.c
 texture u2_texture 4 /data/expl.tga
 attribute a2_position 0
 attribute a2_texcoord 1
 link particle_complete
 
+
 program boxgrid /data/boxgrid_vertex.c /data/boxgrid_fragment.c
 attribute position 0
-attribute color 1
 
-attribute borderLineTexelLeft 2
-attribute borderLineTexelBottom 3
-attribute borderLineTexelRight 4
-attribute borderLineTexelTop 5
+attribute borderTexelLeft 1
+attribute borderTexelBottom 2
+attribute borderTexelRight 3
+attribute borderTexelTop 4
 
-attribute borderCornerTexelLeft 6
-attribute borderCornerTexelBottom 7
-attribute borderCornerTexelRight 8
-attribute borderCornerTexelTop 9
+texture borderLineTex 5 /data/border-line.tga
+texture borderCornerTex 6 /data/border-corner.tga
 
-texture border_line_tex 5 /data/border-line.tga
-texture border_corner_tex 6 /data/border-corner.tga
 colorTexFbo renderTex 12
 link boxgrid

@@ -11,7 +11,9 @@ class msShaderProgram;
 class msUniform : public msAttribute
 {
 	GLfloat m_floatData[4];
+	GLboolean m_boolData[4];
 	GLfloat m_matrixData[4][4];
+	
 	GLuint m_type;
 
 
@@ -21,9 +23,13 @@ public:
 
 	msUniform(string &name, GLfloat v);	
 
-	msUniform(string &name, GLfloat v[], GLuint size = 1)	;
+	msUniform(string &name, GLfloat v[], GLuint size = 1);
 
 	msUniform(string &name, GLfloat matrix[4][4]);
+
+	msUniform(string &name, GLboolean b);
+
+	msUniform(string &name, GLboolean b[], GLuint size = 1);
 
 	~msUniform(void);
 

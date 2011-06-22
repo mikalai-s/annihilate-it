@@ -1,50 +1,45 @@
 
-precision mediump float;
+precision medium float;
 
-uniform sampler2D border_line_tex;
-uniform sampler2D border_corner_tex;
+uniform vec4 color;
+uniform ivec4 lineBorder;
+uniform ivec4 cornerBorder;
 
-varying vec4 border_line_texel_left;
-varying vec4 border_line_texel_bottom;
-varying vec4 border_line_texel_right;
-varying vec4 border_line_texel_top;
+uniform sampler2D borderLineTex;
+uniform sampler2D borderCornerTex;
 
-varying vec4 border_corner_texel_left;
-varying vec4 border_corner_texel_bottom;
-varying vec4 border_corner_texel_right;
-varying vec4 border_corner_texel_top;
-
-varying vec4 outcolor;
-
-varying vec4 border_corner_texel;
+varying vec2 _borderTexelLeft;
+varying vec2 _borderTexelBottom;
+varying vec2 _borderTexelRight;
+varying vec2 _borderTexelTop;
 
 void main()
 {
-	vec4 c = outcolor;
+	vec4 c = color;
 
-	if(border_line_texel_left.w != -1.0)
-		c *= texture2D(border_line_tex, border_line_texel_left.xy);
+	if(lineBorder[0] == 1)
+		c *= texture2D(borderLineTex, _borderTexelLeft);
 	
-	if(border_line_texel_bottom.w != -1.0)
-		c *= texture2D(border_line_tex, border_line_texel_bottom.xy);
+	if(lineBorder[1] == 1)
+		c *= texture2D(borderLineTex, _borderTexelTop);
+	
+	if(lineBorder[2] == 1)
+		c *= texture2D(borderLineTex, _borderTexelRight);
 
-	if(border_line_texel_right.w != -1.0)
-		c *= texture2D(border_line_tex, border_line_texel_right.xy);
+	if(lineBorder[3] == 1)
+		c *= texture2D(borderLineTex, _borderTexelBottom);
 
-	if(border_line_texel_top.w != -1.0)
-		c *= texture2D(border_line_tex, border_line_texel_top.xy);
+	if(cornerBorder[0] == 1)
+		c *= texture2D(borderCornerTex, _borderTexelLeft);
 
-	if(border_corner_texel_left.z != -1.0)
-		c *= texture2D(border_corner_tex, border_corner_texel_left.xy);
+	if(cornerBorder[1] == 1)
+		c *= texture2D(borderCornerTex, _borderTexelTop);
 
-	if(border_corner_texel_bottom.z != -1.0)
-		c *= texture2D(border_corner_tex, border_corner_texel_bottom.xy);
+	if(cornerBorder[2] == 1)
+		c *= texture2D(borderCornerTex, _borderTexelRight);
 
-	if(border_corner_texel_right.z != -1.0)
-		c *= texture2D(border_corner_tex, border_corner_texel_right.xy);
-
-	if(border_corner_texel_top.z != -1.0)
-		c *= texture2D(border_corner_tex, border_corner_texel_top.xy);
+	if(cornerBorder[3] == 1)
+		c *= texture2D(borderCornerTex, _borderTexelBottom);
 
 	gl_FragColor = c;
 }

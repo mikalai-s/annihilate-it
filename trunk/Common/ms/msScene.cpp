@@ -213,9 +213,9 @@ void msScene::init()
 	// init palette
 	m_palette = new msPalette(colorMap, 8);
 
-#define NUM_ROWS 1
-#define NUM_COLS 1
-	/*
+#define NUM_ROWS 20
+#define NUM_COLS 20
+	
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
@@ -232,19 +232,16 @@ void msScene::init()
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-		1,1,1,
-		1,1,2,
-		1,2,1,
+		//1,1,
+	//	1,2,
     };
 	
-	m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS);
-	*/
+	//m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+	
 	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
-
+	
 	m_renderer = new msBoxGridRenderer(&m_shaders);
 }
-
-int c = 0;
 
 
 void msScene::drawFrame()
@@ -260,80 +257,6 @@ void msScene::drawFrame()
 	m_renderer->draw(m_boxGrid, size);
 
 	return;
-
-	msSpline spl;
-	int controlCount = 20;
-	//float controls[] = 
-	//{
-	//	0.33f, 1.66f,
-	//	//0.33f, 1.0f,
-	//	0.33f, 0.33f,
-	//	//1.0f, 0.33f,
-	//	1.66f, 0.33f,
-	//	1.66f, 1.0f,
-	//	0.66f, 0.66f, //1.0f, 1.0f,
-	//	1.0f, 1.66f,
-	//};
-
-	float controls[] = 
-	{
-		0.2, 1.6, // 0
-		0.2, 1.2, // 1
-		0.4, 1.0, // 2
-		0.2, 0.8, // 3
-		0.2, 0.4, // 4
-		0.4, 0.2, // 5
-		0.8, 0.2, // 6
-		1.0, 0.4, // 7
-		1.2, 0.2, // 8
-		1.6, 0.2, // 9
-		1.8, 0.4, // 10
-		1.8, 0.8, // 11
-		1.6, 1.0, // 12
-		1.2, 1.0, // 13
-		1.0, 0.8, // 14
-		0.8, 1.0, // 15
-		1.0, 1.2, // 16
-		1.0, 1.6, // 17
-		0.8, 1.8, // 18
-		0.4, 1.8, // 19
-	};
-
-	msColor controlColors[100];
-	for(int i = 0; i < controlCount; i ++)
-	{
-		controlColors[i].a = 1.0f;
-		controlColors[i].r = 1.0f;
-		controlColors[i].b = 1.0f;
-		controlColors[i].g = 1.0f;
-	}
-
-	/*m_shaders.getProgramByName("boxgrid")->getAttribute("position")->setPointerAndEnable( 2, GL_FLOAT, 0, 0, controls );
-	m_shaders.getProgramByName("boxgrid")->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, controlColors );
-	glDrawArrays(GL_LINE_LOOP, 0, controlCount);*/
-
-	for(int i = 0; i < controlCount * 2; i+=2)	
-	{
-		spl.addControlPoint(controls[i], controls[i+1]);
-	}
-
-	msPointf points[1000];
-	int count;
-	spl.getSplinePoints(7, points, &count);
-
-	msColor colors[1000];
-	for(int i = 0; i < count; i ++)
-	{
-		colors[i].a = 1.0f;
-		colors[i].r = 1.0 - (float)i / (float)count;		
-		colors[i].b = (float)i / (float)count;
-		colors[i].g = (colors[i].r + colors[i].b) / 2.0;
-	}
-
-	m_shaders.getProgramByName("boxgrid")->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, points );
-	m_shaders.getProgramByName("boxgrid")->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, colors );
-
-	glDrawArrays(GL_LINE_LOOP, 0, count);
 }
 
 int getShiftDirection()

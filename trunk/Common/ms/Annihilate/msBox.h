@@ -116,6 +116,26 @@ public:
 		return m_left;
 	}
 
+	bool hasLeft()
+	{
+		return m_left != 0;
+	}
+
+	bool hasTop()
+	{
+		return m_top != 0;
+	}
+
+	bool hasRight()
+	{
+		return m_right != 0;
+	}
+
+	bool hasBottom()
+	{
+		return m_bottom != 0;
+	}
+
 	msPointf getLocation() const
 	{
 		return m_location;

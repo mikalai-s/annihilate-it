@@ -100,6 +100,14 @@ bool msShaderPrograms::loadFile(string fileName )
 
 			recentProgram->addUniform(new msUniform(sKey, vVal));
 		}
+		else if ( sItem == "uniform_bvec4" )
+		{
+			string sKey;
+			GLboolean vVal[4];
+			line >> sKey >> vVal[0] >> vVal[1] >> vVal[2] >> vVal[3]; 
+
+			recentProgram->addUniform(new msUniform(sKey, vVal));
+		}
 		else if ( sItem == "uniform_mat4" )
 		{
 			string sKey;

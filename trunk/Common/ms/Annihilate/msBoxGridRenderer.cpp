@@ -26,33 +26,33 @@ static const GLfloat g_fbVertexTexcoord2[] = {
 	1.f, 1.f,
 };
 
-GLfloat borderOrientation_left[] = {
-	0.f, 0.f, 1.0f, -1.0f,
-	1.f, 0.f, 1.0f, -1.0f,
-	0.f, 1.f, 1.0f, -1.0f,
-	1.f, 1.f, 1.0f, -1.0f,
+GLfloat borderOrientationLeft[] = {
+	0.f, 0.f,
+	1.f, 0.f,
+	0.f, 1.f,
+	1.f, 1.f,
 };
 
 
-GLfloat borderOrientation_bottom[] = {
-	1.f, 0.f, 1.0f, -1.0f,
-	1.f, 1.f, 1.0f, -1.0f,
-	0.f, 0.f, 1.0f, -1.0f,
-	0.f, 1.f, 1.0f, -1.0f,
+GLfloat borderOrientationBottom[] = {
+	1.f, 0.f,
+	1.f, 1.f,
+	0.f, 0.f,
+	0.f, 1.f,
 };
 
-GLfloat borderOrientation_right[] = {
-	1.f, 1.f, 1.0f, -1.0f,
-	0.f, 1.f, 1.0f, -1.0f,
-	1.f, 0.f, 1.0f, -1.0f,
-	0.f, 0.f, 1.0f, -1.0f,
+GLfloat borderOrientationRight[] = {
+	1.f, 1.f,
+	0.f, 1.f,
+	1.f, 0.f,
+	0.f, 0.f,
 };
 
-GLfloat borderOrientation_top[] = {
-	0.f, 1.f, 1.0f, -1.0f,
-	0.f, 0.f, 1.0f, -1.0f,
-	1.f, 1.f, 1.0f, -1.0f,
-	1.f, 0.f, 1.0f, -1.0f,
+GLfloat borderOrientationTop[] = {
+	0.f, 1.f,
+	0.f, 0.f,
+	1.f, 1.f, 
+	1.f, 0.f,
 };
 
 static const GLubyte g_fbIndices2[] = {
@@ -100,7 +100,7 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 		->scale(2, -2, 0)
 		->translate(-1, 1, 0);	
 	
-	program->getUniform("mvp")->setMatrix4fv(16, false, transform.getMatrix()->getArray());
+	program->getUniform("mvp")->setMatrix4fv(1, false, transform.getMatrix()->getArray());
 
 	float z = 0;
 	msPointf points[4];
@@ -115,44 +115,31 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 	cc.b *= box->getColorDisturbance().b;
 	cc.a *= box->getColorDisturbance().a;
 
-	msColor colors[4];
-	colors[0] = colors[1] = colors[2] = colors[3] = cc;
-
-	glEnable(GL_BLEND);
+	program->getUniform("color")->set4fv(1, (GLfloat*)&cc);
 
 	program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, points );
-	program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, colors );
-	program->getUniform("border_line_tex")->set1i(program->getTexture("border_line_tex")->getUnit());
-	program->getUniform("border_corner_tex")->set1i(program->getTexture("border_corner_tex")->getUnit());
+	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
+	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
-	borderOrientation_left[3] = borderOrientation_left[7] = borderOrientation_left[11] = borderOrientation_left[15] = box->getLeft() ? -1.0f : 1.0f;
-	program->getAttribute("borderLineTexelLeft")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_left );
+	GLint lineBorder[] = { !box->hasLeft(), !box->hasTop(), !box->hasRight(), !box->hasBottom() };
+	program->getUniform("lineBorder")->set4iv(1, lineBorder);
 
-	borderOrientation_bottom[3] = borderOrientation_bottom[7] = borderOrientation_bottom[11] = borderOrientation_bottom[15] = box->getBottom() ? -1.0f : 1.0f;
-	program->getAttribute("borderLineTexelBottom")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_bottom );
+    GLint cornerBorder[] =
+	{
+		box->hasLeft() && !box->getLeft()->hasTop() && box->hasTop() && !box->getTop()->hasLeft(),
+		box->hasTop() && !box->getTop()->getRight() && box->hasRight() && !box->getRight()->hasTop(),		
+		box->hasRight() && !box->getRight()->getBottom() && box->hasBottom() && !box->getBottom()->hasRight(),
+		box->hasLeft() && !box->getLeft()->getBottom() && box->hasBottom() && !box->getBottom()->hasLeft(),
+		
+	};
+	program->getUniform("cornerBorder")->set4iv(1, cornerBorder);
+	
+	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientationLeft );
+	program->getAttribute("borderTexelBottom")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientationBottom );
+	program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientationRight );
+	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientationTop );
 
-	borderOrientation_right[3] = borderOrientation_right[7] = borderOrientation_right[11] = borderOrientation_right[15] = box->getRight() ? -1.0f : 1.0f;
-	program->getAttribute("borderLineTexelRight")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_right );
-
-	borderOrientation_top[3] = borderOrientation_top[7] = borderOrientation_top[11] = borderOrientation_top[15] = box->getTop() ? -1.0f : 1.0f;
-	program->getAttribute("borderLineTexelTop")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_top );
-
-
-	bool isleft = box->getLeft() && !box->getLeft()->getTop() && box->getTop() && !box->getTop()->getLeft();
-	borderOrientation_left[2] = borderOrientation_left[6] = borderOrientation_left[10] = borderOrientation_left[14] = isleft ? 1.0f : -1.0f;
-	program->getAttribute("borderCornerTexelLeft")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_left );
-
-	bool isBottom = box->getLeft() && !box->getLeft()->getBottom() && box->getBottom() && !box->getBottom()->getLeft();
-	borderOrientation_bottom[2] = borderOrientation_bottom[6] = borderOrientation_bottom[10] = borderOrientation_bottom[14] = isBottom ? 1.0f : -1.0f;
-	program->getAttribute("borderCornerTexelBottom")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_bottom );
-
-	bool isRight = box->getRight() && !box->getRight()->getBottom() && box->getBottom() && !box->getBottom()->getRight();
-	borderOrientation_right[2] = borderOrientation_right[6] = borderOrientation_right[10] = borderOrientation_right[14] = isRight ? 1.0f : -1.0f;
-	program->getAttribute("borderCornerTexelRight")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_right );
-
-	bool isTop = box->getTop() && !box->getTop()->getRight() && box->getRight() && !box->getRight()->getTop();
-	borderOrientation_top[2] = borderOrientation_top[6] = borderOrientation_top[10] = borderOrientation_top[14] = isTop ? 1.0f : -1.0f;
-	program->getAttribute("borderCornerTexelTop")->setPointerAndEnable(4, GL_FLOAT, 0, 0, borderOrientation_top );
+	glEnable(GL_BLEND);	
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
@@ -186,10 +173,9 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color)
 {
 	GLfloat coords[] = {start.x, start.y, start.z /*+ 0.1f*/, end.x, end.y, end.z /*+ 0.1f*/};
-	GLfloat colors[] = {color->r, color->g, color->b, color->a, color->r, color->g, color->b, color->a};
 
 	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, coords );
-	m_program->getAttribute("color")->setPointerAndEnable( 4, GL_FLOAT, 0, 0, colors );
+	m_program->getUniform("color")->set4fv( 1, (GLfloat*)color );
     
     glDrawArrays(GL_LINES, 0, 2);
 }
