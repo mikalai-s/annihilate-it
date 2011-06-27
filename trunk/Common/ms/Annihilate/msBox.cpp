@@ -7,23 +7,27 @@
 
 msBox::msBox()
 {
-	_init(0, 0, 0, 0, MS_BOX_INVISIBLE);	
+	_init(0, MS_BOX_INVISIBLE);	
 }
 
 msBox::msBox(float x, float y, float width, float height, int colorIndex)
 {	
-	_init(x, y, width, height, colorIndex);	
+	_init(0, colorIndex);	
+}
+
+msBox::msBox(msBoxVertexData *verticesData, int colorIndex)
+{
+	_init(verticesData, colorIndex);	
 }
 
 
 
-void msBox::_init( float x, float y, float width, float height, int colorIndex )
+void msBox::_init(msBoxVertexData *verticesData, int colorIndex )
 {
-	m_location.x = x;
-	m_location.y = y;
-	m_location.z = 0.0f;
-	m_size.width = width;
-	m_size.height = height;
+    m_verticesData = verticesData;
+
+	m_location = getVerticesData()->vertices;	
+	
 	m_colorIndex = colorIndex;
 	m_originalColorIndex = colorIndex;
 	m_border = (msBorder*)malloc(sizeof(msBorder));
@@ -101,16 +105,27 @@ void msBox::unitTest()
 
 
 
-
 void msBox::_linearFalling(msAnimationContext *c)
 {
-	msKeyValueAnimationContext<msPointf*, msPointf> *context = (msKeyValueAnimationContext<msPointf*, msPointf> *)c;
+	msKeyValueAnimationContext<msBoxVertexData*, msPointf> *context = (msKeyValueAnimationContext<msBoxVertexData*, msPointf> *)c;
 
-	msPointf *from = context->getKey();
+	msBoxVertexData *vertexData = context->getKey();
 	msPointf to = context->getValue();
-	
-	from->x += (to.x - from->x) / context->getAnimation()->getCount();
-	from->y += (to.y - from->y) / context->getAnimation()->getCount();
+
+    float dx = (to.x - vertexData->vertices[0].x) / context->getAnimation()->getCount();
+    float dy = (to.y - vertexData->vertices[0].y) / context->getAnimation()->getCount();
+
+    vertexData->move(msPointf(dx, dy, 0));
+}
+
+void msBox::_finishLinearFalling(msAnimationContext *c)
+{
+    msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*> *context = (msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*> *)c;
+
+    msBoxVertexData *fromVertexData = context->getKey();
+    msBoxVertexData *toVertexData = context->getValue();
+
+    fromVertexData->copy(toVertexData);
 }
 
 
@@ -138,30 +153,35 @@ void msBox::_linearFalling2(msAnimationContext *c)
 }
 
 
-void msBox::fall(GLint delay, GLint direction, msPointf newLocation)
+void msBox::fall(GLint delay, GLint direction, msBoxVertexData *newVertexData)
 {
     int times = 10;
 
     // moving from top to bottom
-    msKeyValueAnimationContext<msPointf*, msPointf> *c2 = new msKeyValueAnimationContext<msPointf*, msPointf>(&m_location, newLocation);
+    msKeyValueAnimationContext<msBoxVertexData*, msPointf> *c2 = new msKeyValueAnimationContext<msBoxVertexData*, msPointf>(m_verticesData, newVertexData->vertices[0]);
 	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
     
-    // move a litle bit up for effect of bounce
-    msPointMoveAnimationContext *c3 = new msPointMoveAnimationContext(&m_location, direction);
-    getAnimations()->add(new msAnimation(delay + times, 4, c3, _linearFalling2));
+    // move a little bit up for effect of bounce
+    msPointf bouncePoint(newVertexData->vertices[0].x, newVertexData->vertices[0].y - MS_BOUNCE_OFFSET * 4, newVertexData->vertices[0].z);
+    msKeyValueAnimationContext<msBoxVertexData*, msPointf> *c3 = new msKeyValueAnimationContext<msBoxVertexData*, msPointf>(m_verticesData, bouncePoint);
+    getAnimations()->add(new msAnimation(delay + times, 4, c3, _linearFalling));
     
-    // final falling (very quick)
-    msKeyValueAnimationContext<msPointf*, msPointf> *c4 = new msKeyValueAnimationContext<msPointf*, msPointf>(&m_location, newLocation);
-    getAnimations()->add(new msAnimation(delay + times + 4, 1, c4, _linearFalling));
+    // final falling (very fast and accurate)
+    msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*> *c4 = new msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*>(m_verticesData, newVertexData);
+    getAnimations()->add(new msAnimation(delay + times + 4, 1, c4, _finishLinearFalling));
 }
 
-void msBox::unfall( int delay, int direction, msPointf newLocation )
+void msBox::unfall( int delay, int direction, msBoxVertexData *newVertexData )
 {
 	int times = 10;
 
 	// moving from top to bottom
-	msKeyValueAnimationContext<msPointf*, msPointf> *c2 = new msKeyValueAnimationContext<msPointf*, msPointf>(&m_location, newLocation);
-	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));	
+	msKeyValueAnimationContext<msPointf*, msPointf> *c2 = new msKeyValueAnimationContext<msPointf*, msPointf>(m_location, newVertexData->vertices[0]);
+	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
+
+    // final falling (very fast and accurate)
+    msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*> *c4 = new msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*>(m_verticesData, newVertexData);
+    getAnimations()->add(new msAnimation(delay + times, 1, c4, _finishLinearFalling));
 }
 
 
@@ -184,8 +204,7 @@ void msBox::hide(GLint delay)
     m_requiresExplosion = false;
 
 	// store coordinates of explosion
-	m_explosionPoint.x = m_location.x + m_size.width / 2.0f;
-	m_explosionPoint.y = m_location.y + m_size.height / 2.0f;
+	m_explosionPoint = getVerticesData()->getCenter();
 
     _setFlag<GLboolean>(delay + 1, &m_requiresExplosion, true);
 
@@ -242,3 +261,8 @@ void msBox::wave(GLint delay)
 
 
 
+
+void msBoxVertexData::copy( msBoxVertexData *source )
+{
+    memcpy(this, source, sizeof(msBoxVertexData));
+}

@@ -5,6 +5,43 @@
 
 #define MS_BOX_INVISIBLE -1
 
+struct msBoxVertexData
+{
+    msPointf vertices[4];
+
+    bool isInside(msPointf *point)
+    {
+        return vertices[0].x <= point->x && vertices[1].x >= point->x &&
+            vertices[0].y <= point->y && vertices[3].y >= point->y;
+    }
+
+    msPointf getCenter()
+    {
+        return msPointf((vertices[0].x + vertices[1].x) / 2.0, (vertices[0].y + vertices[3].y) / 2.0, (vertices[0].z + vertices[1].z) / 2.0);
+    }
+
+    void copy( msBoxVertexData *data );
+
+    void move(msPointf d)
+    {
+        float width = vertices[1].x - vertices[0].x;
+        float height = vertices[2].y - vertices[0].y;
+
+        vertices[0].x += d.x;
+        vertices[0].y += d.y;
+        
+        vertices[1].x = vertices[0].x + width;
+        vertices[1].y = vertices[0].y;
+        
+        vertices[2].x = vertices[0].x;
+        vertices[2].y = vertices[0].y + height;
+        
+        vertices[3].x = vertices[0].x + width;
+        vertices[3].y = vertices[0].y + height;
+        
+    }
+};
+
 
 class msBox
 {
@@ -12,8 +49,7 @@ class msBox
 
 private:
 
-	msPointf m_location;
-	msSize m_size;
+	msPointf *m_location;
 	int m_colorIndex;
 	int m_originalColorIndex;
 
@@ -37,6 +73,8 @@ private:
 	msBox *m_bottom;
 	msBox *m_left;
 
+	msBoxVertexData *m_verticesData;
+
 public:
 	float m_angle;
 	
@@ -45,6 +83,8 @@ public:
 private:
 
 	static void _linearFalling(msAnimationContext *c);
+
+    static void _finishLinearFalling(msAnimationContext *c);
 
 	static void _linearFalling2(msAnimationContext *c);
 
@@ -76,6 +116,8 @@ protected:
 public:
 	msBox(float x, float y, float width, float height, int colorIndex);
 
+	msBox(msBoxVertexData *verticesData, int colorIndex);
+
 	~msBox();
 
 	void makeInvisible();
@@ -86,7 +128,7 @@ public:
 
 	static void unitTest();
 
-	void fall(GLint delay, GLint direction, msPointf newLocation);
+	void fall(GLint delay, GLint direction, msBoxVertexData *newVertexData);
 
     void hide(int delay);
 
@@ -94,7 +136,7 @@ public:
 
     void wave(GLint delay);
 
-	void _init( float x, float y, float width, float height, int colorIndex );
+	void _init(msBoxVertexData *verticesData, int colorIndex );
 
 	msBox *getTop() const
 	{
@@ -136,15 +178,10 @@ public:
 		return m_bottom != 0;
 	}
 
-	msPointf getLocation() const
+	msPointf *getLocation() const
 	{
 		return m_location;
-	}
-
-	msSize getSize() const
-	{
-		return m_size;
-	}
+	}	
 
 	int getColorIndex() const 
 	{
@@ -170,6 +207,13 @@ public:
 	{
 		return m_requiresWave;
 	}
-	void unfall( int delay, int  direction, msPointf location );
+
+    msBoxVertexData *getVerticesData() const
+
+    {
+        return m_verticesData;
+    }
+
+	void unfall( int delay, int  direction, msBoxVertexData *newVertexData );
 
 };

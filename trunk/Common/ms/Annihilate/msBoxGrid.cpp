@@ -33,25 +33,25 @@ void msBoxGrid::_refreshBorders()
 			msBox *box = getItem(y, x);
 
             // left
-            GLint left = !ms_boxgrid_check_neighbours(y, x-1, y, x);
+            GLint left = !_checkNeighbours(y, x-1, y, x);
             if(left != box->m_border->left)
                 _animateBorderInvertion(box, left);           
             box->m_border->left = left;
 
             // top
-            GLint top = !ms_boxgrid_check_neighbours(y-1, x, y, x);
+            GLint top = !_checkNeighbours(y-1, x, y, x);
             if(top != box->m_border->top)
                 _animateBorderInvertion(box, top);           
             box->m_border->top = top;
 
             // right
-            GLint right = !ms_boxgrid_check_neighbours(y, x, y, x+1);
+            GLint right = !_checkNeighbours(y, x, y, x+1);
             if(right != box->m_border->right)
                 _animateBorderInvertion(box, right);           
             box->m_border->right = right;
 
             // bottom
-            GLint bottom = !ms_boxgrid_check_neighbours(y, x, y+1, x);
+            GLint bottom = !_checkNeighbours(y, x, y+1, x);
             if(bottom != box->m_border->bottom)
                 _animateBorderInvertion(box, bottom);           
             box->m_border->bottom = bottom;
@@ -80,6 +80,10 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 
 	m_palette = palette;
 
+    m_coordinateGrid = new msGrid<msBoxVertexData*>(numRows, numCols);
+
+	m_boxVertexData = (msBoxVertexData*)malloc(sizeof(msBoxVertexData) * numRows * numCols);
+
 	size.width = gridWidth;
 	size.height = gridHeight;
 
@@ -88,7 +92,18 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 		curx = 0;
 		for(GLint x = 0; x < numCols; x ++)
 		{
-			msBox *box = new msBox(curx, cury, width, height, pattern[y * numCols + x]);
+			msBoxVertexData* verticesData = &m_boxVertexData[y * numCols + x];
+			verticesData->vertices[0] = msPointf(curx, cury, 0);
+			verticesData->vertices[1] = msPointf(curx + width, cury, 0);
+			verticesData->vertices[2] = msPointf(curx, cury + height, 0);
+			verticesData->vertices[3] = msPointf(curx + width, cury + height, 0);
+
+            msBoxVertexData* originalverticesData = new msBoxVertexData();
+            memcpy(originalverticesData, verticesData, sizeof(msBoxVertexData));
+
+            m_coordinateGrid->setItem(y, x, originalverticesData);
+
+			msBox *box = new msBox(verticesData, pattern[y * numCols + x]);
             if(palette != 0)
                 box->m_border->color = *palette->getColor(0);
 			setItem(y, x, box);
@@ -129,10 +144,15 @@ msBoxGrid::~msBoxGrid()
 	{
 		for(GLint x = 0; x < m_columnCount; x ++)
 		{
-			msBox *item = getItem(y, x);
-			delete item;
+			delete getItem(y, x);
+
+            delete m_coordinateGrid->getItem(y, x);
 		}
 	}
+
+    delete m_coordinateGrid;
+
+	free(m_boxVertexData);
 }
 
 
@@ -145,7 +165,7 @@ void msBoxGrid::display()
 		{
 			msBox *box = getItem(y, x);
 			if(box->isVisible())
-				printf("%d:(%3.0f,%3.0f)  ", box->m_colorIndex, box->m_location.y, box->m_location.x);
+				printf("%d:(%3.0f,%3.0f)  ", box->m_colorIndex, box->m_location->y, box->m_location->x);
 			else
 				printf("      -      ");
 		}
@@ -305,9 +325,10 @@ void msBoxGrid::_moveBox(msMoveAction move)
 	setItem(move.from.y, move.from.x, box2);
 	setItem(move.to.y, move.to.x, box1);
 
-	box1->fall(0, move.direction, box2->m_location);
+	box1->fall(0, move.direction, m_coordinateGrid->getItem(move.to.y, move.to.x));
     
-    box2->m_location = box1->m_location;
+    // exchange verticies
+    box2->getVerticesData()->copy(box1->getVerticesData());
 }
 
 void msBoxGrid::_moveBackBox( msMoveAction move )
@@ -318,9 +339,9 @@ void msBoxGrid::_moveBackBox( msMoveAction move )
 	setItem(move.from.y, move.from.x, box2);
 	setItem(move.to.y, move.to.x, box1);
 
-	box1->unfall(0, move.direction, box2->m_location);
+	box1->unfall(0, move.direction, m_coordinateGrid->getItem(move.to.y, move.to.x));
 
-	box2->m_location = box1->m_location;
+	box2->getVerticesData()->copy(box1->getVerticesData());
 }
 
 void msBoxGrid::_shiftDown(msGrid<msBox*> *grid, msMoveActionList *moves)
@@ -484,7 +505,7 @@ void msBoxGrid::shiftPendentBoxes(GLint direction)
 
 // returns 1 if two boxes are with the same color
 // todo: check - it can be private
-int msBoxGrid::ms_boxgrid_check_neighbours(GLint y1, GLint x1, GLint y2, GLint x2)
+int msBoxGrid::_checkNeighbours(GLint y1, GLint x1, GLint y2, GLint x2)
 {
     msBox *box1 = getItem(y1, x1);
     msBox *box2 = getItem(y2, x2);
@@ -588,8 +609,7 @@ void msBoxGrid::removeSimilarItemsAtPoint( msPointf screenPoint )
 		{
 			msBox *box = getItem(y, x);
 
-			if((box->m_location.x <= point.x && point.x <= box->m_location.x + box->m_size.width) &&
-			   (box->m_location.y <= point.y && point.y <= box->m_location.y + box->m_size.height))
+			if(box->getVerticesData()->isInside(&point))
 			{
 				removeSimilarItems(y, x);
 				return;

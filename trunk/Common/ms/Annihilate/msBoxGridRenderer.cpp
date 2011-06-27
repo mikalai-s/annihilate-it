@@ -19,36 +19,23 @@ static const GLfloat g_fbVertexPositions2[] = {
 	 1.f,  1.f, 1.f, 1.f,
 };
 
-static const GLfloat g_fbVertexTexcoord2[] = {
-	0.f, 0.f,
-	1.f, 0.f, 
-	0.f, 1.f,
-	1.f, 1.f,
-};
-
-GLfloat borderOrientationLeft[] = {
+GLfloat textureOrientation[] = {
+// left
 	0.f, 0.f,
 	1.f, 0.f,
 	0.f, 1.f,
 	1.f, 1.f,
-};
-
-
-GLfloat borderOrientationBottom[] = {
+// bottom
 	1.f, 0.f,
 	1.f, 1.f,
 	0.f, 0.f,
 	0.f, 1.f,
-};
-
-GLfloat borderOrientationRight[] = {
+// right
 	1.f, 1.f,
 	0.f, 1.f,
 	1.f, 0.f,
 	0.f, 0.f,
-};
-
-GLfloat borderOrientationTop[] = {
+// top
 	0.f, 1.f,
 	0.f, 0.f,
 	1.f, 1.f, 
@@ -58,6 +45,9 @@ GLfloat borderOrientationTop[] = {
 static const GLubyte g_fbIndices2[] = {
 	0, 1, 2, 3,
 };
+
+GLuint borderBuffer;
+GLuint vertexBuffer;
 
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
 {
@@ -90,54 +80,54 @@ static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 
 void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msColor *c)
 {
-	msPointf l = box->getLocation();
-	msSize s = box->getSize();
+	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
+	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
-	msMatrixTransform transform;
-	transform.translate(-l.x - s.width/2, -l.y - s.height/2, 0)
-		->rotate(box->m_angle, 1, 0, 0)
-		->translate(l.x + s.width/2, l.y + s.height/2, 0)
-		->scale(2, -2, 0)
-		->translate(-1, 1, 0);	
-	
-	program->getUniform("mvp")->setMatrix4fv(1, false, transform.getMatrix()->getArray());
 
-	float z = 0;
-	msPointf points[4];
-	points[0] = msPointf(l.x, l.y, z);
-	points[1] = msPointf(l.x + s.width, l.y, z);
-	points[2] = msPointf(l.x, l.y + s.height, z);
-	points[3] = msPointf(l.x + s.width, l.y + s.height, z);
+	GLint lineBorder[] = { !box->hasLeft(), !box->hasTop(), !box->hasRight(), !box->hasBottom() };
+	program->getUniform("lineBorder")->set4iv(1, lineBorder);
+
 
 	msColor cc = *c;
 	cc.r *= box->getColorDisturbance().r;
 	cc.g *= box->getColorDisturbance().g;
 	cc.b *= box->getColorDisturbance().b;
 	cc.a *= box->getColorDisturbance().a;
-
 	program->getUniform("color")->set4fv(1, (GLfloat*)&cc);
 
-	program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, points );
-	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
-	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
-	GLint lineBorder[] = { !box->hasLeft(), !box->hasTop(), !box->hasRight(), !box->hasBottom() };
-	program->getUniform("lineBorder")->set4iv(1, lineBorder);
+	msPointf center = box->getVerticesData()->getCenter();
+	msMatrixTransform transform;
+	transform.translate(-center.x, -center.y, -center.z)
+		->rotate(box->m_angle, 1, 0, 0)
+		->translate(center.x, center.y, center.z)
+		->scale(2, -2, 0)
+		->translate(-1, 1, 0);		
+	program->getUniform("mvp")->setMatrix4fv(1, false, transform.getMatrix()->getArray());
 
-    GLint cornerBorder[] =
+
+	GLint cornerBorder[] =
 	{
 		box->hasLeft() && !box->getLeft()->hasTop() && box->hasTop() && !box->getTop()->hasLeft(),
 		box->hasTop() && !box->getTop()->getRight() && box->hasRight() && !box->getRight()->hasTop(),		
 		box->hasRight() && !box->getRight()->getBottom() && box->hasBottom() && !box->getBottom()->hasRight(),
 		box->hasLeft() && !box->getLeft()->getBottom() && box->hasBottom() && !box->getBottom()->hasLeft(),
-		
+
 	};
 	program->getUniform("cornerBorder")->set4iv(1, cornerBorder);
-	
-	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientationLeft );
-	program->getAttribute("borderTexelBottom")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientationBottom );
-	program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientationRight );
-	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, 0, 0, borderOrientationTop );
+
+
+
+   /* glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(msBoxVertexData), box->getVerticesData());
+    program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, sizeof(msPointf), 0 );    */
+
+    program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, box->getVerticesData()->vertices);
+
+	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, textureOrientation );
+	program->getAttribute("borderTexelBottom")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[8]);
+	program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[16] );
+	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[24] );
 
 	glEnable(GL_BLEND);	
 
@@ -181,44 +171,24 @@ void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, m
 }
 
 void msBoxGridRenderer::drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color)
-{
-	msPointf start = box->getLocation();
-	msPointf end = box->getLocation();
-	end.y += box->getSize().height;
-    
-    _drawLine(m_program, start, end, color);
+{    
+    _drawLine(m_program, box->getVerticesData()->vertices[0], box->getVerticesData()->vertices[2], color);
 }
 
 void msBoxGridRenderer::drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPointf start = box->getLocation();
-	msPointf end = box->getLocation();
-	end.x += box->getSize().width;
-
-	_drawLine(m_program, start, end, color);
+	_drawLine(m_program, box->getVerticesData()->vertices[0], box->getVerticesData()->vertices[1], color);
 }
 
 void msBoxGridRenderer::drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPointf start = box->getLocation();
-	start.x += box->getSize().width;
-	msPointf end = box->getLocation();
-	end.x += box->getSize().width;
-	end.y += box->getSize().height;
-
-	_drawLine(m_program, start, end, color);
+	_drawLine(m_program, box->getVerticesData()->vertices[1], box->getVerticesData()->vertices[3], color);
 }
 
 
 void msBoxGridRenderer::drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
-	msPointf start = box->getLocation();
-	start.x += box->getSize().width;
-	start.y += box->getSize().height;
-	msPointf end = box->getLocation();
-	end.y += box->getSize().height;
-
-	_drawLine(m_program, start, end, color);
+	_drawLine(m_program, box->getVerticesData()->vertices[2], box->getVerticesData()->vertices[3], color);
 }
 
 GLuint gi = 0;
@@ -368,7 +338,7 @@ void msBoxGridRenderer::drawExplosions()
 
 	particleCompleteProgram->getUniform("u2_texture")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
 	particleCompleteProgram->getAttribute("a2_position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions2 );
-	particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_fbVertexTexcoord2 );
+	particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, textureOrientation );
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
 	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices2 );	
@@ -410,13 +380,6 @@ static const GLfloat g_vertexPositions[] = {
 	1.0f,  1.0f,  1.0f, 1.0f,
 };
 
-static const GLfloat g_vertexTexcoord[] = {
-	0.f, 0.f,
-	1.f, 0.f,
-	0.f, 1.f,
-	1.f, 1.f,
-};
-
 
 void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 {
@@ -455,7 +418,7 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 
 	program->getUniform("tex")->set1i(u);
 	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_vertexPositions );
-	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, g_vertexTexcoord );
+	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, textureOrientation );
 
 	// wave
 	for(msWaveIterator i = m_waves.begin(); i != m_waves.end(); i ++)
@@ -470,10 +433,8 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 
 msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
 {
-	msPointf location;
-	location.x = box->getLocation().x + box->getSize().width / 2.0;
+	msPointf location = box->getVerticesData()->getCenter();	
 	location.x *= m_size.width;
-	location.y = box->getLocation().y + box->getSize().height / 2.0;
 	location.y = 1.0f - location.y;
 	location.y *= m_size.height;
 

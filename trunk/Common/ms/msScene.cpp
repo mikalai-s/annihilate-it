@@ -213,8 +213,8 @@ void msScene::init()
 	// init palette
 	m_palette = new msPalette(colorMap, 8);
 
-#define NUM_ROWS 20
-#define NUM_COLS 20
+#define NUM_ROWS 5
+#define NUM_COLS 5
 	
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {

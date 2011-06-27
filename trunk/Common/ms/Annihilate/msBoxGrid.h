@@ -76,12 +76,20 @@ typedef list<msHideAction> msHideActionList;
 typedef msHideActionList::iterator msHideActionIterator;
 
 
+
+
 class msBoxGrid : public msGrid<msBox*>
 {
 	msSize size;
 
+    msGrid<msBoxVertexData*> *m_coordinateGrid;
+
 	msMoveActionList _lastMovedBoxes;
 	msHideActionList _lastHiddenBoxes;
+
+
+
+
 
 	void _refreshBorders();
 
@@ -89,7 +97,7 @@ class msBoxGrid : public msGrid<msBox*>
 
     void _animateBorderInvertion( msBox * box, GLint positive );
 
-	GLint ms_boxgrid_check_neighbours(GLint y1, GLint x1, GLint y2, GLint x2);
+	GLint _checkNeighbours(GLint y1, GLint x1, GLint y2, GLint x2);
 
 	GLint* _generate_random_pattern(GLint numRows, GLint numCols, GLint numColors);
 
@@ -120,6 +128,8 @@ class msBoxGrid : public msGrid<msBox*>
 	static void doBoxesFallingCallback(msAnimationContext *c);
 
 public:
+
+	msBoxVertexData *m_boxVertexData;
 
 	msPalette *m_palette;
 
