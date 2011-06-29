@@ -88,7 +88,6 @@ private:
 
 	static void _linearFalling2(msAnimationContext *c);
 
-    static void _hiding1(msAnimationContext *c);
 
 	static void _appearing(msAnimationContext *c);
 

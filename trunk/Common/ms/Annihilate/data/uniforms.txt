@@ -4,7 +4,7 @@ attribute texcoord 1
 uniform_float radius
 uniform_float power
 uniform_vec2 location
-colorTexFbo renderTex 11
+
 link shockwave
 
 

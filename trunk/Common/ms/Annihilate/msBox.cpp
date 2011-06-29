@@ -185,18 +185,6 @@ void msBox::unfall( int delay, int direction, msBoxVertexData *newVertexData )
 }
 
 
-void msBox::_hiding1(msAnimationContext *c)
-{
-    msFromToAnimationContext<msBoxAnimation*> *context = (msFromToAnimationContext<msBoxAnimation*>*)c;
-
-    GLfloat k = 1.0f / context->getAnimation()->getCount();
-
-    //context->getFrom()->m_colorDisturbance.a = 0.5;// -= 0.01f;
-    context->getFrom()->m_colorDisturbance.r -= k;
-    context->getFrom()->m_colorDisturbance.g -= k;
-    context->getFrom()->m_colorDisturbance.b -= k;
-}
-
 
 void msBox::hide(GLint delay)
 {

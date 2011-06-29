@@ -172,6 +172,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ms\Annihilate\msAnimationBase.h" />
     <ClInclude Include="..\ms\Annihilate\msSpline.h" />
     <ClInclude Include="..\ms\msMatrix.h" />
     <ClInclude Include="..\ms\msMatrixTransform.h" />

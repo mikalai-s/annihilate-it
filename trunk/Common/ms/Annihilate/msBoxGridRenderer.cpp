@@ -294,57 +294,7 @@ void msBoxGridRenderer::removeInactiveEmitters()
 
 
 
-void msBoxGridRenderer::drawExplosions()
-{
-	// render fire into texture using particle shaders
-    msShaderProgram *program = m_shaders->getProgramByName("particle_create");
-	program->use();
 
-	// Switch the render target to the current FBO to update the texture map
-	program->getFrameBuffer("renderTex")->bind();
-
-	// FBO attachment is complete?
-	if (program->getFrameBuffer("renderTex")->isComplete())		
-	{
-		// Set viewport to size of texture map and erase previous image
-		glViewport(0, 0, (GLsizei)m_size.width, (GLsizei)m_size.height);
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-		// render particles
-        for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
-        {
-            (*ei)->renderParticles(program);
-            (*ei)->update(0.015f);
-        }
-	}
-
-	// Unbind the FBO so rendering will return to the backbuffer.
-	m_shaders->getMainFrameBuffer()->bind();
-
-	// usual renderer
-
-	// Set viewport to size of framebuffer and clear color and depth buffers
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	// Bind updated texture map
-	program->getFrameBuffer("renderTex")->getTexture()->active();
-	program->getFrameBuffer("renderTex")->getTexture()->bind();
-
-	msShaderProgram *particleCompleteProgram = m_shaders->getProgramByName("particle_complete");
-	particleCompleteProgram->use();
-
-	particleCompleteProgram->getUniform("u2_texture")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
-	particleCompleteProgram->getAttribute("a2_position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions2 );
-	particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, textureOrientation );
-
-	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices2 );	
-
-	glDisable(GL_BLEND);
-}
 
 msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPointf location, msSize screenSize)
 {
@@ -429,6 +379,58 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
 	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );
+}
+
+void msBoxGridRenderer::drawExplosions()
+{
+    // render fire into texture using particle shaders
+    msShaderProgram *program = m_shaders->getProgramByName("particle_create");
+    program->use();
+
+    // Switch the render target to the current FBO to update the texture map
+    program->getFrameBuffer("renderTex")->bind();
+
+    // FBO attachment is complete?
+    if (program->getFrameBuffer("renderTex")->isComplete())		
+    {
+        // Set viewport to size of texture map and erase previous image
+        glViewport(0, 0, (GLsizei)m_size.width, (GLsizei)m_size.height);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+        // render particles
+        for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
+        {
+            (*ei)->renderParticles(program);
+            (*ei)->update(0.015f);
+        }
+    }
+
+    // Unbind the FBO so rendering will return to the backbuffer.
+    m_shaders->getMainFrameBuffer()->bind();
+
+    // usual renderer
+
+    // Set viewport to size of framebuffer and clear color and depth buffers
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // Bind updated texture map
+    program->getFrameBuffer("renderTex")->getTexture()->active();
+    program->getFrameBuffer("renderTex")->getTexture()->bind();
+
+    msShaderProgram *particleCompleteProgram = m_shaders->getProgramByName("particle_complete");
+    particleCompleteProgram->use();
+
+    particleCompleteProgram->getUniform("u2_texture")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
+    particleCompleteProgram->getAttribute("a2_position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions2 );
+    particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, textureOrientation );
+
+    // draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
+    glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices2 );	
+
+    glDisable(GL_BLEND);
 }
 
 msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
