@@ -4,7 +4,6 @@
 
 #include "msBoxGrid.h"
 #include "msGrid.h"
-#include "msBoxAnimation.h"
 
 void msBoxGrid::_borderInvertion( msAnimationContext *c )
 {
@@ -59,12 +58,12 @@ void msBoxGrid::_refreshBorders()
 	}
 }
 
-msBoxGrid::msBoxGrid(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth) : msGrid(numRows, numCols)
+msBoxGrid::msBoxGrid(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth) : msGrid<msBox*>(numRows, numCols)
 {
 	init(palette, pattern, numRows, numCols, gridHeight, gridWidth);
 }
 
-msBoxGrid::msBoxGrid(msPalette *palette, GLint numColors, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth) : msGrid(numRows, numCols)
+msBoxGrid::msBoxGrid(msPalette *palette, GLint numColors, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth) : msGrid<msBox*>(numRows, numCols)
 {   
     GLint *pattern = _generate_random_pattern(numRows, numCols, numColors);
 	init(palette, pattern, numRows, numCols, gridHeight, gridWidth);

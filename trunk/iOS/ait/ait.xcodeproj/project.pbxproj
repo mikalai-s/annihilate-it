@@ -11,7 +11,6 @@
 		CE4C2D0F135FF8D70071F1C9 /* msAnimationBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CE6135FF8D70071F1C9 /* msAnimationBundle.cpp */; };
 		CE4C2D10135FF8D70071F1C9 /* msAnimationContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CE8135FF8D70071F1C9 /* msAnimationContext.cpp */; };
 		CE4C2D11135FF8D70071F1C9 /* msBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CEA135FF8D70071F1C9 /* msBox.cpp */; };
-		CE4C2D12135FF8D70071F1C9 /* msBoxAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CEC135FF8D70071F1C9 /* msBoxAnimation.cpp */; };
 		CE4C2D13135FF8D70071F1C9 /* msBoxGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CEE135FF8D70071F1C9 /* msBoxGrid.cpp */; };
 		CE4C2D14135FF8D70071F1C9 /* msBoxGridRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CF0135FF8D70071F1C9 /* msBoxGridRenderer.cpp */; };
 		CE4C2D15135FF8D70071F1C9 /* msPalette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CF3135FF8D70071F1C9 /* msPalette.cpp */; };
@@ -69,6 +68,8 @@
 		CEA849B51384C3340082C69B /* msSpline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA849B31384C3340082C69B /* msSpline.cpp */; };
 		CEA849B61384C3620082C69B /* border-corner.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEA849AF1384C3130082C69B /* border-corner.tga */; };
 		CEA849B71384C3620082C69B /* border-line.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEA849B01384C3130082C69B /* border-line.tga */; };
+		CEAD788413BAD7BA00AAE923 /* msMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEAD788013BAD7BA00AAE923 /* msMatrix.cpp */; };
+		CEAD788513BAD7BA00AAE923 /* msMatrixTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEAD788213BAD7BA00AAE923 /* msMatrixTransform.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,8 +116,6 @@
 		CE4C2CE9135FF8D70071F1C9 /* msAnimationContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAnimationContext.h; sourceTree = "<group>"; };
 		CE4C2CEA135FF8D70071F1C9 /* msBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msBox.cpp; sourceTree = "<group>"; };
 		CE4C2CEB135FF8D70071F1C9 /* msBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msBox.h; sourceTree = "<group>"; };
-		CE4C2CEC135FF8D70071F1C9 /* msBoxAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msBoxAnimation.cpp; sourceTree = "<group>"; };
-		CE4C2CED135FF8D70071F1C9 /* msBoxAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msBoxAnimation.h; sourceTree = "<group>"; };
 		CE4C2CEE135FF8D70071F1C9 /* msBoxGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msBoxGrid.cpp; sourceTree = "<group>"; };
 		CE4C2CEF135FF8D70071F1C9 /* msBoxGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msBoxGrid.h; sourceTree = "<group>"; };
 		CE4C2CF0135FF8D70071F1C9 /* msBoxGridRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msBoxGridRenderer.cpp; sourceTree = "<group>"; };
@@ -189,6 +188,10 @@
 		CEA849B01384C3130082C69B /* border-line.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "border-line.tga"; sourceTree = "<group>"; };
 		CEA849B31384C3340082C69B /* msSpline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msSpline.cpp; sourceTree = "<group>"; };
 		CEA849B41384C3340082C69B /* msSpline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msSpline.h; sourceTree = "<group>"; };
+		CEAD788013BAD7BA00AAE923 /* msMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msMatrix.cpp; sourceTree = "<group>"; };
+		CEAD788113BAD7BA00AAE923 /* msMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msMatrix.h; sourceTree = "<group>"; };
+		CEAD788213BAD7BA00AAE923 /* msMatrixTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msMatrixTransform.cpp; sourceTree = "<group>"; };
+		CEAD788313BAD7BA00AAE923 /* msMatrixTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msMatrixTransform.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +230,10 @@
 				CE4C2CF6135FF8D70071F1C9 /* msGL.h */,
 				CE4C2CF7135FF8D70071F1C9 /* msImageObject.cpp */,
 				CE4C2CF8135FF8D70071F1C9 /* msImageObject.h */,
+				CEAD788013BAD7BA00AAE923 /* msMatrix.cpp */,
+				CEAD788113BAD7BA00AAE923 /* msMatrix.h */,
+				CEAD788213BAD7BA00AAE923 /* msMatrixTransform.cpp */,
+				CEAD788313BAD7BA00AAE923 /* msMatrixTransform.h */,
 				CE4C2CF9135FF8D70071F1C9 /* msParticleEmitter.cpp */,
 				CE4C2CFA135FF8D70071F1C9 /* msParticleEmitter.h */,
 				CE4C2CFB135FF8D70071F1C9 /* msScene.cpp */,
@@ -254,8 +261,6 @@
 				CE4C2CE9135FF8D70071F1C9 /* msAnimationContext.h */,
 				CE4C2CEA135FF8D70071F1C9 /* msBox.cpp */,
 				CE4C2CEB135FF8D70071F1C9 /* msBox.h */,
-				CE4C2CEC135FF8D70071F1C9 /* msBoxAnimation.cpp */,
-				CE4C2CED135FF8D70071F1C9 /* msBoxAnimation.h */,
 				CE4C2CEE135FF8D70071F1C9 /* msBoxGrid.cpp */,
 				CE4C2CEF135FF8D70071F1C9 /* msBoxGrid.h */,
 				CE4C2CF0135FF8D70071F1C9 /* msBoxGridRenderer.cpp */,
@@ -502,7 +507,6 @@
 				CE4C2D0F135FF8D70071F1C9 /* msAnimationBundle.cpp in Sources */,
 				CE4C2D10135FF8D70071F1C9 /* msAnimationContext.cpp in Sources */,
 				CE4C2D11135FF8D70071F1C9 /* msBox.cpp in Sources */,
-				CE4C2D12135FF8D70071F1C9 /* msBoxAnimation.cpp in Sources */,
 				CE4C2D13135FF8D70071F1C9 /* msBoxGrid.cpp in Sources */,
 				CE4C2D14135FF8D70071F1C9 /* msBoxGridRenderer.cpp in Sources */,
 				CE4C2D15135FF8D70071F1C9 /* msPalette.cpp in Sources */,
@@ -528,6 +532,8 @@
 				CEA849A31377AF6A0082C69B /* shockwave_fragment.c in Sources */,
 				CEA849A41377AF6A0082C69B /* shockwave_vertex.c in Sources */,
 				CEA849B51384C3340082C69B /* msSpline.cpp in Sources */,
+				CEAD788413BAD7BA00AAE923 /* msMatrix.cpp in Sources */,
+				CEAD788513BAD7BA00AAE923 /* msMatrixTransform.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

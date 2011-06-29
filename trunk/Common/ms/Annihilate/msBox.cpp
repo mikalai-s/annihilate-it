@@ -2,7 +2,6 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include "msPalette.h"
-#include "msBoxAnimation.h"
 #include "msBoxGrid.h"
 
 msBox::msBox()

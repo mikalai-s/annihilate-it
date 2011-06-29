@@ -10,7 +10,6 @@
 #include "../msGL.h"
 #include "../msCommon.h"
 #include "msBox.h"
-#include "msBoxAnimation.h"
 #include "msBoxGrid.h"
 #include "msPalette.h"
 #include "../ShaderProgram/msShaderPrograms.h"
