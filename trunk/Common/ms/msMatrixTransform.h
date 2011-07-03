@@ -17,12 +17,17 @@ public:
 	msMatrixTransform* translate(float tx, float ty, float tz);
 	msMatrixTransform* rotate(float angle, float x, float y, float z);
 	msMatrixTransform* frustum(float left, float right, float bottom, float top, float nearZ, float farZ);
-	msMatrixTransform* perspective(float fovy, float aspect, float nearZ, float farZ);
 	msMatrixTransform* ortho(float left, float right, float bottom, float top, float nearZ, float farZ);
+
+    msMatrixTransform* perspective(float fieldOfViewY, float aspectRatio, float zNearPlane, double zFarPlane);
+    msMatrixTransform* viewport(float width, float height);
+
+    void multiplyMatrix( msMatrix &matrix );
 
 	msMatrix* getMatrix() const
 	{
 		return m_matrix;
 	}
+
 };
 

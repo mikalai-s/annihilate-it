@@ -39,7 +39,7 @@ msMatrixTransform* msMatrixTransform::scale(float sx, float sy, float sz)
 	m.m_value[2][2] *= sz;
 	m.m_value[2][3] *= sz;
 
-	m_matrix->multiply(&m);
+	m_matrix->multiply(m);
 
 	return this;
 }
@@ -53,7 +53,7 @@ msMatrixTransform* msMatrixTransform::translate(float tx, float ty, float tz)
 	m.m_value[3][2] += (m.m_value[0][2] * tx + m.m_value[1][2] * ty + m.m_value[2][2] * tz);
 	m.m_value[3][3] += (m.m_value[0][3] * tx + m.m_value[1][3] * ty + m.m_value[2][3] * tz);
 
-	m_matrix->multiply(&m);
+	m_matrix->multiply(m);
 
 	return this;
 }
@@ -106,7 +106,7 @@ msMatrixTransform* msMatrixTransform::rotate(float angle, float x, float y, floa
 		rotMat.m_value[3][2] = 0.0F;
 		rotMat.m_value[3][3] = 1.0F;
 
-		m_matrix->multiply( &rotMat );
+		m_matrix->multiply( rotMat );
 	}
 
 	return this;
@@ -137,21 +137,11 @@ msMatrixTransform* msMatrixTransform::frustum(float left, float right, float bot
 	frust.m_value[3][2] = -2.0f * nearZ * farZ / deltaZ;
 	frust.m_value[3][0] = frust.m_value[3][1] = frust.m_value[3][3] = 0.0f;
 
-	m_matrix->multiply(&frust);
+	m_matrix->multiply(frust);
 
 	return this;
 }
 
-
-msMatrixTransform* msMatrixTransform::perspective(float fovy, float aspect, float nearZ, float farZ)
-{
-	float frustumW, frustumH;
-
-	frustumH = tanf( fovy ) * nearZ;
-	frustumW = frustumH * aspect;
-
-	return frustum( -frustumW, frustumW, -frustumH, frustumH, nearZ, farZ );
-}
 
 msMatrixTransform* msMatrixTransform::ortho(float left, float right, float bottom, float top, float nearZ, float farZ)
 {
@@ -171,11 +161,52 @@ msMatrixTransform* msMatrixTransform::ortho(float left, float right, float botto
 	ortho.m_value[2][2] = -2.0f / deltaZ;
 	ortho.m_value[3][2] = -(nearZ + farZ) / deltaZ;
 
-	m_matrix->multiply(&ortho);
+	m_matrix->multiply(ortho);
 
 	return this;
 }
 
+
+msMatrixTransform* msMatrixTransform::perspective(float fieldOfViewY, float aspectRatio, float zNearPlane, double zFarPlane)
+{
+    float height = 1.0f / tanf(fieldOfViewY / 2.0f);
+    float width = height / aspectRatio;
+    float d = zNearPlane - zFarPlane;
+
+    float mv[4][4] = 
+    {
+        width, 0, 0, 0, 
+        0, height, 0, 0,
+        0, 0, zFarPlane / d, -1, 
+        0, 0, zNearPlane * zFarPlane / d, 0
+    };
+
+    msMatrix m(mv);
+    m_matrix->multiply(m);    
+
+    return this;
+}
+
+msMatrixTransform* msMatrixTransform::viewport(float width, float height)
+{
+    float mv[4][4] = 
+    {
+        width / 2.0,    0.0,            0.0,    0.0,
+        0.0,            -height / 2.0,  0.0,    0.0,
+        0.0,            0.0,            1.0,    0.0,
+        width / 2.0,    height / 2.0,   0.0,    1.0,
+    };
+
+    msMatrix m(mv);
+    m_matrix->multiply(m);
+
+    return this;
+}
+
+void msMatrixTransform::multiplyMatrix( msMatrix &matrix )
+{
+    m_matrix->multiply(matrix);
+}
 
 
 

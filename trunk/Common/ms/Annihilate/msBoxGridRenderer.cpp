@@ -56,6 +56,17 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
     m_animate = 0;
 
 	_menuBarHeight = 0.1;
+
+    // calculate projection matrix
+    float fovy = 45.0f / 180.0f * 3.1415926f;
+    float z = -0.5f / tanf(fovy / 2.0f);
+
+    msMatrixTransform transform;
+    transform.translate(-0.5f, -0.5f, z)
+        ->perspective(fovy, 1.0f, -1.0f, 1.0f)
+        ->viewport(2.0f, 2.0f)          
+        ->translate(-1.0f, -1.0f, 0.0f);
+    m_projectionMatrix = *transform.getMatrix();
 }
 
 msBoxGridRenderer::~msBoxGridRenderer()
@@ -97,12 +108,12 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 
 
 	msPointf center = box->getVerticesData()->getCenter();
-	msMatrixTransform transform;
+	msMatrixTransform transform;    
 	transform.translate(-center.x, -center.y, -center.z)
-		->rotate(box->m_angle, 1, 0, 0)
+		->rotate(box->m_angle += 0.01, 0.25f, -1.0, 0)
 		->translate(center.x, center.y, center.z)
-		->scale(2, -2, 0)
-		->translate(-1, 1, 0);		
+        ->multiplyMatrix(m_projectionMatrix);
+    
 	program->getUniform("mvp")->setMatrix4fv(1, false, transform.getMatrix()->getArray());
 
 

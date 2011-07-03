@@ -18,6 +18,7 @@
 #include "../msWaveEmitter.h"
 #include "msSpline.h"
 #include <list>
+#include "../msMatrix.h"
 
 using namespace std;
 
@@ -36,6 +37,8 @@ class msBoxGridRenderer
 	msWaveList m_waves;
 
     msSize m_size;
+
+    msMatrix m_projectionMatrix;
 
     GLfloat mBoxVertexesTemp[6][3]; // 6 vertexes for defining quad by means of two triangles (2 vertex for each)
     GLfloat mBoxColorsTemp[6][4];
