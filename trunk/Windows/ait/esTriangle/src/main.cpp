@@ -342,13 +342,21 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
 
    case WM_KEYDOWN:
       {
-         g_keys[wParam] = TRUE;
-		 if(wParam == 8)
-		 {
-			 // Backspace is pressed then undo
-			 g_scene->undoLastMove();
-		 }
-         return 0;
+        g_keys[wParam] = TRUE;
+	    if(wParam == 8)
+	    {
+		    // Backspace is pressed then undo
+		    g_scene->undoLastMove();
+	    } 
+        else if(wParam == 13)
+        {
+            g_scene->start();
+        }
+        else if(wParam == 32)
+        {
+            g_scene->end();
+        }
+        return 0;
       }
 
    case WM_KEYUP:

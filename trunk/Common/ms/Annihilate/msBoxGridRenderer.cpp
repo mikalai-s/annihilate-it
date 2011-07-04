@@ -67,6 +67,8 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
         ->viewport(2.0f, 2.0f)          
         ->translate(-1.0f, -1.0f, 0.0f);
     m_projectionMatrix = *transform.getMatrix();
+
+    glViewport(0, 0, m_size.width, m_size.height);
 }
 
 msBoxGridRenderer::~msBoxGridRenderer()
@@ -211,7 +213,12 @@ GLuint gi = 0;
 
 void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
 {
+    glClear(GL_COLOR_BUFFER_BIT);
+
     m_size = size;
+
+    if(boxGrid == 0)
+        return;
 
     drawBoxesWithShockWave(boxGrid);
 

@@ -57,8 +57,8 @@ msScene::msScene()
 
 void msScene::newSize(GLint width, GLint height)
 {
-	_width = width;
-	_height = height;
+	m_size.width = width;
+	m_size.height = height;
 	
 	m_shaders.notifySizeChanged(width, height);	
 
@@ -140,9 +140,9 @@ bool msScene::loadData(string filename)
 /// \return null
 //=================================================================================================================================
 
-msParticleEmitter* msScene::_createExplosionPe(GLint _width, GLint _height)
+msParticleEmitter* msScene::_createExplosionPe(GLint width, GLint height)
 {
-    float k = (_width / 320.0f / 2.0f) + (_height / 480.0f / 2.0f);
+    float k = (m_size.width / 320.0f / 2.0f) + (m_size.height / 480.0f / 2.0f);
 
     return new msParticleEmitter(
 		// explosion
@@ -183,7 +183,7 @@ GLfloat colorMap[][4] =
 
 void msScene::init()
 {
-	m_shaders.notifySizeChanged(_width, _height);
+	m_shaders.notifySizeChanged(m_size.width, m_size.height);
 
 	pe2 = new msParticleEmitter(
 		// dust
@@ -213,9 +213,51 @@ void msScene::init()
 	// init palette
 	m_palette = new msPalette(colorMap, 8);
 
+    m_renderer = new msBoxGridRenderer(&m_shaders);
+}
+
+
+void msScene::drawFrame()
+{
+    if(m_renderer != 0)
+        m_renderer->draw(m_boxGrid, m_size);
+}
+
+int getShiftDirection()
+{
+	return MS_BOX_SHIFT_DOWN;
+}
+
+void msScene::mouseClick(int x, int y)
+{
+    if(m_boxGrid == 0)
+        return;
+
+	msPointf touchPoint;
+	touchPoint.x = ((GLfloat)x / (GLfloat)m_size.width);
+	touchPoint.y = ((GLfloat)y / (GLfloat)m_size.height);
+	
+	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
+}
+
+void msScene::setMainFrameBuffer(GLint id)
+{
+	m_shaders.setMainFrameBuffer(id);
+}
+
+void msScene::undoLastMove()
+{
+	m_boxGrid->undo();
+}
+
+void msScene::start()
+{
+    if(m_boxGrid != 0)
+        delete m_boxGrid;
+
 #define NUM_ROWS 5
 #define NUM_COLS 5
-	
+
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
@@ -232,53 +274,17 @@ void msScene::init()
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-		//1,1,
-	//	1,2,
+        //1,1,
+        //	1,2,
     };
-	
-	//m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
-	
-	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
-	
-	m_renderer = new msBoxGridRenderer(&m_shaders);
+
+    //m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+
+    m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 }
 
-
-void msScene::drawFrame()
+void msScene::end()
 {
-    m_shaders.getMainFrameBuffer()->bind();
-    
-	glViewport(0, 0, _width, _height);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-    msSize size;
-    size.width = (GLfloat)_width;
-    size.height = (GLfloat)_height;
-	m_renderer->draw(m_boxGrid, size);
-
-	return;
-}
-
-int getShiftDirection()
-{
-	return MS_BOX_SHIFT_DOWN;
-}
-
-void msScene::mouseClick(int x, int y)
-{
-	msPointf touchPoint;
-	touchPoint.x = ((GLfloat)x / (GLfloat)_width);
-	touchPoint.y = ((GLfloat)y / (GLfloat)_height);
-	
-	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
-}
-
-void msScene::setMainFrameBuffer(GLint id)
-{
-	m_shaders.setMainFrameBuffer(id);
-}
-
-void msScene::undoLastMove()
-{
-	m_boxGrid->undo();
+    delete m_boxGrid;
+    m_boxGrid = 0;
 }

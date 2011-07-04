@@ -97,6 +97,10 @@ public:
 
    void undoLastMove();
 
+   void start();
+
+   void end();
+
 private:
 
    /// Contains all the uniform/texture/attribute/shader data
@@ -105,8 +109,7 @@ private:
    /// Pointer to the clear color
    GLfloat m_clearColor[4];
 
-   int _width;
-   int _height;
+   msSize m_size;
 };
 
 
