@@ -75,8 +75,8 @@ private:
 
 	msBoxVertexData *m_verticesData;
 
-public:
 	float m_angle;
+    msPointf m_angleVector;
 	
 
 
@@ -128,6 +128,8 @@ public:
 	static void unitTest();
 
 	void fall(GLint delay, GLint direction, msBoxVertexData *newVertexData);
+
+    void unfall( int delay, int  direction, msBoxVertexData *newVertexData );
 
     void hide(int delay);
 
@@ -208,11 +210,17 @@ public:
 	}
 
     msBoxVertexData *getVerticesData() const
-
     {
         return m_verticesData;
     }
 
-	void unfall( int delay, int  direction, msBoxVertexData *newVertexData );
+    float getAngle()
+    {
+        return m_angle;
+    }
 
+    msPointf getAngleVector()
+    {
+        return m_angleVector;
+    }
 };

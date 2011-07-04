@@ -107,12 +107,17 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 	program->getUniform("color")->set4fv(1, (GLfloat*)&cc);
 
 
-	msPointf center = box->getVerticesData()->getCenter();
-	msMatrixTransform transform;    
-	transform.translate(-center.x, -center.y, -center.z)
-		->rotate(box->m_angle += 0.01, 0.25f, -1.0, 0)
-		->translate(center.x, center.y, center.z)
-        ->multiplyMatrix(m_projectionMatrix);
+	msMatrixTransform transform;
+    float boxAngle = box->getAngle();
+    if(boxAngle != 0.0f)
+    {
+        msPointf center = box->getVerticesData()->getCenter();
+	    transform.translate(-center.x, -center.y, -center.z)
+		    ->rotate(boxAngle, box->getAngleVector())
+		    ->translate(center.x, center.y, center.z);
+    }
+
+    transform.multiplyMatrix(m_projectionMatrix);
     
 	program->getUniform("mvp")->setMatrix4fv(1, false, transform.getMatrix()->getArray());
 

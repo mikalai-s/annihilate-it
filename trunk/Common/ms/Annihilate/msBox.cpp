@@ -50,7 +50,8 @@ void msBox::_init(msBoxVertexData *verticesData, int colorIndex )
 	m_bottom = 0;
 	m_left = 0;
 
-	m_angle = 0.0f;	
+	m_angle = 0.0f;
+    m_angleVector = msPointf(0.0f, 1.0f, 0.0f);
 }
 
 msBox::~msBox()
@@ -244,10 +245,6 @@ void msBox::wave(GLint delay)
     _setFlag<GLboolean>(delay, &m_requiresWave, true);
     _setFlag<GLboolean>(delay + 1, &m_requiresWave, false);
 }
-
-
-
-
 
 void msBoxVertexData::copy( msBoxVertexData *source )
 {
