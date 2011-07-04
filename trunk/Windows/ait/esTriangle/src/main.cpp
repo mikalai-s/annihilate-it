@@ -33,6 +33,7 @@
 #include <ctime>
 #include <windowsx.h>
 
+//#define PERFORMANCE_TUNING
 
 // Globals
 bool  g_keys[256];               // Array Used For The Keyboard Routine
@@ -289,8 +290,10 @@ HWND CreateWind( int width, int height )
    return hWnd;
 }
 
+#ifdef PERFORMANCE_TUNING
 double start = static_cast <float> (clock ());
 double frameCount = 0;
+#endif
 
 
 //=================================================================================================================================
@@ -371,11 +374,8 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
        switch (wParam) 
        { 
        case 43: 
-           // process the 60fps timer
-            /*DrawScene();
-
-            eglSwapBuffers( g_egl.dsp, g_egl.surf );*/		  
-
+           
+#ifdef PERFORMANCE_TUNING
 		   double newstart = static_cast <double> (clock ());
 
 		   double time = frameCount / ( (newstart - start) / static_cast <double> (CLOCKS_PER_SEC));    
@@ -384,6 +384,13 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
 
 		   frameCount = 0;
 		   start = newstart;
+#else
+            // process the 60fps timer
+            DrawScene();
+
+            eglSwapBuffers( g_egl.dsp, g_egl.surf );
+#endif
+
 
            return 0;      
        } 
@@ -402,8 +409,6 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
 
 #define SCR_WIDTH 320 + 16
 #define SCR_HEIGHT 480 + 38
-
-
 
 
 //=================================================================================================================================
@@ -456,12 +461,18 @@ int WINAPI WinMain( HINSTANCE  hInstance,
 
    g_scene->init();
    
+#ifdef PERFORMANCE_TUNING
    SetTimer(hWnd,             // handle to main window 
        43,            // timer identifier 
-      // 16,                 // 10-second interval 
-	  2000,
+      2000,
        (TIMERPROC) NULL);     // no timer callback 
-   
+#else
+   SetTimer(hWnd,             // handle to main window 
+       43,            // timer identifier 
+       16,                 // 10-second interval 
+       (TIMERPROC) NULL);     // no timer callback 
+#endif
+
    while ( ! done )
    {
       if ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )  // Is There A Message Waiting?
@@ -474,12 +485,11 @@ int WINAPI WinMain( HINSTANCE  hInstance,
          {
             TranslateMessage( &msg );
             DispatchMessage( &msg );
-
-
          }
       }
       else
       {
+#ifdef PERFORMANCE_TUNING
 		  if ( ( g_active && !DrawScene() ) || g_keys[VK_ESCAPE] )
 		  {
 			  done=TRUE;  // ESC or DrawGLScene Signalled A Quit
@@ -490,6 +500,12 @@ int WINAPI WinMain( HINSTANCE  hInstance,
 
 			  frameCount ++;
 		  }
+#else
+         if ( ( g_active && FALSE ) || g_keys[VK_ESCAPE] )
+         {
+            done=TRUE;  // ESC or DrawGLScene Signalled A Quit
+         }
+#endif
       }
    }
 
