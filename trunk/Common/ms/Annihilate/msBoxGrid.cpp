@@ -659,4 +659,35 @@ void msBoxGrid::undo()
 	_updateLinks();
 }
 
+	void _rotationStep(msAnimationContext *c)
+    {
+        msKeyValueAnimationContext<float*, float> *context = (msKeyValueAnimationContext<float*, float>*)c;
+
+        float *angle = context->getKey();
+
+        *angle += (context->getValue() - *angle) / context->getAnimation()->getCount();
+    }
+
+void msBoxGrid::show()
+{
+    for(int y = 0; y < m_rowCount; y ++)
+    {
+        for(int x = 0; x < m_columnCount; x ++)
+        {
+            msBox *box = getItem(y, x);
+
+            box->m_angle = 180.0 * 3.1415926f / 180.0f;
+
+            msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(&box->m_angle, 0.0f);
+            msAnimation *rotation = new msAnimation((y + x) * 3, 15, context, _rotationStep);
+            box->getAnimations()->add(rotation);
+        }
+    }
+}
+
+void msBoxGrid::hide()
+{
+    
+}
+
 

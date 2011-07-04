@@ -103,7 +103,7 @@ class msBoxGrid : public msGrid<msBox*>
 
 	void display2();
 
-	static void _hiding1(msAnimationContext *c);
+
 
 	void _removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &removedBoxes, GLint level);
 
@@ -159,6 +159,8 @@ public:
 	void _updateLinks();
 	void undo();
 	void _moveBackBox( msMoveAction action );
+    void show();
+    void hide();
 };
 
 class msBorderAnimationContext : public msAnimationContext

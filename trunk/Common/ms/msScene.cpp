@@ -281,10 +281,16 @@ void msScene::start()
     //m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
     m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+
+    m_boxGrid->show();
 }
 
 void msScene::end()
 {
+    //m_boxGrid->hide();
+
     delete m_boxGrid;
     m_boxGrid = 0;
+
+    
 }
