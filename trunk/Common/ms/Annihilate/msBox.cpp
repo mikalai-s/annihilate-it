@@ -29,6 +29,9 @@ void msBox::_init(msBoxVertexData *verticesData, int colorIndex )
 	
 	m_colorIndex = colorIndex;
 	m_originalColorIndex = colorIndex;
+	m_backColorIndex = 0;
+	m_originalBackColorIndex = 0;
+
 	m_border = (msBorder*)malloc(sizeof(msBorder));
 	m_border->left = 0;
 	m_border->top = 0;

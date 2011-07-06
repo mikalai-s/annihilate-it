@@ -247,16 +247,27 @@ void msScene::setMainFrameBuffer(GLint id)
 
 void msScene::undoLastMove()
 {
-	m_boxGrid->undo();
+	if(m_boxGrid != 0)
+		m_boxGrid->undo();
 }
 
 void msScene::start()
 {
-    if(m_boxGrid != 0)
-        delete m_boxGrid;
+#define NUM_ROWS 10
+#define NUM_COLS 7
 
-#define NUM_ROWS 5
-#define NUM_COLS 5
+    int backPattern[NUM_ROWS * NUM_COLS];
+
+    memset(backPattern, 0, sizeof(backPattern));
+
+    if(m_boxGrid != 0)
+    {        
+        m_boxGrid->extractPattern(backPattern);        
+
+        delete m_boxGrid;
+    }
+
+
 
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
@@ -281,6 +292,12 @@ void msScene::start()
     //m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
     m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+
+   
+            m_boxGrid->setBackPattern(backPattern);
+           
+   
+    
 
     m_boxGrid->show();
 }

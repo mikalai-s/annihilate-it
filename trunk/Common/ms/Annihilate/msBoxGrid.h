@@ -161,6 +161,21 @@ public:
 	void _moveBackBox( msMoveAction action );
     void show();
     void hide();
+
+
+    void setBackPattern(GLint *pattern)
+    {
+        for(int y = 0; y < m_rowCount; y ++)
+            for(int x = 0; x < m_columnCount; x ++)
+                getItem(y, x)->m_backColorIndex = pattern[y * m_columnCount + x];
+    }
+
+    void extractPattern(int *pattern)
+    {
+        for(int y = 0; y < m_rowCount; y ++)
+            for(int x = 0; x < m_columnCount; x ++)
+                pattern[y * m_columnCount + x] = getItem(y, x)->getColorIndex();
+    }
 };
 
 class msBorderAnimationContext : public msAnimationContext

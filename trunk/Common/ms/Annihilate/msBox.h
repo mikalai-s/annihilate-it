@@ -53,6 +53,9 @@ private:
 	int m_colorIndex;
 	int m_originalColorIndex;
 
+	int m_backColorIndex;
+	int m_originalBackColorIndex;
+
 	msColor m_colorDisturbance;
 
     // visibility of border
@@ -188,6 +191,11 @@ public:
 	{
 		return m_colorIndex;
 	}
+
+    int getBackColorIndex() const 
+    {
+        return m_backColorIndex;
+    }    
 
 	msColor getColorDisturbance() const
 	{

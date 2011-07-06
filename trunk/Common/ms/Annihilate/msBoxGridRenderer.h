@@ -61,6 +61,8 @@ class msBoxGridRenderer
 
     void drawBoxesWithShockWave(msBoxGrid *boxGrid);
 
+    void drawBoxGrid( msBoxGrid * boxGrid );
+
     msParticleEmitter* _createExplosionPe(msPointf location, msSize screenSize);
 
 	msWaveEmitter* _createWave(msBox *box);
@@ -82,6 +84,6 @@ public:
 	msBoxGridRenderer(msShaderPrograms *shaders);
     ~msBoxGridRenderer();
 
-	void draw(msBoxGrid *boxGrid, msSize size);
+    void draw(msBoxGrid *boxGrid, msSize size);
 };
 

@@ -93,6 +93,9 @@ static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 
 void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msColor *c)
 {
+	    glEnable(GL_CULL_FACE);
+
+
 	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
 	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
@@ -136,10 +139,6 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 
 
 
-   /* glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(msBoxVertexData), box->getVerticesData());
-    program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, sizeof(msPointf), 0 );    */
-
     program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, box->getVerticesData()->vertices);
 
 	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, textureOrientation );
@@ -152,6 +151,13 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	glDisable(GL_BLEND);
+
+	glDisable(GL_CULL_FACE);
+
+	
+	if(box->getAngle() > 0.0001f)
+		// don't draw border lines when box is rotating
+		return;
 
     // draw borders if need
 	msColor innerBorderColor(
@@ -176,6 +182,8 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
         drawRightBorder(program, box, palette->getColor(0));
     if(!box->getBottom())
         drawBottomBorder(program, box, palette->getColor(0));
+
+	
 }
 
 void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color)
@@ -211,7 +219,7 @@ void msBoxGridRenderer::drawBottomBorder(msShaderProgram *m_program, msBox *box,
 
 GLuint gi = 0;
 
-void msBoxGridRenderer::draw(msBoxGrid *boxGrid, msSize size)
+void msBoxGridRenderer::draw( msBoxGrid *boxGrid, msSize size )
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -253,14 +261,8 @@ void msBoxGridRenderer::showExplosions()
 
 void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid, msSize size)
 {
-	/*
-	msColor boxColorTemp = *boxGrid->m_palette->getColor(box.getColorIndex());
+   glCullFace(GL_FRONT);	
 
-	drawBox(program, boxGrid->m_palette, &box, &boxColorTemp);
-
-	box.getAnimations()->performStep();
-	*/
-	
     for(int y = 0; y < boxGrid->m_rowCount; y ++)
     {
         for(int x = 0; x < boxGrid->m_columnCount; x ++)
@@ -279,13 +281,26 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
 			}
 
 			if(box->isVisible())
-            {
-                msColor  boxColorTemp;
+            {           
+                // back face first
+                glFrontFace(GL_CW);
+
+                msColor boxColorTemp = *boxGrid->m_palette->getColor(box->getBackColorIndex());
+
+                drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
+
+              // front face then
+               glFrontFace(GL_CCW);
+                
                 boxColorTemp = *boxGrid->m_palette->getColor(box->getColorIndex());
                 drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
+                
+                
+                
             }
         }
     }
+
 }
 
 void msBoxGridRenderer::removeInactiveEmitters()
@@ -354,26 +369,27 @@ static const GLfloat g_vertexPositions[] = {
 };
 
 
+
 void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 {
     // render fire into texture using particle shaders
-	msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
-	program->use();
+    msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
+    program->use();
 
-	// Switch the render target to the current FBO to update the texture map
-	program->getFrameBuffer("renderTex")->bind();
+    // Switch the render target to the current FBO to update the texture map
+    program->getFrameBuffer("renderTex")->bind();
 
-	// FBO attachment is complete?
-	if (program->getFrameBuffer("renderTex")->isComplete())
-	{
-		// Set viewport to size of texture map and erase previous image
-		glViewport(0, 0, m_size.width, m_size.height);
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
+    // FBO attachment is complete?
+    if (program->getFrameBuffer("renderTex")->isComplete())
+    {
+        // Set viewport to size of texture map and erase previous image
+        glViewport(0, 0, m_size.width, m_size.height);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
 
-		// render background
+        // render background
         drawBoxGrid(program, boxGrid, m_size);
-	}
+    }
 
 	// Unbind the FBO so rendering will return to the backbuffer.
 	m_shaders->getMainFrameBuffer()->bind();
@@ -381,15 +397,14 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 	// usual renderer
 
 	// Bind updated texture map
-	program->getFrameBuffer("renderTex")->getTexture()->active();
-	program->getFrameBuffer("renderTex")->getTexture()->bind();
-
-    GLuint u = program->getFrameBuffer("renderTex")->getTexture()->getUnit();
+    msTexture *renderTex = m_shaders->getProgramByName("boxgrid")->getFrameBuffer("renderTex")->getTexture();
+    renderTex->active();
+	renderTex->bind();
 
     program = m_shaders->getProgramByName("shockwave");
     program->use();
 
-	program->getUniform("tex")->set1i(u);
+	program->getUniform("tex")->set1i(renderTex->getUnit());
 	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_vertexPositions );
 	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, textureOrientation );
 

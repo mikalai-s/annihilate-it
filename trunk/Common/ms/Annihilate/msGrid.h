@@ -29,6 +29,16 @@ public:
 		free(m_items);
 	}
 
+    int getRowCount()
+    {
+        return m_rowCount;
+    }
+
+    int getColCount()
+    {
+        return m_columnCount;
+    }
+
 	void setItem(GLint y, GLint x, T value)
 	{
 		if(y < m_rowCount && x < m_columnCount)
