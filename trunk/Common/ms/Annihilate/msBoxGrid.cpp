@@ -620,6 +620,8 @@ void msBoxGrid::removeSimilarItemsAtPoint( msPointf screenPoint )
 // updates links between boxes. Boxes have links to each other if they are neighbors and have the same color
 void msBoxGrid::_updateLinks()
 {
+	// TODO: merge this two loops
+
 	for(int y = 0; y < m_rowCount; y ++)
 	{
 		for(int x = 0; x < m_columnCount; x ++)
@@ -630,6 +632,24 @@ void msBoxGrid::_updateLinks()
 			box->m_right = _checkBoxColor(y, x + 1, box->m_colorIndex) ? getItem(y, x + 1) : 0;
 			box->m_bottom = _checkBoxColor(y + 1, x, box->m_colorIndex) ? getItem(y + 1, x) : 0;
 			box->m_left = _checkBoxColor(y, x - 1, box->m_colorIndex) ? getItem(y, x - 1) : 0;
+		}
+	}
+
+	for(int y = 0; y < m_rowCount; y ++)
+	{
+		for(int x = 0; x < m_columnCount; x ++)
+		{
+			msBox *box = getItem(y, x);
+
+			box->m_verticesData->hasBorder[0] = (box->m_left == 0);
+			box->m_verticesData->hasBorder[1] = (box->m_top == 0);
+			box->m_verticesData->hasBorder[2] = (box->m_right == 0);
+			box->m_verticesData->hasBorder[3] = (box->m_bottom == 0);
+
+			box->m_verticesData->hasCornerBorder[0] = !box->hasLeft() && !box->m_left->hasTop() && !box->hasTop() && !box->m_top->hasLeft();
+			box->m_verticesData->hasCornerBorder[1] = !box->hasTop() && !box->m_top->hasRight() && !box->hasRight() && !box->m_right->hasTop();		
+			box->m_verticesData->hasCornerBorder[2] = !box->hasRight() && !box->m_right->hasBottom() && !box->hasBottom() && !box->m_bottom->hasRight();
+			box->m_verticesData->hasCornerBorder[3] = !box->hasLeft() && !box->m_left->hasBottom() && !box->hasBottom() && !box->m_bottom->hasLeft();
 		}
 	}
 }
@@ -676,10 +696,14 @@ void msBoxGrid::show()
         {
             msBox *box = getItem(y, x);
 
+			// don't rotate if the back color is the same as front one
+			if(box->getBackColorIndex() == box->getColorIndex())
+				continue;
+
             box->m_angle = 180.0 * 3.1415926f / 180.0f;
 
             msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(&box->m_angle, 0.0f);
-            msAnimation *rotation = new msAnimation((y + x) * 3, 15, context, _rotationStep);
+            msAnimation *rotation = new msAnimation(((y + x))  * (double)3 * (double)rand() / (double)RAND_MAX, 15, context, _rotationStep);
             box->getAnimations()->add(rotation);
         }
     }

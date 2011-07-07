@@ -9,6 +9,9 @@ struct msBoxVertexData
 {
     msPointf vertices[4];
 
+	int hasBorder[4]; // left, top, right, bottom
+	int hasCornerBorder[4]; // LeftTop, TopRight, RightBottom, BottomLeft
+
     bool isInside(msPointf *point)
     {
         return vertices[0].x <= point->x && vertices[1].x >= point->x &&
@@ -142,44 +145,24 @@ public:
 
 	void _init(msBoxVertexData *verticesData, int colorIndex );
 
-	msBox *getTop() const
-	{
-		return m_top;
-	}
-
-	msBox *getRight() const
-	{
-		return m_right;
-	}
-
-	msBox *getBottom() const
-	{
-		return m_bottom;
-	}
-
-	msBox *getLeft() const
-	{
-		return m_left;
-	}
-
 	bool hasLeft()
 	{
-		return m_left != 0;
+		return m_verticesData->hasBorder[0];
 	}
 
 	bool hasTop()
 	{
-		return m_top != 0;
+		return m_verticesData->hasBorder[1];
 	}
 
 	bool hasRight()
 	{
-		return m_right != 0;
+		return m_verticesData->hasBorder[2];
 	}
 
 	bool hasBottom()
 	{
-		return m_bottom != 0;
+		return m_verticesData->hasBorder[3];
 	}
 
 	msPointf *getLocation() const

@@ -93,15 +93,10 @@ static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 
 void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msColor *c)
 {
-	    glEnable(GL_CULL_FACE);
-
-
 	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
 	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
-
-	GLint lineBorder[] = { !box->hasLeft(), !box->hasTop(), !box->hasRight(), !box->hasBottom() };
-	program->getUniform("lineBorder")->set4iv(1, lineBorder);
+	program->getUniform("lineBorder")->set4iv(1, box->getVerticesData()->hasBorder);
 
 
 	msColor cc = *c;
@@ -125,19 +120,8 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
     transform.multiplyMatrix(m_projectionMatrix);
     
 	program->getUniform("mvp")->setMatrix4fv(1, false, transform.getMatrix()->getArray());
-
-
-	GLint cornerBorder[] =
-	{
-		box->hasLeft() && !box->getLeft()->hasTop() && box->hasTop() && !box->getTop()->hasLeft(),
-		box->hasTop() && !box->getTop()->getRight() && box->hasRight() && !box->getRight()->hasTop(),		
-		box->hasRight() && !box->getRight()->getBottom() && box->hasBottom() && !box->getBottom()->hasRight(),
-		box->hasLeft() && !box->getLeft()->getBottom() && box->hasBottom() && !box->getBottom()->hasLeft(),
-
-	};
-	program->getUniform("cornerBorder")->set4iv(1, cornerBorder);
-
-
+	
+	program->getUniform("cornerBorder")->set4iv(1, box->getVerticesData()->hasCornerBorder);
 
     program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, box->getVerticesData()->vertices);
 
@@ -147,13 +131,13 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[24] );
 
 	glEnable(GL_BLEND);	
+	glEnable(GL_CULL_FACE);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	glDisable(GL_BLEND);
-
 	glDisable(GL_CULL_FACE);
-
+	
 	
 	if(box->getAngle() > 0.0001f)
 		// don't draw border lines when box is rotating
@@ -165,22 +149,22 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 		c->g * 0.8f * box->getColorDisturbance().g, 
 		c->b * 0.8f * box->getColorDisturbance().b, 
 		c->a * box->getColorDisturbance().a);
-	if(box->getLeft())
+	if(box->hasLeft())
 		drawLeftBorder(program, box, &innerBorderColor);
-	if(box->getTop())
+	if(box->hasTop())
 		drawTopBorder(program, box, &innerBorderColor);
-	if(box->getRight())
+	if(box->hasRight())
 		drawRightBorder(program, box, &innerBorderColor);
-	if(box->getBottom())
+	if(box->hasBottom())
 		drawBottomBorder(program, box, &innerBorderColor);
 	
-    if(!box->getLeft())
+    if(!box->hasLeft())
         drawLeftBorder(program, box, palette->getColor(0));
-    if(!box->getTop())
+    if(!box->hasTop())
         drawTopBorder(program, box, palette->getColor(0));
-    if(!box->getRight())
+    if(!box->hasRight())
         drawRightBorder(program, box, palette->getColor(0));
-    if(!box->getBottom())
+    if(!box->hasBottom())
         drawBottomBorder(program, box, palette->getColor(0));
 
 	
@@ -283,20 +267,14 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
 			if(box->isVisible())
             {           
                 // back face first
-                glFrontFace(GL_CW);
-
-                msColor boxColorTemp = *boxGrid->m_palette->getColor(box->getBackColorIndex());
-
+                glFrontFace(GL_CW);				
+                msColor boxColorTemp = *boxGrid->m_palette->getColor(box->getBackColorIndex() == MS_BOX_INVISIBLE ? 0 : box->getBackColorIndex());
                 drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
 
-              // front face then
-               glFrontFace(GL_CCW);
-                
+				// front face then
+				glFrontFace(GL_CCW);                
                 boxColorTemp = *boxGrid->m_palette->getColor(box->getColorIndex());
                 drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
-                
-                
-                
             }
         }
     }
