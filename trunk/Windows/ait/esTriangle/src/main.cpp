@@ -435,7 +435,7 @@ int WINAPI WinMain( HINSTANCE  hInstance,
                     LPSTR      lpCmdLine,
                     int        nCmdShow)
 {
-	UINT res = WinExec ("C:\\copy.bat", SW_SHOWNORMAL);
+	UINT res = WinExec ("C:\\Program Files (x86)\\NVIDIA Corporation\\win_x86_es2emu\\ait\\esTriangle\\copy.bat", SW_SHOWNORMAL);
 
    MSG  msg;
    BOOL done=FALSE;
