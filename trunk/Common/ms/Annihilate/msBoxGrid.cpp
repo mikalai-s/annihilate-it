@@ -11,53 +11,6 @@ void msBoxGrid::_borderInvertion( msAnimationContext *c )
     context->updateColor();
 }
 
-void msBoxGrid::_animateBorderInvertion( msBox * box, GLint positive ) 
-{/*
-    GLint count = 500;
-    GLfloat step = 1.0f / count;
-    if(!positive)
-        step *= -1.0;
-    msBorderAnimationContext *context = new msBorderAnimationContext(&box->m_border->color, step); 
-    msAnimation *animation = new msAnimation(0, count, context, _borderInvertion);
-    box->m_animations->m_list.push_back(animation);
-    */
-}
-
-void msBoxGrid::_refreshBorders()
-{
-    for(GLint y = 0; y < m_rowCount; y ++)
-	{
-		for(GLint x = 0; x < m_columnCount; x ++)
-		{
-			msBox *box = getItem(y, x);
-
-            // left
-            GLint left = !_checkNeighbours(y, x-1, y, x);
-            if(left != box->m_border->left)
-                _animateBorderInvertion(box, left);           
-            box->m_border->left = left;
-
-            // top
-            GLint top = !_checkNeighbours(y-1, x, y, x);
-            if(top != box->m_border->top)
-                _animateBorderInvertion(box, top);           
-            box->m_border->top = top;
-
-            // right
-            GLint right = !_checkNeighbours(y, x, y, x+1);
-            if(right != box->m_border->right)
-                _animateBorderInvertion(box, right);           
-            box->m_border->right = right;
-
-            // bottom
-            GLint bottom = !_checkNeighbours(y, x, y+1, x);
-            if(bottom != box->m_border->bottom)
-                _animateBorderInvertion(box, bottom);           
-            box->m_border->bottom = bottom;
-		}
-	}
-}
-
 msBoxGrid::msBoxGrid(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth) : msGrid<msBox*>(numRows, numCols)
 {
 	init(palette, pattern, numRows, numCols, gridHeight, gridWidth);
@@ -79,7 +32,7 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 
 	m_palette = palette;
 
-    m_coordinateGrid = new msGrid<msBoxVertexData*>(numRows, numCols);
+    m_coordinateGrid = new msGrid<msPointf*>(numRows, numCols);
 
 	m_boxVertexData = (msBoxVertexData*)malloc(sizeof(msBoxVertexData) * numRows * numCols);
 
@@ -97,28 +50,34 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 			verticesData->vertices[2] = msPointf(curx, cury + height, 0);
 			verticesData->vertices[3] = msPointf(curx + width, cury + height, 0);
 
-            msBoxVertexData* originalverticesData = new msBoxVertexData();
-            memcpy(originalverticesData, verticesData, sizeof(msBoxVertexData));
+			verticesData->colorIndex = pattern[y * numCols + x];
+			verticesData->backColorIndex = 0;
 
-            m_coordinateGrid->setItem(y, x, originalverticesData);
+			verticesData->colorDisturbance.a = 1.0f;
+			verticesData->colorDisturbance.r = 1.0f;
+			verticesData->colorDisturbance.g = 1.0f;
+			verticesData->colorDisturbance.b = 1.0f;
 
-			msBox *box = new msBox(verticesData, pattern[y * numCols + x]);
-            if(palette != 0)
-                box->m_border->color = *palette->getColor(0);
+			verticesData->angle = 0.0f;
+			verticesData->angleVector = msPointf(0.0f, 1.0f, 0.0f);
+
+            msPointf* originalCoords = (msPointf*)malloc(sizeof(verticesData->vertices));
+            memcpy(originalCoords, verticesData->vertices, sizeof(verticesData->vertices));
+
+            m_coordinateGrid->setItem(y, x, originalCoords);
+
+			msBox *box = new msBox(verticesData);
+           /* if(palette != 0)
+                box->m_border->color = *palette->getColor(0);*/
 			setItem(y, x, box);
 
 			curx += width;
-			/*
-			msValueAnimationContext<float*> *c = new msValueAnimationContext<float*>(&box->m_angle);
-			msAnimation *a = new msAnimation((x+y)*2, 10000, c, rotate);
-			box->getAnimations()->add(a);*/
 		}
 
 		cury += height;
 	}
 
 	_refreshBorders();
-	_updateLinks();
 }
 
 
@@ -164,7 +123,7 @@ void msBoxGrid::display()
 		{
 			msBox *box = getItem(y, x);
 			if(box->isVisible())
-				printf("%d:(%3.0f,%3.0f)  ", box->m_colorIndex, box->m_location->y, box->m_location->x);
+				printf("%d:(%3.0f,%3.0f)  ", box->getColorIndex(), box->m_location->y, box->m_location->x);
 			else
 				printf("      -      ");
 		}
@@ -181,7 +140,7 @@ void msBoxGrid::display2()
 		{
 			msBox *box = getItem(y, x);
 			if(box->isVisible())
-				printf("%d", box->m_colorIndex);
+				printf("%d", box->getColorIndex());
 			else
 				printf(" ");
 		}
@@ -249,7 +208,7 @@ void msBoxGrid::_removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &rem
     else
     {
         // if the neighbor has different color
-        if(box->m_colorIndex != c)
+        if(box->getColorIndex() != c)
             return;
     }
 
@@ -274,7 +233,7 @@ int msBoxGrid::_checkBoxColor(GLint y, GLint x, GLint colorIndex)
 	if(x < 0 || x >= m_columnCount || y < 0 || y >= m_rowCount)
 		return 0;
 
-	return getItem(y, x)->m_colorIndex == colorIndex;
+	return getItem(y, x)->getColorIndex() == colorIndex;
 }
 
 
@@ -283,7 +242,7 @@ void msBoxGrid::removeSimilarItems(GLint y, GLint x)
 	msBox *box = getItem(y, x);
 	if(box->isVisible())
     {
-       // if(_ms_boxgrid_has_similar_neighbour(y, x, box->m_colorIndex))
+       // if(_ms_boxgrid_has_similar_neighbour(y, x, box->getColorIndex()))
         {
             box->wave(MS_WAVE_DELAY);
 
@@ -292,7 +251,7 @@ void msBoxGrid::removeSimilarItems(GLint y, GLint x)
 			// clear undo buffer
 			_lastHiddenBoxes.clear();
 
-            _removeSimilarBoxes(y, x, box->m_colorIndex, removedBoxes, 0);
+            _removeSimilarBoxes(y, x, box->getColorIndex(), removedBoxes, 0);
 
 			// fill undo buffer
 			for(msBoxExplIterator i = removedBoxes.begin(); i != removedBoxes.end(); i ++)
@@ -499,7 +458,6 @@ void msBoxGrid::shiftPendentBoxes(GLint direction)
     
 	// refresh
     _refreshBorders();
-	_updateLinks();
 }
 
 // returns 1 if two boxes are with the same color
@@ -515,7 +473,7 @@ int msBoxGrid::_checkNeighbours(GLint y1, GLint x1, GLint y2, GLint x2)
     if(box1 == 0 || box2 == 0)
         return 0;
     
-    return box1->m_colorIndex == box2->m_colorIndex;
+    return box1->getColorIndex() == box2->getColorIndex();
 }
 
 
@@ -618,38 +576,33 @@ void msBoxGrid::removeSimilarItemsAtPoint( msPointf screenPoint )
 }
 
 // updates links between boxes. Boxes have links to each other if they are neighbors and have the same color
-void msBoxGrid::_updateLinks()
+void msBoxGrid::_refreshBorders()
 {
-	// TODO: merge this two loops
-
-	for(int y = 0; y < m_rowCount; y ++)
-	{
-		for(int x = 0; x < m_columnCount; x ++)
-		{
-			msBox *box = getItem(y, x);
-			
-			box->m_top = _checkBoxColor(y - 1, x, box->m_colorIndex) ? getItem(y - 1, x) : 0;
-			box->m_right = _checkBoxColor(y, x + 1, box->m_colorIndex) ? getItem(y, x + 1) : 0;
-			box->m_bottom = _checkBoxColor(y + 1, x, box->m_colorIndex) ? getItem(y + 1, x) : 0;
-			box->m_left = _checkBoxColor(y, x - 1, box->m_colorIndex) ? getItem(y, x - 1) : 0;
-		}
-	}
-
 	for(int y = 0; y < m_rowCount; y ++)
 	{
 		for(int x = 0; x < m_columnCount; x ++)
 		{
 			msBox *box = getItem(y, x);
 
-			box->m_verticesData->hasBorder[0] = (box->m_left == 0);
-			box->m_verticesData->hasBorder[1] = (box->m_top == 0);
-			box->m_verticesData->hasBorder[2] = (box->m_right == 0);
-			box->m_verticesData->hasBorder[3] = (box->m_bottom == 0);
+			// the following variables reflects neighbours with the same colour
+			bool left = _checkBoxColor(y, x - 1, box->getColorIndex());
+			bool leftTop = _checkBoxColor(y - 1, x - 1, box->getColorIndex());
+			bool top = _checkBoxColor(y - 1, x, box->getColorIndex());
+			bool topRight = _checkBoxColor(y - 1, x + 1, box->getColorIndex());
+			bool right = _checkBoxColor(y, x + 1, box->getColorIndex());
+			bool rightBottom = _checkBoxColor(y + 1, x + 1, box->getColorIndex());
+			bool bottom = _checkBoxColor(y + 1, x, box->getColorIndex());
+			bool bottomLeft = _checkBoxColor(y + 1, x - 1, box->getColorIndex());
 
-			box->m_verticesData->hasCornerBorder[0] = !box->hasLeft() && !box->m_left->hasTop() && !box->hasTop() && !box->m_top->hasLeft();
-			box->m_verticesData->hasCornerBorder[1] = !box->hasTop() && !box->m_top->hasRight() && !box->hasRight() && !box->m_right->hasTop();		
-			box->m_verticesData->hasCornerBorder[2] = !box->hasRight() && !box->m_right->hasBottom() && !box->hasBottom() && !box->m_bottom->hasRight();
-			box->m_verticesData->hasCornerBorder[3] = !box->hasLeft() && !box->m_left->hasBottom() && !box->hasBottom() && !box->m_bottom->hasLeft();
+			box->m_verticesData->hasBorder[0] = !left;
+			box->m_verticesData->hasBorder[1] = !top;
+			box->m_verticesData->hasBorder[2] = !right;
+			box->m_verticesData->hasBorder[3] = !bottom;
+
+			box->m_verticesData->hasCornerBorder[0] = left & top & !leftTop;
+			box->m_verticesData->hasCornerBorder[1] = top & right & !topRight;		
+			box->m_verticesData->hasCornerBorder[2] = right & bottom & !rightBottom;
+			box->m_verticesData->hasCornerBorder[3] = bottom & left & !bottomLeft;
 		}
 	}
 }
@@ -676,7 +629,6 @@ void msBoxGrid::undo()
 
 	// refresh
 	_refreshBorders();
-	_updateLinks();
 }
 
 	void _rotationStep(msAnimationContext *c)
@@ -700,9 +652,9 @@ void msBoxGrid::show()
 			if(box->getBackColorIndex() == box->getColorIndex())
 				continue;
 
-            box->m_angle = 180.0 * 3.1415926f / 180.0f;
+            box->m_verticesData->angle = 180.0 * 3.1415926f / 180.0f;
 
-            msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(&box->m_angle, 0.0f);
+            msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(&box->m_verticesData->angle, 0.0f);
             msAnimation *rotation = new msAnimation(((y + x))  * (double)3 * (double)rand() / (double)RAND_MAX, 15, context, _rotationStep);
             box->getAnimations()->add(rotation);
         }

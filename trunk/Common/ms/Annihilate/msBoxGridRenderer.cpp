@@ -139,10 +139,10 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 	glDisable(GL_CULL_FACE);
 	
 	
-	if(box->getAngle() > 0.0001f)
+	//if(box->getAngle() > 0.0001f)
 		// don't draw border lines when box is rotating
-		return;
-
+		//return;
+	/*
     // draw borders if need
 	msColor innerBorderColor(
 		c->r * 0.8f * box->getColorDisturbance().r, 
@@ -166,8 +166,7 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
         drawRightBorder(program, box, palette->getColor(0));
     if(!box->hasBottom())
         drawBottomBorder(program, box, palette->getColor(0));
-
-	
+		*/
 }
 
 void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color)
@@ -268,7 +267,7 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
             {           
                 // back face first
                 glFrontFace(GL_CW);				
-                msColor boxColorTemp = *boxGrid->m_palette->getColor(box->getBackColorIndex() == MS_BOX_INVISIBLE ? 0 : box->getBackColorIndex());
+                msColor boxColorTemp = *boxGrid->m_palette->getColor(box->getBackColorIndex());
                 drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
 
 				// front face then

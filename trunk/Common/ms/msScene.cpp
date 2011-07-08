@@ -267,8 +267,6 @@ void msScene::start()
         delete m_boxGrid;
     }
 
-
-
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
@@ -285,11 +283,11 @@ void msScene::start()
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        //1,1,
-        //	1,2,
+        1,1,
+        1,2,
     };
 
-    //m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+   // m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
     m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 

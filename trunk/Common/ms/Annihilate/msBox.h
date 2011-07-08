@@ -3,14 +3,32 @@
 #include "msAnimationBundle.h"
 #include "msAnimation.h"
 
-#define MS_BOX_INVISIBLE -1
-
 struct msBoxVertexData
 {
+	// vertices
     msPointf vertices[4];
 
+	// color information
+	int colorIndex;
+
+	// color disturbance
+	msColor colorDisturbance;
+
+	// rotation angle and vector
+	float angle;
+	msPointf angleVector;
+
+	// borders
 	int hasBorder[4]; // left, top, right, bottom
 	int hasCornerBorder[4]; // LeftTop, TopRight, RightBottom, BottomLeft
+
+	// TODO: remove. should be separate vertex data
+	// back color information
+	int backColorIndex;
+
+	msBoxVertexData()
+	{
+	}
 
     bool isInside(msPointf *point)
     {
@@ -24,6 +42,8 @@ struct msBoxVertexData
     }
 
     void copy( msBoxVertexData *data );
+
+	void exchange( msBoxVertexData *source );
 
     void move(msPointf d)
     {
@@ -41,7 +61,6 @@ struct msBoxVertexData
         
         vertices[3].x = vertices[0].x + width;
         vertices[3].y = vertices[0].y + height;
-        
     }
 };
 
@@ -53,16 +72,6 @@ class msBox
 private:
 
 	msPointf *m_location;
-	int m_colorIndex;
-	int m_originalColorIndex;
-
-	int m_backColorIndex;
-	int m_originalBackColorIndex;
-
-	msColor m_colorDisturbance;
-
-    // visibility of border
-	msBorder *m_border;
 
 	// animations related
 	msAnimationBundle *m_animations;
@@ -72,17 +81,11 @@ private:
 
     GLboolean m_requiresWave;
 
+	bool m_visible;
+
 private:
-	// for figure structure
-	msBox *m_top;
-	msBox *m_right;
-	msBox *m_bottom;
-	msBox *m_left;
 
 	msBoxVertexData *m_verticesData;
-
-	float m_angle;
-    msPointf m_angleVector;
 	
 
 
@@ -119,9 +122,9 @@ protected:
 	msBox();
 
 public:
-	msBox(float x, float y, float width, float height, int colorIndex);
+	msBox(float x, float y, float width, float height);
 
-	msBox(msBoxVertexData *verticesData, int colorIndex);
+	msBox(msBoxVertexData *verticesData);
 
 	~msBox();
 
@@ -133,9 +136,9 @@ public:
 
 	static void unitTest();
 
-	void fall(GLint delay, GLint direction, msBoxVertexData *newVertexData);
+	void fall(GLint delay, GLint direction, msPointf *newVertices);
 
-    void unfall( int delay, int  direction, msBoxVertexData *newVertexData );
+    void unfall( int delay, int  direction, msPointf *newVertices);
 
     void hide(int delay);
 
@@ -143,26 +146,28 @@ public:
 
     void wave(GLint delay);
 
-	void _init(msBoxVertexData *verticesData, int colorIndex );
+	void _init(msBoxVertexData *verticesData);
+
+	
 
 	bool hasLeft()
 	{
-		return m_verticesData->hasBorder[0];
+		return !m_verticesData->hasBorder[0];
 	}
 
 	bool hasTop()
 	{
-		return m_verticesData->hasBorder[1];
+		return !m_verticesData->hasBorder[1];
 	}
 
 	bool hasRight()
 	{
-		return m_verticesData->hasBorder[2];
+		return !m_verticesData->hasBorder[2];
 	}
 
 	bool hasBottom()
 	{
-		return m_verticesData->hasBorder[3];
+		return !m_verticesData->hasBorder[3];
 	}
 
 	msPointf *getLocation() const
@@ -172,17 +177,17 @@ public:
 
 	int getColorIndex() const 
 	{
-		return m_colorIndex;
+		return m_verticesData->colorIndex;
 	}
 
     int getBackColorIndex() const 
     {
-        return m_backColorIndex;
+        return m_verticesData->backColorIndex;
     }    
 
 	msColor getColorDisturbance() const
 	{
-		return m_colorDisturbance;
+		return m_verticesData->colorDisturbance;
 	}
 	
 	msPointf getExplosionPoint() const
@@ -207,11 +212,11 @@ public:
 
     float getAngle()
     {
-        return m_angle;
+        return m_verticesData->angle;
     }
 
     msPointf getAngleVector()
     {
-        return m_angleVector;
+        return m_verticesData->angleVector;
     }
 };

@@ -82,7 +82,7 @@ class msBoxGrid : public msGrid<msBox*>
 {
 	msSize size;
 
-    msGrid<msBoxVertexData*> *m_coordinateGrid;
+    msGrid<msPointf*> *m_coordinateGrid;
 
 	msMoveActionList _lastMovedBoxes;
 	msHideActionList _lastHiddenBoxes;
@@ -155,8 +155,6 @@ public:
 
 	void removeSimilarItemsAtPoint( msPointf touchPoint );
 
-	// goes through boxes and updates links between them
-	void _updateLinks();
 	void undo();
 	void _moveBackBox( msMoveAction action );
     void show();
@@ -167,7 +165,7 @@ public:
     {
         for(int y = 0; y < m_rowCount; y ++)
             for(int x = 0; x < m_columnCount; x ++)
-                getItem(y, x)->m_backColorIndex = pattern[y * m_columnCount + x];
+                getItem(y, x)->m_verticesData->backColorIndex = pattern[y * m_columnCount + x];
     }
 
     void extractPattern(int *pattern)

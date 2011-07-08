@@ -6,76 +6,52 @@
 
 msBox::msBox()
 {
-	_init(0, MS_BOX_INVISIBLE);	
+	_init(0);	
 }
 
-msBox::msBox(float x, float y, float width, float height, int colorIndex)
+msBox::msBox(float x, float y, float width, float height)
 {	
-	_init(0, colorIndex);	
+	_init(0);	
 }
 
-msBox::msBox(msBoxVertexData *verticesData, int colorIndex)
+msBox::msBox(msBoxVertexData *verticesData)
 {
-	_init(verticesData, colorIndex);	
+	_init(verticesData);	
 }
 
 
 
-void msBox::_init(msBoxVertexData *verticesData, int colorIndex )
+void msBox::_init(msBoxVertexData *verticesData)
 {
     m_verticesData = verticesData;
 
 	m_location = getVerticesData()->vertices;	
 	
-	m_colorIndex = colorIndex;
-	m_originalColorIndex = colorIndex;
-	m_backColorIndex = 0;
-	m_originalBackColorIndex = 0;
-
-	m_border = (msBorder*)malloc(sizeof(msBorder));
-	m_border->left = 0;
-	m_border->top = 0;
-	m_border->right = 0;
-	m_border->bottom = 0;
-
-	m_colorDisturbance.a = 1.0f;
-	m_colorDisturbance.r = 1.0f;
-	m_colorDisturbance.g = 1.0f;
-	m_colorDisturbance.b = 1.0f;
-
-	m_animations = new msAnimationBundle();
+    m_animations = new msAnimationBundle();
 
 	m_requiresExplosion = false;
 	m_requiresWave = false;
 
-	m_top = 0;
-	m_right = 0;
-	m_bottom = 0;
-	m_left = 0;
-
-	m_angle = 0.0f;
-    m_angleVector = msPointf(0.0f, 1.0f, 0.0f);
+	m_visible = true;
 }
 
 msBox::~msBox()
 {
-	free(m_border);
-
 	delete m_animations;
 }
 
 void msBox::makeInvisible()
 {
-	m_colorIndex = MS_BOX_INVISIBLE;
+	m_visible = false;
 }
 
 
 GLboolean msBox::isVisible()
 {
 	if(this == 0)
-		return GL_FALSE;
+		return false;
 
-	return (m_colorIndex != MS_BOX_INVISIBLE);
+	return m_visible;
 }
 
 msAnimationBundle* msBox::getAnimations()
@@ -85,7 +61,7 @@ msAnimationBundle* msBox::getAnimations()
 
 void msBox::unitTest()
 {
-	msBox *box = new msBox(0, 0, 100, 100, 2);
+	msBox *box = new msBox(0, 0, 100, 100);
 	msAnimationBundle *anims = box->getAnimations();
 
 	anims->add(new msAnimation(0, 5, new msFromToAnimationContext<GLfloat>(0, 2.5), 0));
@@ -123,14 +99,13 @@ void msBox::_linearFalling(msAnimationContext *c)
 
 void msBox::_finishLinearFalling(msAnimationContext *c)
 {
-    msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*> *context = (msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*> *)c;
+    msKeyValueAnimationContext<msBoxVertexData*, msPointf*> *context = (msKeyValueAnimationContext<msBoxVertexData*, msPointf*> *)c;
 
     msBoxVertexData *fromVertexData = context->getKey();
-    msBoxVertexData *toVertexData = context->getValue();
+    msPointf *toVertices = context->getValue();
 
-    fromVertexData->copy(toVertexData);
+	memcpy(fromVertexData->vertices, toVertices, sizeof(fromVertexData->vertices));
 }
-
 
 void msBox::_linearFalling2(msAnimationContext *c)
 {
@@ -156,34 +131,34 @@ void msBox::_linearFalling2(msAnimationContext *c)
 }
 
 
-void msBox::fall(GLint delay, GLint direction, msBoxVertexData *newVertexData)
+void msBox::fall(GLint delay, GLint direction, msPointf *newVertices)
 {
     int times = 10;
 
     // moving from top to bottom
-    msKeyValueAnimationContext<msBoxVertexData*, msPointf> *c2 = new msKeyValueAnimationContext<msBoxVertexData*, msPointf>(m_verticesData, newVertexData->vertices[0]);
+    msKeyValueAnimationContext<msBoxVertexData*, msPointf> *c2 = new msKeyValueAnimationContext<msBoxVertexData*, msPointf>(m_verticesData, newVertices[0]);
 	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
     
     // move a little bit up for effect of bounce
-    msPointf bouncePoint(newVertexData->vertices[0].x, newVertexData->vertices[0].y - MS_BOUNCE_OFFSET * 4, newVertexData->vertices[0].z);
+    msPointf bouncePoint(newVertices[0].x, newVertices[0].y - MS_BOUNCE_OFFSET * 4, newVertices[0].z);
     msKeyValueAnimationContext<msBoxVertexData*, msPointf> *c3 = new msKeyValueAnimationContext<msBoxVertexData*, msPointf>(m_verticesData, bouncePoint);
     getAnimations()->add(new msAnimation(delay + times, 4, c3, _linearFalling));
     
     // final falling (very fast and accurate)
-    msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*> *c4 = new msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*>(m_verticesData, newVertexData);
+    msKeyValueAnimationContext<msBoxVertexData*, msPointf*> *c4 = new msKeyValueAnimationContext<msBoxVertexData*, msPointf*>(m_verticesData, newVertices);
     getAnimations()->add(new msAnimation(delay + times + 4, 1, c4, _finishLinearFalling));
 }
 
-void msBox::unfall( int delay, int direction, msBoxVertexData *newVertexData )
+void msBox::unfall( int delay, int direction,  msPointf *newVertices)
 {
 	int times = 10;
 
 	// moving from top to bottom
-	msKeyValueAnimationContext<msPointf*, msPointf> *c2 = new msKeyValueAnimationContext<msPointf*, msPointf>(m_location, newVertexData->vertices[0]);
+	msKeyValueAnimationContext<msPointf*, msPointf> *c2 = new msKeyValueAnimationContext<msPointf*, msPointf>(m_location, newVertices[0]);
 	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
 
     // final falling (very fast and accurate)
-    msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*> *c4 = new msKeyValueAnimationContext<msBoxVertexData*, msBoxVertexData*>(m_verticesData, newVertexData);
+    msKeyValueAnimationContext<msBoxVertexData*, msPointf*> *c4 = new msKeyValueAnimationContext<msBoxVertexData*, msPointf*>(m_verticesData, newVertices);
     getAnimations()->add(new msAnimation(delay + times, 1, c4, _finishLinearFalling));
 }
 
@@ -202,31 +177,30 @@ void msBox::hide(GLint delay)
     // the following animation will be called only once and it will just reset the requires explosion flag to stop its animation
     _setFlag<GLboolean>(delay + 2, &m_requiresExplosion, false);
 
-	_setFlag<int>(delay + 2, &m_colorIndex, MS_BOX_INVISIBLE);
+	_setFlag<bool>(delay + 2, &m_visible, false);
 }
 
 void rotate(msAnimationContext *c)
 {
 	msValueAnimationContext<float*> *con = (msValueAnimationContext<float*> *)c;
 	float *angle = con->getValue();
-	*angle -= 9;
+	*angle -= 0.15707963 * 2.0f;
 }
 
 void msBox::show( int delay )
 {
-	// restore original color after some delay
-	m_colorIndex = m_originalColorIndex;
+	m_visible = true;
 
 	// make 
-	m_colorDisturbance.a = 0.0;
+	m_verticesData->colorDisturbance.a = 0.0;
 	
 	// moving from top to bottom
-	msKeyValueAnimationContext<float*, float> *c = new msKeyValueAnimationContext<float*, float>(&m_colorDisturbance.a, 1.0);
+	msKeyValueAnimationContext<float*, float> *c = new msKeyValueAnimationContext<float*, float>(&m_verticesData->colorDisturbance.a, 1.0);
 	getAnimations()->add(new msAnimation(delay, 15, c, _appearing));	
 
-	m_angle = 90;
+	m_verticesData->angle = 90.0f * 3.1415926f / 180.0f * 2.0f;
 
-	msValueAnimationContext<float*> *c2 = new msValueAnimationContext<float*>(&m_angle);
+	msValueAnimationContext<float*> *c2 = new msValueAnimationContext<float*>(&m_verticesData->angle);
 	msAnimation *a = new msAnimation(0, 10, c2, rotate);
 	getAnimations()->add(a);
 }
@@ -252,4 +226,12 @@ void msBox::wave(GLint delay)
 void msBoxVertexData::copy( msBoxVertexData *source )
 {
     memcpy(this, source, sizeof(msBoxVertexData));
+}
+
+void msBoxVertexData::exchange( msBoxVertexData *source )
+{
+	msBoxVertexData temp;
+	memcpy(&temp, source, sizeof(msBoxVertexData));
+	memcpy(source, this, sizeof(msBoxVertexData));
+	memcpy(this, &temp, sizeof(msBoxVertexData));
 }
