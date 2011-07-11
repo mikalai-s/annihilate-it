@@ -277,29 +277,28 @@ void msBoxGrid::_exchangeBoxes(msGrid<msBox*> *grid, GLint y1, GLint x1, GLint y
 
 void msBoxGrid::_moveBox(msMoveAction move)
 {
-	msBox *box1 = getItem(move.from.y, move.from.x);
-	msBox *box2 = getItem(move.to.y, move.to.x);
+	msBox *boxFrom = getItem(move.from.y, move.from.x);
+	msBox *boxTo = getItem(move.to.y, move.to.x);
     
-	setItem(move.from.y, move.from.x, box2);
-	setItem(move.to.y, move.to.x, box1);
+	setItem(move.from.y, move.from.x, boxTo);
+	setItem(move.to.y, move.to.x, boxFrom);
 
-	box1->fall(0, move.direction, m_coordinateGrid->getItem(move.to.y, move.to.x));
-    
-    // exchange verticies
-    box2->getVerticesData()->copy(box1->getVerticesData());
+	boxFrom->fall(0, move.direction, m_coordinateGrid->getItem(move.to.y, move.to.x));
+
+	boxTo->getVerticesData()->copyVertices(boxFrom->getVerticesData());
 }
 
 void msBoxGrid::_moveBackBox( msMoveAction move )
 {
-	msBox *box1 = getItem(move.from.y, move.from.x);
-	msBox *box2 = getItem(move.to.y, move.to.x);
+	msBox *boxFrom = getItem(move.from.y, move.from.x);
+	msBox *boxTo = getItem(move.to.y, move.to.x);
 
-	setItem(move.from.y, move.from.x, box2);
-	setItem(move.to.y, move.to.x, box1);
+	setItem(move.from.y, move.from.x, boxTo);
+	setItem(move.to.y, move.to.x, boxFrom);
 
-	box1->unfall(0, move.direction, m_coordinateGrid->getItem(move.to.y, move.to.x));
+	boxFrom->unfall(0, move.direction, m_coordinateGrid->getItem(move.to.y, move.to.x));
 
-	box2->getVerticesData()->copy(box1->getVerticesData());
+	boxTo->getVerticesData()->copyVertices(boxFrom->getVerticesData());
 }
 
 void msBoxGrid::_shiftDown(msGrid<msBox*> *grid, msMoveActionList *moves)

@@ -62,6 +62,11 @@ struct msBoxVertexData
         vertices[3].x = vertices[0].x + width;
         vertices[3].y = vertices[0].y + height;
     }
+
+	void copyVertices( msBoxVertexData *source )
+	{
+		memcpy(this->vertices, source->vertices, sizeof(this->vertices));
+	}
 };
 
 
