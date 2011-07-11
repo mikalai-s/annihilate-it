@@ -171,8 +171,13 @@ public:
     void extractPattern(int *pattern)
     {
         for(int y = 0; y < m_rowCount; y ++)
+        {
             for(int x = 0; x < m_columnCount; x ++)
-                pattern[y * m_columnCount + x] = getItem(y, x)->getColorIndex();
+            {
+                msBox *box = getItem(y, x);
+                pattern[y * m_columnCount + x] = box->isVisible() ? box->getColorIndex() : 0;
+            }
+        }
     }
 };
 
