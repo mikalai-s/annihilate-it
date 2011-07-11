@@ -91,8 +91,10 @@ static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 #define MS_BORDER_RIGTH 4
 #define MS_BORDER_BOTTOM 8
 
-void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msColor *c)
+void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msColor *c, int mode)
 {
+
+
 	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
 	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
@@ -125,24 +127,29 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 
     program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, box->getVerticesData()->vertices);
 
-	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, textureOrientation );
+	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, textureOrientation);
 	program->getAttribute("borderTexelBottom")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[8]);
-	program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[16] );
-	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[24] );
+	program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[16]);
+	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[24]);
 
-	glEnable(GL_BLEND);	
+	glEnable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
+	glFrontFace(mode);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 	
-	
-	//if(box->getAngle() > 0.0001f)
+	if((cos(box->getAngle()) < 0.0f && mode == GL_CCW) || (cos(box->getAngle()) > 0.0f && mode == GL_CW))
+	{
+		//printf("%f, %f, %f\r\n", newNormal.x, newNormal.y, newNormal.z);
+
 		// don't draw border lines when box is rotating
-		//return;
-	/*
+		return;
+	}
+	
+	
     // draw borders if need
 	msColor innerBorderColor(
 		c->r * 0.8f * box->getColorDisturbance().r, 
@@ -166,7 +173,6 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
         drawRightBorder(program, box, palette->getColor(0));
     if(!box->hasBottom())
         drawBottomBorder(program, box, palette->getColor(0));
-		*/
 }
 
 void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color)
@@ -265,15 +271,13 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
 
 			if(box->isVisible())
             {           
-                // back face first
-                glFrontFace(GL_CW);				
+                // back face first	
                 msColor boxColorTemp = *boxGrid->m_palette->getColor(box->getBackColorIndex());
-                drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
+                drawBox(program, boxGrid->m_palette, box, &boxColorTemp, GL_CW);
 
 				// front face then
-				glFrontFace(GL_CCW);                
                 boxColorTemp = *boxGrid->m_palette->getColor(box->getColorIndex());
-                drawBox(program, boxGrid->m_palette, box, &boxColorTemp);
+                drawBox(program, boxGrid->m_palette, box, &boxColorTemp, GL_CCW);
             }
         }
     }
