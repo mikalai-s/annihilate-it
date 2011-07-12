@@ -16,7 +16,7 @@ public:
 	msMatrixTransform* scale(float sx, float sy, float sz);
     msMatrixTransform* scale(msPointf &s)
     {
-        return translate(s.x, s.y, s.z);
+        return scale(s.x, s.y, s.z);
     }
 
 	msMatrixTransform* translate(float tx, float ty, float tz);

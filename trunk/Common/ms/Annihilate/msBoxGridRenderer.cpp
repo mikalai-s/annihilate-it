@@ -113,9 +113,10 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
     float boxAngle = box->getAngle();
     if(boxAngle != 0.0f)
     {
+        msPointf angleVector = box->getAngleVector();
         msPointf center = box->getVerticesData()->getCenter();
 	    transform.translate(-center.x, -center.y, -center.z)
-		    ->rotate(boxAngle, box->getAngleVector())
+		    ->rotate(boxAngle, angleVector)
 		    ->translate(center.x, center.y, center.z);
     }
 
