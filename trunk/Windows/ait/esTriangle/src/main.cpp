@@ -34,6 +34,7 @@
 #include <windowsx.h>
 
 //#define PERFORMANCE_TUNING
+#define FRAME_INTERVAL 100 //ms
 
 // Globals
 bool  g_keys[256];               // Array Used For The Keyboard Routine
@@ -477,7 +478,7 @@ int WINAPI WinMain( HINSTANCE  hInstance,
 #else
    SetTimer(hWnd,             // handle to main window 
        43,            // timer identifier 
-       16,                 // 10-second interval 
+       FRAME_INTERVAL,                 // 10-second interval 
        (TIMERPROC) NULL);     // no timer callback 
 #endif
 
