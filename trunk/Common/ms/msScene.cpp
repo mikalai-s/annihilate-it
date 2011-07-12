@@ -256,17 +256,17 @@ void msScene::start()
 #define NUM_ROWS 10
 #define NUM_COLS 7
 
-    int backPattern[NUM_ROWS * NUM_COLS];
+    msBoxFaceData backFaces[NUM_ROWS * NUM_COLS];
 
-    memset(backPattern, 0, sizeof(backPattern));
+    memset(backFaces, 0, sizeof(backFaces));
 
     if(m_boxGrid != 0)
-    {        
-        m_boxGrid->extractPattern(backPattern);        
+    {
+        m_boxGrid->extractPattern(backFaces);        
 
         delete m_boxGrid;
     }
-
+	
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
@@ -283,16 +283,16 @@ void msScene::start()
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1,1,
         1,2,
+        3,1,
     };
+	
+    //m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
-   // m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
-
-    m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
    
-            m_boxGrid->setBackPattern(backPattern);
+            m_boxGrid->setBackPattern(backFaces);
            
    
     

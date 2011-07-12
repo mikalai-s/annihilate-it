@@ -93,6 +93,8 @@ class msBoxGrid : public msGrid<msBox*>
 
 	void _refreshBorders();
 
+	void _refreshBoxFaceBorders(int y, int x, msBoxFaceData *faceData);
+
     static void _borderInvertion( msAnimationContext *context );
 
     void _animateBorderInvertion( msBox * box, GLint positive );
@@ -129,7 +131,7 @@ class msBoxGrid : public msGrid<msBox*>
 
 public:
 
-	msBoxVertexData *m_boxVertexData;
+	msBoxData *m_boxVertexData;
 
 	msPalette *m_palette;
 
@@ -161,21 +163,24 @@ public:
     void hide();
 
 
-    void setBackPattern(GLint *pattern)
+    void setBackPattern(msBoxFaceData *faces)
     {
         for(int y = 0; y < m_rowCount; y ++)
             for(int x = 0; x < m_columnCount; x ++)
-                getItem(y, x)->m_verticesData->backColorIndex = pattern[y * m_columnCount + x];
+				memcpy(&getItem(y, x)->m_verticesData->backFace, &faces[y * m_columnCount + x], sizeof(msBoxFaceData));                
     }
 
-    void extractPattern(int *pattern)
+    void extractPattern(msBoxFaceData *faces)
     {
         for(int y = 0; y < m_rowCount; y ++)
         {
             for(int x = 0; x < m_columnCount; x ++)
             {
-                msBox *box = getItem(y, x);
-                pattern[y * m_columnCount + x] = box->isVisible() ? box->getColorIndex() : 0;
+				msBox *box = getItem(y, x);
+				memcpy(&faces[y * m_columnCount + x], &box->getVerticesData()->frontFace, sizeof(msBoxFaceData));
+                
+                if(!box->isVisible())
+					faces[y * m_columnCount + x].colorIndex = 0;
             }
         }
     }

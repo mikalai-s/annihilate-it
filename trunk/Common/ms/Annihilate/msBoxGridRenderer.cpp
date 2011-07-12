@@ -91,22 +91,19 @@ static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 #define MS_BORDER_RIGTH 4
 #define MS_BORDER_BOTTOM 8
 
-void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msColor *c, int mode)
+void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msBoxFaceData *faceData)
 {
-
-
 	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
 	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
-	program->getUniform("lineBorder")->set4iv(1, box->getVerticesData()->hasBorder);
+	program->getUniform("lineBorder")->set4iv(1, faceData->getHasBorder());
 
-
-	msColor cc = *c;
-	cc.r *= box->getColorDisturbance().r;
-	cc.g *= box->getColorDisturbance().g;
-	cc.b *= box->getColorDisturbance().b;
-	cc.a *= box->getColorDisturbance().a;
-	program->getUniform("color")->set4fv(1, (GLfloat*)&cc);
+	msColor faceColor = *palette->getColor(faceData->getColorIndex());
+	faceColor.r *= faceData->getColorDisturbance().r;
+	faceColor.g *= faceData->getColorDisturbance().g;
+	faceColor.b *= faceData->getColorDisturbance().b;
+	faceColor.a *= faceData->getColorDisturbance().a;
+	program->getUniform("color")->set4fv(1, (GLfloat*)&faceColor);
 
 
 	msMatrixTransform transform;
@@ -124,7 +121,7 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
     
 	program->getUniform("mvp")->setMatrix4fv(1, false, transform.getMatrix()->getArray());
 	
-	program->getUniform("cornerBorder")->set4iv(1, box->getVerticesData()->hasCornerBorder);
+	program->getUniform("cornerBorder")->set4iv(1, faceData->getHasCornerBorder());
 
     program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, box->getVerticesData()->vertices);
 
@@ -135,45 +132,37 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 
 	glEnable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
-	glFrontFace(mode);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	glDisable(GL_BLEND);
-	glDisable(GL_CULL_FACE);
-	
-	if((cos(box->getAngle()) < 0.0f && mode == GL_CCW) || (cos(box->getAngle()) > 0.0f && mode == GL_CW))
-	{
-		//printf("%f, %f, %f\r\n", newNormal.x, newNormal.y, newNormal.z);
-
-		// don't draw border lines when box is rotating
-		return;
-	}
 	
 	
     // draw borders if need
 	msColor innerBorderColor(
-		c->r * 0.8f * box->getColorDisturbance().r, 
-		c->g * 0.8f * box->getColorDisturbance().g, 
-		c->b * 0.8f * box->getColorDisturbance().b, 
-		c->a * box->getColorDisturbance().a);
-	if(box->hasLeft())
+		faceColor.r * 0.8f * faceData->getColorDisturbance().r, 
+		faceColor.g * 0.8f * faceData->getColorDisturbance().g, 
+		faceColor.b * 0.8f * faceData->getColorDisturbance().b, 
+		faceColor.a * faceData->getColorDisturbance().a);
+	if(faceData->hasLeft())
 		drawLeftBorder(program, box, &innerBorderColor);
-	if(box->hasTop())
+	if(faceData->hasTop())
 		drawTopBorder(program, box, &innerBorderColor);
-	if(box->hasRight())
+	if(faceData->hasRight())
 		drawRightBorder(program, box, &innerBorderColor);
-	if(box->hasBottom())
+	if(faceData->hasBottom())
 		drawBottomBorder(program, box, &innerBorderColor);
 	
-    if(!box->hasLeft())
+    if(!faceData->hasLeft())
         drawLeftBorder(program, box, palette->getColor(0));
-    if(!box->hasTop())
+    if(!faceData->hasTop())
         drawTopBorder(program, box, palette->getColor(0));
-    if(!box->hasRight())
+    if(!faceData->hasRight())
         drawRightBorder(program, box, palette->getColor(0));
-    if(!box->hasBottom())
+    if(!faceData->hasBottom())
         drawBottomBorder(program, box, palette->getColor(0));
+
+	glDisable(GL_CULL_FACE);	
 }
 
 void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color)
@@ -271,14 +260,24 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
 			}
 
 			if(box->isVisible())
-            {           
-                // back face first	
-                msColor boxColorTemp = *boxGrid->m_palette->getColor(box->getBackColorIndex());
-                drawBox(program, boxGrid->m_palette, box, &boxColorTemp, GL_CW);
+            {
+				// todo: determine correct way of resolving what face we have to draw
+				printf("%f\r\n", cos(box->getAngle()));
+				if(cos(box->getAngle()) <= 0.0f)
+				{
+					glFrontFace(GL_CW);
 
-				// front face then
-                boxColorTemp = *boxGrid->m_palette->getColor(box->getColorIndex());
-                drawBox(program, boxGrid->m_palette, box, &boxColorTemp, GL_CCW);
+					 // back face	
+					drawBox(program, boxGrid->m_palette, box, &box->getVerticesData()->backFace);
+					
+				}
+				else
+				{
+					glFrontFace(GL_CCW);
+
+					// front face
+					drawBox(program, boxGrid->m_palette, box, &box->getVerticesData()->frontFace);
+				}
             }
         }
     }

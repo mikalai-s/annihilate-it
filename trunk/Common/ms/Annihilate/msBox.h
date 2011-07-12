@@ -3,30 +3,81 @@
 #include "msAnimationBundle.h"
 #include "msAnimation.h"
 
-struct msBoxVertexData
+struct msBoxFaceData
 {
-	// vertices
-    msPointf vertices[4];
-
+public:
 	// color information
 	int colorIndex;
 
 	// color disturbance
 	msColor colorDisturbance;
 
-	// rotation angle and vector
-	float angle;
-	msPointf angleVector;
-
 	// borders
 	int hasBorder[4]; // left, top, right, bottom
 	int hasCornerBorder[4]; // LeftTop, TopRight, RightBottom, BottomLeft
 
-	// TODO: remove. should be separate vertex data
-	// back color information
-	int backColorIndex;
+public:
 
-	msBoxVertexData()
+	int *getHasBorder() const
+	{
+		return (int*)hasBorder;
+	}
+
+	int *getHasCornerBorder() const
+	{
+		return (int*)hasCornerBorder;
+	}
+
+	bool hasLeft()
+	{
+		return !hasBorder[0];
+	}
+
+	bool hasTop()
+	{
+		return !hasBorder[1];
+	}
+
+	bool hasRight()
+	{
+		return !hasBorder[2];
+	}
+
+	bool hasBottom()
+	{
+		return !hasBorder[3];
+	}
+
+	int getColorIndex() const 
+	{
+		return colorIndex;
+	}
+
+	msColor getColorDisturbance() const
+	{
+		return colorDisturbance;
+	}
+};
+
+struct msBoxData
+{
+	// todo: make provate
+public:
+	// vertices
+    msPointf vertices[4];	
+
+	// rotation angle and vector
+	float angle;
+	msPointf angleVector;
+
+	// front face
+	msBoxFaceData frontFace;	
+
+	// back face
+	msBoxFaceData backFace;
+
+public:
+	msBoxData()
 	{
 	}
 
@@ -41,9 +92,9 @@ struct msBoxVertexData
         return msPointf((vertices[0].x + vertices[1].x) / 2.0, (vertices[0].y + vertices[3].y) / 2.0, (vertices[0].z + vertices[1].z) / 2.0);
     }
 
-    void copy( msBoxVertexData *data );
+    void copy( msBoxData *data );
 
-	void exchange( msBoxVertexData *source );
+	void exchange( msBoxData *source );
 
     void move(msPointf d)
     {
@@ -63,7 +114,7 @@ struct msBoxVertexData
         vertices[3].y = vertices[0].y + height;
     }
 
-	void copyVertices( msBoxVertexData *source )
+	void copyVertices( msBoxData *source )
 	{
 		memcpy(this->vertices, source->vertices, sizeof(this->vertices));
 	}
@@ -90,9 +141,7 @@ private:
 
 private:
 
-	msBoxVertexData *m_verticesData;
-	
-
+	msBoxData *m_verticesData;
 
 private:
 
@@ -129,7 +178,7 @@ protected:
 public:
 	msBox(float x, float y, float width, float height);
 
-	msBox(msBoxVertexData *verticesData);
+	msBox(msBoxData *verticesData);
 
 	~msBox();
 
@@ -151,49 +200,26 @@ public:
 
     void wave(GLint delay);
 
-	void _init(msBoxVertexData *verticesData);
+	void _init(msBoxData *verticesData);
 
 	
-
-	bool hasLeft()
+	int getColorIndex() const
 	{
-		return !m_verticesData->hasBorder[0];
+		return m_verticesData->frontFace.getColorIndex();
 	}
 
-	bool hasTop()
+	msColor getColorDisturbance() const
 	{
-		return !m_verticesData->hasBorder[1];
+		return m_verticesData->frontFace.getColorDisturbance();
 	}
-
-	bool hasRight()
-	{
-		return !m_verticesData->hasBorder[2];
-	}
-
-	bool hasBottom()
-	{
-		return !m_verticesData->hasBorder[3];
-	}
+	
 
 	msPointf *getLocation() const
 	{
 		return m_location;
 	}	
 
-	int getColorIndex() const 
-	{
-		return m_verticesData->colorIndex;
-	}
-
-    int getBackColorIndex() const 
-    {
-        return m_verticesData->backColorIndex;
-    }    
-
-	msColor getColorDisturbance() const
-	{
-		return m_verticesData->colorDisturbance;
-	}
+	
 	
 	msPointf getExplosionPoint() const
 	{
@@ -210,7 +236,7 @@ public:
 		return m_requiresWave;
 	}
 
-    msBoxVertexData *getVerticesData() const
+    msBoxData *getVerticesData() const
     {
         return m_verticesData;
     }

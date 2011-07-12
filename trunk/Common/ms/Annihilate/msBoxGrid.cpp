@@ -34,7 +34,7 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 
     m_coordinateGrid = new msGrid<msPointf*>(numRows, numCols);
 
-	m_boxVertexData = (msBoxVertexData*)malloc(sizeof(msBoxVertexData) * numRows * numCols);
+	m_boxVertexData = (msBoxData*)malloc(sizeof(msBoxData) * numRows * numCols);
 
 	size.width = gridWidth;
 	size.height = gridHeight;
@@ -44,19 +44,23 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 		curx = 0;
 		for(GLint x = 0; x < numCols; x ++)
 		{
-			msBoxVertexData* verticesData = &m_boxVertexData[y * numCols + x];
+			msBoxData* verticesData = &m_boxVertexData[y * numCols + x];
 			verticesData->vertices[0] = msPointf(curx, cury, 0);
 			verticesData->vertices[1] = msPointf(curx + width, cury, 0);
 			verticesData->vertices[2] = msPointf(curx, cury + height, 0);
 			verticesData->vertices[3] = msPointf(curx + width, cury + height, 0);
 
-			verticesData->colorIndex = pattern[y * numCols + x];
-			verticesData->backColorIndex = 0;
+			verticesData->frontFace.colorIndex = pattern[y * numCols + x];
+			verticesData->backFace.colorIndex = 0;
 
-			verticesData->colorDisturbance.a = 1.0f;
-			verticesData->colorDisturbance.r = 1.0f;
-			verticesData->colorDisturbance.g = 1.0f;
-			verticesData->colorDisturbance.b = 1.0f;
+			verticesData->frontFace.colorDisturbance.a = 1.0f;
+			verticesData->frontFace.colorDisturbance.r = 1.0f;
+			verticesData->frontFace.colorDisturbance.g = 1.0f;
+			verticesData->frontFace.colorDisturbance.b = 1.0f;
+			verticesData->backFace.colorDisturbance.a = 1.0f;
+			verticesData->backFace.colorDisturbance.r = 1.0f;
+			verticesData->backFace.colorDisturbance.g = 1.0f;
+			verticesData->backFace.colorDisturbance.b = 1.0f;
 
 			verticesData->angle = 0.0f;
 			verticesData->angleVector = msPointf(0.0f, 1.0f, 0.0f);
@@ -593,15 +597,15 @@ void msBoxGrid::_refreshBorders()
 			bool bottom = _checkBoxColor(y + 1, x, box->getColorIndex());
 			bool bottomLeft = _checkBoxColor(y + 1, x - 1, box->getColorIndex());
 
-			box->m_verticesData->hasBorder[0] = !left;
-			box->m_verticesData->hasBorder[1] = !top;
-			box->m_verticesData->hasBorder[2] = !right;
-			box->m_verticesData->hasBorder[3] = !bottom;
+			box->m_verticesData->frontFace.hasBorder[0] = !left;
+			box->m_verticesData->frontFace.hasBorder[1] = !top;
+			box->m_verticesData->frontFace.hasBorder[2] = !right;
+			box->m_verticesData->frontFace.hasBorder[3] = !bottom;
 
-			box->m_verticesData->hasCornerBorder[0] = left & top & !leftTop;
-			box->m_verticesData->hasCornerBorder[1] = top & right & !topRight;		
-			box->m_verticesData->hasCornerBorder[2] = right & bottom & !rightBottom;
-			box->m_verticesData->hasCornerBorder[3] = bottom & left & !bottomLeft;
+			box->m_verticesData->frontFace.hasCornerBorder[0] = left & top & !leftTop;
+			box->m_verticesData->frontFace.hasCornerBorder[1] = top & right & !topRight;		
+			box->m_verticesData->frontFace.hasCornerBorder[2] = right & bottom & !rightBottom;
+			box->m_verticesData->frontFace.hasCornerBorder[3] = bottom & left & !bottomLeft;
 		}
 	}
 }
@@ -648,14 +652,16 @@ void msBoxGrid::show()
             msBox *box = getItem(y, x);
 
 			// don't rotate if the back color is the same as front one
-			if(box->getBackColorIndex() == box->getColorIndex())
-				continue;
+		//	if(box->getVerticesData()->frontFace.getColorIndex() == box->getVerticesData()->backFace.getColorIndex())
+			//	continue;
 
             box->m_verticesData->angle = 180.0 * 3.1415926f / 180.0f;
 
             msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(&box->m_verticesData->angle, 0.0f);
             msAnimation *rotation = new msAnimation(((y + x))  * (double)3 * (double)rand() / (double)RAND_MAX, 15, context, _rotationStep);
             box->getAnimations()->add(rotation);
+
+			
         }
     }
 }
