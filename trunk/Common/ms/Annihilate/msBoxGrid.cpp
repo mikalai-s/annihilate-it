@@ -231,16 +231,6 @@ void msBoxGrid::_removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &rem
     _removeSimilarBoxes(y + 1, x, c, removedBoxes, level + 1);
 }
 
-// checks whether a box with specified coordinates has given color
-int msBoxGrid::_checkBoxColor(GLint y, GLint x, GLint colorIndex)
-{
-	if(x < 0 || x >= m_columnCount || y < 0 || y >= m_rowCount)
-		return 0;
-
-	return getItem(y, x)->getColorIndex() == colorIndex;
-}
-
-
 void msBoxGrid::removeSimilarItems(GLint y, GLint x)
 {
 	msBox *box = getItem(y, x);
@@ -578,6 +568,8 @@ void msBoxGrid::removeSimilarItemsAtPoint( msPointf screenPoint )
 	}
 }
 
+
+
 // updates links between boxes. Boxes have links to each other if they are neighbors and have the same color
 void msBoxGrid::_refreshBorders()
 {
@@ -587,28 +579,46 @@ void msBoxGrid::_refreshBorders()
 		{
 			msBox *box = getItem(y, x);
 
-			// the following variables reflects neighbours with the same colour
-			bool left = _checkBoxColor(y, x - 1, box->getColorIndex());
-			bool leftTop = _checkBoxColor(y - 1, x - 1, box->getColorIndex());
-			bool top = _checkBoxColor(y - 1, x, box->getColorIndex());
-			bool topRight = _checkBoxColor(y - 1, x + 1, box->getColorIndex());
-			bool right = _checkBoxColor(y, x + 1, box->getColorIndex());
-			bool rightBottom = _checkBoxColor(y + 1, x + 1, box->getColorIndex());
-			bool bottom = _checkBoxColor(y + 1, x, box->getColorIndex());
-			bool bottomLeft = _checkBoxColor(y + 1, x - 1, box->getColorIndex());
-
-			box->m_verticesData->frontFace.hasBorder[0] = !left;
-			box->m_verticesData->frontFace.hasBorder[1] = !top;
-			box->m_verticesData->frontFace.hasBorder[2] = !right;
-			box->m_verticesData->frontFace.hasBorder[3] = !bottom;
-
-			box->m_verticesData->frontFace.hasCornerBorder[0] = left & top & !leftTop;
-			box->m_verticesData->frontFace.hasCornerBorder[1] = top & right & !topRight;		
-			box->m_verticesData->frontFace.hasCornerBorder[2] = right & bottom & !rightBottom;
-			box->m_verticesData->frontFace.hasCornerBorder[3] = bottom & left & !bottomLeft;
+			_refreshBoxFaceBorders(y, x, &box->getVerticesData()->frontFace);
+			_refreshBoxFaceBorders(y, x, &box->getVerticesData()->backFace);
 		}
 	}
 }
+
+
+void msBoxGrid::_refreshBoxFaceBorders(int y, int x, msBoxFaceData *face)
+{
+	// the following variables reflects neighbours with the same colour
+	bool left = _checkBoxColor(y, x - 1, face->getColorIndex());
+	bool leftTop = _checkBoxColor(y - 1, x - 1, face->getColorIndex());
+	bool top = _checkBoxColor(y - 1, x, face->getColorIndex());
+	bool topRight = _checkBoxColor(y - 1, x + 1, face->getColorIndex());
+	bool right = _checkBoxColor(y, x + 1, face->getColorIndex());
+	bool rightBottom = _checkBoxColor(y + 1, x + 1, face->getColorIndex());
+	bool bottom = _checkBoxColor(y + 1, x, face->getColorIndex());
+	bool bottomLeft = _checkBoxColor(y + 1, x - 1, face->getColorIndex());
+
+	face->hasBorder[0] = !left;
+	face->hasBorder[1] = !top;
+	face->hasBorder[2] = !right;
+	face->hasBorder[3] = !bottom;
+
+	face->hasCornerBorder[0] = left & top & !leftTop;
+	face->hasCornerBorder[1] = top & right & !topRight;		
+	face->hasCornerBorder[2] = right & bottom & !rightBottom;
+	face->hasCornerBorder[3] = bottom & left & !bottomLeft;
+}
+
+
+// checks whether a box with specified coordinates has given color
+int msBoxGrid::_checkBoxColor(GLint y, GLint x, GLint colorIndex)
+{
+	if(x < 0 || x >= m_columnCount || y < 0 || y >= m_rowCount)
+		return 0;
+
+	return getItem(y, x)->getColorIndex() == colorIndex;
+}
+
 
 void msBoxGrid::undo()
 {
@@ -652,16 +662,14 @@ void msBoxGrid::show()
             msBox *box = getItem(y, x);
 
 			// don't rotate if the back color is the same as front one
-		//	if(box->getVerticesData()->frontFace.getColorIndex() == box->getVerticesData()->backFace.getColorIndex())
-			//	continue;
+			if(box->getVerticesData()->frontFace.getColorIndex() == box->getVerticesData()->backFace.getColorIndex())
+				continue;
 
             box->m_verticesData->angle = 180.0 * 3.1415926f / 180.0f;
 
             msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(&box->m_verticesData->angle, 0.0f);
             msAnimation *rotation = new msAnimation(((y + x))  * (double)3 * (double)rand() / (double)RAND_MAX, 15, context, _rotationStep);
             box->getAnimations()->add(rotation);
-
-			
         }
     }
 }

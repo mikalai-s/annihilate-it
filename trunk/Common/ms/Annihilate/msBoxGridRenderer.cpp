@@ -86,12 +86,16 @@ msBoxGridRenderer::~msBoxGridRenderer()
 
 static const GLubyte g_indices[] = { 0, 1, 2, 3 };
 
+static const GLubyte g_frontFaceIndices[] = { 0, 1, 2, 3 };
+static const GLubyte g_backFaceIndices[] = { 1, 0, 3, 2 };
+
+
 #define MS_BORDER_LEFT 1
 #define MS_BORDER_TOP 2
 #define MS_BORDER_RIGTH 4
 #define MS_BORDER_BOTTOM 8
 
-void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msBoxFaceData *faceData)
+void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front)
 {
 	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
 	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
@@ -133,11 +137,10 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 	glEnable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
 
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_frontFaceIndices);
 
 	glDisable(GL_BLEND);
-	
-	
+	/*
     // draw borders if need
 	msColor innerBorderColor(
 		faceColor.r * 0.8f * faceData->getColorDisturbance().r, 
@@ -161,7 +164,7 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
         drawRightBorder(program, box, palette->getColor(0));
     if(!faceData->hasBottom())
         drawBottomBorder(program, box, palette->getColor(0));
-
+		*/
 	glDisable(GL_CULL_FACE);	
 }
 
@@ -261,23 +264,11 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid
 
 			if(box->isVisible())
             {
-				// todo: determine correct way of resolving what face we have to draw
-				printf("%f\r\n", cos(box->getAngle()));
-				if(cos(box->getAngle()) <= 0.0f)
-				{
-					glFrontFace(GL_CW);
-
-					 // back face	
-					drawBox(program, boxGrid->m_palette, box, &box->getVerticesData()->backFace);
-					
-				}
-				else
-				{
-					glFrontFace(GL_CCW);
-
-					// front face
-					drawBox(program, boxGrid->m_palette, box, &box->getVerticesData()->frontFace);
-				}
+				glCullFace(GL_FRONT);
+				drawBox(program, boxGrid->m_palette, box, &box->getVerticesData()->frontFace, true);
+				
+				glCullFace(GL_BACK);
+				drawBox(program, boxGrid->m_palette, box, &box->getVerticesData()->backFace, false);
             }
         }
     }

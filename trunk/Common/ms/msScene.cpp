@@ -253,8 +253,8 @@ void msScene::undoLastMove()
 
 void msScene::start()
 {
-#define NUM_ROWS 10
-#define NUM_COLS 7
+#define NUM_ROWS 2
+#define NUM_COLS 2
 
     msBoxFaceData backFaces[NUM_ROWS * NUM_COLS];
 
@@ -283,19 +283,15 @@ void msScene::start()
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1,2,
-        3,1,
+        1,1,
+        2,1,
     };
 	
-    //m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+   m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
-	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
-
+	//m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
    
-            m_boxGrid->setBackPattern(backFaces);
-           
-   
-    
+	m_boxGrid->setBackPattern(backFaces);
 
     m_boxGrid->show();
 }

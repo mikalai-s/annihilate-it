@@ -56,7 +56,7 @@ class msBoxGridRenderer
 
     void drawExplosions();
 
-	void drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msBoxFaceData *faceData);
+	void drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front);
 
 
     void drawBoxesWithShockWave(msBoxGrid *boxGrid);
