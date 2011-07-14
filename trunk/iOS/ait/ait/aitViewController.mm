@@ -178,6 +178,7 @@ enum {
     m_scene.newSize(320, 480);  
     m_scene.loadData(uniforms);
     m_scene.init();
+    m_scene.start();
   
     
     return TRUE;
@@ -192,6 +193,16 @@ enum {
 {
     touchStartLocation = [[touches anyObject] locationInView:self.view];
     
-    m_scene.mouseClick(touchStartLocation.x, touchStartLocation.y);}
+    m_scene.mouseClick(touchStartLocation.x, touchStartLocation.y);
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    CGPoint current = [[touches anyObject] locationInView:self.view];
+    float dif = (current.x - touchStartLocation.x) * (current.x - touchStartLocation.x) + (current.y - touchStartLocation.y) * (current.y - touchStartLocation.y);
+
+    if(dif > 1000)
+    m_scene.start();
+}
 
 @end
