@@ -39,11 +39,9 @@ class msBoxGridRenderer
     msSize m_size;
 
     msMatrix m_projectionMatrix;
-
-    GLfloat mBoxVertexesTemp[6][3]; // 6 vertexes for defining quad by means of two triangles (2 vertex for each)
-    GLfloat mBoxColorsTemp[6][4];
     
-    GLfloat mBoxBordersTemp[6]; // array of vertexes for box borders
+    msBoxGrid *m_boxGrid;
+    
 
 	void _drawFigure(msBoxList &boxes, msBox *box, msPalette *palette, msShaderProgram *m_program);
 	void _drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color);
@@ -52,16 +50,16 @@ class msBoxGridRenderer
 	void drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color);
 	void drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color);
 
-    void drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid, msSize size);
+    void drawBoxGrid(msShaderProgram *program, msSize size);
 
     void drawExplosions();
 
 	void drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front);
 
 
-    void drawBoxesWithShockWave(msBoxGrid *boxGrid);
+    void drawBoxesWithShockWave();
 
-    void drawBoxGrid( msBoxGrid * boxGrid );
+    void drawBoxGrid();
 
     msParticleEmitter* _createExplosionPe(msPointf location, msSize screenSize);
 
@@ -81,9 +79,9 @@ class msBoxGridRenderer
 	float _menuBarHeight;
 
 public:
-	msBoxGridRenderer(msShaderPrograms *shaders);
+	msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGrid);
     ~msBoxGridRenderer();
 
-    void draw(msBoxGrid *boxGrid, msSize size);
+    void draw(msSize size);
 };
 

@@ -78,8 +78,8 @@ msParticleEmitter::msParticleEmitter(
 	}
 
 	// Generate the VBO's
-	glGenBuffers(1, &verticesID);
-	glGenBuffers(1, &colorsID);
+//	glGenBuffers(1, &verticesID);
+//	glGenBuffers(1, &colorsID);
 
 	// By default the particle emitter is active when created
 	active = GL_TRUE;

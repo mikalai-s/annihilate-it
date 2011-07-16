@@ -19,37 +19,13 @@ static const GLfloat g_fbVertexPositions2[] = {
 	 1.f,  1.f, 1.f, 1.f,
 };
 
-GLfloat textureOrientation[] = {
-// left
-	0.f, 0.f,
-	1.f, 0.f,
-	0.f, 1.f,
-	1.f, 1.f,
-// bottom
-	1.f, 0.f,
-	1.f, 1.f,
-	0.f, 0.f,
-	0.f, 1.f,
-// right
-	1.f, 1.f,
-	0.f, 1.f,
-	1.f, 0.f,
-	0.f, 0.f,
-// top
-	0.f, 1.f,
-	0.f, 0.f,
-	1.f, 1.f, 
-	1.f, 0.f,
-};
 
-static const GLubyte g_fbIndices2[] = {
-	0, 1, 2, 3,
-};
-
-GLuint borderBuffer;
+GLuint indexBuffer;
 GLuint vertexBuffer;
+GLuint textureOrientationBuffer;
 
-msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
+
+msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGrid)
 {
 	m_shaders = shaders;
     
@@ -67,7 +43,53 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders)
         ->viewport(2.0f, 2.0f)          
         ->translate(-1.0f, -1.0f, 0.0f);
     m_projectionMatrix = *transform.getMatrix();
+    
+    m_boxGrid = boxGrid;
+    
+    
+    // buffer for vertices data
+    unsigned long size = sizeof(msBoxData) * boxGrid->getRowCount() * boxGrid->getColCount();   
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, size, 0, GL_DYNAMIC_DRAW);
+    
+    
+    // buffer for indicies
+    GLubyte boxIndicies[] = { 0, 1, 2, 3 };    
+    glGenBuffers(1, &indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * 4, boxIndicies, GL_STATIC_DRAW);
+    
+    
+    // buffer for texture texcoords
+    GLfloat textureOrientation[] = {
+        // left
+        0.f, 0.f,
+        1.f, 0.f,
+        0.f, 1.f,
+        1.f, 1.f,
+        // bottom
+        1.f, 0.f,
+        1.f, 1.f,
+        0.f, 0.f,
+        0.f, 1.f,
+        // right
+        1.f, 1.f,
+        0.f, 1.f,
+        1.f, 0.f,
+        0.f, 0.f,
+        // top
+        0.f, 1.f,
+        0.f, 0.f,
+        1.f, 1.f, 
+        1.f, 0.f,
+    };    
+    glGenBuffers(1, &textureOrientationBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, textureOrientationBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 32, textureOrientation, GL_STATIC_DRAW);
 
+    
+    
     glViewport(0, 0, m_size.width, m_size.height);
 }
 
@@ -84,19 +106,76 @@ msBoxGridRenderer::~msBoxGridRenderer()
 	}
 }
 
-static const GLubyte g_indices[] = { 0, 1, 2, 3 };
+void msBoxGridRenderer::draw(msSize size)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(msBoxData) * m_boxGrid->getRowCount() * m_boxGrid->getColCount(), m_boxGrid->m_boxVertexData);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    m_size = size;
+    
+    if(m_boxGrid == 0)
+        return;
+    
+    drawBoxesWithShockWave();
+    
+    drawExplosions();
+    
+    removeInactiveEmitters();
+    
+    // update all animations
+    for(int y = 0; y < m_boxGrid->m_rowCount; y ++)
+    {
+        for(int x = 0; x < m_boxGrid->m_columnCount; x ++)
+        {
+            msBox *box = m_boxGrid->getItem(y, x);
+            box->getAnimations()->performStep();
+        }
+    }
+    
+	m_boxGrid->getAnimations()->performStep();
+}
 
-static const GLubyte g_frontFaceIndices[] = { 0, 1, 2, 3 };
-static const GLubyte g_backFaceIndices[] = { 1, 0, 3, 2 };
-
-
-#define MS_BORDER_LEFT 1
-#define MS_BORDER_TOP 2
-#define MS_BORDER_RIGTH 4
-#define MS_BORDER_BOTTOM 8
+void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msSize size)
+{
+    glCullFace(GL_FRONT);	
+    
+    for(int y = 0; y < m_boxGrid->m_rowCount; y ++)
+    {
+        for(int x = 0; x < m_boxGrid->m_columnCount; x ++)
+        {
+            msBox *box = m_boxGrid->getItem(y, x);
+            
+            // first check for explosion and if box is required one put it into list to be used after grid rendering
+            if(box->getRequiresExplosion())
+            {
+                m_explosions.push_back(_createExplosionPe(box->getExplosionPoint(), size));
+            }
+            
+			if(box->getRequiresWave())
+			{
+				m_waves.push_back(_createWave(box));
+			}
+            
+			if(box->isVisible())
+            {
+				glCullFace(GL_FRONT);
+				drawBox(program, m_boxGrid->m_palette, box, &box->getVerticesData()->frontFace, true);
+				
+				glCullFace(GL_BACK);
+				drawBox(program, m_boxGrid->m_palette, box, &box->getVerticesData()->backFace, false);
+            }
+        }
+    }
+    
+}
 
 void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front)
 {
+        
 	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
 	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
@@ -126,18 +205,26 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 	program->getUniform("mvp")->setMatrix4fv(1, false, transform.getMatrix()->getArray());
 	
 	program->getUniform("cornerBorder")->set4iv(1, faceData->getHasCornerBorder());
-
-    program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, box->getVerticesData()->vertices);
-
-	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, textureOrientation);
-	program->getAttribute("borderTexelBottom")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[8]);
-	program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[16]);
-	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, 0, &textureOrientation[24]);
+    
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);    
+    unsigned long offset = (unsigned long)box->getVerticesData() - (unsigned long)m_boxGrid->m_boxVertexData;
+    program->getAttribute("position")->setPointerAndEnable(3, GL_FLOAT, GL_FALSE, sizeof(msPointf), (void*)offset);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, textureOrientationBuffer);    
+	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (void*)0);
+	program->getAttribute("borderTexelBottom")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (void*)8);
+	program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (void*)16);
+	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (void*)24);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glEnable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
-
-    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_frontFaceIndices);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
 
 	glDisable(GL_BLEND);
 	/*
@@ -199,37 +286,6 @@ void msBoxGridRenderer::drawBottomBorder(msShaderProgram *m_program, msBox *box,
 	_drawLine(m_program, box->getVerticesData()->vertices[2], box->getVerticesData()->vertices[3], color);
 }
 
-GLuint gi = 0;
-
-void msBoxGridRenderer::draw( msBoxGrid *boxGrid, msSize size )
-{
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    m_size = size;
-
-    if(boxGrid == 0)
-        return;
-
-    drawBoxesWithShockWave(boxGrid);
-
-    drawExplosions();
-
-    removeInactiveEmitters();
-
-    // update all animations
-    for(int y = 0; y < boxGrid->m_rowCount; y ++)
-    {
-        for(int x = 0; x < boxGrid->m_columnCount; x ++)
-        {
-            msBox *box = boxGrid->getItem(y, x);
-            box->getAnimations()->performStep();
-        }
-    }
-
-	boxGrid->getAnimations()->performStep();
-
-    gi ++;
-}
 
 size_t m_lastExplosions = 0;
 
@@ -241,39 +297,7 @@ void msBoxGridRenderer::showExplosions()
     }
 }
 
-void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msBoxGrid *boxGrid, msSize size)
-{
-   glCullFace(GL_FRONT);	
 
-    for(int y = 0; y < boxGrid->m_rowCount; y ++)
-    {
-        for(int x = 0; x < boxGrid->m_columnCount; x ++)
-        {
-            msBox *box = boxGrid->getItem(y, x);
-
-            // first check for explosion and if box is required one put it into list to be used after grid rendering
-            if(box->getRequiresExplosion())
-            {
-                m_explosions.push_back(_createExplosionPe(box->getExplosionPoint(), size));
-            }
-
-			if(box->getRequiresWave())
-			{
-				m_waves.push_back(_createWave(box));
-			}
-
-			if(box->isVisible())
-            {
-				glCullFace(GL_FRONT);
-				drawBox(program, boxGrid->m_palette, box, &box->getVerticesData()->frontFace, true);
-				
-				glCullFace(GL_BACK);
-				drawBox(program, boxGrid->m_palette, box, &box->getVerticesData()->backFace, false);
-            }
-        }
-    }
-
-}
 
 void msBoxGridRenderer::removeInactiveEmitters()
 {
@@ -342,7 +366,7 @@ static const GLfloat g_vertexPositions[] = {
 
 
 
-void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
+void msBoxGridRenderer::drawBoxesWithShockWave()
 {
     // render fire into texture using particle shaders
     msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
@@ -355,12 +379,11 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
     if (program->getFrameBuffer("renderTex")->isComplete())
     {
         // Set viewport to size of texture map and erase previous image
-        glViewport(0, 0, m_size.width, m_size.height);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
 
         // render background
-        drawBoxGrid(program, boxGrid, m_size);
+        drawBoxGrid(program, m_size);
     }
 
 	// Unbind the FBO so rendering will return to the backbuffer.
@@ -378,7 +401,10 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 
 	program->getUniform("tex")->set1i(renderTex->getUnit());
 	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_vertexPositions );
-	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, textureOrientation );
+    
+    glBindBuffer(GL_ARRAY_BUFFER, textureOrientationBuffer);    
+	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);    
 
 	// wave
 	for(msWaveIterator i = m_waves.begin(); i != m_waves.end(); i ++)
@@ -388,7 +414,8 @@ void msBoxGridRenderer::drawBoxesWithShockWave(msBoxGrid *boxGrid)
 	}
 
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_indices );
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);
 }
 
 void msBoxGridRenderer::drawExplosions()
@@ -404,7 +431,6 @@ void msBoxGridRenderer::drawExplosions()
     if (program->getFrameBuffer("renderTex")->isComplete())		
     {
         // Set viewport to size of texture map and erase previous image
-        glViewport(0, 0, (GLsizei)m_size.width, (GLsizei)m_size.height);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -435,10 +461,14 @@ void msBoxGridRenderer::drawExplosions()
 
     particleCompleteProgram->getUniform("u2_texture")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
     particleCompleteProgram->getAttribute("a2_position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions2 );
-    particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, textureOrientation );
+    
+    glBindBuffer(GL_ARRAY_BUFFER, textureOrientationBuffer);    
+    particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0 );
+    glBindBuffer(GL_ARRAY_BUFFER, 0);    
 
     // draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-    glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, g_fbIndices2 );	
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);
 
     glDisable(GL_BLEND);
 }
