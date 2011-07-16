@@ -109,7 +109,7 @@ private:
    /// Pointer to the clear color
    GLfloat m_clearColor[4];
 
-   msSize m_size;
+   msSizef m_size;
 };
 
 

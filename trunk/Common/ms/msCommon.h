@@ -136,10 +136,16 @@ struct msPointi
 
 
 
-struct msSize
+struct msSizef
 {
-	GLfloat width;
-	GLfloat height;
+	float width;
+	float height;
+};
+
+struct msSizei
+{
+    int width;
+    int height;
 };
 
 

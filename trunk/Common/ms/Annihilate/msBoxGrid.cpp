@@ -63,7 +63,7 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 			verticesData->backFace.colorDisturbance.b = 1.0f;
 
 			verticesData->angle = 0.0f;
-			verticesData->angleVector = msPointf(0.0f, 1.0f, 0.0f);
+			verticesData->angleVector = msPointf(1.0f, 0.0f, 0.0f);
 
             msPointf* originalCoords = (msPointf*)malloc(sizeof(verticesData->vertices));
             memcpy(originalCoords, verticesData->vertices, sizeof(verticesData->vertices));
@@ -568,7 +568,15 @@ void msBoxGrid::removeSimilarItemsAtPoint( msPointf screenPoint )
 	}
 }
 
+msBoxFaceData* _frontFaceResolver(msBox *box)
+{
+    return &box->getVerticesData()->frontFace;
+}
 
+msBoxFaceData* _backFaceResolver(msBox *box)
+{
+    return &box->getVerticesData()->frontFace;
+}
 
 // updates links between boxes. Boxes have links to each other if they are neighbors and have the same color
 void msBoxGrid::_refreshBorders()
@@ -579,24 +587,26 @@ void msBoxGrid::_refreshBorders()
 		{
 			msBox *box = getItem(y, x);
 
-			_refreshBoxFaceBorders(y, x, &box->getVerticesData()->frontFace);
-			_refreshBoxFaceBorders(y, x, &box->getVerticesData()->backFace);
+			_refreshBoxFaceBorders(y, x, _frontFaceResolver);
+			_refreshBoxFaceBorders(y, x, _backFaceResolver);
 		}
 	}
 }
 
 
-void msBoxGrid::_refreshBoxFaceBorders(int y, int x, msBoxFaceData *face)
+void msBoxGrid::_refreshBoxFaceBorders(int y, int x, msBoxFaceData* (*faceResolver)(msBox *))
 {
-	// the following variables reflects neighbours with the same colour
-	bool left = _checkBoxColor(y, x - 1, face->getColorIndex());
-	bool leftTop = _checkBoxColor(y - 1, x - 1, face->getColorIndex());
-	bool top = _checkBoxColor(y - 1, x, face->getColorIndex());
-	bool topRight = _checkBoxColor(y - 1, x + 1, face->getColorIndex());
-	bool right = _checkBoxColor(y, x + 1, face->getColorIndex());
-	bool rightBottom = _checkBoxColor(y + 1, x + 1, face->getColorIndex());
-	bool bottom = _checkBoxColor(y + 1, x, face->getColorIndex());
-	bool bottomLeft = _checkBoxColor(y + 1, x - 1, face->getColorIndex());
+    msBoxFaceData *face = faceResolver(getItem(y, x));
+
+	// the following variables reflects neighbors with the same color
+	bool left = _checkBoxColor(y, x - 1, face->getColorIndex(), faceResolver);
+	bool leftTop = _checkBoxColor(y - 1, x - 1, face->getColorIndex(), faceResolver);
+	bool top = _checkBoxColor(y - 1, x, face->getColorIndex(), faceResolver);
+	bool topRight = _checkBoxColor(y - 1, x + 1, face->getColorIndex(), faceResolver);
+	bool right = _checkBoxColor(y, x + 1, face->getColorIndex(), faceResolver);
+	bool rightBottom = _checkBoxColor(y + 1, x + 1, face->getColorIndex(), faceResolver);
+	bool bottom = _checkBoxColor(y + 1, x, face->getColorIndex(), faceResolver);
+	bool bottomLeft = _checkBoxColor(y + 1, x - 1, face->getColorIndex(), faceResolver);
 
 	face->hasBorder[0] = !left;
 	face->hasBorder[1] = !top;
@@ -611,12 +621,12 @@ void msBoxGrid::_refreshBoxFaceBorders(int y, int x, msBoxFaceData *face)
 
 
 // checks whether a box with specified coordinates has given color
-int msBoxGrid::_checkBoxColor(GLint y, GLint x, GLint colorIndex)
+int msBoxGrid::_checkBoxColor(GLint y, GLint x, GLint colorIndex, msBoxFaceData* (*faceResolver)(msBox *))
 {
 	if(x < 0 || x >= m_columnCount || y < 0 || y >= m_rowCount)
 		return 0;
 
-	return getItem(y, x)->getColorIndex() == colorIndex;
+	return faceResolver(getItem(y, x))->getColorIndex() == colorIndex;
 }
 
 

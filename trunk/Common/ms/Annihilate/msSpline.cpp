@@ -55,7 +55,6 @@ void msSpline::draw()
 	CtrlPt[m_count+6] = CtrlPt[m_count+4];
 
 	msPointf Ap, Bp, Cp, Dp;
-	float Lx, Ly;
 
 	for(int i = 2; i < m_count + 2; i ++)
 	{
@@ -90,7 +89,6 @@ void msSpline::getSplinePoints(int resolution, msPointf *points, int *count, int
 	CtrlPt[m_count+6] = CtrlPt[m_count+4];
 
 	msPointf Ap, Bp, Cp, Dp;
-	float Lx, Ly;
 
 	int firstIndex = startIndex;
 	*count = 0;

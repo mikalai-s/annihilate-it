@@ -80,7 +80,7 @@ typedef msHideActionList::iterator msHideActionIterator;
 
 class msBoxGrid : public msGrid<msBox*>
 {
-	msSize size;
+	msSizef size;
 
     msGrid<msPointf*> *m_coordinateGrid;
 
@@ -93,7 +93,9 @@ class msBoxGrid : public msGrid<msBox*>
 
 	void _refreshBorders();
 
-	void _refreshBoxFaceBorders(int y, int x, msBoxFaceData *faceData);
+  
+
+	void _refreshBoxFaceBorders(int y, int x, msBoxFaceData* (*faceResolver)(msBox *));
 
     static void _borderInvertion( msAnimationContext *context );
 
@@ -109,7 +111,7 @@ class msBoxGrid : public msGrid<msBox*>
 
 	void _removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &removedBoxes, GLint level);
 
-	GLint _checkBoxColor(GLint y, GLint x, GLint colorIndex);
+	GLint _checkBoxColor(GLint y, GLint x, GLint colorIndex, msBoxFaceData* (*faceResolver)(msBox *));
 
 	void _exchangeBoxes(msGrid<msBox*> *grid, GLint y1, GLint x1, GLint y2, GLint x2);
 

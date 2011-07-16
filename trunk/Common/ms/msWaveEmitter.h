@@ -5,7 +5,7 @@
 class msWaveEmitter
 {
 public:
-	msWaveEmitter(msPointf location, msSize size);
+	msWaveEmitter(msPointf location, msSizef size);
 	~msWaveEmitter(void);
 	//void render();
 	void step();
@@ -13,7 +13,7 @@ public:
 	float m_radius;
 	float m_power;
 	msPointf m_location;
-	msSize m_size;
+	msSizef m_size;
 
 	GLboolean isAlive();
 };

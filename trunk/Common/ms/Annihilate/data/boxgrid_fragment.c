@@ -16,7 +16,7 @@ varying vec2 _borderTexelTop;
 void main()
 {
 	vec4 c = color;
-
+    
 	if(lineBorder[0] == 1)
 		c *= texture2D(borderLineTex, _borderTexelLeft);
 	
@@ -28,18 +28,18 @@ void main()
 
 	if(lineBorder[3] == 1)
 		c *= texture2D(borderLineTex, _borderTexelBottom);
-
+       
 	if(cornerBorder[0] == 1)
 		c *= texture2D(borderCornerTex, _borderTexelLeft);
-
+    
 	if(cornerBorder[1] == 1)
 		c *= texture2D(borderCornerTex, _borderTexelTop);
-
+    
 	if(cornerBorder[2] == 1)
 		c *= texture2D(borderCornerTex, _borderTexelRight);
 
 	if(cornerBorder[3] == 1)
 		c *= texture2D(borderCornerTex, _borderTexelBottom);
-
+        
 	gl_FragColor = c;
 }

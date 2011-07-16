@@ -36,7 +36,7 @@ class msBoxGridRenderer
 
 	msWaveList m_waves;
 
-    msSize m_size;
+    msSizef m_size;
 
     msMatrix m_projectionMatrix;
     
@@ -50,7 +50,7 @@ class msBoxGridRenderer
 	void drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color);
 	void drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color);
 
-    void drawBoxGrid(msShaderProgram *program, msSize size);
+    void drawBoxGrid(msShaderProgram *program, msSizef size);
 
     void drawExplosions();
 
@@ -61,7 +61,7 @@ class msBoxGridRenderer
 
     void drawBoxGrid();
 
-    msParticleEmitter* _createExplosionPe(msPointf location, msSize screenSize);
+    msParticleEmitter* _createExplosionPe(msPointf location, msSizef screenSize);
 
 	msWaveEmitter* _createWave(msBox *box);
 
@@ -82,6 +82,6 @@ public:
 	msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGrid);
     ~msBoxGridRenderer();
 
-    void draw(msSize size);
+    void draw(msSizef size);
 };
 

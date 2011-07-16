@@ -106,12 +106,11 @@ msBoxGridRenderer::~msBoxGridRenderer()
 	}
 }
 
-void msBoxGridRenderer::draw(msSize size)
+void msBoxGridRenderer::draw(msSizef size)
 {
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(msBoxData) * m_boxGrid->getRowCount() * m_boxGrid->getColCount(), m_boxGrid->m_boxVertexData);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
     
     glClear(GL_COLOR_BUFFER_BIT);
     
@@ -139,7 +138,7 @@ void msBoxGridRenderer::draw(msSize size)
 	m_boxGrid->getAnimations()->performStep();
 }
 
-void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msSize size)
+void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msSizef size)
 {
     glCullFace(GL_FRONT);	
     
@@ -212,10 +211,11 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
     program->getAttribute("position")->setPointerAndEnable(3, GL_FLOAT, GL_FALSE, sizeof(msPointf), (void*)offset);
     
     glBindBuffer(GL_ARRAY_BUFFER, textureOrientationBuffer);    
-	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (void*)0);
-	program->getAttribute("borderTexelBottom")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (void*)8);
-	program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (void*)16);
-	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (void*)24);
+	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)0);
+	program->getAttribute("borderTexelBottom")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 8));
+	program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 16));
+	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 24));
+    
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glEnable(GL_BLEND);
@@ -330,7 +330,7 @@ void msBoxGridRenderer::removeInactiveEmitters()
 
 
 
-msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPointf location, msSize screenSize)
+msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPointf location, msSizef screenSize)
 {
     float k = (screenSize.width / 320.0f) + (screenSize.height / 480.0f);
 

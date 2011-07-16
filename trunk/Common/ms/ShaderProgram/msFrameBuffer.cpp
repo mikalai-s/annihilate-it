@@ -10,7 +10,7 @@ msFrameBuffer::msFrameBuffer(GLuint id)
 	m_requiresBufferDeletion = false;
 }
 
-// The constructor is used to create new FBO
+// The constructor is used to create new FBOB
 msFrameBuffer::msFrameBuffer(string &name, GLuint textureUnit)
 {
 	m_name = copyString(name);
