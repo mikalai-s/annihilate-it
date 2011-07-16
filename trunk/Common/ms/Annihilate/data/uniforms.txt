@@ -9,15 +9,15 @@ link shockwave
 
 
 program particle_create /data/particle_create_vertex.c /data/particle_create_fragment.c
-texture u_texture 3 /data/expl.tga
+texture u_texture 1 /data/expl.tga
 attribute a_position 0
 attribute a_color 2
-colorTexFbo renderTex 10
+colorTexFbo renderTex 2
 link particle_create
 
 
 program particle_complete /data/particle_complete_vertex.c /data/particle_complete_fragment.c
-texture u2_texture 4 /data/expl.tga
+texture u2_texture 3 /data/expl.tga
 attribute a2_position 0
 attribute a2_texcoord 1
 link particle_complete
@@ -31,8 +31,8 @@ attribute borderTexelBottom 2
 attribute borderTexelRight 3
 attribute borderTexelTop 4
 
-texture borderLineTex 5 /data/border-line.tga
-texture borderCornerTex 6 /data/border-corner.tga
+texture borderLineTex 4 /data/border-line.tga
+texture borderCornerTex 5 /data/border-corner.tga
 
-colorTexFbo renderTex 12
+colorTexFbo renderTex 6
 link boxgrid
