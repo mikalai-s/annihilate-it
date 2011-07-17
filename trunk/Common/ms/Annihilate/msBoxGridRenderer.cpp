@@ -175,7 +175,8 @@ void msBoxGridRenderer::_drawBoxGrid(msShaderProgram *program, msSizef size)
 
 void msBoxGridRenderer::_drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front)
 {        
-	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
+	program->getUniform("borderExternalLineTex")->set1i(program->getTexture("borderExternalLineTex")->getUnit());
+    program->getUniform("borderInternalLineTex")->set1i(program->getTexture("borderInternalLineTex")->getUnit());
 	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
 	program->getUniform("lineBorder")->set4iv(1, faceData->getHasBorder());
@@ -227,7 +228,7 @@ void msBoxGridRenderer::_drawBox(msShaderProgram *program, msPalette *palette, m
     
 
 	glDisable(GL_BLEND);
-	
+	/*
     // draw borders if need
 	msColor innerBorderColor(
 		faceColor.r * 0.8f * faceData->getColorDisturbance().r, 
@@ -251,7 +252,7 @@ void msBoxGridRenderer::_drawBox(msShaderProgram *program, msPalette *palette, m
         _drawRightBorder(program, box, palette->getColor(0));
     if(!faceData->hasBottom())
         _drawBottomBorder(program, box, palette->getColor(0));
-
+        */
 	glDisable(GL_CULL_FACE);	
 }
 

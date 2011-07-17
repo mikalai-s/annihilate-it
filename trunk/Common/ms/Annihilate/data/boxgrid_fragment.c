@@ -5,7 +5,8 @@ uniform vec4 color;
 uniform ivec4 lineBorder;
 uniform ivec4 cornerBorder;
 
-uniform sampler2D borderLineTex;
+uniform sampler2D borderExternalLineTex;
+uniform sampler2D borderInternalLineTex;
 uniform sampler2D borderCornerTex;
 
 varying vec2 _borderTexelLeft;
@@ -18,16 +19,24 @@ void main()
 	vec4 c = color;
 
 	if(lineBorder[0] == 1)
-		c *= texture2D(borderLineTex, _borderTexelLeft);
+		c *= texture2D(borderExternalLineTex, _borderTexelLeft);
+    else
+        c *= texture2D(borderInternalLineTex, _borderTexelLeft);
 	
 	if(lineBorder[1] == 1)
-		c *= texture2D(borderLineTex, _borderTexelTop);
+		c *= texture2D(borderExternalLineTex, _borderTexelTop);
+    else
+        c *= texture2D(borderInternalLineTex, _borderTexelTop);
 	
 	if(lineBorder[2] == 1)
-		c *= texture2D(borderLineTex, _borderTexelRight);
+		c *= texture2D(borderExternalLineTex, _borderTexelRight);
+    else
+        c *= texture2D(borderInternalLineTex, _borderTexelRight);
 
 	if(lineBorder[3] == 1)
-		c *= texture2D(borderLineTex, _borderTexelBottom);
+		c *= texture2D(borderExternalLineTex, _borderTexelBottom);
+    else
+        c *= texture2D(borderInternalLineTex, _borderTexelBottom);
        
 	if(cornerBorder[0] == 1)
 		c *= texture2D(borderCornerTex, _borderTexelLeft);

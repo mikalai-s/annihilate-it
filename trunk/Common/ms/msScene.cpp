@@ -253,8 +253,8 @@ void msScene::undoLastMove()
 
 void msScene::start()
 {
-#define NUM_ROWS 10
-#define NUM_COLS 7
+#define NUM_ROWS 5
+#define NUM_COLS 5
 
     msBoxFaceData backFaces[NUM_ROWS * NUM_COLS];
 

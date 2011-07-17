@@ -33,8 +33,8 @@
 #include <ctime>
 #include <windowsx.h>
 
-//#define PERFORMANCE_TUNING
-#define FRAME_INTERVAL 20 //ms
+#define PERFORMANCE_TUNING
+//#define FRAME_INTERVAL 20 //ms
 
 // Globals
 bool  g_keys[256];               // Array Used For The Keyboard Routine
