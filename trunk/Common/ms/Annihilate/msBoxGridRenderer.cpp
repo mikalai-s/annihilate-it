@@ -16,10 +16,6 @@
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGrid)
 {
 	m_shaders = shaders;
-    
-    m_animate = 0;
-
-	_menuBarHeight = 0.1;
 
     // calculate projection matrix
     float fovy = 45.0f / 180.0f * 3.1415926f;
@@ -124,11 +120,11 @@ void msBoxGridRenderer::draw(msSizef size)
     if(m_boxGrid == 0)
         return;
     
-    drawBoxesWithShockWave();
+    _drawBoxesWithShockWave();
     
-    drawExplosions();
+    _drawExplosions();
     
-    removeInactiveEmitters();
+    _removeInactiveEmitters();
     
     // update all animations
     for(int y = 0; y < m_boxGrid->m_rowCount; y ++)
@@ -143,7 +139,7 @@ void msBoxGridRenderer::draw(msSizef size)
 	m_boxGrid->getAnimations()->performStep();
 }
 
-void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msSizef size)
+void msBoxGridRenderer::_drawBoxGrid(msShaderProgram *program, msSizef size)
 {
     glCullFace(GL_FRONT);	
     
@@ -167,19 +163,18 @@ void msBoxGridRenderer::drawBoxGrid(msShaderProgram *program, msSizef size)
 			if(box->isVisible())
             {
 				glCullFace(GL_FRONT);
-				drawBox(program, m_boxGrid->m_palette, box, &box->getVerticesData()->frontFace, true);
+				_drawBox(program, m_boxGrid->m_palette, box, &box->getVerticesData()->frontFace, true);
 				
 				glCullFace(GL_BACK);
-				drawBox(program, m_boxGrid->m_palette, box, &box->getVerticesData()->backFace, false);
+				_drawBox(program, m_boxGrid->m_palette, box, &box->getVerticesData()->backFace, false);
             }
         }
     }
     
 }
 
-void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front)
-{
-        
+void msBoxGridRenderer::_drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front)
+{        
 	program->getUniform("borderLineTex")->set1i(program->getTexture("borderLineTex")->getUnit());
 	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
@@ -240,22 +235,22 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
 		faceColor.b * 0.8f * faceData->getColorDisturbance().b, 
 		faceColor.a * faceData->getColorDisturbance().a);
 	if(faceData->hasLeft())
-		drawLeftBorder(program, box, &innerBorderColor);
+		_drawLeftBorder(program, box, &innerBorderColor);
 	if(faceData->hasTop())
-		drawTopBorder(program, box, &innerBorderColor);
+		_drawTopBorder(program, box, &innerBorderColor);
 	if(faceData->hasRight())
-		drawRightBorder(program, box, &innerBorderColor);
+		_drawRightBorder(program, box, &innerBorderColor);
 	if(faceData->hasBottom())
-		drawBottomBorder(program, box, &innerBorderColor);
+		_drawBottomBorder(program, box, &innerBorderColor);
 	
     if(!faceData->hasLeft())
-        drawLeftBorder(program, box, palette->getColor(0));
+        _drawLeftBorder(program, box, palette->getColor(0));
     if(!faceData->hasTop())
-        drawTopBorder(program, box, palette->getColor(0));
+        _drawTopBorder(program, box, palette->getColor(0));
     if(!faceData->hasRight())
-        drawRightBorder(program, box, palette->getColor(0));
+        _drawRightBorder(program, box, palette->getColor(0));
     if(!faceData->hasBottom())
-        drawBottomBorder(program, box, palette->getColor(0));
+        _drawBottomBorder(program, box, palette->getColor(0));
 
 	glDisable(GL_CULL_FACE);	
 }
@@ -274,41 +269,29 @@ void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, m
 //    glDrawArrays(GL_LINES, 0, 2);
 }
 
-void msBoxGridRenderer::drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color)
+void msBoxGridRenderer::_drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {    
     _drawLine(m_program, box->getVerticesData()->vertices[0], box->getVerticesData()->vertices[2], color);
 }
 
-void msBoxGridRenderer::drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color)
+void msBoxGridRenderer::_drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
 	_drawLine(m_program, box->getVerticesData()->vertices[0], box->getVerticesData()->vertices[1], color);
 }
 
-void msBoxGridRenderer::drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color)
+void msBoxGridRenderer::_drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
 	_drawLine(m_program, box->getVerticesData()->vertices[1], box->getVerticesData()->vertices[3], color);
 }
 
 
-void msBoxGridRenderer::drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color)
+void msBoxGridRenderer::_drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color)
 {
 	_drawLine(m_program, box->getVerticesData()->vertices[2], box->getVerticesData()->vertices[3], color);
 }
 
 
-size_t m_lastExplosions = 0;
-
-void msBoxGridRenderer::showExplosions()
-{
-    for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
-    {
-        printf("explosions:\t%d\r\n", (*ei)->particleCount);
-    }
-}
-
-
-
-void msBoxGridRenderer::removeInactiveEmitters()
+void msBoxGridRenderer::_removeInactiveEmitters()
 {
     msExplosionList explosionsToDelete;
 
@@ -334,8 +317,6 @@ void msBoxGridRenderer::removeInactiveEmitters()
 		m_waves.remove(*wi);
 	}
 }
-
-
 
 
 
@@ -368,7 +349,7 @@ msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPointf location, msSi
 
 
 
-void msBoxGridRenderer::drawBoxesWithShockWave()
+void msBoxGridRenderer::_drawBoxesWithShockWave()
 {
     // render fire into texture using particle shaders
     msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
@@ -385,7 +366,7 @@ void msBoxGridRenderer::drawBoxesWithShockWave()
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
 
         // render background
-        drawBoxGrid(program, m_size);
+        _drawBoxGrid(program, m_size);
     }
 
 	// Unbind the FBO so rendering will return to the backbuffer.
@@ -423,7 +404,7 @@ void msBoxGridRenderer::drawBoxesWithShockWave()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void msBoxGridRenderer::drawExplosions()
+void msBoxGridRenderer::_drawExplosions()
 {
     // render fire into texture using particle shaders
     msShaderProgram *program = m_shaders->getProgramByName("particle_create");

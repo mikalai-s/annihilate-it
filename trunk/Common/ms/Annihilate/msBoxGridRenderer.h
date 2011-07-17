@@ -30,6 +30,7 @@ typedef msWaveList::iterator msWaveIterator;
 
 class msBoxGridRenderer
 {
+private:
 	msShaderPrograms *m_shaders;
 
     msExplosionList m_explosions;
@@ -47,42 +48,23 @@ class msBoxGridRenderer
     GLuint m_textureOrientationBuffer;
     GLuint m_positionBuffer;
 
-    
-
+private:
 	void _drawFigure(msBoxList &boxes, msBox *box, msPalette *palette, msShaderProgram *m_program);
 	void _drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color);
-	void drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color);
-	void drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color);
-	void drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color);
-	void drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color);
-
-    void drawBoxGrid(msShaderProgram *program, msSizef size);
-
-    void drawExplosions();
-
-	void drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front);
-
-
-    void drawBoxesWithShockWave();
-
-    void drawBoxGrid();
+	void _drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color);
+	void _drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color);
+	void _drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color);
+	void _drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color);
+    void _drawBoxGrid(msShaderProgram *program, msSizef size);
+    void _drawExplosions();
+	void _drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front);
+    void _drawBoxesWithShockWave();
+    void _drawBoxGrid();
 
     msParticleEmitter* _createExplosionPe(msPointf location, msSizef screenSize);
-
 	msWaveEmitter* _createWave(msBox *box);
 
-    void removeInactiveEmitters();
-
-    void showExplosions();
-    
-	GLboolean m_animate;
-
-    GLint c;
-
-	void _getBoxSplinePoints( msBoxList & boxes, msBox * box, msSpline &spl, char direction);
-
-	// % part of screen that is used for menu bar
-	float _menuBarHeight;
+    void _removeInactiveEmitters();	
 
 public:
 	msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGrid);
