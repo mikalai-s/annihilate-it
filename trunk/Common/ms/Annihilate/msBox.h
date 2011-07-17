@@ -149,9 +149,6 @@ private:
 
     static void _finishLinearFalling(msAnimationContext *c);
 
-	static void _linearFalling2(msAnimationContext *c);
-
-
 	static void _appearing(msAnimationContext *c);
 
     

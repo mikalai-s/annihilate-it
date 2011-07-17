@@ -107,29 +107,6 @@ void msBox::_finishLinearFalling(msAnimationContext *c)
 	memcpy(fromVertexData->vertices, toVertices, sizeof(fromVertexData->vertices));
 }
 
-void msBox::_linearFalling2(msAnimationContext *c)
-{
-	msPointMoveAnimationContext *context = (msPointMoveAnimationContext*)c;
-	msPointf *p = context->getPoint();
-    switch(context->getDirection())
-    {
-        case MS_BOX_SHIFT_TOP:
-            p->y += MS_BOUNCE_OFFSET;
-            break;
-            
-        case MS_BOX_SHIFT_LEFT:
-            p->x += MS_BOUNCE_OFFSET;
-            break;
-            
-        case MS_BOX_SHIFT_RIGHT:
-            p->x -= MS_BOUNCE_OFFSET;
-            break;
-            
-        default:
-            p->y -= MS_BOUNCE_OFFSET;
-    }    
-}
-
 
 void msBox::fall(GLint delay, GLint direction, msPointf *newVertices)
 {
@@ -140,7 +117,24 @@ void msBox::fall(GLint delay, GLint direction, msPointf *newVertices)
 	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
     
     // move a little bit up for effect of bounce
-    msPointf bouncePoint(newVertices[0].x, newVertices[0].y - MS_BOUNCE_OFFSET * 4, newVertices[0].z);
+    msPointf bouncePoint(newVertices[0].x, newVertices[0].y, newVertices[0].z);
+    switch(direction)
+    {
+        case MS_BOX_SHIFT_TOP:
+            bouncePoint.y += MS_BOUNCE_OFFSET;
+            break;
+            
+        case MS_BOX_SHIFT_LEFT:
+            bouncePoint.x += MS_BOUNCE_OFFSET;
+            break;
+            
+        case MS_BOX_SHIFT_RIGHT:
+            bouncePoint.x -= MS_BOUNCE_OFFSET;
+            break;
+            
+        default:
+            bouncePoint.y -= MS_BOUNCE_OFFSET;
+    }    
     msKeyValueAnimationContext<msBoxData*, msPointf> *c3 = new msKeyValueAnimationContext<msBoxData*, msPointf>(m_verticesData, bouncePoint);
     getAnimations()->add(new msAnimation(delay + times, 4, c3, _linearFalling));
     

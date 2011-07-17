@@ -16,7 +16,7 @@ using namespace::std;
 #define MS_BOX_SHIFT_TOP 2
 #define MS_BOX_SHIFT_RIGHT 3
 
-#define MS_BOUNCE_OFFSET 0.002f 
+#define MS_BOUNCE_OFFSET 0.008f 
 
 
 #define MS_WAVE_DELAY 5
