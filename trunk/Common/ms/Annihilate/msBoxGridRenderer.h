@@ -42,6 +42,12 @@ class msBoxGridRenderer
     
     msBoxGrid *m_boxGrid;
     
+    GLuint m_indexBuffer;
+    GLuint m_vertexBuffer;
+    GLuint m_textureOrientationBuffer;
+    GLuint m_positionBuffer;
+
+    
 
 	void _drawFigure(msBoxList &boxes, msBox *box, msPalette *palette, msShaderProgram *m_program);
 	void _drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color);
