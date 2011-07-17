@@ -27,6 +27,8 @@ msBoxGrid::msBoxGrid(msPalette *palette, GLint numColors, GLint numRows, GLint n
 
 void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth)
 {
+    m_lastKnownDirection = MS_BOX_SHIFT_DOWN;
+    
 	float width = gridWidth / numCols, height = gridHeight / numRows;
 	float curx = 0, cury = 0;
 
@@ -160,8 +162,10 @@ msAnimationBundle* msBoxGrid::getAnimations()
 
 void msBoxGrid::doBoxesFallingCallback(msAnimationContext *c)
 {
-	msValueAnimationContext<msBoxGrid*> *context = (msValueAnimationContext<msBoxGrid*>*)c;
-	context->getValue()->shiftPendentBoxes(MS_BOX_SHIFT_DOWN);
+	msKeyValueAnimationContext<msBoxGrid*, int> *context = (msKeyValueAnimationContext<msBoxGrid*, int>*)c;
+    msBoxGrid *boxGrid = context->getKey();
+    int direction = context->getValue();
+	boxGrid->shiftPendentBoxes(direction);
 }
 
 void msBoxGrid::_animateBoxHiding(msBoxExplMap &boxesMap)
@@ -182,7 +186,7 @@ void msBoxGrid::_animateBoxHiding(msBoxExplMap &boxesMap)
 			maxOffset = o;
     }
 
-	msValueAnimationContext<msBoxGrid*> *c = new msValueAnimationContext<msBoxGrid*>(this);
+	msKeyValueAnimationContext<msBoxGrid*, int> *c = new msKeyValueAnimationContext<msBoxGrid*, int>(this, m_lastKnownDirection);
 	msAnimation *a = new msAnimation(maxOffset + 15, 1, c, doBoxesFallingCallback);
 	m_animations.add(a);
 }

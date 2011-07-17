@@ -86,7 +86,7 @@ public:
    /// \brief Binds an FBO into GL
    bool bindFbo( const char* name, GLint width, GLint height );
 
-   void mouseClick(int x, int y);
+   void mouseClick(int x, int y, int direction);
 
    void newSize(int width, int height);
 

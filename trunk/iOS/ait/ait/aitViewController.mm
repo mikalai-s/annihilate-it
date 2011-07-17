@@ -189,11 +189,37 @@ enum {
 
 }
 
+int lastDirection = MS_BOX_SHIFT_DOWN;
+
+int getShiftDirection()
+{
+    switch([UIDevice currentDevice].orientation)
+    {
+        case UIDeviceOrientationPortrait:
+            lastDirection = MS_BOX_SHIFT_DOWN;
+            return MS_BOX_SHIFT_DOWN;
+            
+        case UIDeviceOrientationPortraitUpsideDown:
+            lastDirection = MS_BOX_SHIFT_TOP;
+            return MS_BOX_SHIFT_TOP;
+            
+        case UIDeviceOrientationLandscapeLeft:
+            lastDirection = MS_BOX_SHIFT_LEFT;
+            return MS_BOX_SHIFT_LEFT;
+            
+        case UIDeviceOrientationLandscapeRight:
+            lastDirection = MS_BOX_SHIFT_RIGHT;
+            return MS_BOX_SHIFT_RIGHT;
+    }
+    return lastDirection;
+}
+
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     touchStartLocation = [[touches anyObject] locationInView:self.view];
     
-    m_scene.mouseClick(touchStartLocation.x, touchStartLocation.y);
+    m_scene.mouseClick(touchStartLocation.x, touchStartLocation.y, getShiftDirection());
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -204,5 +230,7 @@ enum {
     if(dif > 1000)
     m_scene.start();
 }
+
+
 
 @end

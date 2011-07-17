@@ -223,12 +223,7 @@ void msScene::drawFrame()
         m_renderer->draw(m_size);
 }
 
-int getShiftDirection()
-{
-	return MS_BOX_SHIFT_DOWN;
-}
-
-void msScene::mouseClick(int x, int y)
+void msScene::mouseClick(int x, int y, int direction)
 {
     if(m_boxGrid == 0 || m_renderer == 0)
         return;
@@ -237,6 +232,7 @@ void msScene::mouseClick(int x, int y)
 	touchPoint.x = ((GLfloat)x / (GLfloat)m_size.width);
 	touchPoint.y = ((GLfloat)y / (GLfloat)m_size.height);
 	
+    m_boxGrid->setDirection(direction);
 	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
 }
 
@@ -253,8 +249,8 @@ void msScene::undoLastMove()
 
 void msScene::start()
 {
-#define NUM_ROWS 5
-#define NUM_COLS 5
+#define NUM_ROWS 3
+#define NUM_COLS 3
 
     msBoxFaceData backFaces[NUM_ROWS * NUM_COLS];
 
@@ -267,9 +263,16 @@ void msScene::start()
         delete m_boxGrid;
         delete m_renderer;
     }
-	/*
+	
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
+        3, 2, 1, //4, 5, //6, 7, 2, 1, 4,
+        1, 2, 3, //4, 5, //6, 7, 2, 1, 4,
+        1, 2, 3, //4, 5, //6, 7, 2, 1, 4,
+        //2, 3, 4, //5, 1, //6, 7, 2, 1, 4,
+        //2, 3, 4, //5, 1, //6, 7, 2, 1, 4,
+        //2, 3, 4, //5, 1, //6, 7, 2, 1, 4,
+        //2, 3, 4, //5, 1, //6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
@@ -277,20 +280,13 @@ void msScene::start()
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
         //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        //1, 2, 3, 4, 5, 6, 7, 2, 1, 4,
-        1,1,
-        2,1,
+        //1,1,
+        //2,1,
     };
 	
    m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
-*/
-	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+
+	//m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
     m_renderer = new msBoxGridRenderer(&m_shaders, m_boxGrid);
 
    

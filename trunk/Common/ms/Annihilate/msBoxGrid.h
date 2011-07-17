@@ -86,6 +86,8 @@ class msBoxGrid : public msGrid<msBox*>
 
 	msMoveActionList _lastMovedBoxes;
 	msHideActionList _lastHiddenBoxes;
+    
+    int m_lastKnownDirection;
 
 
 
@@ -148,6 +150,11 @@ public:
 	~msBoxGrid();
 
 	void display();	
+    
+    void setDirection(int direction)
+    {
+        m_lastKnownDirection = direction;
+    }
 
 	void removeSimilarItems(GLint y, GLint x);
 
