@@ -16,7 +16,7 @@ varying vec2 _borderTexelTop;
 void main()
 {
 	vec4 c = color;
-    
+
 	if(lineBorder[0] == 1)
 		c *= texture2D(borderLineTex, _borderTexelLeft);
 	

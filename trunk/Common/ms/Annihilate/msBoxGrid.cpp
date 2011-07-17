@@ -63,7 +63,7 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 			verticesData->backFace.colorDisturbance.b = 1.0f;
 
 			verticesData->angle = 0.0f;
-			verticesData->angleVector = msPointf(1.0f, 0.0f, 0.0f);
+			verticesData->angleVector = msPointf(0.0f, 1.0f, 0.0f);
 
             msPointf* originalCoords = (msPointf*)malloc(sizeof(verticesData->vertices));
             memcpy(originalCoords, verticesData->vertices, sizeof(verticesData->vertices));

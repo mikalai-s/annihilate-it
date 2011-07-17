@@ -12,17 +12,10 @@
 #include "../msMatrix.h"
 #include "../msMatrixTransform.h"
 
-static const GLfloat g_fbVertexPositions2[] = {
-	-1.f, -1.f, 1.f, 1.f,
-	 1.f, -1.f, 1.f, 1.f,
-	-1.f,  1.f, 1.f, 1.f,
-	 1.f,  1.f, 1.f, 1.f,
-};
-
-
 GLuint indexBuffer;
 GLuint vertexBuffer;
 GLuint textureOrientationBuffer;
+GLuint positionBuffer;
 
 
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGrid)
@@ -89,6 +82,17 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGr
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 32, textureOrientation, GL_STATIC_DRAW);
 
     
+    // buffer for position attribute
+    static const GLfloat vertexPositions[] = {
+        -1.f, -1.f, 1.f, 1.f,
+        1.f, -1.f, 1.f, 1.f,
+        -1.f,  1.f, 1.f, 1.f,
+        1.f,  1.f, 1.f, 1.f,
+    };
+    glGenBuffers(1, &positionBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 16, vertexPositions, GL_STATIC_DRAW);
+    
     
     glViewport(0, 0, m_size.width, m_size.height);
 }
@@ -113,6 +117,7 @@ void msBoxGridRenderer::draw(msSizef size)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.f, 0.f, 0.f, 0.f);
     
     m_size = size;
     
@@ -121,7 +126,7 @@ void msBoxGridRenderer::draw(msSizef size)
     
     drawBoxesWithShockWave();
     
-    drawExplosions();
+    //drawExplosions();
     
     removeInactiveEmitters();
     
@@ -227,7 +232,7 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
     
 
 	glDisable(GL_BLEND);
-	/*
+	
     // draw borders if need
 	msColor innerBorderColor(
 		faceColor.r * 0.8f * faceData->getColorDisturbance().r, 
@@ -251,7 +256,7 @@ void msBoxGridRenderer::drawBox(msShaderProgram *program, msPalette *palette, ms
         drawRightBorder(program, box, palette->getColor(0));
     if(!faceData->hasBottom())
         drawBottomBorder(program, box, palette->getColor(0));
-		*/
+
 	glDisable(GL_CULL_FACE);	
 }
 
@@ -262,7 +267,11 @@ void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, m
 	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, coords );
 	m_program->getUniform("color")->set4fv( 1, (GLfloat*)color );
     
-    glDrawArrays(GL_LINES, 0, 2);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glDrawElements(GL_LINES, 2, GL_UNSIGNED_BYTE, (void*)0);    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+//    glDrawArrays(GL_LINES, 0, 2);
 }
 
 void msBoxGridRenderer::drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color)
@@ -357,13 +366,6 @@ msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPointf location, msSi
 		);
 }
 
-static const GLfloat g_vertexPositions[] = {
-	-1.0f, -1.0f,  1.0f,  1.0f,
-	1.0f, -1.0f,  1.0f,  1.0f,
-	-1.0f,  1.0f,  1.0f, 1.0f,
-	1.0f,  1.0f,  1.0f, 1.0f,
-};
-
 
 
 void msBoxGridRenderer::drawBoxesWithShockWave()
@@ -371,20 +373,20 @@ void msBoxGridRenderer::drawBoxesWithShockWave()
     // render fire into texture using particle shaders
     msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
     program->use();
-
+/*
     // Switch the render target to the current FBO to update the texture map
     program->getFrameBuffer("renderTex")->bind();
 
     // FBO attachment is complete?
     if (program->getFrameBuffer("renderTex")->isComplete())
     {
-        // Set viewport to size of texture map and erase previous image
+  */      // Set viewport to size of texture map and erase previous image
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
 
         // render background
         drawBoxGrid(program, m_size);
-    }
+ /*   }
 
 	// Unbind the FBO so rendering will return to the backbuffer.
 	m_shaders->getMainFrameBuffer()->bind();
@@ -400,7 +402,9 @@ void msBoxGridRenderer::drawBoxesWithShockWave()
     program->use();
 
 	program->getUniform("tex")->set1i(renderTex->getUnit());
-	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_vertexPositions );
+    
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);    
+	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, (void*)0);
     
     glBindBuffer(GL_ARRAY_BUFFER, textureOrientationBuffer);    
 	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0);
@@ -416,6 +420,8 @@ void msBoxGridRenderer::drawBoxesWithShockWave()
 	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  */
 }
 
 void msBoxGridRenderer::drawExplosions()
@@ -460,7 +466,9 @@ void msBoxGridRenderer::drawExplosions()
     particleCompleteProgram->use();
 
     particleCompleteProgram->getUniform("u2_texture")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
-    particleCompleteProgram->getAttribute("a2_position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, g_fbVertexPositions2 );
+    
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);    
+    particleCompleteProgram->getAttribute("a2_position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, (void*)0 );
     
     glBindBuffer(GL_ARRAY_BUFFER, textureOrientationBuffer);    
     particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0 );
