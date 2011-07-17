@@ -339,14 +339,14 @@ void msBoxGrid::_shiftTop(msGrid<msBox*> *grid, msMoveActionList *moves)
 		GLint y = 0;
 		while(y < m_rowCount)
 		{
-			if(!getItem(y, x)->isVisible())
+			if(!grid->getItem(y, x)->isVisible())
 			{
 				// y < 0 when there are no empty boxes
 				if(y >= m_rowCount)
 					break;
 
 				GLint yy = y + 1; // note: dependent on direction
-				while(yy <= m_rowCount && !getItem(yy, x)->isVisible())
+				while(yy <= m_rowCount && !grid->getItem(yy, x)->isVisible())
 					yy ++;
 
 				// yy < -1 when there are no items to shift
@@ -371,14 +371,14 @@ void msBoxGrid::_shiftRight(msGrid<msBox*> *grid, msMoveActionList *moves)
 		GLint x = m_columnCount - 1;
 		while(x >= -1)
 		{
-			if(!getItem(y, x)->isVisible())
+			if(!grid->getItem(y, x)->isVisible())
 			{
 				// y < 0 when there are no empty boxes
 				if(x < 0)
 					break;
 
 				GLint xx = x - 1; // note: dependent on direction
-				while(xx >= -1 && !getItem(y, xx)->isVisible())
+				while(xx >= -1 && !grid->getItem(y, xx)->isVisible())
 					xx --;
 
 				// yy < -1 when there are no items to shift
@@ -403,14 +403,14 @@ void msBoxGrid::_shiftLeft(msGrid<msBox*> *grid, msMoveActionList *moves)
 		GLint x = 0;
 		while(x < m_columnCount)
 		{
-			if(!getItem(y, x)->isVisible())
+			if(!grid->getItem(y, x)->isVisible())
 			{
 				// y < 0 when there are no empty boxes
 				if(x >= m_columnCount)
 					break;
 
 				GLint xx = x + 1; // note: dependent on direction
-				while(xx <= m_columnCount && !getItem(y, xx)->isVisible())
+				while(xx <= m_columnCount && !grid->getItem(y, xx)->isVisible())
 					xx ++;
 
 				// yy < -1 when there are no items to shift
@@ -513,22 +513,20 @@ void msBoxGrid::unitTest()
 	};*/
 	GLint pattern_horiz[] = 
 	{
-		-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,
-		-1,-1, 1, 1,-1,-1, 1, 1,-1,-1, 1, 1,-1,-1, 1, 1,-1,-1, 1, 1,-1,-1, 1, 1,-1,-1, 1, 1,-1,-1, 1, 1,
-		-1,-1,-1,-1, 1, 1, 1, 1,-1,-1,-1,-1, 1, 1, 1, 1,-1,-1,-1,-1, 1, 1, 1, 1,-1,-1,-1,-1, 1, 1, 1, 1,
-		-1,-1,-1,-1,-1,-1,-1,-1, 1, 1, 1, 1, 1, 1, 1, 1,-1,-1,-1,-1,-1,-1,-1,-1, 1, 1, 1, 1, 1, 1, 1, 1,
-		-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+		3,2,1, 
+        1,2,3,
+        1,2,3,
 	};
 	//msBoxGrid grid(0, pattern_vert, 32, 5, 100.0, 100.0);
-	msBoxGrid grid(0, pattern_horiz, 5, 32, 100.0, 100.0);
+	msBoxGrid grid(0, pattern_horiz, 3, 3, 100.0, 100.0);
 	grid.display2();
 
-	grid.removeSimilarItems(1, 1);
-	grid.removeSimilarItems(0, 31);
+	grid.getItem(0, 0)->m_visible = false;
 	grid.display2();
 
-	grid.shiftPendentBoxes(MS_BOX_SHIFT_RIGHT);
+	grid.shiftPendentBoxes(MS_BOX_SHIFT_TOP);
 	grid.display2();
+
 	/*
 	ms_boxgrid_shift_pendent_boxes(grid, 1);
 	ms_boxgrid_display(grid);
