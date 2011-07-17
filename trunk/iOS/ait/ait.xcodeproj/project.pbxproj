@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9791C92C13D2809100060949 /* border-external-line.tga in Resources */ = {isa = PBXBuildFile; fileRef = 9791C92A13D2809100060949 /* border-external-line.tga */; };
+		9791C92D13D2809100060949 /* border-internal-line.tga in Resources */ = {isa = PBXBuildFile; fileRef = 9791C92B13D2809100060949 /* border-internal-line.tga */; };
+		9791C92E13D2809C00060949 /* border-external-line.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9791C92A13D2809100060949 /* border-external-line.tga */; };
+		9791C92F13D2809C00060949 /* border-internal-line.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9791C92B13D2809100060949 /* border-internal-line.tga */; };
 		CE4C2D0E135FF8D70071F1C9 /* msAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CE3135FF8D70071F1C9 /* msAnimation.cpp */; };
 		CE4C2D0F135FF8D70071F1C9 /* msAnimationBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CE6135FF8D70071F1C9 /* msAnimationBundle.cpp */; };
 		CE4C2D10135FF8D70071F1C9 /* msAnimationContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4C2CE8135FF8D70071F1C9 /* msAnimationContext.cpp */; };
@@ -64,10 +68,8 @@
 		CEA849AD1377AF770082C69B /* particle_create_vertex.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6413628C6A0071F1C9 /* particle_create_vertex.c */; };
 		CEA849AE1377AF770082C69B /* uniforms.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE4C2E6713628C6A0071F1C9 /* uniforms.txt */; };
 		CEA849B11384C3130082C69B /* border-corner.tga in Resources */ = {isa = PBXBuildFile; fileRef = CEA849AF1384C3130082C69B /* border-corner.tga */; };
-		CEA849B21384C3130082C69B /* border-line.tga in Resources */ = {isa = PBXBuildFile; fileRef = CEA849B01384C3130082C69B /* border-line.tga */; };
 		CEA849B51384C3340082C69B /* msSpline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA849B31384C3340082C69B /* msSpline.cpp */; };
 		CEA849B61384C3620082C69B /* border-corner.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEA849AF1384C3130082C69B /* border-corner.tga */; };
-		CEA849B71384C3620082C69B /* border-line.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEA849B01384C3130082C69B /* border-line.tga */; };
 		CEAD788413BAD7BA00AAE923 /* msMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEAD788013BAD7BA00AAE923 /* msMatrix.cpp */; };
 		CEAD788513BAD7BA00AAE923 /* msMatrixTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEAD788213BAD7BA00AAE923 /* msMatrixTransform.cpp */; };
 /* End PBXBuildFile section */
@@ -89,8 +91,9 @@
 			dstPath = data;
 			dstSubfolderSpec = 7;
 			files = (
+				9791C92E13D2809C00060949 /* border-external-line.tga in CopyFiles */,
+				9791C92F13D2809C00060949 /* border-internal-line.tga in CopyFiles */,
 				CEA849B61384C3620082C69B /* border-corner.tga in CopyFiles */,
-				CEA849B71384C3620082C69B /* border-line.tga in CopyFiles */,
 				CEA849A51377AF770082C69B /* shockwave_fragment.c in CopyFiles */,
 				CEA849A61377AF770082C69B /* shockwave_vertex.c in CopyFiles */,
 				CEA849A71377AF770082C69B /* boxgrid_fragment.c in CopyFiles */,
@@ -107,6 +110,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9791C92A13D2809100060949 /* border-external-line.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "border-external-line.tga"; sourceTree = "<group>"; };
+		9791C92B13D2809100060949 /* border-internal-line.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "border-internal-line.tga"; sourceTree = "<group>"; };
 		CE4C2CE3135FF8D70071F1C9 /* msAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msAnimation.cpp; sourceTree = "<group>"; };
 		CE4C2CE4135FF8D70071F1C9 /* msAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAnimation.h; sourceTree = "<group>"; };
 		CE4C2CE5135FF8D70071F1C9 /* msAnimationBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAnimationBase.h; sourceTree = "<group>"; };
@@ -185,7 +190,6 @@
 		CEA849A11377AF6A0082C69B /* shockwave_fragment.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = shockwave_fragment.c; sourceTree = "<group>"; };
 		CEA849A21377AF6A0082C69B /* shockwave_vertex.c */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = shockwave_vertex.c; sourceTree = "<group>"; };
 		CEA849AF1384C3130082C69B /* border-corner.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "border-corner.tga"; sourceTree = "<group>"; };
-		CEA849B01384C3130082C69B /* border-line.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "border-line.tga"; sourceTree = "<group>"; };
 		CEA849B31384C3340082C69B /* msSpline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msSpline.cpp; sourceTree = "<group>"; };
 		CEA849B41384C3340082C69B /* msSpline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msSpline.h; sourceTree = "<group>"; };
 		CEAD788013BAD7BA00AAE923 /* msMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msMatrix.cpp; sourceTree = "<group>"; };
@@ -296,8 +300,9 @@
 		CE4C2E5913628C6A0071F1C9 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				9791C92A13D2809100060949 /* border-external-line.tga */,
+				9791C92B13D2809100060949 /* border-internal-line.tga */,
 				CEA849AF1384C3130082C69B /* border-corner.tga */,
-				CEA849B01384C3130082C69B /* border-line.tga */,
 				CE4C2E5C13628C6A0071F1C9 /* expl.tga */,
 				CEA849A11377AF6A0082C69B /* shockwave_fragment.c */,
 				CEA849A21377AF6A0082C69B /* shockwave_vertex.c */,
@@ -463,7 +468,8 @@
 				CE8D89DF135E94B700C083EA /* MainWindow.xib in Resources */,
 				CE8D89EC135E94B700C083EA /* aitViewController.xib in Resources */,
 				CEA849B11384C3130082C69B /* border-corner.tga in Resources */,
-				CEA849B21384C3130082C69B /* border-line.tga in Resources */,
+				9791C92C13D2809100060949 /* border-external-line.tga in Resources */,
+				9791C92D13D2809100060949 /* border-internal-line.tga in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
