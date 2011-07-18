@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{25921768-ED93-4503-8520-542F3289B0E0}</ProjectGuid>
+    <RootNamespace>esTriangle</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>./src;./../common;./../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WINDOWS_GL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>./../../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)esTriangle.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <AdditionalIncludeDirectories>./src;./../common;./../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;WINDOWS_GL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <PreLinkEvent>
+      <Command>xcopy "$(SolutionDir)..\ms\Annihilate\data" "$(OutDir)data\" /Y /F</Command>
+    </PreLinkEvent>
+    <Link>
+      <AdditionalLibraryDirectories>./../../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ms\Annihilate\msSpline.cpp" />
+    <ClCompile Include="..\ms\msMatrix.cpp" />
+    <ClCompile Include="..\ms\msMatrixTransform.cpp" />
+    <ClCompile Include="..\ms\msWaveEmitter.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Misc.cpp" />
+    <ClCompile Include="..\ms\msGL.cpp" />
+    <ClCompile Include="..\ms\msImageObject.cpp" />
+    <ClCompile Include="..\ms\msParticleEmitter.cpp" />
+    <ClCompile Include="..\ms\msScene.cpp" />
+    <ClCompile Include="..\ms\msSimpleImageLoader.cpp" />
+    <ClCompile Include="..\ms\msTga.cpp" />
+    <ClCompile Include="..\ms\ShaderProgram\msAttribute.cpp" />
+    <ClCompile Include="..\ms\ShaderProgram\msFrameBuffer.cpp" />
+    <ClCompile Include="..\ms\ShaderProgram\msShaderProgram.cpp" />
+    <ClCompile Include="..\ms\ShaderProgram\msShaderPrograms.cpp" />
+    <ClCompile Include="..\ms\ShaderProgram\msTexture.cpp" />
+    <ClCompile Include="..\ms\ShaderProgram\msUniform.cpp" />
+    <ClCompile Include="..\ms\Annihilate\msAnimation.cpp" />
+    <ClCompile Include="..\ms\Annihilate\msAnimationBundle.cpp" />
+    <ClCompile Include="..\ms\Annihilate\msAnimationContext.cpp" />
+    <ClCompile Include="..\ms\Annihilate\msBox.cpp" />
+    <ClCompile Include="..\ms\Annihilate\msBoxGrid.cpp" />
+    <ClCompile Include="..\ms\Annihilate\msBoxGridRenderer.cpp" />
+    <ClCompile Include="..\ms\Annihilate\msPalette.cpp" />
+    <ClCompile Include="..\ms\Annihilate\data\boxgrid_fragment.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\ms\Annihilate\data\boxgrid_vertex.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\ms\Annihilate\data\particle_complete_fragment.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\ms\Annihilate\data\particle_complete_vertex.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\ms\Annihilate\data\particle_create_fragment.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\ms\Annihilate\data\particle_create_vertex.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\ms\Annihilate\data\shockwave_fragment.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\ms\Annihilate\data\shockwave_vertex.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ms\Annihilate\msAnimationBase.h" />
+    <ClInclude Include="..\ms\Annihilate\msSpline.h" />
+    <ClInclude Include="..\ms\msMatrix.h" />
+    <ClInclude Include="..\ms\msMatrixTransform.h" />
+    <ClInclude Include="..\ms\msWaveEmitter.h" />
+    <ClInclude Include="src\Misc.h" />
+    <ClInclude Include="..\ms\msCommon.h" />
+    <CustomBuildStep Include="..\ms\msGL.h" />
+    <ClInclude Include="..\ms\msImageObject.h" />
+    <ClInclude Include="..\ms\msParticleEmitter.h" />
+    <ClInclude Include="..\ms\msScene.h" />
+    <ClInclude Include="..\ms\msSimpleImageLoader.h" />
+    <ClInclude Include="..\ms\msTga.h" />
+    <ClInclude Include="..\ms\ShaderProgram\msAttribute.h" />
+    <ClInclude Include="..\ms\ShaderProgram\msFrameBuffer.h" />
+    <ClInclude Include="..\ms\ShaderProgram\msShaderProgram.h" />
+    <ClInclude Include="..\ms\ShaderProgram\msShaderPrograms.h" />
+    <ClInclude Include="..\ms\ShaderProgram\msTexture.h" />
+    <ClInclude Include="..\ms\ShaderProgram\msUniform.h" />
+    <ClInclude Include="..\ms\Annihilate\msAnimation.h" />
+    <ClInclude Include="..\ms\Annihilate\msAnimationBundle.h" />
+    <ClInclude Include="..\ms\Annihilate\msAnimationContext.h" />
+    <ClInclude Include="..\ms\Annihilate\msBox.h" />
+    <ClInclude Include="..\ms\Annihilate\msBoxGrid.h" />
+    <CustomBuildStep Include="..\ms\Annihilate\msBoxGridRenderer.h" />
+    <ClInclude Include="..\ms\Annihilate\msGrid.h" />
+    <ClInclude Include="..\ms\Annihilate\msPalette.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ms\Annihilate\data\expl.tga" />
+    <CustomBuild Include="..\ms\Annihilate\data\uniforms.txt">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
