@@ -46,10 +46,6 @@ msScene::msScene()
    m_afterShockRadiusMax = 1500.0f;
    m_afterShockRadiusStep = 37.0f;
 
-   m_explosionParticles = 0;
-   pe2 = 0;
-   pe3 = 0;
-
    m_palette = 0;
    m_boxGrid = 0;
    m_renderer = 0;
@@ -61,10 +57,8 @@ void msScene::newSize(GLint width, GLint height)
 	m_size.height = height;
 	
 	m_shaders.notifySizeChanged(width, height);	
-
-    delete m_explosionParticles;
-    m_explosionParticles = _createExplosionPe(width, height);
 }
+
 
 //=================================================================================================================================
 ///
@@ -76,13 +70,6 @@ void msScene::newSize(GLint width, GLint height)
 //=================================================================================================================================
 msScene::~msScene()
 {
-	if(m_explosionParticles != 0)
-		delete m_explosionParticles;
-	if(pe2 != 0)
-		delete pe2;
-	if(pe3 != 0)
-		delete pe3;
-
     if(m_palette != 0)
 	    delete m_palette;
     if(m_boxGrid != 0)
@@ -131,41 +118,7 @@ bool msScene::loadData(string filename)
 
 
 
-//=================================================================================================================================
-///
-/// Draws the current frame.
-///
-/// \param none
-///
-/// \return null
-//=================================================================================================================================
 
-msParticleEmitter* msScene::_createExplosionPe(GLint width, GLint height)
-{
-    float k = (m_size.width / 320.0f / 2.0f) + (m_size.height / 480.0f / 2.0f);
-
-    return new msParticleEmitter(
-		// explosion
-		Vector2fMake(0.0f, 0.0f),//position:
-		Vector2fMake(0.031f, 0.031f),//sourcePositionVariance:
-		0.001f,//speed:
-		0.007f,//speedVariance:
-		0.5f,//particleLifeSpan:
-		0.25f,//particleLifespanVariance:
-		0.0f,//angle:
-		360.0f,//angleVariance:
-		Vector2fMake(0.0f, -0.000025f),//gravity:
-		colorMake(1.0f, 0.5f, 0.05f, 1.0f),//startColor:
-		colorMake(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
-		colorMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColor:
-		colorMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
-		200,//maxParticles:
-		50 * k,//particleSize:
-		3 * k,//particleSizeVariance:
-		-1,//0.125f,//duration:
-		GL_TRUE//blendAdditive:
-		);
-}
 
 GLfloat colorMap[][4] = 
 {
@@ -185,35 +138,8 @@ void msScene::init()
 {
 	m_shaders.notifySizeChanged(m_size.width, m_size.height);
 
-	pe2 = new msParticleEmitter(
-		// dust
-		Vector2fMake(0.0f, 0.0f),//position:
-		Vector2fMake(0.1f, 0.0f),//sourcePositionVariance:
-		0.001f,//speed:
-		0.00005f,//speedVariance:
-		0.5f,//particleLifeSpan:
-		0.5f,//particleLifespanVariance:
-		90.0f,//angle:
-		90.0f,//angleVariance:
-		Vector2fMake(0.0f, -0.0001f),//gravity:
-		colorMake(0.5f, 0.5f, 0.5f, 1.0f),//startColor:
-		colorMake(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
-		colorMake(0.1f, 0.1f, 0.1f, 0.0f),//finishColor:
-		colorMake(0.0f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
-		1000,//maxParticles:
-		20,//particleSize:
-		5,//particleSizeVariance:
-		-1,//0.125f,//duration:
-		GL_FALSE//blendAdditive:
-		);
-
-	pe3 = 0;
-
-
 	// init palette
-	m_palette = new msPalette(colorMap, 8);
-
-    
+	m_palette = new msPalette(colorMap, 8);    
 }
 
 
@@ -249,8 +175,8 @@ void msScene::undoLastMove()
 
 void msScene::start()
 {
-#define NUM_ROWS 10
-#define NUM_COLS 7
+#define NUM_ROWS 8
+#define NUM_COLS 5
 
     msBoxFaceData backFaces[NUM_ROWS * NUM_COLS];
 
@@ -288,7 +214,6 @@ void msScene::start()
 
 	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
     m_renderer = new msBoxGridRenderer(&m_shaders, m_boxGrid);
-
    
 	m_boxGrid->setBackPattern(backFaces);
     

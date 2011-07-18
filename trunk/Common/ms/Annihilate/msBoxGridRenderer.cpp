@@ -152,7 +152,8 @@ void msBoxGridRenderer::_drawBoxGrid(msShaderProgram *program, msSizef size)
             // first check for explosion and if box is required one put it into list to be used after grid rendering
             if(box->getRequiresExplosion())
             {
-                m_explosions.push_back(_createExplosionPe(box->getExplosionPoint(), size));
+                GLfloat ratio = m_boxGrid->getRowCount() / size.height / 2.0f + m_boxGrid->getColCount() / size.width / 2.0f;
+                m_explosions.push_back(_createExplosionPe(box->getExplosionPoint(), ratio));
             }
             
 			if(box->getRequiresWave())
@@ -321,10 +322,10 @@ void msBoxGridRenderer::_removeInactiveEmitters()
 
 
 
-msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPointf location, msSizef screenSize)
+msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPointf location, GLfloat ratio)
 {
-    float k = (screenSize.width / 320.0f) + (screenSize.height / 480.0f);
-
+    float k = 0.03333333f / ratio;
+    
     return new msParticleEmitter(
 		// explosion
 		Vector2fMake(location.x, location.y),//position:
@@ -355,7 +356,7 @@ void msBoxGridRenderer::_drawBoxesWithShockWave()
     // render fire into texture using particle shaders
     msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
     program->use();
-
+/*
     // Switch the render target to the current FBO to update the texture map
     program->getFrameBuffer("renderTex")->bind();
 
@@ -365,10 +366,10 @@ void msBoxGridRenderer::_drawBoxesWithShockWave()
         // Set viewport to size of texture map and erase previous image
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
-
+*/
         // render background
         _drawBoxGrid(program, m_size);
-    }
+  /*  }
 
 	// Unbind the FBO so rendering will return to the backbuffer.
 	m_shaders->getMainFrameBuffer()->bind();
@@ -403,6 +404,7 @@ void msBoxGridRenderer::_drawBoxesWithShockWave()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+   */
 }
 
 void msBoxGridRenderer::_drawExplosions()

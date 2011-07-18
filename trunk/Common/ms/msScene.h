@@ -38,9 +38,6 @@
 class msScene
 {
 private:
-	msParticleEmitter *m_explosionParticles;
-	msParticleEmitter *pe2;
-	msParticleEmitter *pe3;
 
 	GLfloat m_afterShockRadius;
 	GLfloat m_afterShockPower;
@@ -56,8 +53,6 @@ private:
 	msBoxGrid *m_boxGrid;
 	msBoxGridRenderer *m_renderer;
 
-
-    msParticleEmitter* _createExplosionPe(GLint _width, GLint _height);
 
 public:
    /// \brief Constructor.

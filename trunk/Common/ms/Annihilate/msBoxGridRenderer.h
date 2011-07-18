@@ -61,7 +61,7 @@ private:
     void _drawBoxesWithShockWave();
     void _drawBoxGrid();
 
-    msParticleEmitter* _createExplosionPe(msPointf location, msSizef screenSize);
+    msParticleEmitter* _createExplosionPe(msPointf location, GLfloat ratio);
 	msWaveEmitter* _createWave(msBox *box);
 
     void _removeInactiveEmitters();	
