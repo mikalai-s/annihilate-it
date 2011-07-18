@@ -356,7 +356,7 @@ void msBoxGridRenderer::_drawBoxesWithShockWave()
     // render fire into texture using particle shaders
     msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
     program->use();
-/*
+
     // Switch the render target to the current FBO to update the texture map
     program->getFrameBuffer("renderTex")->bind();
 
@@ -366,51 +366,16 @@ void msBoxGridRenderer::_drawBoxesWithShockWave()
         // Set viewport to size of texture map and erase previous image
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
-*/
+
         // render background
         _drawBoxGrid(program, m_size);
-  /*  }
+    }
+	msTexture *dest = program->getFrameBuffer("renderTex")->getTexture();
 
-	// Unbind the FBO so rendering will return to the backbuffer.
-	m_shaders->getMainFrameBuffer()->bind();
 
-	// usual renderer
 
-	// Bind updated texture map
-    msTexture *renderTex = m_shaders->getProgramByName("boxgrid")->getFrameBuffer("renderTex")->getTexture();
-    renderTex->active();
-	renderTex->bind();
-
-    program = m_shaders->getProgramByName("shockwave");
-    program->use();
-
-	program->getUniform("tex")->set1i(renderTex->getUnit());
-    
-    glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);    
-	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, (void*)0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, m_textureOrientationBuffer);    
-	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);    
-
-	// wave
-	for(msWaveIterator i = m_waves.begin(); i != m_waves.end(); i ++)
-	{
-		(*i)->render(program);
-		(*i)->step();
-	}
-
-	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-   */
-}
-
-void msBoxGridRenderer::_drawExplosions()
-{
-    // render fire into texture using particle shaders
-    msShaderProgram *program = m_shaders->getProgramByName("particle_create");
+	// render fire into texture using particle shaders
+    program = m_shaders->getProgramByName("particle_create");
     program->use();
 
     // Switch the render target to the current FBO to update the texture map
@@ -430,38 +395,46 @@ void msBoxGridRenderer::_drawExplosions()
             (*ei)->update(0.015f);
         }
     }
+	msTexture *src = program->getFrameBuffer("renderTex")->getTexture();
 
-    // Unbind the FBO so rendering will return to the backbuffer.
-    m_shaders->getMainFrameBuffer()->bind();
 
-    // usual renderer
 
-    // Set viewport to size of framebuffer and clear color and depth buffers
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Bind updated texture map
-    program->getFrameBuffer("renderTex")->getTexture()->active();
-    program->getFrameBuffer("renderTex")->getTexture()->bind();
 
-    msShaderProgram *particleCompleteProgram = m_shaders->getProgramByName("particle_complete");
-    particleCompleteProgram->use();
 
-    particleCompleteProgram->getUniform("u2_texture")->set1i(program->getFrameBuffer("renderTex")->getTexture()->getUnit());
+
+	// Unbind the FBO so rendering will return to the backbuffer.
+	m_shaders->getMainFrameBuffer()->bind();
+
+    program = m_shaders->getProgramByName("shockwave");
+    program->use();
+
+	program->getUniform("dest")->set1i(dest->getUnit());
+	program->getUniform("src")->set1i(src->getUnit());
     
     glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);    
-    particleCompleteProgram->getAttribute("a2_position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, (void*)0 );
+	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, (void*)0);
     
     glBindBuffer(GL_ARRAY_BUFFER, m_textureOrientationBuffer);    
-    particleCompleteProgram->getAttribute("a2_texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0 );
+	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);    
 
-    // draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);
+	// wave
+	for(msWaveIterator i = m_waves.begin(); i != m_waves.end(); i ++)
+	{
+		(*i)->render(program);
+		(*i)->step();
+	}
 
-    glDisable(GL_BLEND);
+	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void msBoxGridRenderer::_drawExplosions()
+{
 }
 
 msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)

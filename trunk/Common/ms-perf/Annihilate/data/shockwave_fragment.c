@@ -1,6 +1,7 @@
 precision mediump float;
 
-uniform sampler2D tex;
+uniform sampler2D src;
+uniform sampler2D dest;
 uniform sampler2D ns0;
 
 uniform vec2 location;
@@ -11,6 +12,18 @@ varying vec4 texcoord0;
 
 void main()
 {
+	vec4 s = texture2D(src, texcoord0);
+	s.a = s.r + s.b + s.g;
+
+	vec4 d = texture2D(dest, texcoord0);
+	d.a = 1.0;
+
+	vec4 r = s * s.a + d * (1.0 - s.a);
+	gl_FragColor = r;
+
+	
+
+	/*
 	vec4 color;
 
 	vec3 shockParams = vec3(10.0, 0.2, 0.1 * power);	
@@ -34,5 +47,5 @@ void main()
 		color = texture2D(tex, texCoord);
 	}	
 	
-	gl_FragColor = color;
+	gl_FragColor = color;*/
 }
