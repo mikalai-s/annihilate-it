@@ -368,7 +368,7 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
 
    case WM_LBUTTONDOWN:
 	   {
-		   g_scene->mouseClick(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		   g_scene->mouseClick(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), MS_BOX_SHIFT_DOWN);
 		   return 0;
 	   }
 
