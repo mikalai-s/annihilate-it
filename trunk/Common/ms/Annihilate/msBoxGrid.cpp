@@ -572,12 +572,12 @@ void msBoxGrid::removeSimilarItemsAtPoint( msPointf screenPoint )
 
 msBoxFaceData* _frontFaceResolver(msBox *box)
 {
-    return &box->getVerticesData()->frontFace;
+	return &box->getVerticesData()->frontFace;
 }
 
 msBoxFaceData* _backFaceResolver(msBox *box)
 {
-    return &box->getVerticesData()->frontFace;
+    return &box->getVerticesData()->backFace;
 }
 
 // updates links between boxes. Boxes have links to each other if they are neighbors and have the same color
@@ -628,7 +628,11 @@ int msBoxGrid::_checkBoxColor(GLint y, GLint x, GLint colorIndex, msBoxFaceData*
 	if(x < 0 || x >= m_columnCount || y < 0 || y >= m_rowCount)
 		return 0;
 
-	return faceResolver(getItem(y, x))->getColorIndex() == colorIndex;
+	msBox *neigbor = getItem(y, x);
+	if(!neigbor->isVisible())
+		return 0;
+
+	return faceResolver(neigbor)->getColorIndex() == colorIndex;
 }
 
 
