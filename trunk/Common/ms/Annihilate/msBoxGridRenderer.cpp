@@ -194,8 +194,8 @@ void msBoxGridRenderer::_drawBox(msShaderProgram *program, msPalette *palette, m
     float boxAngle = box->getAngle();
     if(boxAngle != 0.0f)
     {
-        msPointf angleVector = box->getAngleVector();
-        msPointf center = box->getVerticesData()->getCenter();
+        msPoint3f angleVector = box->getAngleVector();
+        msPoint3f center = box->getVerticesData()->getCenter();
 	    transform.translate(-center.x, -center.y, -center.z)
 		    ->rotate(boxAngle, angleVector)
 		    ->translate(center.x, center.y, center.z);
@@ -210,7 +210,7 @@ void msBoxGridRenderer::_drawBox(msShaderProgram *program, msPalette *palette, m
     
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);    
     unsigned long offset = (unsigned long)box->getVerticesData() - (unsigned long)m_boxGrid->m_boxVertexData;
-    program->getAttribute("position")->setPointerAndEnable(3, GL_FLOAT, GL_FALSE, sizeof(msPointf), (void*)offset);
+    program->getAttribute("position")->setPointerAndEnable(3, GL_FLOAT, GL_FALSE, sizeof(msPoint3f), (void*)offset);
     
     glBindBuffer(GL_ARRAY_BUFFER, m_textureOrientationBuffer);    
 	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)0);
@@ -257,7 +257,7 @@ void msBoxGridRenderer::_drawBox(msShaderProgram *program, msPalette *palette, m
 	glDisable(GL_CULL_FACE);	
 }
 
-void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPointf &start, msPointf &end, msColor *color)
+void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPoint3f &start, msPoint3f &end, msColor *color)
 {
 	GLfloat coords[] = {start.x, start.y, start.z /*+ 0.1f*/, end.x, end.y, end.z /*+ 0.1f*/};
 
@@ -322,25 +322,25 @@ void msBoxGridRenderer::_removeInactiveEmitters()
 
 
 
-msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPointf location, GLfloat ratio)
+msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPoint3f location, GLfloat ratio)
 {
     float k = 0.03333333f / ratio;
     
     return new msParticleEmitter(
 		// explosion
-		Vector2fMake(location.x, location.y),//position:
-		Vector2fMake(0.031f, 0.031f),//sourcePositionVariance:
+		msPoint2f(location.x, location.y),//position:
+		msPoint2f(0.031f, 0.031f),//sourcePositionVariance:
 		0.0001f,//speed:
 		0.007f,//speedVariance:
 		0.5f,//particleLifeSpan:
 		0.25f,//particleLifespanVariance:
 		0.0f,//angle:
 		360.0f,//angleVariance:
-		Vector2fMake(0.0f, -0.0000025f),//gravity:
-		colorMake(1.0f, 0.5f, 0.05f, 1.0f),//startColor:
-		colorMake(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
-		colorMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColor:
-		colorMake(0.2f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
+		msPoint2f(0.0f, -0.0000025f),//gravity:
+		msColor(1.0f, 0.5f, 0.05f, 1.0f),//startColor:
+		msColor(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
+		msColor(0.2f, 0.0f, 0.0f, 0.0f),//finishColor:
+		msColor(0.2f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
 		200,//maxParticles:
 		50 * k,//particleSize:
 		3 * k,//particleSizeVariance:
@@ -356,7 +356,7 @@ void msBoxGridRenderer::_drawBoxesWithShockWave()
     // render fire into texture using particle shaders
     msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
     program->use();
-/*
+
     // Switch the render target to the current FBO to update the texture map
     program->getFrameBuffer("renderTex")->bind();
 
@@ -366,10 +366,10 @@ void msBoxGridRenderer::_drawBoxesWithShockWave()
         // Set viewport to size of texture map and erase previous image
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
-*/
+
         // render background
         _drawBoxGrid(program, m_size);
-  /*  }
+    }
 
 	// Unbind the FBO so rendering will return to the backbuffer.
 	m_shaders->getMainFrameBuffer()->bind();
@@ -404,7 +404,6 @@ void msBoxGridRenderer::_drawBoxesWithShockWave()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-   */
 }
 
 void msBoxGridRenderer::_drawExplosions()
@@ -426,7 +425,7 @@ void msBoxGridRenderer::_drawExplosions()
         // render particles
         for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
         {
-            (*ei)->renderParticles(program);
+            _drawParticles(*ei, program);
             (*ei)->update(0.015f);
         }
     }
@@ -466,10 +465,40 @@ void msBoxGridRenderer::_drawExplosions()
 
 msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
 {
-	msPointf location = box->getVerticesData()->getCenter();	
+	msPoint3f location = box->getVerticesData()->getCenter();	
 	location.x *= m_size.width;
 	location.y = 1.0f - location.y;
 	location.y *= m_size.height;
 
 	return new msWaveEmitter(location, m_size);
+}
+
+void msBoxGridRenderer::_drawParticles(msParticleEmitter *pe, msShaderProgram *particleProgram)
+{
+    msTexture *particleTexture = particleProgram->getTexture("u_texture");
+    glEnable(GL_BLEND);
+    glEnable ( GL_TEXTURE_2D );
+
+    particleTexture->active();
+    particleTexture->bind();
+
+    if(pe->blendAdditive)
+    {
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    }
+    else
+    {
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    // Load the vertex attributes
+    particleProgram->getUniform("a_position")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &pe->particleDatas[0].position);
+    particleProgram->getUniform("a_color")->setPointerAndEnable(4, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &pe->particleDatas[0].color);
+    //particleProgram->getUniform("a_size")->setPointerAndEnable(1, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &pe->particleDatas[0].size);
+    particleProgram->getUniform("u_texture")->set1i(particleTexture->getUnit());
+
+    glDrawArrays( GL_POINTS, 0, pe->particleCount );
+
+    glDisable ( GL_TEXTURE_2D );
+    glDisable(GL_BLEND);
 }
