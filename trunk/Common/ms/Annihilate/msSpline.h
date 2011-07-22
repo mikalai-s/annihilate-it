@@ -16,17 +16,17 @@ public:
 
 	//msPoints m_controlPoints;
 
-	msPointf CtrlPt[80];
+	msPoint3f CtrlPt[80];
 
-	void BSpline_ComputeCoeffs(int N, msPointf *Ap, msPointf *Bp, msPointf *Cp, msPointf *Dp);
+	void BSpline_ComputeCoeffs(int N, msPoint3f *Ap, msPoint3f *Bp, msPoint3f *Cp, msPoint3f *Dp);
 
-	msPointf Spline_Calc(msPointf Ap, msPointf Bp, msPointf Cp, msPointf Dp, float T, float D);
+	msPoint3f Spline_Calc(msPoint3f Ap, msPoint3f Bp, msPoint3f Cp, msPoint3f Dp, float T, float D);
 
 	void draw();
 
-	void addControlPoint(msPointf p);
+	void addControlPoint(msPoint3f p);
 
 	void addControlPoint(float x, float y);
 
-	void getSplinePoints(int resolution, msPointf *points, int *count, int startIndex = 0, bool loop = false);
+	void getSplinePoints(int resolution, msPoint3f *points, int *count, int startIndex = 0, bool loop = false);
 };

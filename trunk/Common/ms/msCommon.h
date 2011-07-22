@@ -54,10 +54,6 @@ struct msColor
 	}
 };
 
-struct msVector {
-	GLfloat x;
-	GLfloat y;
-};
 
 struct msQuad
 {
@@ -67,45 +63,59 @@ struct msQuad
 	GLfloat tr_x, tr_y;
 };
 
-struct msParticle
+
+struct msPoint2f
 {
-	msVector position;
-	msVector direction;
-	msColor color;
-	msColor deltaColor;
-	GLfloat particleSize;
-	GLfloat timeToLive;
+    float x;
+    float y;
+
+    msPoint2f()
+    {
+        this->x = 0.f;
+        this->y = 0.f;
+    }
+
+    msPoint2f(float x, float y)
+    {
+        this->x = x;
+        this->y = y;
+    }
+
+    void add(msPoint2f &p)
+    {
+        this->x += p.x;
+        this->y += p.y;
+    }
+
+    void multiply(float d)
+    {
+        this->x *= d;
+        this->y *= d;
+    }
 };
 
 
-struct msPointSprite
-{
-	GLfloat x;
-	GLfloat y;
-	GLfloat size;
-};
-
-struct msPointf
+struct msPoint3f
 {
 	GLfloat x;
 	GLfloat y;
 	GLfloat z;
 
-	msPointf()
+	msPoint3f()
 	{
 		x = 0;
 		y = 0;
 		z = 0;
 	}
 
-	msPointf(float xx, float yy)
+	msPoint3f(float xx, float yy)
 	{
 		x = xx;
 		y = yy;
 		z = 0;
 	}
 
-	msPointf(float xx, float yy, float zz)
+	msPoint3f(float xx, float yy, float zz)
 	{
 		x = xx;
 		y = yy;
@@ -159,7 +169,7 @@ struct msBorder
     msColor color;
 };
 
-
+/*
 
 static const msVector Vector2fZero = {0.0f, 0.0f};
 
@@ -219,7 +229,7 @@ static inline msVector Vector2fNormalize(msVector v)
 {
 	return Vector2fMultiply(v, 1.0f/Vector2fLength(v));
 } 
-
+*/
 static inline char* copyString(string src)
 {
 	char *dest = new char [src.length() + 1];

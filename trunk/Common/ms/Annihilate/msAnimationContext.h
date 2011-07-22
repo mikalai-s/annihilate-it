@@ -56,14 +56,14 @@ public:
 
 class msPointMoveAnimationContext : public msAnimationContext
 {
-    msPointf *m_point;
+    msPoint3f *m_point;
     GLint m_direction;
 
 public:
-    msPointMoveAnimationContext(msPointf *point, GLint direction);
+    msPointMoveAnimationContext(msPoint3f *point, GLint direction);
     ~msPointMoveAnimationContext();
 
-    msPointf* getPoint();
+    msPoint3f* getPoint();
     GLint getDirection();
 };
 

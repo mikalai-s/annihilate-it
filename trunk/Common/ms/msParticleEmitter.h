@@ -4,18 +4,34 @@
 
 class msShaderProgram;
 
+
+struct msParticleData
+{
+    msPoint2f position;
+    float size;
+    msColor color;
+};
+
+struct msParticle
+{
+    msParticleData *particleData;
+
+    msPoint2f direction;
+    msColor deltaColor;
+    float timeToLive;
+};
+
+
 class msParticleEmitter
 {
 private:
-	//Image *texture;
 
-	
-	msVector sourcePositionVariance;
+	msPoint2f sourcePositionVariance;
 	GLfloat angle;
 	GLfloat angleVariance;
 	GLfloat speed;
 	GLfloat speedVariance;
-	msVector gravity;
+	msPoint2f gravity;
 	GLfloat particleLifespan;
 	GLfloat particleLifespanVariance;
 	msColor startColor;
@@ -46,25 +62,24 @@ private:
 	void stopParticleEmitter();
 
 public:
-	msVector sourcePosition;
+	msPoint2f sourcePosition;
 	GLfloat duration;
 	GLboolean active;
-		GLuint particleCount;
-		msParticle *particles;
-		msPointSprite *vertices;
-		msColor *colors;
-		GLboolean blendAdditive;
+	GLuint particleCount;
+	msParticle *particles;
+    msParticleData *particleDatas;
+	GLboolean blendAdditive;
 
 	msParticleEmitter(
-		msVector inPosition ,
-		msVector inSourcePositionVariance,
+		msPoint2f inPosition ,
+		msPoint2f inSourcePositionVariance,
 		GLfloat inSpeed,
 		GLfloat inSpeedVariance,
 		GLfloat inParticleLifeSpan,
 		GLfloat inParticleLifeSpanVariance,
 		GLfloat inAngle,
 		GLfloat inAngleVariance,
-		msVector inGravity,
+		msPoint2f inGravity,
 		msColor inStartColor,
 		msColor inStartColorVariance,
 		msColor inFinishColor ,
@@ -75,9 +90,6 @@ public:
 		GLfloat inDuration,
 		GLboolean inBlendAdditive);
 
-	
-
-	void renderParticles(msShaderProgram *particleProgram);
 	
 
 	void update(GLfloat delta);

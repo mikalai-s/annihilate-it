@@ -36,9 +36,9 @@ void msMatrix::multiply(msMatrix &m)
 	memcpy(this->m_value, tmp.m_value, sizeof(float) * 16);
 }
 
-msPointf msMatrix::multiply(msPointf &p)
+msPoint3f msMatrix::multiply(msPoint3f &p)
 {
-    return msPointf(
+    return msPoint3f(
         p.x * m_value[0][0] + p.y * m_value[1][0] + p.z * m_value[2][0] + m_value[3][0],
         p.x * m_value[0][1] + p.y * m_value[1][1] + p.z * m_value[2][1] + m_value[3][1],
         p.x * m_value[0][2] + p.y * m_value[1][2] + p.z * m_value[2][1] + m_value[3][2]);

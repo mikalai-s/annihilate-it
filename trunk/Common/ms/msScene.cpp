@@ -154,7 +154,7 @@ void msScene::mouseClick(int x, int y, int direction)
     if(m_boxGrid == 0 || m_renderer == 0)
         return;
 
-	msPointf touchPoint;
+	msPoint3f touchPoint;
 	touchPoint.x = ((GLfloat)x / (GLfloat)m_size.width);
 	touchPoint.y = ((GLfloat)y / (GLfloat)m_size.height);
 	
@@ -175,8 +175,8 @@ void msScene::undoLastMove()
 
 void msScene::start()
 {
-#define NUM_ROWS 8
-#define NUM_COLS 5
+#define NUM_ROWS 10
+#define NUM_COLS 7
 
     msBoxFaceData backFaces[NUM_ROWS * NUM_COLS];
 

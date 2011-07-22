@@ -442,15 +442,16 @@ int WINAPI WinMain( HINSTANCE  hInstance,
    BOOL done=FALSE;
 
    g_scene = new msScene();
-
+   
    // redirect stdin/stdout to a console window
    RedirectIOToConsole();
 
    // unit tests
-   /*msBox::unitTest();
-   msAnimation::unitTest();
-   msAnimationBundle::unitTest();
-   msBoxGrid::unitTest();*/
+   //msBox::unitTest();   
+   //msAnimation::unitTest();
+   //msAnimationBundle::unitTest();
+  // msBoxGrid::unitTest();
+ //  return 0;
 
    MainFuncInit();
 

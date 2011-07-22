@@ -34,7 +34,7 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 
 	m_palette = palette;
 
-    m_coordinateGrid = new msGrid<msPointf*>(numRows, numCols);
+    m_coordinateGrid = new msGrid<msPoint3f*>(numRows, numCols);
 
 	m_boxVertexData = (msBoxData*)malloc(sizeof(msBoxData) * numRows * numCols);
 
@@ -47,10 +47,10 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 		for(GLint x = 0; x < numCols; x ++)
 		{
 			msBoxData* verticesData = &m_boxVertexData[y * numCols + x];
-			verticesData->vertices[0] = msPointf(curx, cury, 0);
-			verticesData->vertices[1] = msPointf(curx + width, cury, 0);
-			verticesData->vertices[2] = msPointf(curx, cury + height, 0);
-			verticesData->vertices[3] = msPointf(curx + width, cury + height, 0);
+			verticesData->vertices[0] = msPoint3f(curx, cury, 0);
+			verticesData->vertices[1] = msPoint3f(curx + width, cury, 0);
+			verticesData->vertices[2] = msPoint3f(curx, cury + height, 0);
+			verticesData->vertices[3] = msPoint3f(curx + width, cury + height, 0);
 
 			verticesData->frontFace.colorIndex = pattern[y * numCols + x];
 			verticesData->backFace.colorIndex = 0;
@@ -65,9 +65,9 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
 			verticesData->backFace.colorDisturbance.b = 1.0f;
 
 			verticesData->angle = 0.0f;
-			verticesData->angleVector = msPointf(0.0f, 1.0f, 0.0f);
+			verticesData->angleVector = msPoint3f(0.0f, 1.0f, 0.0f);
 
-            msPointf* originalCoords = (msPointf*)malloc(sizeof(verticesData->vertices));
+            msPoint3f* originalCoords = (msPoint3f*)malloc(sizeof(verticesData->vertices));
             memcpy(originalCoords, verticesData->vertices, sizeof(verticesData->vertices));
 
             m_coordinateGrid->setItem(y, x, originalCoords);
@@ -549,9 +549,9 @@ void msBoxGrid::unitTest()
 }
 
 
-void msBoxGrid::removeSimilarItemsAtPoint( msPointf screenPoint )
+void msBoxGrid::removeSimilarItemsAtPoint( msPoint3f screenPoint )
 {
-	msPointf point;
+	msPoint3f point;
 	point.x = screenPoint.x * this->size.width;
 	point.y = screenPoint.y * this->size.height;
 

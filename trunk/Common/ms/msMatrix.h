@@ -15,7 +15,7 @@ public:
 	
 	void multiply(msMatrix &m);
 
-    msPointf multiply(msPointf &p);
+    msPoint3f multiply(msPoint3f &p);
 
 	static msMatrix identity();
 

@@ -9,15 +9,15 @@
 
 
 msParticleEmitter::msParticleEmitter(
-									 msVector inPosition ,
-									 msVector inSourcePositionVariance,
+									 msPoint2f inPosition ,
+									 msPoint2f inSourcePositionVariance,
 									 GLfloat inSpeed,
 									 GLfloat inSpeedVariance,
 									 GLfloat inParticleLifeSpan,
 									 GLfloat inParticleLifeSpanVariance,
 									 GLfloat inAngle,
 									 GLfloat inAngleVariance,
-									 msVector inGravity,
+									 msPoint2f inGravity,
 									 msColor inStartColor,
 									 msColor inStartColorVariance,
 									 msColor inFinishColor ,
@@ -27,16 +27,7 @@ msParticleEmitter::msParticleEmitter(
 									 GLfloat inParticleSizeVariance,
 									 GLfloat inDuration,
 									 GLboolean inBlendAdditive)
-{
-	//sharedGameState = [SingletonGameState sharedGameStateInstance];
-
-	// If the texture name is not nil then allocate the texture for the points.  If the texture name is nil
-	// and we do not assign a texture, then a quad will be drawn instead
-	/*	if(inTextureName) {		
-	// Create a new texture which is going to be used as the texture for the point sprites
-	texture = [[Image alloc] initWithImage:[UIImage imageNamed:inTextureName] scale:1.0f filter:GL_NEAREST];
-	}
-	*/
+{	
 	// Take the parameters which have been passed into this particle emitter and set the emitters
 	// properties
 	sourcePosition = inPosition;
@@ -59,27 +50,23 @@ msParticleEmitter::msParticleEmitter(
 	duration = inDuration;
 	blendAdditive = inBlendAdditive;
 
+    // create particle datas
+    particleDatas = (msParticleData*)calloc(maxParticles, sizeof(msParticleData));
+
 	// Allocate the memory necessary for the particle emitter arrays
 	particles = (msParticle*)calloc(maxParticles, sizeof(msParticle));
-	vertices = (msPointSprite*)calloc(maxParticles, sizeof(msPointSprite));
-	colors = (msColor*)calloc(maxParticles, sizeof(msColor));
+
+    // assign particle datas
+    for(int i = 0; i < maxParticles; i ++)
+        particles[i].particleData = &particleDatas[i];
 
 	// If one of the arrays cannot be allocated, then report a warning and return nil
-	if(!(particles && vertices && colors))
+	if(!particles)
 	{
 		printf("WARNING: ParticleEmitter - Not enough memory");
 		if(particles)
-			free(particles);
-		if(vertices)
-			free(vertices);
-		if(colors)
-			free(colors);
-		return;
-	}
-
-	// Generate the VBO's
-//	glGenBuffers(1, &verticesID);
-//	glGenBuffers(1, &colorsID);
+			free(particles);		
+	}	
 
 	// By default the particle emitter is active when created
 	active = GL_TRUE;
@@ -95,68 +82,8 @@ msParticleEmitter::msParticleEmitter(
 
 msParticleEmitter::~msParticleEmitter(void)
 {
-	free(vertices);
-	free(colors);
 	free(particles);
-	
-	/*if(texture != 0)
-	[texture release];*/
-}
-
-static const GLfloat g_vertexPositions[] = {
-	-1.0f, 1.0f,  0.0f,  1.0f,
-	1.0f, -1.0f,  0.0f,  1.0f,
-	-1.0f,  1.0f,  0.0f, 1.0f,
-	1.0f,  1.0f,  0.0f, 1.0f,
-};
-
-static const GLfloat g_vertexColors[] = {
-	1.0f, 1.0f, 0.0f, 1.0f,
-	1.0f, 1.0f, 1.0f, 1.0f,
-	1.0f, 0.0f, 0.0f, 1.0f,
-	1.0f, 0.0f, 1.0f, 1.0f,
-};
-
-static const GLfloat g_vertexTexcoord[] = {
-	0.0f, 0.f,   
-	0.0f, 1.f,    
-	1.f,  0.f,    
-	1.f,  1.f,   
-};
-
-static const GLuint g_indices[] = {
-	0, 1, 2, 3,
-};
-
-
-
-void msParticleEmitter::renderParticles(msShaderProgram *particleProgram)
-{
-	msTexture *particleTexture = particleProgram->getTexture("u_texture");
-	glEnable(GL_BLEND);
-	glEnable ( GL_TEXTURE_2D );
-
-	particleTexture->active();
-	particleTexture->bind();
-
-	if(blendAdditive)
-	{
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	}
-	else
-	{
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	}
-
-	// Load the vertex attributes
-	particleProgram->getAttribute("a_position")->setPointerAndEnable(3, GL_FLOAT, GL_FALSE, 0, vertices);
-	particleProgram->getAttribute("a_color")->setPointerAndEnable(4, GL_FLOAT, GL_FALSE, 0, colors);
-	particleProgram->getUniform("u_texture")->set1i(particleTexture->getUnit());
-
-	glDrawArrays( GL_POINTS, 0, particleCount );
-
-	glDisable ( GL_TEXTURE_2D );
-	glDisable(GL_BLEND);
+    free(particleDatas);
 }
 
 void msParticleEmitter::update(GLfloat delta)
@@ -186,33 +113,24 @@ void msParticleEmitter::update(GLfloat delta)
 
 		// Get the particle for the current particle index
 		msParticle *currentParticle = &particles[particleIndex];
+        msParticleData *particleData = currentParticle->particleData;
 
 		// If the current particle is alive then update it
 		if(currentParticle->timeToLive > 0) {
 
 			// Calculate the new direction based on gravity
-			currentParticle->direction = Vector2fAdd(currentParticle->direction, gravity);
-			//currentParticle->direction = Vector2fMultiply(currentParticle->direction, delta);
-			currentParticle->position = Vector2fAdd(currentParticle->position, currentParticle->direction);
+			currentParticle->direction.add(gravity);
+			//currentParticle->direction.multiply(delta);
+			particleData->position.add(currentParticle->direction);
 
 			// Reduce the life span of the particle
 			currentParticle->timeToLive -= delta;
 
-			// Place the position of the current particle into the vertices array
-			vertices[particleIndex].x = currentParticle->position.x;
-			vertices[particleIndex].y = currentParticle->position.y;
-
-			// Place the size of the current particle in the size array
-			vertices[particleIndex].size = currentParticle->particleSize;
-
 			// Update the particles color
-			currentParticle->color.r += (currentParticle->deltaColor.r * delta);
-			currentParticle->color.g += (currentParticle->deltaColor.g * delta);
-			currentParticle->color.b += (currentParticle->deltaColor.b * delta);
-			currentParticle->color.a += (currentParticle->deltaColor.a * delta);
-
-			// Place the color of the current particle into the color array
-			colors[particleIndex] = currentParticle->color;
+			particleData->color.r += (currentParticle->deltaColor.r * delta);
+			particleData->color.g += (currentParticle->deltaColor.g * delta);
+			particleData->color.b += (currentParticle->deltaColor.b * delta);
+			particleData->color.a += (currentParticle->deltaColor.a * delta);
 
 			// Update the particle counter
 			particleIndex++;
@@ -226,14 +144,7 @@ void msParticleEmitter::update(GLfloat delta)
 				particles[particleIndex] = particles[particleCount-1];
 			particleCount--;
 		}
-	}
-	/*
-	// Now we have updated all the particles, update the VBOs with the arrays we have just updated
-	glBindBuffer(GL_ARRAY_BUFFER, verticesID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(PointSprite)*maxParticles, vertices, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, colorsID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Color4f)*maxParticles, colors, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0); */
+	}	
 }
 
 GLboolean msParticleEmitter::addParticle()
@@ -259,25 +170,25 @@ void msParticleEmitter::initParticle(msParticle* particle)
 	// Init the position of the particle.  This is based on the source position of the particle emitter
 	// plus a configured variance.  The RANDOM_MINUS_1_TO_1 macro allows the number to be both positive
 	// and negative
-	particle->position.x = sourcePosition.x + sourcePositionVariance.x * RANDOM_MINUS_1_TO_1();
-	particle->position.y = sourcePosition.y + sourcePositionVariance.y * RANDOM_MINUS_1_TO_1();
+	particle->particleData->position.x = sourcePosition.x + sourcePositionVariance.x * RANDOM_MINUS_1_TO_1();
+	particle->particleData->position.y = sourcePosition.y + sourcePositionVariance.y * RANDOM_MINUS_1_TO_1();
+
+    // Calculate the vectorSpeed using the speed and speedVariance which has been passed in
+    float vectorSpeed = speed + speedVariance * RANDOM_MINUS_1_TO_1();
 
 	// Init the direction of the particle.  The newAngle is calculated using the angle passed in and the
 	// angle variance.
 	float newAngle = (GLfloat)DEGREES_TO_RADIANS(angle + angleVariance * RANDOM_MINUS_1_TO_1());
 
 	// Create a new Vector2f using the newAngle
-	msVector vector = Vector2fMake(cosf(newAngle), sinf(newAngle));
-
-	// Calculate the vectorSpeed using the speed and speedVariance which has been passed in
-	float vectorSpeed = speed + speedVariance * RANDOM_MINUS_1_TO_1();
+	particle->direction = msPoint2f(cosf(newAngle), sinf(newAngle));
 
 	// The particles direction vector is calculated by taking the vector calculated above and
 	// multiplying that by the speed
-	particle->direction = Vector2fMultiply(vector, vectorSpeed);
+	particle->direction.multiply(vectorSpeed);
 
 	// Calculate the particle size using the particleSize and variance passed in
-	particle->particleSize = particleSize + particleSizeVariance * RANDOM_MINUS_1_TO_1();
+	particle->particleData->size = particleSize + particleSizeVariance * RANDOM_MINUS_1_TO_1();
 
 	// Calculate the particles life span using the life span and variance passed in
 	particle->timeToLive = particleLifespan + particleLifespanVariance * RANDOM_MINUS_1_TO_1();
@@ -301,7 +212,7 @@ void msParticleEmitter::initParticle(msParticle* particle)
 	// Calculate the delta which is to be applied to the particles color during each cycle of its
 	// life.  The delta calculation uses the life space of the particle to make sure that the 
 	// particles color will transition from the start to end color during its life time.
-	particle->color = start;
+	particle->particleData->color = start;
 	particle->deltaColor.r = (end.r - start.r) / particle->timeToLive;
 	particle->deltaColor.g = (end.g - start.g) / particle->timeToLive;
 	particle->deltaColor.b = (end.b - start.b) / particle->timeToLive;

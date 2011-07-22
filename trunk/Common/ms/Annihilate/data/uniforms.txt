@@ -11,7 +11,8 @@ link shockwave
 program particle_create /data/particle_create_vertex.c /data/particle_create_fragment.c
 texture u_texture 0 /data/expl.tga
 attribute a_position 0
-attribute a_color 2
+attribute a_color 1
+attribute a_size 2
 colorTexFbo renderTex 1
 link particle_create
 

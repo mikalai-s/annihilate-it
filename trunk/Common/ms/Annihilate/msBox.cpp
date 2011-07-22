@@ -86,38 +86,38 @@ void msBox::unitTest()
 
 void msBox::_linearFalling(msAnimationContext *c)
 {
-	msKeyValueAnimationContext<msBoxData*, msPointf> *context = (msKeyValueAnimationContext<msBoxData*, msPointf> *)c;
+	msKeyValueAnimationContext<msBoxData*, msPoint3f> *context = (msKeyValueAnimationContext<msBoxData*, msPoint3f> *)c;
 
 	msBoxData *vertexData = context->getKey();
-	msPointf to = context->getValue();
+	msPoint3f to = context->getValue();
 
     float dx = (to.x - vertexData->vertices[0].x) / context->getAnimation()->getCount();
     float dy = (to.y - vertexData->vertices[0].y) / context->getAnimation()->getCount();
 
-    vertexData->move(msPointf(dx, dy, 0));
+    vertexData->move(msPoint3f(dx, dy, 0));
 }
 
 void msBox::_finishLinearFalling(msAnimationContext *c)
 {
-    msKeyValueAnimationContext<msBoxData*, msPointf*> *context = (msKeyValueAnimationContext<msBoxData*, msPointf*> *)c;
+    msKeyValueAnimationContext<msBoxData*, msPoint3f*> *context = (msKeyValueAnimationContext<msBoxData*, msPoint3f*> *)c;
 
     msBoxData *fromVertexData = context->getKey();
-    msPointf *toVertices = context->getValue();
+    msPoint3f *toVertices = context->getValue();
 
 	memcpy(fromVertexData->vertices, toVertices, sizeof(fromVertexData->vertices));
 }
 
 
-void msBox::fall(GLint delay, GLint direction, msPointf *newVertices)
+void msBox::fall(GLint delay, GLint direction, msPoint3f *newVertices)
 {
     int times = 10;
 
     // moving from top to bottom
-    msKeyValueAnimationContext<msBoxData*, msPointf> *c2 = new msKeyValueAnimationContext<msBoxData*, msPointf>(m_verticesData, newVertices[0]);
+    msKeyValueAnimationContext<msBoxData*, msPoint3f> *c2 = new msKeyValueAnimationContext<msBoxData*, msPoint3f>(m_verticesData, newVertices[0]);
 	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
     
     // move a little bit up for effect of bounce
-    msPointf bouncePoint(newVertices[0].x, newVertices[0].y, newVertices[0].z);
+    msPoint3f bouncePoint(newVertices[0].x, newVertices[0].y, newVertices[0].z);
     switch(direction)
     {
         case MS_BOX_SHIFT_TOP:
@@ -135,24 +135,24 @@ void msBox::fall(GLint delay, GLint direction, msPointf *newVertices)
         default:
             bouncePoint.y -= MS_BOUNCE_OFFSET;
     }    
-    msKeyValueAnimationContext<msBoxData*, msPointf> *c3 = new msKeyValueAnimationContext<msBoxData*, msPointf>(m_verticesData, bouncePoint);
+    msKeyValueAnimationContext<msBoxData*, msPoint3f> *c3 = new msKeyValueAnimationContext<msBoxData*, msPoint3f>(m_verticesData, bouncePoint);
     getAnimations()->add(new msAnimation(delay + times, 4, c3, _linearFalling));
     
     // final falling (very fast and accurate)
-    msKeyValueAnimationContext<msBoxData*, msPointf*> *c4 = new msKeyValueAnimationContext<msBoxData*, msPointf*>(m_verticesData, newVertices);
+    msKeyValueAnimationContext<msBoxData*, msPoint3f*> *c4 = new msKeyValueAnimationContext<msBoxData*, msPoint3f*>(m_verticesData, newVertices);
     getAnimations()->add(new msAnimation(delay + times + 4, 1, c4, _finishLinearFalling));
 }
 
-void msBox::unfall( int delay, int direction,  msPointf *newVertices)
+void msBox::unfall( int delay, int direction,  msPoint3f *newVertices)
 {
 	int times = 10;
 
 	// moving from top to bottom
-	msKeyValueAnimationContext<msPointf*, msPointf> *c2 = new msKeyValueAnimationContext<msPointf*, msPointf>(m_location, newVertices[0]);
+	msKeyValueAnimationContext<msPoint3f*, msPoint3f> *c2 = new msKeyValueAnimationContext<msPoint3f*, msPoint3f>(m_location, newVertices[0]);
 	getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
 
     // final falling (very fast and accurate)
-    msKeyValueAnimationContext<msBoxData*, msPointf*> *c4 = new msKeyValueAnimationContext<msBoxData*, msPointf*>(m_verticesData, newVertices);
+    msKeyValueAnimationContext<msBoxData*, msPoint3f*> *c4 = new msKeyValueAnimationContext<msBoxData*, msPoint3f*>(m_verticesData, newVertices);
     getAnimations()->add(new msAnimation(delay + times, 1, c4, _finishLinearFalling));
 }
 

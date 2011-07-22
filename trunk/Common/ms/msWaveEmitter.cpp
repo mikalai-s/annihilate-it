@@ -5,7 +5,7 @@
 #define RADIUS_STEP 0.025f
 #define POWER_STEP RADIUS_STEP / (RADIUS_MIN - RADIUS_MAX)
 
-msWaveEmitter::msWaveEmitter(msPointf location, msSizef size)
+msWaveEmitter::msWaveEmitter(msPoint3f location, msSizef size)
 {
 	m_radius = RADIUS_MIN;
 	m_power = 1.0f;

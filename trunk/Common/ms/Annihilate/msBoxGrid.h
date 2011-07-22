@@ -82,7 +82,7 @@ class msBoxGrid : public msGrid<msBox*>
 {
 	msSizef size;
 
-    msGrid<msPointf*> *m_coordinateGrid;
+    msGrid<msPoint3f*> *m_coordinateGrid;
 
 	msMoveActionList _lastMovedBoxes;
 	msHideActionList _lastHiddenBoxes;
@@ -164,7 +164,7 @@ public:
 
 	static void unitTest();
 
-	void removeSimilarItemsAtPoint( msPointf touchPoint );
+	void removeSimilarItemsAtPoint( msPoint3f touchPoint );
 
 	void undo();
 	void _moveBackBox( msMoveAction action );

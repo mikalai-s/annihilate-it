@@ -57,10 +57,10 @@ GLint msAnimation::getCount()
 
 void msAnimation::_unitTestLineStep(msAnimationContext *c)
 {
-    msFromToAnimationContext<msPointf*> *context = (msFromToAnimationContext<msPointf*>*)c;
-    msPointf *from = context->getFrom();
-    msPointf *to = context->getTo();
-    msPointf step;
+    msFromToAnimationContext<msPoint3f*> *context = (msFromToAnimationContext<msPoint3f*>*)c;
+    msPoint3f *from = context->getFrom();
+    msPoint3f *to = context->getTo();
+    msPoint3f step;
     step.x = (to->x - from->x) / context->getAnimation()->getCount();
     step.y = (to->y - from->y) / context->getAnimation()->getCount();
 
@@ -70,8 +70,8 @@ void msAnimation::_unitTestLineStep(msAnimationContext *c)
 
 void msAnimation::unitTest()
 {
-    msPointf from;
-    msPointf to;
+    msPoint3f from;
+    msPoint3f to;
     int count = 10;
 
     from.x = 0;
@@ -80,7 +80,7 @@ void msAnimation::unitTest()
     to.x = 10;
     to.y = 5;
 
-    msFromToAnimationContext<msPointf*> *context = new msFromToAnimationContext<msPointf*>(&from, &to);
+    msFromToAnimationContext<msPoint3f*> *context = new msFromToAnimationContext<msPoint3f*>(&from, &to);
     msAnimation *animation = new msAnimation(0, count, context, _unitTestLineStep);
 
     do
