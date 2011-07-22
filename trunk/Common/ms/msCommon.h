@@ -17,8 +17,6 @@ using namespace std;
 
 
 
-
-
 // Macro which returns a random value between -1 and 1
 #define RANDOM_MINUS_1_TO_1() (((GLfloat)rand() / (GLfloat)RAND_MAX * 2.0f ) - 1.0f)
 

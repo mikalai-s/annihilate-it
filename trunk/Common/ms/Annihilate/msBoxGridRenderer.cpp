@@ -90,11 +90,6 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGr
 
 msBoxGridRenderer::~msBoxGridRenderer()
 {
-    for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
-    {
-        delete (*ei);
-    }
-
 	for(msWaveIterator wi = m_waves.begin(); wi != m_waves.end(); wi ++)
 	{
 		delete (*wi);
@@ -153,7 +148,7 @@ void msBoxGridRenderer::_drawBoxGrid(msShaderProgram *program, msSizef size)
             if(box->getRequiresExplosion())
             {
                 GLfloat ratio = m_boxGrid->getRowCount() / size.height / 2.0f + m_boxGrid->getColCount() / size.width / 2.0f;
-                m_explosions.push_back(_createExplosionPe(box->getExplosionPoint(), ratio));
+				explosionsBundle.addParticleEmitter(_createExplosionPe(box->getExplosionPoint(), ratio));
             }
             
 			if(box->getRequiresWave())
@@ -229,83 +224,14 @@ void msBoxGridRenderer::_drawBox(msShaderProgram *program, msPalette *palette, m
     
 
 	glDisable(GL_BLEND);
-	/*
-    // draw borders if need
-	msColor innerBorderColor(
-		faceColor.r * 0.8f * faceData->getColorDisturbance().r, 
-		faceColor.g * 0.8f * faceData->getColorDisturbance().g, 
-		faceColor.b * 0.8f * faceData->getColorDisturbance().b, 
-		faceColor.a * faceData->getColorDisturbance().a);
-	if(faceData->hasLeft())
-		_drawLeftBorder(program, box, &innerBorderColor);
-	if(faceData->hasTop())
-		_drawTopBorder(program, box, &innerBorderColor);
-	if(faceData->hasRight())
-		_drawRightBorder(program, box, &innerBorderColor);
-	if(faceData->hasBottom())
-		_drawBottomBorder(program, box, &innerBorderColor);
 	
-    if(!faceData->hasLeft())
-        _drawLeftBorder(program, box, palette->getColor(0));
-    if(!faceData->hasTop())
-        _drawTopBorder(program, box, palette->getColor(0));
-    if(!faceData->hasRight())
-        _drawRightBorder(program, box, palette->getColor(0));
-    if(!faceData->hasBottom())
-        _drawBottomBorder(program, box, palette->getColor(0));
-        */
 	glDisable(GL_CULL_FACE);	
-}
-
-void msBoxGridRenderer::_drawLine(msShaderProgram *m_program, msPoint3f &start, msPoint3f &end, msColor *color)
-{
-	GLfloat coords[] = {start.x, start.y, start.z /*+ 0.1f*/, end.x, end.y, end.z /*+ 0.1f*/};
-
-	m_program->getAttribute("position")->setPointerAndEnable( 3, GL_FLOAT, 0, 0, coords );
-	m_program->getUniform("color")->set4fv( 1, (GLfloat*)color );
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-    glDrawElements(GL_LINES, 2, GL_UNSIGNED_BYTE, (void*)0);    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    
-//    glDrawArrays(GL_LINES, 0, 2);
-}
-
-void msBoxGridRenderer::_drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color)
-{    
-    _drawLine(m_program, box->getVerticesData()->vertices[0], box->getVerticesData()->vertices[2], color);
-}
-
-void msBoxGridRenderer::_drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color)
-{
-	_drawLine(m_program, box->getVerticesData()->vertices[0], box->getVerticesData()->vertices[1], color);
-}
-
-void msBoxGridRenderer::_drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color)
-{
-	_drawLine(m_program, box->getVerticesData()->vertices[1], box->getVerticesData()->vertices[3], color);
-}
-
-
-void msBoxGridRenderer::_drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color)
-{
-	_drawLine(m_program, box->getVerticesData()->vertices[2], box->getVerticesData()->vertices[3], color);
 }
 
 
 void msBoxGridRenderer::_removeInactiveEmitters()
 {
-    msExplosionList explosionsToDelete;
-
-    for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
-        if(!(*ei)->isAlive())
-            explosionsToDelete.push_back(*ei);
-
-    for(msExplosionIterator ei = explosionsToDelete.begin(); ei != explosionsToDelete.end(); ei ++)
-    {
-        delete (*ei);
-        m_explosions.remove(*ei);
-    }
+	this->explosionsBundle.removeInactiveEmitters();
 
 	msWaveList wavesToDelete;
 
@@ -422,12 +348,9 @@ void msBoxGridRenderer::_drawExplosions()
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-        // render particles
-        for(msExplosionIterator ei = m_explosions.begin(); ei != m_explosions.end(); ei ++)
-        {
-            _drawParticles(*ei, program);
-            (*ei)->update(0.015f);
-        }
+        // render particles        
+        _drawParticles(explosionsBundle, *program);
+        explosionsBundle.update(0.015f);
     }
 
     // Unbind the FBO so rendering will return to the backbuffer.
@@ -473,31 +396,37 @@ msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
 	return new msWaveEmitter(location, m_size);
 }
 
-void msBoxGridRenderer::_drawParticles(msParticleEmitter *pe, msShaderProgram *particleProgram)
+void msBoxGridRenderer::_drawParticles(msParticleEmitterBundle &particleEmitters, msShaderProgram &particleProgram)
 {
-    msTexture *particleTexture = particleProgram->getTexture("u_texture");
+	if(particleEmitters.getCount() == 0)
+		return;
+
+    msTexture *particleTexture = particleProgram.getTexture("u_texture");
     glEnable(GL_BLEND);
     glEnable ( GL_TEXTURE_2D );
 
     particleTexture->active();
     particleTexture->bind();
 
-    if(pe->blendAdditive)
-    {
+	// todo: make blendAddictive as global setting for all emitters inside bundle
+    //if(pe->blendAdditive)
+    //{
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    }
-    else
-    {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
+    //}
+    //else
+    //{
+        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //}
+
+	msParticleData *particleData = particleEmitters.getParticleData();
 
     // Load the vertex attributes
-    particleProgram->getUniform("a_position")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &pe->particleDatas[0].position);
-    particleProgram->getUniform("a_color")->setPointerAndEnable(4, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &pe->particleDatas[0].color);
-    //particleProgram->getUniform("a_size")->setPointerAndEnable(1, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &pe->particleDatas[0].size);
-    particleProgram->getUniform("u_texture")->set1i(particleTexture->getUnit());
+    particleProgram.getAttribute("a_position")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &particleData[0].position);
+    particleProgram.getAttribute("a_color")->setPointerAndEnable(4, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &particleData[0].color);
+    particleProgram.getAttribute("a_size")->setPointerAndEnable(1, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &particleData[0].size);
+    particleProgram.getUniform("u_texture")->set1i(particleTexture->getUnit());
 
-    glDrawArrays( GL_POINTS, 0, pe->particleCount );
+    glDrawArrays( GL_POINTS, 0, particleEmitters.getCount());
 
     glDisable ( GL_TEXTURE_2D );
     glDisable(GL_BLEND);

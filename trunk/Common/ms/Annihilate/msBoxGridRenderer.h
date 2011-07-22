@@ -15,15 +15,11 @@
 #include "../ShaderProgram/msShaderPrograms.h"
 #include "../ShaderProgram/msShaderProgram.h"
 #include "../msParticleEmitter.h"
+#include "../msParticleEmitterBundle.h"
 #include "../msWaveEmitter.h"
 #include "msSpline.h"
-#include <list>
 #include "../msMatrix.h"
 
-using namespace std;
-
-typedef list<msParticleEmitter*> msExplosionList;
-typedef msExplosionList::iterator msExplosionIterator;
 
 typedef list<msWaveEmitter*> msWaveList;
 typedef msWaveList::iterator msWaveIterator;
@@ -33,7 +29,7 @@ class msBoxGridRenderer
 private:
 	msShaderPrograms *m_shaders;
 
-    msExplosionList m_explosions;
+    msParticleEmitterBundle explosionsBundle;
 
 	msWaveList m_waves;
 
@@ -60,7 +56,7 @@ private:
 	void _drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front);
     void _drawBoxesWithShockWave();
     void _drawBoxGrid();
-    void _drawParticles(msParticleEmitter *pe, msShaderProgram *particleProgram);
+    void _drawParticles(msParticleEmitterBundle &particleEmitters, msShaderProgram &particleProgram);
 
     msParticleEmitter* _createExplosionPe(msPoint3f location, GLfloat ratio);
 	msWaveEmitter* _createWave(msBox *box);

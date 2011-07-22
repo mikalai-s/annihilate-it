@@ -9,7 +9,7 @@
 
 
 msParticleEmitter::msParticleEmitter(
-									 msPoint2f inPosition ,
+									 msPoint2f inPosition,
 									 msPoint2f inSourcePositionVariance,
 									 GLfloat inSpeed,
 									 GLfloat inSpeedVariance,
@@ -20,9 +20,9 @@ msParticleEmitter::msParticleEmitter(
 									 msPoint2f inGravity,
 									 msColor inStartColor,
 									 msColor inStartColorVariance,
-									 msColor inFinishColor ,
+									 msColor inFinishColor,
 									 msColor inFinishColorVariance,
-									 GLuint inMaxParticles ,
+									 GLuint inMaxParticles,
 									 GLfloat inParticleSize,
 									 GLfloat inParticleSizeVariance,
 									 GLfloat inDuration,
@@ -50,15 +50,15 @@ msParticleEmitter::msParticleEmitter(
 	duration = inDuration;
 	blendAdditive = inBlendAdditive;
 
-    // create particle datas
-    particleDatas = (msParticleData*)calloc(maxParticles, sizeof(msParticleData));
+	// get memory for particle data
+	particleData = resolveParticleData();
 
 	// Allocate the memory necessary for the particle emitter arrays
 	particles = (msParticle*)calloc(maxParticles, sizeof(msParticle));
 
-    // assign particle datas
+    // assign particle data for each particle
     for(int i = 0; i < maxParticles; i ++)
-        particles[i].particleData = &particleDatas[i];
+        particles[i].particleData = &particleData[i];
 
 	// If one of the arrays cannot be allocated, then report a warning and return nil
 	if(!particles)
@@ -83,7 +83,8 @@ msParticleEmitter::msParticleEmitter(
 msParticleEmitter::~msParticleEmitter(void)
 {
 	free(particles);
-    free(particleDatas);
+
+	deleteParticleData();
 }
 
 void msParticleEmitter::update(GLfloat delta)
@@ -229,4 +230,25 @@ void msParticleEmitter::stopParticleEmitter()
 GLboolean msParticleEmitter::isAlive()
 {
     return (particleCount > 0);
+}
+
+msParticleData* msParticleEmitter::resolveParticleData()
+{
+	return (msParticleData*)calloc(this->maxParticles, sizeof(msParticleData));
+}
+
+void msParticleEmitter::deleteParticleData()
+{
+	free(this->particleData);
+}
+
+
+msParticleData* msBundeledParticleEmitter::resolveParticleData()
+{
+	return (msParticleData*)calloc(this->maxParticles, sizeof(msParticleData));
+}
+
+void msBundeledParticleEmitter::deleteParticleData()
+{
+	free(this->particleData);
 }

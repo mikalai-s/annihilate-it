@@ -117,6 +117,9 @@
     <ClCompile Include="..\ms\msMatrixTransform.cpp">
       <Filter>ms</Filter>
     </ClCompile>
+    <ClCompile Include="..\ms\msParticleEmitterBundle.cpp">
+      <Filter>ms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Misc.h">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="..\ms\Annihilate\msAnimationBase.h">
       <Filter>ms\Annihilate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ms\msParticleEmitterBundle.h">
+      <Filter>ms</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

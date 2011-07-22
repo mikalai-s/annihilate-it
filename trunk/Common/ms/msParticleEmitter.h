@@ -24,7 +24,9 @@ struct msParticle
 
 class msParticleEmitter
 {
-private:
+	friend class msParticleEmitterBundle;
+
+protected:
 
 	msPoint2f sourcePositionVariance;
 	GLfloat angle;
@@ -67,34 +69,39 @@ public:
 	GLboolean active;
 	GLuint particleCount;
 	msParticle *particles;
-    msParticleData *particleDatas;
+    msParticleData *particleData;
 	GLboolean blendAdditive;
 
 	msParticleEmitter(
-		msPoint2f inPosition ,
-		msPoint2f inSourcePositionVariance,
-		GLfloat inSpeed,
-		GLfloat inSpeedVariance,
-		GLfloat inParticleLifeSpan,
-		GLfloat inParticleLifeSpanVariance,
-		GLfloat inAngle,
-		GLfloat inAngleVariance,
+		msPoint2f inPosition, msPoint2f inSourcePositionVariance,
+		GLfloat inSpeed, GLfloat inSpeedVariance,
+		GLfloat inParticleLifeSpan, GLfloat inParticleLifeSpanVariance,
+		GLfloat inAngle, GLfloat inAngleVariance,
 		msPoint2f inGravity,
-		msColor inStartColor,
-		msColor inStartColorVariance,
-		msColor inFinishColor ,
-		msColor inFinishColorVariance,
-		GLuint inMaxParticles ,
-		GLfloat inParticleSize,
-		GLfloat inParticleSizeVariance,
+		msColor inStartColor, msColor inStartColorVariance,
+		msColor inFinishColor, msColor inFinishColorVariance,
+		GLuint inMaxParticles,
+		GLfloat inParticleSize, GLfloat inParticleSizeVariance,
 		GLfloat inDuration,
-		GLboolean inBlendAdditive);
-
-	
+		GLboolean inBlendAdditive);	
 
 	void update(GLfloat delta);
 
     GLboolean isAlive();
 
 	~msParticleEmitter(void);
+
+protected:
+	virtual msParticleData* resolveParticleData();
+	virtual void deleteParticleData();
+};
+
+
+
+// Special class for particle emitter that
+class msBundeledParticleEmitter : public msParticleEmitter
+{
+	protected:
+	virtual msParticleData* resolveParticleData();
+	virtual void deleteParticleData();
 };
