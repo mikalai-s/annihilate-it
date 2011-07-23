@@ -14,11 +14,31 @@ struct msParticleData
 
 struct msParticle
 {
-    msParticleData *particleData;
-
     msPoint2f direction;
     msColor deltaColor;
     float timeToLive;
+};
+
+struct msParticleEmitterSettings
+{
+    msPoint2f position;
+    msPoint2f sourcePositionVariance;
+    GLfloat speed;
+    GLfloat speedVariance;
+    GLfloat particleLifeSpan;
+    GLfloat particleLifeSpanVariance;
+    GLfloat angle;
+    GLfloat angleVariance;
+    msPoint2f gravity;
+    msColor startColor;
+    msColor startColorVariance;
+    msColor finishColor;
+    msColor finishColorVariance;
+    GLuint maxParticles;
+    GLfloat particleSize;
+    GLfloat particleSizeVariance;
+    GLfloat duration;
+    GLboolean blendAdditive;
 };
 
 
@@ -28,38 +48,19 @@ class msParticleEmitter
 
 protected:
 
-	msPoint2f sourcePositionVariance;
-	GLfloat angle;
-	GLfloat angleVariance;
-	GLfloat speed;
-	GLfloat speedVariance;
-	msPoint2f gravity;
-	GLfloat particleLifespan;
-	GLfloat particleLifespanVariance;
-	msColor startColor;
-	msColor startColorVariance;
-	msColor finishColor;
-	msColor finishColorVariance;
-	GLfloat particleSize;
-	GLfloat particleSizeVariance;
-	GLuint maxParticles;
-
+    msParticleEmitterSettings settings;
+    
 	GLfloat emissionRate;
 	GLfloat emitCounter;	
 	GLuint verticesID;
-	GLuint colorsID;	
-	
+	GLuint colorsID;		
 	
 	GLuint particleIndex;
-//	BOOL useTexture;
 	GLfloat elapsedTime;
-	
 
+	bool addParticle();
 
-
-	GLboolean addParticle();
-
-	void initParticle(msParticle* particle);
+	void initParticle(int particleIndex);
 
 	void stopParticleEmitter();
 
@@ -72,18 +73,7 @@ public:
     msParticleData *particleData;
 	GLboolean blendAdditive;
 
-	msParticleEmitter(
-		msPoint2f inPosition, msPoint2f inSourcePositionVariance,
-		GLfloat inSpeed, GLfloat inSpeedVariance,
-		GLfloat inParticleLifeSpan, GLfloat inParticleLifeSpanVariance,
-		GLfloat inAngle, GLfloat inAngleVariance,
-		msPoint2f inGravity,
-		msColor inStartColor, msColor inStartColorVariance,
-		msColor inFinishColor, msColor inFinishColorVariance,
-		GLuint inMaxParticles,
-		GLfloat inParticleSize, GLfloat inParticleSizeVariance,
-		GLfloat inDuration,
-		GLboolean inBlendAdditive);	
+	msParticleEmitter(msParticleEmitterSettings &settings);
 
 	void update(GLfloat delta);
 
@@ -92,16 +82,6 @@ public:
 	~msParticleEmitter(void);
 
 protected:
-	virtual msParticleData* resolveParticleData();
-	virtual void deleteParticleData();
-};
-
-
-
-// Special class for particle emitter that
-class msBundeledParticleEmitter : public msParticleEmitter
-{
-	protected:
 	virtual msParticleData* resolveParticleData();
 	virtual void deleteParticleData();
 };

@@ -8,57 +8,17 @@
 #include "ShaderProgram/msShaderProgram.h"
 
 
-msParticleEmitter::msParticleEmitter(
-									 msPoint2f inPosition,
-									 msPoint2f inSourcePositionVariance,
-									 GLfloat inSpeed,
-									 GLfloat inSpeedVariance,
-									 GLfloat inParticleLifeSpan,
-									 GLfloat inParticleLifeSpanVariance,
-									 GLfloat inAngle,
-									 GLfloat inAngleVariance,
-									 msPoint2f inGravity,
-									 msColor inStartColor,
-									 msColor inStartColorVariance,
-									 msColor inFinishColor,
-									 msColor inFinishColorVariance,
-									 GLuint inMaxParticles,
-									 GLfloat inParticleSize,
-									 GLfloat inParticleSizeVariance,
-									 GLfloat inDuration,
-									 GLboolean inBlendAdditive)
+msParticleEmitter::msParticleEmitter(msParticleEmitterSettings &settings)
 {	
 	// Take the parameters which have been passed into this particle emitter and set the emitters
 	// properties
-	sourcePosition = inPosition;
-	sourcePositionVariance = inSourcePositionVariance;
-	speed = inSpeed;
-	speedVariance = inSpeedVariance;
-	particleLifespan = inParticleLifeSpan;
-	particleLifespanVariance = inParticleLifeSpanVariance;
-	angle = inAngle;
-	angleVariance = inAngleVariance;
-	gravity = inGravity;
-	startColor = inStartColor;
-	startColorVariance = inStartColorVariance;
-	finishColor = inFinishColor;
-	finishColorVariance = inFinishColorVariance;
-	maxParticles = inMaxParticles;
-	particleSize = inParticleSize;
-	particleSizeVariance = inParticleSizeVariance;
-	emissionRate = maxParticles/particleLifespan;
-	duration = inDuration;
-	blendAdditive = inBlendAdditive;
+	this->settings = settings;
 
 	// get memory for particle data
-	particleData = resolveParticleData();
+    this->particleData = (msParticleData*)calloc(settings.maxParticles, sizeof(msParticleData));
 
 	// Allocate the memory necessary for the particle emitter arrays
-	particles = (msParticle*)calloc(maxParticles, sizeof(msParticle));
-
-    // assign particle data for each particle
-    for(int i = 0; i < maxParticles; i ++)
-        particles[i].particleData = &particleData[i];
+	this->particles = (msParticle*)calloc(settings.maxParticles, sizeof(msParticle));    
 
 	// If one of the arrays cannot be allocated, then report a warning and return nil
 	if(!particles)
@@ -95,7 +55,7 @@ void msParticleEmitter::update(GLfloat delta)
 	{
 		GLfloat rate = 1.0f / emissionRate;
 		emitCounter += delta;
-		while(particleCount < maxParticles && emitCounter > rate)
+		while(particleCount < this->settings.maxParticles && emitCounter > rate)
 		{
 			addParticle();
 			emitCounter -= rate;
@@ -113,14 +73,14 @@ void msParticleEmitter::update(GLfloat delta)
 	while(particleIndex < particleCount) {
 
 		// Get the particle for the current particle index
-		msParticle *currentParticle = &particles[particleIndex];
-        msParticleData *particleData = currentParticle->particleData;
+		msParticle *currentParticle = &this->particles[particleIndex];
+        msParticleData *particleData = &this->particleData[particleIndex];
 
 		// If the current particle is alive then update it
 		if(currentParticle->timeToLive > 0) {
 
 			// Calculate the new direction based on gravity
-			currentParticle->direction.add(gravity);
+			currentParticle->direction.add(this->settings.gravity);
 			//currentParticle->direction.multiply(delta);
 			particleData->position.add(currentParticle->direction);
 
@@ -142,21 +102,22 @@ void msParticleEmitter::update(GLfloat delta)
 			// to be packed together at the start of the array so that a particle which has run out of
 			// life will only drop into this clause once
 			if(particleIndex != particleCount-1)
+            {
 				particles[particleIndex] = particles[particleCount-1];
+            }
 			particleCount--;
 		}
 	}	
 }
 
-GLboolean msParticleEmitter::addParticle()
+bool msParticleEmitter::addParticle()
 {
 	// If we have already reached the maximum number of particles then do nothing
-	if(particleCount == maxParticles)
+	if(particleCount == this->settings.maxParticles)
 		return GL_FALSE;
 
 	// Take the next particle out of the particle pool we have created and initialize it
-	msParticle *particle = &particles[particleCount];
-	initParticle(particle);
+	initParticle(particleCount);
 
 	// Increment the particle count
 	particleCount++;
@@ -165,21 +126,24 @@ GLboolean msParticleEmitter::addParticle()
 	return GL_TRUE; 
 }
 
-void msParticleEmitter::initParticle(msParticle* particle)
+void msParticleEmitter::initParticle(int particleIndex)
 {
+    msParticle *particle = &this->particles[particleIndex];
+    msParticleData *particleData = &this->particleData[particleIndex];
+
 	//srand((unsigned)time( NULL ));
 	// Init the position of the particle.  This is based on the source position of the particle emitter
 	// plus a configured variance.  The RANDOM_MINUS_1_TO_1 macro allows the number to be both positive
 	// and negative
-	particle->particleData->position.x = sourcePosition.x + sourcePositionVariance.x * RANDOM_MINUS_1_TO_1();
-	particle->particleData->position.y = sourcePosition.y + sourcePositionVariance.y * RANDOM_MINUS_1_TO_1();
+	particleData->position.x = sourcePosition.x + this->settings.sourcePositionVariance.x * RANDOM_MINUS_1_TO_1();
+	particleData->position.y = sourcePosition.y + this->settings.sourcePositionVariance.y * RANDOM_MINUS_1_TO_1();
 
     // Calculate the vectorSpeed using the speed and speedVariance which has been passed in
-    float vectorSpeed = speed + speedVariance * RANDOM_MINUS_1_TO_1();
+    float vectorSpeed = this->settings.speed + this->settings.speedVariance * RANDOM_MINUS_1_TO_1();
 
 	// Init the direction of the particle.  The newAngle is calculated using the angle passed in and the
 	// angle variance.
-	float newAngle = (GLfloat)DEGREES_TO_RADIANS(angle + angleVariance * RANDOM_MINUS_1_TO_1());
+	float newAngle = (GLfloat)DEGREES_TO_RADIANS(this->settings.angle + this->settings.angleVariance * RANDOM_MINUS_1_TO_1());
 
 	// Create a new Vector2f using the newAngle
 	particle->direction = msPoint2f(cosf(newAngle), sinf(newAngle));
@@ -189,31 +153,31 @@ void msParticleEmitter::initParticle(msParticle* particle)
 	particle->direction.multiply(vectorSpeed);
 
 	// Calculate the particle size using the particleSize and variance passed in
-	particle->particleData->size = particleSize + particleSizeVariance * RANDOM_MINUS_1_TO_1();
+	particleData->size = this->settings.particleSize + this->settings.particleSizeVariance * RANDOM_MINUS_1_TO_1();
 
 	// Calculate the particles life span using the life span and variance passed in
-	particle->timeToLive = particleLifespan + particleLifespanVariance * RANDOM_MINUS_1_TO_1();
+	particle->timeToLive = this->settings.particleLifeSpan + this->settings.particleLifeSpanVariance * RANDOM_MINUS_1_TO_1();
 
 	// Calculate the color the particle should have when it starts its life.  All the elements
 	// of the start color passed in along with the variance as used to calculate the star color
 	msColor start;
-	start.r = startColor.r + startColorVariance.r * RANDOM_MINUS_1_TO_1();
-	start.g = startColor.g + startColorVariance.g * RANDOM_MINUS_1_TO_1();
-	start.b = startColor.b + startColorVariance.b * RANDOM_MINUS_1_TO_1();
-	start.a = startColor.a + startColorVariance.a * RANDOM_MINUS_1_TO_1();
+	start.r = this->settings.startColor.r + this->settings.startColorVariance.r * RANDOM_MINUS_1_TO_1();
+	start.g = this->settings.startColor.g + this->settings.startColorVariance.g * RANDOM_MINUS_1_TO_1();
+	start.b = this->settings.startColor.b + this->settings.startColorVariance.b * RANDOM_MINUS_1_TO_1();
+	start.a = this->settings.startColor.a + this->settings.startColorVariance.a * RANDOM_MINUS_1_TO_1();
 
 	// Calculate the color the particle should be when its life is over.  This is done the same
 	// way as the start color above
 	msColor end;
-	end.r = finishColor.r + finishColorVariance.r * RANDOM_MINUS_1_TO_1();
-	end.g = finishColor.g + finishColorVariance.g * RANDOM_MINUS_1_TO_1();
-	end.b = finishColor.b + finishColorVariance.b * RANDOM_MINUS_1_TO_1();
-	end.a = finishColor.a + finishColorVariance.a * RANDOM_MINUS_1_TO_1();
+	end.r = this->settings.finishColor.r + this->settings.finishColorVariance.r * RANDOM_MINUS_1_TO_1();
+	end.g = this->settings.finishColor.g + this->settings.finishColorVariance.g * RANDOM_MINUS_1_TO_1();
+	end.b = this->settings.finishColor.b + this->settings.finishColorVariance.b * RANDOM_MINUS_1_TO_1();
+	end.a = this->settings.finishColor.a + this->settings.finishColorVariance.a * RANDOM_MINUS_1_TO_1();
 
 	// Calculate the delta which is to be applied to the particles color during each cycle of its
 	// life.  The delta calculation uses the life space of the particle to make sure that the 
 	// particles color will transition from the start to end color during its life time.
-	particle->particleData->color = start;
+	particleData->color = start;
 	particle->deltaColor.r = (end.r - start.r) / particle->timeToLive;
 	particle->deltaColor.g = (end.g - start.g) / particle->timeToLive;
 	particle->deltaColor.b = (end.b - start.b) / particle->timeToLive;
@@ -234,21 +198,10 @@ GLboolean msParticleEmitter::isAlive()
 
 msParticleData* msParticleEmitter::resolveParticleData()
 {
-	return (msParticleData*)calloc(this->maxParticles, sizeof(msParticleData));
+	return (msParticleData*)calloc(this->settings.maxParticles, sizeof(msParticleData));
 }
 
 void msParticleEmitter::deleteParticleData()
-{
-	free(this->particleData);
-}
-
-
-msParticleData* msBundeledParticleEmitter::resolveParticleData()
-{
-	return (msParticleData*)calloc(this->maxParticles, sizeof(msParticleData));
-}
-
-void msBundeledParticleEmitter::deleteParticleData()
 {
 	free(this->particleData);
 }

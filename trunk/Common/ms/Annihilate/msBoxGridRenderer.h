@@ -58,7 +58,7 @@ private:
     void _drawBoxGrid();
     void _drawParticles(msParticleEmitterBundle &particleEmitters, msShaderProgram &particleProgram);
 
-    msParticleEmitter* _createExplosionPe(msPoint3f location, GLfloat ratio);
+    msParticleEmitterSettings _createExplosionSettings(msPoint3f location, GLfloat ratio);
 	msWaveEmitter* _createWave(msBox *box);
 
     void _removeInactiveEmitters();	

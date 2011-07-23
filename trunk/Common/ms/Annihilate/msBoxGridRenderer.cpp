@@ -148,7 +148,7 @@ void msBoxGridRenderer::_drawBoxGrid(msShaderProgram *program, msSizef size)
             if(box->getRequiresExplosion())
             {
                 GLfloat ratio = m_boxGrid->getRowCount() / size.height / 2.0f + m_boxGrid->getColCount() / size.width / 2.0f;
-				explosionsBundle.addParticleEmitter(_createExplosionPe(box->getExplosionPoint(), ratio));
+				explosionsBundle.addParticleEmitter(_createExplosionSettings(box->getExplosionPoint(), ratio));
             }
             
 			if(box->getRequiresWave())
@@ -248,31 +248,30 @@ void msBoxGridRenderer::_removeInactiveEmitters()
 
 
 
-msParticleEmitter* msBoxGridRenderer::_createExplosionPe(msPoint3f location, GLfloat ratio)
+msParticleEmitterSettings msBoxGridRenderer::_createExplosionSettings(msPoint3f location, GLfloat ratio)
 {
     float k = 0.03333333f / ratio;
-    
-    return new msParticleEmitter(
-		// explosion
-		msPoint2f(location.x, location.y),//position:
-		msPoint2f(0.031f, 0.031f),//sourcePositionVariance:
-		0.0001f,//speed:
-		0.007f,//speedVariance:
-		0.5f,//particleLifeSpan:
-		0.25f,//particleLifespanVariance:
-		0.0f,//angle:
-		360.0f,//angleVariance:
-		msPoint2f(0.0f, -0.0000025f),//gravity:
-		msColor(1.0f, 0.5f, 0.05f, 1.0f),//startColor:
-		msColor(0.0f, 0.0f, 0.0f, 0.5f),//startColorVariance:
-		msColor(0.2f, 0.0f, 0.0f, 0.0f),//finishColor:
-		msColor(0.2f, 0.0f, 0.0f, 0.0f),//finishColorVariance:
-		200,//maxParticles:
-		50 * k,//particleSize:
-		3 * k,//particleSizeVariance:
-		0.125f,//duration:
-		GL_TRUE//blendAdditive:
-		);
+
+    msParticleEmitterSettings settings;
+	settings.position                   = msPoint2f(location.x, location.y);
+	settings.sourcePositionVariance     = msPoint2f(0.031f, 0.031f);
+	settings.speed                      = 0.0001f;
+	settings.speedVariance              = 0.007f;
+	settings.particleLifeSpan           = 0.5f;
+	settings.particleLifeSpanVariance   = 0.25f;
+	settings.angle                      = 0.0f;
+	settings.angleVariance              = 360.0f;
+	settings.gravity                    = msPoint2f(0.0f, -0.0000025f);
+	settings.startColor                 = msColor(1.0f, 0.5f, 0.05f, 1.0f);
+	settings.startColorVariance         = msColor(0.0f, 0.0f, 0.0f, 0.5f);
+	settings.finishColor                = msColor(0.2f, 0.0f, 0.0f, 0.0f);
+	settings.finishColorVariance        = msColor(0.2f, 0.0f, 0.0f, 0.0f);
+	settings.maxParticles               = 200;
+	settings.particleSize               = 50 * k;
+	settings.particleSizeVariance       = 3 * k;
+	settings.duration                   = 0.125f;
+	settings.blendAdditive              = GL_TRUE;
+	return settings;
 }
 
 
@@ -398,8 +397,8 @@ msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
 
 void msBoxGridRenderer::_drawParticles(msParticleEmitterBundle &particleEmitters, msShaderProgram &particleProgram)
 {
-	if(particleEmitters.getCount() == 0)
-		return;
+	if(particleEmitters.getParticleCount() == 0)
+		return;  
 
     msTexture *particleTexture = particleProgram.getTexture("u_texture");
     glEnable(GL_BLEND);
@@ -426,7 +425,7 @@ void msBoxGridRenderer::_drawParticles(msParticleEmitterBundle &particleEmitters
     particleProgram.getAttribute("a_size")->setPointerAndEnable(1, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &particleData[0].size);
     particleProgram.getUniform("u_texture")->set1i(particleTexture->getUnit());
 
-    glDrawArrays( GL_POINTS, 0, particleEmitters.getCount());
+    glDrawArrays( GL_POINTS, 0, particleEmitters.getParticleCount());
 
     glDisable ( GL_TEXTURE_2D );
     glDisable(GL_BLEND);

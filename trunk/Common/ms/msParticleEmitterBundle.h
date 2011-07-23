@@ -15,6 +15,7 @@ class msParticleEmitterBundle
 
 	// shared particle data
 	msParticleData *particleData;
+    int particleDataCount;
 
 public:
 	msParticleEmitterBundle(void);
@@ -22,18 +23,12 @@ public:
 
 	void removeInactiveEmitters();
 
-	void addParticleEmitter(msParticleEmitter *emitter);
+	void addParticleEmitter(msParticleEmitterSettings &settings);
 
 	void update(float delta);
 
-	msParticleData* getParticleData() const
-	{
-		return this->particleData;
-	}
+	msParticleData* getParticleData();
 
-	int getCount()
-	{
-		return this->emitterList.size();
-	}
+	int getParticleCount();
 };
 
