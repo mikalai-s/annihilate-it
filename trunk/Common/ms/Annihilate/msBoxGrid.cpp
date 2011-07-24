@@ -587,8 +587,6 @@ void msBoxGrid::_refreshBorders()
     {
         for(int x = 0; x < m_columnCount; x ++)
         {
-            msBox *box = getItem(y, x);
-
             _refreshBoxFaceBorders(y, x, _frontFaceResolver);
             _refreshBoxFaceBorders(y, x, _backFaceResolver);
         }

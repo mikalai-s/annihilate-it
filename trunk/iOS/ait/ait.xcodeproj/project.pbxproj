@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		970D3A8A13D69524007DE977 /* MainViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 970D3A8813D69524007DE977 /* MainViewController.mm */; };
+		970D3A8B13D69524007DE977 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 970D3A8913D69524007DE977 /* MainViewController.xib */; };
+		970D3ABC13D69AC1007DE977 /* google.png in Resources */ = {isa = PBXBuildFile; fileRef = 970D3ABB13D69AC1007DE977 /* google.png */; };
+		975C268813DBC93400F77767 /* msParticleEmitterBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 975C268713DBC93400F77767 /* msParticleEmitterBundle.cpp */; };
 		9791C92C13D2809100060949 /* border-external-line.tga in Resources */ = {isa = PBXBuildFile; fileRef = 9791C92A13D2809100060949 /* border-external-line.tga */; };
 		9791C92D13D2809100060949 /* border-internal-line.tga in Resources */ = {isa = PBXBuildFile; fileRef = 9791C92B13D2809100060949 /* border-internal-line.tga */; };
 		9791C92E13D2809C00060949 /* border-external-line.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9791C92A13D2809100060949 /* border-external-line.tga */; };
@@ -46,8 +50,6 @@
 		CE8D89DC135E94B700C083EA /* aitAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89DB135E94B700C083EA /* aitAppDelegate.mm */; };
 		CE8D89DF135E94B700C083EA /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89DD135E94B700C083EA /* MainWindow.xib */; };
 		CE8D89E6135E94B700C083EA /* EAGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89E5135E94B700C083EA /* EAGLView.mm */; };
-		CE8D89E9135E94B700C083EA /* aitViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE8D89E8135E94B700C083EA /* aitViewController.mm */; };
-		CE8D89EC135E94B700C083EA /* aitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE8D89EA135E94B700C083EA /* aitViewController.xib */; };
 		CE8D89F3135E94B700C083EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C7135E94B700C083EA /* UIKit.framework */; };
 		CE8D89F4135E94B700C083EA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89C9135E94B700C083EA /* Foundation.framework */; };
 		CE8D89F5135E94B700C083EA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D89CB135E94B700C083EA /* CoreGraphics.framework */; };
@@ -110,6 +112,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		970D3A8713D69524007DE977 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = ../MainViewController.h; sourceTree = "<group>"; };
+		970D3A8813D69524007DE977 /* MainViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MainViewController.mm; path = ../MainViewController.mm; sourceTree = "<group>"; };
+		970D3A8913D69524007DE977 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MainViewController.xib; path = ../MainViewController.xib; sourceTree = "<group>"; };
+		970D3ABB13D69AC1007DE977 /* google.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = google.png; sourceTree = "<group>"; };
+		975C268713DBC93400F77767 /* msParticleEmitterBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msParticleEmitterBundle.cpp; sourceTree = "<group>"; };
+		975C268A13DBC94700F77767 /* msParticleEmitterBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msParticleEmitterBundle.h; sourceTree = "<group>"; };
 		9791C92A13D2809100060949 /* border-external-line.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "border-external-line.tga"; sourceTree = "<group>"; };
 		9791C92B13D2809100060949 /* border-internal-line.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "border-internal-line.tga"; sourceTree = "<group>"; };
 		CE4C2CE3135FF8D70071F1C9 /* msAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msAnimation.cpp; sourceTree = "<group>"; };
@@ -176,9 +184,6 @@
 		CE8D89DE135E94B700C083EA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		CE8D89E4135E94B700C083EA /* EAGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
 		CE8D89E5135E94B700C083EA /* EAGLView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = EAGLView.mm; sourceTree = "<group>"; };
-		CE8D89E7135E94B700C083EA /* aitViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aitViewController.h; sourceTree = "<group>"; };
-		CE8D89E8135E94B700C083EA /* aitViewController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = aitViewController.mm; sourceTree = "<group>"; };
-		CE8D89EB135E94B700C083EA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/aitViewController.xib; sourceTree = "<group>"; };
 		CE8D89F2135E94B700C083EA /* aitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = aitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8D89FA135E94B700C083EA /* aitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "aitTests-Info.plist"; sourceTree = "<group>"; };
 		CE8D89FC135E94B700C083EA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -240,6 +245,8 @@
 				CEAD788313BAD7BA00AAE923 /* msMatrixTransform.h */,
 				CE4C2CF9135FF8D70071F1C9 /* msParticleEmitter.cpp */,
 				CE4C2CFA135FF8D70071F1C9 /* msParticleEmitter.h */,
+				975C268A13DBC94700F77767 /* msParticleEmitterBundle.h */,
+				975C268713DBC93400F77767 /* msParticleEmitterBundle.cpp */,
 				CE4C2CFB135FF8D70071F1C9 /* msScene.cpp */,
 				CE4C2CFC135FF8D70071F1C9 /* msScene.h */,
 				CE4C2CFD135FF8D70071F1C9 /* msSimpleImageLoader.cpp */,
@@ -352,14 +359,15 @@
 		CE8D89D1135E94B700C083EA /* ait */ = {
 			isa = PBXGroup;
 			children = (
+				970D3ABB13D69AC1007DE977 /* google.png */,
+				970D3A8713D69524007DE977 /* MainViewController.h */,
+				970D3A8813D69524007DE977 /* MainViewController.mm */,
+				970D3A8913D69524007DE977 /* MainViewController.xib */,
 				CE8D89DA135E94B700C083EA /* aitAppDelegate.h */,
 				CE8D89DB135E94B700C083EA /* aitAppDelegate.mm */,
 				CE8D89DD135E94B700C083EA /* MainWindow.xib */,
 				CE8D89E4135E94B700C083EA /* EAGLView.h */,
 				CE8D89E5135E94B700C083EA /* EAGLView.mm */,
-				CE8D89E7135E94B700C083EA /* aitViewController.h */,
-				CE8D89E8135E94B700C083EA /* aitViewController.mm */,
-				CE8D89EA135E94B700C083EA /* aitViewController.xib */,
 				CE8D89D2135E94B700C083EA /* Supporting Files */,
 			);
 			path = ait;
@@ -466,10 +474,11 @@
 			files = (
 				CE8D89D6135E94B700C083EA /* InfoPlist.strings in Resources */,
 				CE8D89DF135E94B700C083EA /* MainWindow.xib in Resources */,
-				CE8D89EC135E94B700C083EA /* aitViewController.xib in Resources */,
 				CEA849B11384C3130082C69B /* border-corner.tga in Resources */,
 				9791C92C13D2809100060949 /* border-external-line.tga in Resources */,
 				9791C92D13D2809100060949 /* border-internal-line.tga in Resources */,
+				970D3A8B13D69524007DE977 /* MainViewController.xib in Resources */,
+				970D3ABC13D69AC1007DE977 /* google.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,7 +517,6 @@
 				CE8D89D9135E94B700C083EA /* main.m in Sources */,
 				CE8D89DC135E94B700C083EA /* aitAppDelegate.mm in Sources */,
 				CE8D89E6135E94B700C083EA /* EAGLView.mm in Sources */,
-				CE8D89E9135E94B700C083EA /* aitViewController.mm in Sources */,
 				CE4C2D0E135FF8D70071F1C9 /* msAnimation.cpp in Sources */,
 				CE4C2D0F135FF8D70071F1C9 /* msAnimationBundle.cpp in Sources */,
 				CE4C2D10135FF8D70071F1C9 /* msAnimationContext.cpp in Sources */,
@@ -540,6 +548,8 @@
 				CEA849B51384C3340082C69B /* msSpline.cpp in Sources */,
 				CEAD788413BAD7BA00AAE923 /* msMatrix.cpp in Sources */,
 				CEAD788513BAD7BA00AAE923 /* msMatrixTransform.cpp in Sources */,
+				970D3A8A13D69524007DE977 /* MainViewController.mm in Sources */,
+				975C268813DBC93400F77767 /* msParticleEmitterBundle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -576,14 +586,6 @@
 				CE8D89DE135E94B700C083EA /* en */,
 			);
 			name = MainWindow.xib;
-			sourceTree = "<group>";
-		};
-		CE8D89EA135E94B700C083EA /* aitViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CE8D89EB135E94B700C083EA /* en */,
-			);
-			name = aitViewController.xib;
 			sourceTree = "<group>";
 		};
 		CE8D89FB135E94B700C083EA /* InfoPlist.strings */ = {

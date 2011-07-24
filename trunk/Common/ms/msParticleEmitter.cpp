@@ -233,7 +233,7 @@ void msParticleEmitter::unitTest()
     msParticleEmitter pe(settings);
 
     FILE *stream;
-    fopen_s( &stream, "c:\\bad.txt", "w" );
+//    fopen( &stream, "c:\\bad.txt", "w" );
 
     int j = 0;
 

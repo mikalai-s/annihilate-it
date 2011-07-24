@@ -1,39 +1,22 @@
 //
-//  aitViewController.m
+//  MainViewController.m
 //  ait
 //
-//  Created by Mikalai Silivonik on 11-04-20.
+//  Created by Mikalai on 11-07-19.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
+#import "MainViewController.h"
 
-#import "aitViewController.h"
-#import "EAGLView.h"
-
-#import "../ms/msGL.h"
-
-// Uniform index.
-enum {
-    UNIFORM_TRANSLATE,
-    NUM_UNIFORMS
-};
-GLint uniforms[NUM_UNIFORMS];
-
-// Attribute index.
-enum {
-    ATTRIB_VERTEX,
-    ATTRIB_COLOR,
-    NUM_ATTRIBUTES
-};
-
-@interface aitViewController ()
+@interface MainViewController ()
 @property (nonatomic, retain) EAGLContext *context;
 @property (nonatomic, assign) CADisplayLink *displayLink;
 - (BOOL)loadShaders:(GLuint)bufferId;
 @end
 
-@implementation aitViewController
+
+@implementation MainViewController
+
 
 @synthesize animating, context, displayLink;
 
@@ -52,9 +35,11 @@ enum {
     
 	self.context = aContext;
 	[aContext release];
+    
+    EAGLView *eaglView = [self.view viewWithTag:101];
 	
-    [(EAGLView *)self.view setContext:context];
-    [(EAGLView *)self.view setFramebuffer];
+    [eaglView setContext:context];
+    [eaglView setFramebuffer];
     
     if ([context API] == kEAGLRenderingAPIOpenGLES2)
         [self loadShaders:1];
@@ -63,7 +48,6 @@ enum {
     animationFrameInterval = 1;
     self.displayLink = nil;
 }
-
 - (void)dealloc
 {
     if (program) {
@@ -110,7 +94,7 @@ enum {
         glDeleteProgram(program);
         program = 0;
     }
-
+    
     // Tear down context.
     if ([EAGLContext currentContext] == context)
         [EAGLContext setCurrentContext:nil];
@@ -161,32 +145,38 @@ enum {
 
 - (void)drawFrame
 {
-    [(EAGLView *)self.view setFramebuffer];
+    EAGLView *eaglView = [self.view viewWithTag:101];
     
-    m_scene.setMainFrameBuffer([(EAGLView *)self.view getFramebuffer]);
+    [eaglView setFramebuffer];
+    
+    m_scene.setMainFrameBuffer([eaglView getFramebuffer]);
     
     m_scene.drawFrame();
     
-    [(EAGLView *)self.view presentFramebuffer];
+    [eaglView presentFramebuffer];
 }
 
 - (BOOL)loadShaders:(GLuint)frameId
 {
     string uniforms = "/data/uniforms.txt";
     msMapDataFileName(uniforms);
-
-    m_scene.newSize(320, 480);  
+    
+    EAGLView *eaglView = [self.view viewWithTag:101];
+    
+    CGRect rect = [eaglView frame];
+    
+    m_scene.newSize(rect.size.width, rect.size.height);  
     m_scene.loadData(uniforms);
     m_scene.init();
     m_scene.start();
-  
+    
     
     return TRUE;
 }
 
 - (void) touched:(CGPoint)point 
 {
-
+    
 }
 
 int lastDirection = MS_BOX_SHIFT_DOWN;
@@ -226,9 +216,20 @@ int getShiftDirection()
 {
     CGPoint current = [[touches anyObject] locationInView:self.view];
     float dif = (current.x - touchStartLocation.x) * (current.x - touchStartLocation.x) + (current.y - touchStartLocation.y) * (current.y - touchStartLocation.y);
-
+    
     if(dif > 1000)
+        m_scene.start();
+}
+
+- (IBAction)onNew:(id)sender
+{
     m_scene.start();
+}
+
+
+- (IBAction)onUndo:(id)sender
+{
+    m_scene.undoLastMove();
 }
 
 

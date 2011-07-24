@@ -152,7 +152,8 @@ void msBoxGridRenderer::_drawBoxGrid(msShaderProgram *program, msSizef size)
             if(box->getRequiresExplosion())
             {
                 GLfloat ratio = m_boxGrid->getRowCount() / size.height / 2.0f + m_boxGrid->getColCount() / size.width / 2.0f;
-                explosionsBundle.addParticleEmitter(_createExplosionSettings(box->getExplosionPoint(), ratio));
+                msParticleEmitterSettings settings = _createExplosionSettings(box->getExplosionPoint(), ratio);
+                explosionsBundle.addParticleEmitter(settings);
             }
             
             if(box->getRequiresWave())
