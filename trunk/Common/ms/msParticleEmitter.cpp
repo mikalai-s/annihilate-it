@@ -62,7 +62,7 @@ void msParticleEmitter::update(GLfloat delta)
 		}
 
 		elapsedTime += delta;
-		if(duration != -1 && duration < elapsedTime)
+		if(this->settings.duration != -1 && this->settings.duration < elapsedTime)
 			stopParticleEmitter();
 	}
 
@@ -81,7 +81,6 @@ void msParticleEmitter::update(GLfloat delta)
 
 			// Calculate the new direction based on gravity
 			currentParticle->direction.add(this->settings.gravity);
-			//currentParticle->direction.multiply(delta);
 			particleData->position.add(currentParticle->direction);
 
 			// Reduce the life span of the particle
@@ -135,8 +134,8 @@ void msParticleEmitter::initParticle(int particleIndex)
 	// Init the position of the particle.  This is based on the source position of the particle emitter
 	// plus a configured variance.  The RANDOM_MINUS_1_TO_1 macro allows the number to be both positive
 	// and negative
-	particleData->position.x = sourcePosition.x + this->settings.sourcePositionVariance.x * RANDOM_MINUS_1_TO_1();
-	particleData->position.y = sourcePosition.y + this->settings.sourcePositionVariance.y * RANDOM_MINUS_1_TO_1();
+	particleData->position.x = this->settings.position.x + this->settings.sourcePositionVariance.x * RANDOM_MINUS_1_TO_1();
+	particleData->position.y = this->settings.position.y + this->settings.sourcePositionVariance.y * RANDOM_MINUS_1_TO_1();
 
     // Calculate the vectorSpeed using the speed and speedVariance which has been passed in
     float vectorSpeed = this->settings.speed + this->settings.speedVariance * RANDOM_MINUS_1_TO_1();

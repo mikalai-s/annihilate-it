@@ -65,8 +65,6 @@ protected:
 	void stopParticleEmitter();
 
 public:
-	msPoint2f sourcePosition;
-	GLfloat duration;
 	GLboolean active;
 	GLuint particleCount;
 	msParticle *particles;
