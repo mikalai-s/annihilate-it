@@ -9,7 +9,6 @@ public:
     ~msWaveEmitter(void);
     //void render();
     void step();
-    void render( msShaderProgram * program );
     float m_radius;
     float m_power;
     msPoint3f m_location;

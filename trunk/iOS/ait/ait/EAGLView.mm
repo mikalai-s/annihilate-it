@@ -82,6 +82,9 @@
         
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
             NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+        glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
+        glViewport(0, 0, framebufferWidth, framebufferHeight);
     }
 }
 
@@ -108,11 +111,7 @@
         [EAGLContext setCurrentContext:context];
         
         if (!defaultFramebuffer)
-            [self createFramebuffer];
-        
-        glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-        
-        glViewport(0, 0, framebufferWidth, framebufferHeight);
+            [self createFramebuffer];        
     }
 }
 
@@ -127,9 +126,7 @@
     
     if (context) {
         [EAGLContext setCurrentContext:context];
-        
-        glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-        
+               
         success = [context presentRenderbuffer:GL_RENDERBUFFER];
     }
     

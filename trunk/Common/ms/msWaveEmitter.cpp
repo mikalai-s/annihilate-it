@@ -18,13 +18,6 @@ msWaveEmitter::~msWaveEmitter(void)
 {
 }
 
-void msWaveEmitter::render( msShaderProgram * program )
-{
-    program->getUniform("radius")->set1f(m_radius);
-    program->getUniform("power")->set1f(m_power);
-    program->getUniform("location")->set2f(m_location.x / m_size.width, m_location.y / m_size.height);
-}
-
 void msWaveEmitter::step()
 {
     m_radius += RADIUS_STEP;    

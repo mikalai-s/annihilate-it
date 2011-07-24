@@ -35,13 +35,6 @@ public:
     void enableVertexArray()
     {
         glEnableVertexAttribArray(m_location);
-        /*if(glGetError() == GL_INVALID_VALUE)
-        {
-            GLboolean b;
-            glGetBooleanv(GL_MAX_VERTEX_ATTRIBS, &b);
-            printf("GL_MAX_VERTEX_ATTRIBS = %d\r\n", b);
-            printf("wrong location: %d\r\n\r\n", m_location);
-        }*/
     }
 
     void disableVertexArray()

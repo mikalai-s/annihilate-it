@@ -46,15 +46,10 @@ private:
     GLuint m_positionBuffer;
     int particleBufferSize;
 private:
-    void _drawFigure(msBoxList &boxes, msBox *box, msPalette *palette, msShaderProgram *m_program);
-    void _drawLine(msShaderProgram *m_program, msPoint3f &start, msPoint3f &end, msColor *color);
-    void _drawLeftBorder(msShaderProgram *m_program, msBox *box, msColor *color);
-    void _drawTopBorder(msShaderProgram *m_program, msBox *box, msColor *color);
-    void _drawRightBorder(msShaderProgram *m_program, msBox *box, msColor *color);
-    void _drawBottomBorder(msShaderProgram *m_program, msBox *box, msColor *color);
     void _drawBoxGrid(msShaderProgram *program, msSizef size);
     void _drawExplosions();
-    void _drawBox(msShaderProgram *m_program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front);
+    void _drawBox(msShaderProgram *m_program, msBox *box);
+    void _drawFace(msShaderProgram *m_program, msBoxFaceData *faceData);
     void _drawBoxesWithShockWave();
     void _drawBoxGrid();
     void _drawParticles(msParticleEmitterBundle &particleEmitters, msShaderProgram &particleProgram);

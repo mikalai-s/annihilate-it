@@ -232,8 +232,8 @@
 		CE4C2CE1135FF8D70071F1C9 /* ms */ = {
 			isa = PBXGroup;
 			children = (
-				CE4C2D01135FF8D70071F1C9 /* ShaderProgram */,
 				CE4C2CE2135FF8D70071F1C9 /* Annihilate */,
+				CE4C2D01135FF8D70071F1C9 /* ShaderProgram */,
 				CE4C2CF5135FF8D70071F1C9 /* msCommon.h */,
 				CE4C2E5613628C4B0071F1C9 /* msGL.cpp */,
 				CE4C2CF6135FF8D70071F1C9 /* msGL.h */,
