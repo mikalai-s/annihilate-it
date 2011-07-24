@@ -79,6 +79,8 @@ public:
 
 	~msParticleEmitter(void);
 
+    static void unitTest();
+
 protected:
 	virtual msParticleData* resolveParticleData();
 	virtual void deleteParticleData();

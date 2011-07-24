@@ -12,7 +12,8 @@ msParticleEmitterBundle::~msParticleEmitterBundle(void)
     for(msParticleEmitterIterator i = this->emitterList.begin(); i != this->emitterList.end(); i ++)
          delete (*i);
 
-    free(this->particleData);
+    if(this->particleDataCount > 0)
+        free(this->particleData);
 }
 
 void msParticleEmitterBundle::removeInactiveEmitters()
