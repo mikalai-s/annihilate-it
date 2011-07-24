@@ -1,5 +1,5 @@
 
-precision mediump float;
+precision lowp float;
 
 uniform vec4 color;
 uniform ivec4 lineBorder;

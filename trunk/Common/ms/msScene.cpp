@@ -48,7 +48,7 @@ msScene::msScene()
 
    m_palette = 0;
    m_boxGrid = 0;
-   m_renderer = 0;
+    m_renderer = 0;
 }
 
 void msScene::newSize(GLint width, GLint height)
@@ -89,6 +89,8 @@ msScene::~msScene()
 bool msScene::loadData(string filename)
 {
    m_shaders.loadFile(filename);
+    m_renderer = new msBoxGridRenderer(&this->m_shaders, 0);
+
    return true;
 }
 
@@ -145,7 +147,7 @@ void msScene::init()
 
 void msScene::drawFrame()
 {
-    if(m_renderer != 0)
+    //if(m_renderer != 0)
         m_renderer->draw(m_size);
 }
 
@@ -187,8 +189,7 @@ void msScene::start()
         m_boxGrid->extractPattern(backFaces);        
 
         delete m_boxGrid;
-        delete m_renderer;
-    }
+     }
     
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
@@ -213,15 +214,10 @@ void msScene::start()
    //m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
     m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
-    m_renderer = new msBoxGridRenderer(&m_shaders, m_boxGrid);
-   
+    m_renderer->setBoxGrid(m_boxGrid);
+    
     m_boxGrid->setBackPattern(backFaces);
-    
-    
-
     m_boxGrid->show();
-    
-
 }
 
 void msScene::end()
@@ -229,9 +225,8 @@ void msScene::end()
     //m_boxGrid->hide();
 
     delete m_boxGrid;
-    delete m_renderer;
+
     m_boxGrid = 0;
-    m_renderer = 0;
 
     
 }
