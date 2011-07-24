@@ -7,8 +7,8 @@
 
 using namespace::std;
 
-typedef std::list<msAnimation*>	msAnimationList;
-typedef msAnimationList::iterator	msAnimationIterator;
+typedef std::list<msAnimation*>    msAnimationList;
+typedef msAnimationList::iterator    msAnimationIterator;
 
 // represents set of animations each animation autoreleases when it's done
 class msAnimationBundle
@@ -16,13 +16,13 @@ class msAnimationBundle
     msAnimationList m_list;
 
 public:
-	static void _lineStep2(msAnimationContext *context);
+    static void _lineStep2(msAnimationContext *context);
 
 public:
-	msAnimationBundle();
-	~msAnimationBundle();
+    msAnimationBundle();
+    ~msAnimationBundle();
 
-	void performStep();
+    void performStep();
 
     GLint getCount();
 
@@ -32,5 +32,5 @@ public:
 
     msAnimationIterator getLast();
 
-	static void unitTest();
+    static void unitTest();
 };

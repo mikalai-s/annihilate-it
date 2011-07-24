@@ -39,19 +39,19 @@ class msScene
 {
 private:
 
-	GLfloat m_afterShockRadius;
-	GLfloat m_afterShockPower;
-	GLfloat m_afterShockLocation[2];
-	GLboolean m_animate;
+    GLfloat m_afterShockRadius;
+    GLfloat m_afterShockPower;
+    GLfloat m_afterShockLocation[2];
+    GLboolean m_animate;
 
-	GLfloat m_afterShockRadiusMin;
-	GLfloat m_afterShockRadiusMax;
-	GLfloat m_afterShockRadiusStep;
+    GLfloat m_afterShockRadiusMin;
+    GLfloat m_afterShockRadiusMax;
+    GLfloat m_afterShockRadiusStep;
 
 
-	msPalette *m_palette;
-	msBoxGrid *m_boxGrid;
-	msBoxGridRenderer *m_renderer;
+    msPalette *m_palette;
+    msBoxGrid *m_boxGrid;
+    msBoxGridRenderer *m_renderer;
 
 
 public:

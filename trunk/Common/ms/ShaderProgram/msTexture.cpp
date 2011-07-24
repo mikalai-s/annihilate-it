@@ -6,7 +6,7 @@
 
 msTexture::msTexture(string &name, GLuint unit, string &fileName)
 {
-	init(name, unit, fileName.c_str());
+    init(name, unit, fileName.c_str());
 }
 
 msTexture::msTexture(string &name, GLuint unit)
@@ -43,47 +43,47 @@ void msTexture::init(string &name, GLuint unit, const char *fileName)
             }
             else
             {
-                //			assert( pImgObj->GetNumChannels() == 4 );
+                //            assert( pImgObj->GetNumChannels() == 4 );
                 glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
             }
             delete pImgObj;
         }
-    }	
+    }    
 }
 
 msTexture::~msTexture(void)
 {
-	glDeleteTextures(1, &m_id);
+    glDeleteTextures(1, &m_id);
 }
 
 void msTexture::setProgram(msShaderProgram *program)
 {
-	m_program = program;
+    m_program = program;
 }
 
 void msTexture::link()
 {
-	m_location = glGetUniformLocation( m_program->getHandle(), m_name);
+    m_location = glGetUniformLocation( m_program->getHandle(), m_name);
 }
 
 GLuint msTexture::getId()
 {
-	return m_id;
+    return m_id;
 }
 
 GLuint msTexture::getUnit()
 {
-	return m_unit;
+    return m_unit;
 }
 
 GLsizei msTexture::getWidth()
 {
-	return m_width;
+    return m_width;
 }
 
 GLsizei msTexture::getHeight()
 {
-	return m_height;
+    return m_height;
 }
 
 void msTexture::bind()

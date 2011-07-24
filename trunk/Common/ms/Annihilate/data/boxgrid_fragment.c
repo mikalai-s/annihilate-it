@@ -16,39 +16,39 @@ varying vec2 _borderTexelTop;
 
 void main()
 {
-	vec4 c = color;
+    vec4 c = color;
 
-	if(lineBorder[0] == 1)
-		c *= texture2D(borderExternalLineTex, _borderTexelLeft);
+    if(lineBorder[0] == 1)
+        c *= texture2D(borderExternalLineTex, _borderTexelLeft);
     else
         c *= texture2D(borderInternalLineTex, _borderTexelLeft);
-	
-	if(lineBorder[1] == 1)
-		c *= texture2D(borderExternalLineTex, _borderTexelTop);
+    
+    if(lineBorder[1] == 1)
+        c *= texture2D(borderExternalLineTex, _borderTexelTop);
     else
         c *= texture2D(borderInternalLineTex, _borderTexelTop);
-	
-	if(lineBorder[2] == 1)
-		c *= texture2D(borderExternalLineTex, _borderTexelRight);
+    
+    if(lineBorder[2] == 1)
+        c *= texture2D(borderExternalLineTex, _borderTexelRight);
     else
         c *= texture2D(borderInternalLineTex, _borderTexelRight);
 
-	if(lineBorder[3] == 1)
-		c *= texture2D(borderExternalLineTex, _borderTexelBottom);
+    if(lineBorder[3] == 1)
+        c *= texture2D(borderExternalLineTex, _borderTexelBottom);
     else
         c *= texture2D(borderInternalLineTex, _borderTexelBottom);
        
-	if(cornerBorder[0] == 1)
-		c *= texture2D(borderCornerTex, _borderTexelLeft);
+    if(cornerBorder[0] == 1)
+        c *= texture2D(borderCornerTex, _borderTexelLeft);
     
-	if(cornerBorder[1] == 1)
-		c *= texture2D(borderCornerTex, _borderTexelTop);
+    if(cornerBorder[1] == 1)
+        c *= texture2D(borderCornerTex, _borderTexelTop);
     
-	if(cornerBorder[2] == 1)
-		c *= texture2D(borderCornerTex, _borderTexelRight);
+    if(cornerBorder[2] == 1)
+        c *= texture2D(borderCornerTex, _borderTexelRight);
 
-	if(cornerBorder[3] == 1)
-		c *= texture2D(borderCornerTex, _borderTexelBottom);
+    if(cornerBorder[3] == 1)
+        c *= texture2D(borderCornerTex, _borderTexelBottom);
         
-	gl_FragColor = c;
+    gl_FragColor = c;
 }

@@ -18,7 +18,7 @@ msParticleEmitterBundle::~msParticleEmitterBundle(void)
 
 void msParticleEmitterBundle::removeInactiveEmitters()
 {
-	msParticleEmitterList emittersToDelete;
+    msParticleEmitterList emittersToDelete;
 
     for(msParticleEmitterIterator ei = this->emitterList.begin(); ei != this->emitterList.end(); ei ++)
         if(!(*ei)->isAlive())
@@ -33,13 +33,13 @@ void msParticleEmitterBundle::removeInactiveEmitters()
 
 void msParticleEmitterBundle::addParticleEmitter(msParticleEmitterSettings &settings)
 {
-	this->emitterList.push_back(new msParticleEmitter(settings));
+    this->emitterList.push_back(new msParticleEmitter(settings));
 }
 
 void msParticleEmitterBundle::update(float delta)
 {
-	for(msParticleEmitterIterator ei = this->emitterList.begin(); ei != this->emitterList.end(); ei ++)
-		(*ei)->update(delta);
+    for(msParticleEmitterIterator ei = this->emitterList.begin(); ei != this->emitterList.end(); ei ++)
+        (*ei)->update(delta);
 }
 
 msParticleData* msParticleEmitterBundle::getParticleData()

@@ -9,26 +9,26 @@
 
 using namespace std;
 
-typedef std::vector<msShaderProgram*>	   msShaderProgramList;
-typedef msShaderProgramList::iterator	msShaderProgramIterator;
+typedef std::vector<msShaderProgram*>       msShaderProgramList;
+typedef msShaderProgramList::iterator    msShaderProgramIterator;
 
 
 class msShaderPrograms
 {
-	msFrameBuffer *m_mainFrameBuffer;
+    msFrameBuffer *m_mainFrameBuffer;
 
 public:
-	msShaderPrograms(void);
-	~msShaderPrograms(void);
+    msShaderPrograms(void);
+    ~msShaderPrograms(void);
 
-	msShaderProgramList m_shaderPrograms;
+    msShaderProgramList m_shaderPrograms;
 
-	// load programs description
-	bool loadFile(string fileName);
+    // load programs description
+    bool loadFile(string fileName);
 
-	msShaderProgram* getProgramByName( const char *name );
-	msFrameBuffer* getMainFrameBuffer();
-	void setMainFrameBuffer(GLint frameBufferId);
+    msShaderProgram* getProgramByName( const char *name );
+    msFrameBuffer* getMainFrameBuffer();
+    void setMainFrameBuffer(GLint frameBufferId);
 
-	void notifySizeChanged( GLint width, GLint height );
+    void notifySizeChanged( GLint width, GLint height );
 };

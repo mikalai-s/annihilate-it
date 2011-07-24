@@ -30,40 +30,40 @@ typedef msFrameBufferList::iterator msFrameBufferIterator;
 
 class msShaderProgram
 {
-	const char *m_name;
-	GLuint m_handle;
-	GLuint m_vertexShaderHandle;
-	GLuint m_fragmentShaderHandle;
+    const char *m_name;
+    GLuint m_handle;
+    GLuint m_vertexShaderHandle;
+    GLuint m_fragmentShaderHandle;
 
-	msUniformList m_uniforms;
-	msAttributeList m_attributes;
-	msTextureList m_textures;
-	msFrameBufferList m_frameBuffers;
+    msUniformList m_uniforms;
+    msAttributeList m_attributes;
+    msTextureList m_textures;
+    msFrameBufferList m_frameBuffers;
 
-	bool loadShader( string &fileName, GLuint shaderHandle );
+    bool loadShader( string &fileName, GLuint shaderHandle );
 
 public:
-	msShaderProgram(string &name, string &vertexShaderFileName, string &fragmentShaderFileName);
-	~msShaderProgram(void);
+    msShaderProgram(string &name, string &vertexShaderFileName, string &fragmentShaderFileName);
+    ~msShaderProgram(void);
 
-	GLuint getHandle();
-	const char *getName();
+    GLuint getHandle();
+    const char *getName();
 
-	bool link();
+    bool link();
 
-	void linkAllDescriptors();
+    void linkAllDescriptors();
 
-	void addUniform( msUniform *uniform );
-	void addAttribute( msAttribute *attribute );
-	void addTexture( msTexture *texture );
-	void addFrameBuffer(msFrameBuffer *frameBuffer);
+    void addUniform( msUniform *uniform );
+    void addAttribute( msAttribute *attribute );
+    void addTexture( msTexture *texture );
+    void addFrameBuffer(msFrameBuffer *frameBuffer);
 
-	msTexture* getTexture(const char *name);
-	msUniform* getUniform(const char *name);
-	msAttribute* getAttribute(const char *name);
-	msFrameBuffer* getFrameBuffer(const char *name);
+    msTexture* getTexture(const char *name);
+    msUniform* getUniform(const char *name);
+    msAttribute* getAttribute(const char *name);
+    msFrameBuffer* getFrameBuffer(const char *name);
 
-	void use();
-	void notifyScreenChanged( GLint width, GLint height );
-	void notifySizeChanged( GLint width, GLint height );
+    void use();
+    void notifyScreenChanged( GLint width, GLint height );
+    void notifySizeChanged( GLint width, GLint height );
 };

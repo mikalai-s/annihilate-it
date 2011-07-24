@@ -85,12 +85,12 @@ int TGALoad(const char *Filename, char **Buffer, int *Width, int *Height, int *D
     }
 
     fread(&Header, sizeof(TGA_HEADER), 1, fp);
-	
-	*Width=  Header.Width;
-	*Height= Header.Height;
-	*Depth=  Header.ColorDepth;
+    
+    *Width=  Header.Width;
+    *Height= Header.Height;
+    *Depth=  Header.ColorDepth;
 
-	if(Header.ColorDepth== 24)
+    if(Header.ColorDepth== 24)
     {
         RGBTRIPLE1 *Buffer24;
 
@@ -126,9 +126,9 @@ int TGALoad(const char *Filename, char **Buffer, int *Width, int *Height, int *D
 
             free(Buffer24);
             return(1);
-        }		
+        }        
     }
-	else if(Header.ColorDepth == 32){
+    else if(Header.ColorDepth == 32){
         RGBQUAD1 *Buffer32;
 
         Buffer32= (RGBQUAD1*)malloc(sizeof(RGBQUAD1) * (*Width) * (*Height));
@@ -164,7 +164,7 @@ int TGALoad(const char *Filename, char **Buffer, int *Width, int *Height, int *D
 
             free(Buffer32);
             return(1);
-        }		
+        }        
     }
     return(0);
 }

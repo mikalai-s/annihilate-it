@@ -44,44 +44,44 @@ struct msParticleEmitterSettings
 
 class msParticleEmitter
 {
-	friend class msParticleEmitterBundle;
+    friend class msParticleEmitterBundle;
 
 protected:
 
     msParticleEmitterSettings settings;
     
-	GLfloat emissionRate;
-	GLfloat emitCounter;	
-	GLuint verticesID;
-	GLuint colorsID;		
-	
-	GLuint particleIndex;
-	GLfloat elapsedTime;
+    GLfloat emissionRate;
+    GLfloat emitCounter;    
+    GLuint verticesID;
+    GLuint colorsID;        
+    
+    GLuint particleIndex;
+    GLfloat elapsedTime;
 
-	bool addParticle();
+    bool addParticle();
 
-	void initParticle(int particleIndex);
+    void initParticle(int particleIndex);
 
-	void stopParticleEmitter();
+    void stopParticleEmitter();
 
 public:
-	GLboolean active;
-	GLuint particleCount;
-	msParticle *particles;
+    GLboolean active;
+    GLuint particleCount;
+    msParticle *particles;
     msParticleData *particleData;
-	GLboolean blendAdditive;
+    GLboolean blendAdditive;
 
-	msParticleEmitter(msParticleEmitterSettings &settings);
+    msParticleEmitter(msParticleEmitterSettings &settings);
 
-	void update(GLfloat delta);
+    void update(GLfloat delta);
 
     GLboolean isAlive();
 
-	~msParticleEmitter(void);
+    ~msParticleEmitter(void);
 
     static void unitTest();
 
 protected:
-	virtual msParticleData* resolveParticleData();
-	virtual void deleteParticleData();
+    virtual msParticleData* resolveParticleData();
+    virtual void deleteParticleData();
 };

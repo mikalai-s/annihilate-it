@@ -3,10 +3,10 @@
 
 msAnimation::msAnimation(GLint delayCount, GLint count, msAnimationContext *context, void (*stepCallback)(msAnimationContext*))
 {
-	m_delayCount = delayCount;
-	m_count = count;
+    m_delayCount = delayCount;
+    m_count = count;
     m_context = context;
-	m_performStepCallback = (stepCallback == 0) ? _defaultStep : stepCallback;
+    m_performStepCallback = (stepCallback == 0) ? _defaultStep : stepCallback;
 
     m_context->m_animation = this;
 }
@@ -18,31 +18,31 @@ msAnimation::~msAnimation()
 
 void msAnimation::_defaultStep(msAnimationContext *context)
 {
-	msFromToAnimationContext<GLfloat> *c = (msFromToAnimationContext<GLfloat>*)context;
-	GLfloat step = (c->getTo() - c->getFrom()) / c->getAnimation()->getCount();
-	c->setFrom(c->getFrom() + step);
+    msFromToAnimationContext<GLfloat> *c = (msFromToAnimationContext<GLfloat>*)context;
+    GLfloat step = (c->getTo() - c->getFrom()) / c->getAnimation()->getCount();
+    c->setFrom(c->getFrom() + step);
 }
 
-// NOTE:	don't forget to delete animation object after the last perform step has executed
+// NOTE:    don't forget to delete animation object after the last perform step has executed
 GLint msAnimation::performStep()
 {
-	if(m_performStepCallback == 0)
-		return 0;
+    if(m_performStepCallback == 0)
+        return 0;
 
-	if(m_count <= 0)
-		return 0;
+    if(m_count <= 0)
+        return 0;
 
-	if(m_delayCount > 0)
-	{
-		m_delayCount --;
-		return 1;
-	}
+    if(m_delayCount > 0)
+    {
+        m_delayCount --;
+        return 1;
+    }
 
-	m_performStepCallback(m_context);
+    m_performStepCallback(m_context);
 
-	m_count --;
+    m_count --;
 
-	return (m_count >= 0);
+    return (m_count >= 0);
 }
 
 msAnimationContext* msAnimation::getContext()

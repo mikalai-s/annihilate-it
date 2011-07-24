@@ -30,35 +30,35 @@ using namespace std;
 
 struct msColor
 {
-	GLfloat r;
-	GLfloat g;
-	GLfloat b;
-	GLfloat a;
+    GLfloat r;
+    GLfloat g;
+    GLfloat b;
+    GLfloat a;
 
-	msColor()
-	{
-		r = 0.0f;
-		g = 0.0f;
-		b = 0.0f;
-		a = 1.0f;
-	}
+    msColor()
+    {
+        r = 0.0f;
+        g = 0.0f;
+        b = 0.0f;
+        a = 1.0f;
+    }
 
-	msColor(float rr, float gg, float bb, float aa)
-	{
-		r = rr;
-		g = gg;
-		b = bb;
-		a = aa;
-	}
+    msColor(float rr, float gg, float bb, float aa)
+    {
+        r = rr;
+        g = gg;
+        b = bb;
+        a = aa;
+    }
 };
 
 
 struct msQuad
 {
-	GLfloat bl_x, bl_y;
-	GLfloat br_x, br_y;
-	GLfloat tl_x, tl_y;
-	GLfloat tr_x, tr_y;
+    GLfloat bl_x, bl_y;
+    GLfloat br_x, br_y;
+    GLfloat tl_x, tl_y;
+    GLfloat tr_x, tr_y;
 };
 
 
@@ -95,59 +95,59 @@ struct msPoint2f
 
 struct msPoint3f
 {
-	GLfloat x;
-	GLfloat y;
-	GLfloat z;
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
 
-	msPoint3f()
-	{
-		x = 0;
-		y = 0;
-		z = 0;
-	}
+    msPoint3f()
+    {
+        x = 0;
+        y = 0;
+        z = 0;
+    }
 
-	msPoint3f(float xx, float yy)
-	{
-		x = xx;
-		y = yy;
-		z = 0;
-	}
+    msPoint3f(float xx, float yy)
+    {
+        x = xx;
+        y = yy;
+        z = 0;
+    }
 
-	msPoint3f(float xx, float yy, float zz)
-	{
-		x = xx;
-		y = yy;
-		z = zz;
-	}
+    msPoint3f(float xx, float yy, float zz)
+    {
+        x = xx;
+        y = yy;
+        z = zz;
+    }
 };
 
 struct msPointi
 {
-	int x;
-	int y;
-	int z;
+    int x;
+    int y;
+    int z;
 
-	msPointi()
-	{
-		x = 0;
-		y = 0;
-		z = 0;
-	}
+    msPointi()
+    {
+        x = 0;
+        y = 0;
+        z = 0;
+    }
 
-	msPointi(int xx, int yy)
-	{
-		x = xx;
-		y = yy;
-		z = 0;
-	}
+    msPointi(int xx, int yy)
+    {
+        x = xx;
+        y = yy;
+        z = 0;
+    }
 };
 
 
 
 struct msSizef
 {
-	float width;
-	float height;
+    float width;
+    float height;
 };
 
 struct msSizei
@@ -159,10 +159,10 @@ struct msSizei
 
 struct msBorder
 {
-	GLint left;
-	GLint top;
-	GLint right;
-	GLint bottom;
+    GLint left;
+    GLint top;
+    GLint right;
+    GLint bottom;
 
     msColor color;
 };
@@ -173,65 +173,65 @@ static const msVector Vector2fZero = {0.0f, 0.0f};
 
 static inline msVector Vector2fMake(GLfloat x, GLfloat y)
 {
-	msVector v;
-	v.x = x;
-	v.y = y;
-	return v;
+    msVector v;
+    v.x = x;
+    v.y = y;
+    return v;
 }
 
 static inline msColor colorMake(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
-	msColor c;
-	c.r = red;
-	c.g = green;
-	c.b = blue;
-	c.a = alpha;
-	return c;
+    msColor c;
+    c.r = red;
+    c.g = green;
+    c.b = blue;
+    c.a = alpha;
+    return c;
 }
 
 static inline msVector Vector2fMultiply(msVector v, GLfloat s)
 {
-	msVector vv;
-	vv.x = v.x * s;
-	vv.y = v.y * s;
-	return vv;
+    msVector vv;
+    vv.x = v.x * s;
+    vv.y = v.y * s;
+    return vv;
 }
 
 static inline msVector Vector2fAdd(msVector v1, msVector v2)
 {
-	msVector vr;
-	vr.x = v1.x + v2.x;
-	vr.y = v1.y + v2.y;
-	return vr;
+    msVector vr;
+    vr.x = v1.x + v2.x;
+    vr.y = v1.y + v2.y;
+    return vr;
 }
 
 static inline msVector Vector2fSub(msVector v1, msVector v2)
 {
-	msVector vr;
-	vr.x = v1.x - v2.x;
-	vr.y = v1.y - v2.y;
-	return vr;
+    msVector vr;
+    vr.x = v1.x - v2.x;
+    vr.y = v1.y - v2.y;
+    return vr;
 }
 
 static inline GLfloat Vector2fDot(msVector v1, msVector v2)
 {
-	return (GLfloat) v1.x * v2.x + v1.y * v2.y;
+    return (GLfloat) v1.x * v2.x + v1.y * v2.y;
 }
 
 static inline GLfloat Vector2fLength(msVector v)
 {
-	return (GLfloat) sqrt(Vector2fDot(v, v));
+    return (GLfloat) sqrt(Vector2fDot(v, v));
 }
 
 static inline msVector Vector2fNormalize(msVector v)
 {
-	return Vector2fMultiply(v, 1.0f/Vector2fLength(v));
+    return Vector2fMultiply(v, 1.0f/Vector2fLength(v));
 } 
 */
 static inline char* copyString(string src)
 {
-	char *dest = new char [src.length() + 1];
-	memcpy( dest, src.c_str(), src.length() + 1);
-	return dest;
+    char *dest = new char [src.length() + 1];
+    memcpy( dest, src.c_str(), src.length() + 1);
+    return dest;
 }
 

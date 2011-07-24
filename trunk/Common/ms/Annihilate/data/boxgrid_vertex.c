@@ -16,10 +16,10 @@ void main()
 {
     vec4 p = mvp * position;
 
-	gl_Position = p;
+    gl_Position = p;
 
-	_borderTexelLeft = borderTexelLeft;
-	_borderTexelBottom = borderTexelBottom;
-	_borderTexelRight = borderTexelRight;
-	_borderTexelTop = borderTexelTop;
+    _borderTexelLeft = borderTexelLeft;
+    _borderTexelBottom = borderTexelBottom;
+    _borderTexelRight = borderTexelRight;
+    _borderTexelTop = borderTexelTop;
 }

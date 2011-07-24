@@ -10,31 +10,31 @@ class msShaderPrograms;
 
 class msFrameBuffer
 {
-	friend class msShaderPrograms;
+    friend class msShaderPrograms;
 
 private:
 
-	const char *m_name;
-	msTexture *m_texture;
-	GLuint m_id;
+    const char *m_name;
+    msTexture *m_texture;
+    GLuint m_id;
 
-	GLsizei m_width;
-	GLsizei m_height;
+    GLsizei m_width;
+    GLsizei m_height;
 
-	GLboolean m_requiresBufferDeletion;
+    GLboolean m_requiresBufferDeletion;
 
-	msFrameBuffer(GLuint id);
+    msFrameBuffer(GLuint id);
 
 public:
-	
-	msFrameBuffer(string &name, GLuint textureUnit);
-	~msFrameBuffer(void);
+    
+    msFrameBuffer(string &name, GLuint textureUnit);
+    ~msFrameBuffer(void);
 
-	const char* getName();
+    const char* getName();
 
-	void bind();
-	bool isComplete();
-	msTexture* getTexture();
-	void setSize( GLint width, GLint height );
-	static msFrameBuffer *main;
+    void bind();
+    bool isComplete();
+    msTexture* getTexture();
+    void setSize( GLint width, GLint height );
+    static msFrameBuffer *main;
 };

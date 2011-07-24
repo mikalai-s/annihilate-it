@@ -31,31 +31,31 @@ typedef msBoxExplMap::iterator msBoxExplIterator;
 
 struct msMoveAction
 {
-	msPointi from;
-	msPointi to;
-	int direction;
+    msPointi from;
+    msPointi to;
+    int direction;
 
-	msMoveAction(int x1, int y1, int x2, int y2, int dir)
-	{
-		from = msPointi(x1, y1);
-		to = msPointi(x2, y2);
-		direction = dir;
-	}
+    msMoveAction(int x1, int y1, int x2, int y2, int dir)
+    {
+        from = msPointi(x1, y1);
+        to = msPointi(x2, y2);
+        direction = dir;
+    }
 
-	msMoveAction invert()
-	{
-		int dir = direction;
-		if(dir == MS_BOX_SHIFT_DOWN)
-			dir = MS_BOX_SHIFT_TOP;
-		else if(dir == MS_BOX_SHIFT_LEFT)
-			dir = MS_BOX_SHIFT_RIGHT;
-		else if(dir == MS_BOX_SHIFT_TOP)
-			dir = MS_BOX_SHIFT_DOWN;
-		else if(dir == MS_BOX_SHIFT_RIGHT)
-			dir = MS_BOX_SHIFT_LEFT;
+    msMoveAction invert()
+    {
+        int dir = direction;
+        if(dir == MS_BOX_SHIFT_DOWN)
+            dir = MS_BOX_SHIFT_TOP;
+        else if(dir == MS_BOX_SHIFT_LEFT)
+            dir = MS_BOX_SHIFT_RIGHT;
+        else if(dir == MS_BOX_SHIFT_TOP)
+            dir = MS_BOX_SHIFT_DOWN;
+        else if(dir == MS_BOX_SHIFT_RIGHT)
+            dir = MS_BOX_SHIFT_LEFT;
 
-		return msMoveAction(to.x, to.y, from.x, from.y, dir);
-	}
+        return msMoveAction(to.x, to.y, from.x, from.y, dir);
+    }
 };
 
 typedef list<msMoveAction> msMoveActionList;
@@ -64,12 +64,12 @@ typedef msMoveActionList::iterator msMoveActionIterator;
 
 struct msHideAction
 {
-	msBox *box;
+    msBox *box;
 
-	msHideAction(msBox *b)
-	{
-		box = b;
-	}
+    msHideAction(msBox *b)
+    {
+        box = b;
+    }
 };
 
 typedef list<msHideAction> msHideActionList;
@@ -80,12 +80,12 @@ typedef msHideActionList::iterator msHideActionIterator;
 
 class msBoxGrid : public msGrid<msBox*>
 {
-	msSizef size;
+    msSizef size;
 
     msGrid<msPoint3f*> *m_coordinateGrid;
 
-	msMoveActionList _lastMovedBoxes;
-	msHideActionList _lastHiddenBoxes;
+    msMoveActionList _lastMovedBoxes;
+    msHideActionList _lastHiddenBoxes;
     
     int m_lastKnownDirection;
 
@@ -93,81 +93,81 @@ class msBoxGrid : public msGrid<msBox*>
 
 
 
-	void _refreshBorders();
+    void _refreshBorders();
 
   
 
-	void _refreshBoxFaceBorders(int y, int x, msBoxFaceData* (*faceResolver)(msBox *));
+    void _refreshBoxFaceBorders(int y, int x, msBoxFaceData* (*faceResolver)(msBox *));
 
     static void _borderInvertion( msAnimationContext *context );
 
     void _animateBorderInvertion( msBox * box, GLint positive );
 
-	GLint _checkNeighbours(GLint y1, GLint x1, GLint y2, GLint x2);
+    GLint _checkNeighbours(GLint y1, GLint x1, GLint y2, GLint x2);
 
-	GLint* _generate_random_pattern(GLint numRows, GLint numCols, GLint numColors);
+    GLint* _generate_random_pattern(GLint numRows, GLint numCols, GLint numColors);
 
-	void display2();
+    void display2();
 
 
 
-	void _removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &removedBoxes, GLint level);
+    void _removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &removedBoxes, GLint level);
 
-	GLint _checkBoxColor(GLint y, GLint x, GLint colorIndex, msBoxFaceData* (*faceResolver)(msBox *));
+    GLint _checkBoxColor(GLint y, GLint x, GLint colorIndex, msBoxFaceData* (*faceResolver)(msBox *));
 
-	void _exchangeBoxes(msGrid<msBox*> *grid, GLint y1, GLint x1, GLint y2, GLint x2);
+    void _exchangeBoxes(msGrid<msBox*> *grid, GLint y1, GLint x1, GLint y2, GLint x2);
 
-	void _animateBoxHiding(msBoxExplMap &boxes);
+    void _animateBoxHiding(msBoxExplMap &boxes);
 
-	void _moveBox(msMoveAction move);
+    void _moveBox(msMoveAction move);
 
-	void _shiftDown(msGrid<msBox*> *grid, msMoveActionList *moves);
+    void _shiftDown(msGrid<msBox*> *grid, msMoveActionList *moves);
 
-	void _shiftTop(msGrid<msBox*> *grid, msMoveActionList *moves);
+    void _shiftTop(msGrid<msBox*> *grid, msMoveActionList *moves);
 
-	void _shiftLeft(msGrid<msBox*> *grid, msMoveActionList *moves);
+    void _shiftLeft(msGrid<msBox*> *grid, msMoveActionList *moves);
 
-	void _shiftRight(msGrid<msBox*> *grid, msMoveActionList *moves);
+    void _shiftRight(msGrid<msBox*> *grid, msMoveActionList *moves);
 
-	msAnimationBundle m_animations;
+    msAnimationBundle m_animations;
 
-	static void doBoxesFallingCallback(msAnimationContext *c);
+    static void doBoxesFallingCallback(msAnimationContext *c);
 
 public:
 
-	msBoxData *m_boxVertexData;
+    msBoxData *m_boxVertexData;
 
-	msPalette *m_palette;
+    msPalette *m_palette;
 
-	msAnimationBundle *getAnimations();
+    msAnimationBundle *getAnimations();
 
-	void init(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth);
+    void init(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth);
 
-	msBoxGrid(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth);
+    msBoxGrid(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth);
 
-	msBoxGrid(msPalette *palette, GLint numColors, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth);
+    msBoxGrid(msPalette *palette, GLint numColors, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth);
 
-	~msBoxGrid();
+    ~msBoxGrid();
 
-	void display();	
+    void display();    
     
     void setDirection(int direction)
     {
         m_lastKnownDirection = direction;
     }
 
-	void removeSimilarItems(GLint y, GLint x);
+    void removeSimilarItems(GLint y, GLint x);
 
-	void shiftPendentBoxes(GLint direction);
+    void shiftPendentBoxes(GLint direction);
 
-	GLint checkNeighbours(GLint y1, GLint x1, GLint y2, GLint x2);
+    GLint checkNeighbours(GLint y1, GLint x1, GLint y2, GLint x2);
 
-	static void unitTest();
+    static void unitTest();
 
-	void removeSimilarItemsAtPoint( msPoint3f touchPoint );
+    void removeSimilarItemsAtPoint( msPoint3f touchPoint );
 
-	void undo();
-	void _moveBackBox( msMoveAction action );
+    void undo();
+    void _moveBackBox( msMoveAction action );
     void show();
     void hide();
 
@@ -176,7 +176,7 @@ public:
     {
         for(int y = 0; y < m_rowCount; y ++)
             for(int x = 0; x < m_columnCount; x ++)
-				memcpy(&getItem(y, x)->m_verticesData->backFace, &faces[y * m_columnCount + x], sizeof(msBoxFaceData));                
+                memcpy(&getItem(y, x)->m_verticesData->backFace, &faces[y * m_columnCount + x], sizeof(msBoxFaceData));                
     }
 
     void extractPattern(msBoxFaceData *faces)
@@ -185,11 +185,11 @@ public:
         {
             for(int x = 0; x < m_columnCount; x ++)
             {
-				msBox *box = getItem(y, x);
-				memcpy(&faces[y * m_columnCount + x], &box->getVerticesData()->frontFace, sizeof(msBoxFaceData));
+                msBox *box = getItem(y, x);
+                memcpy(&faces[y * m_columnCount + x], &box->getVerticesData()->frontFace, sizeof(msBoxFaceData));
                 
                 if(!box->isVisible())
-					faces[y * m_columnCount + x].colorIndex = 0;
+                    faces[y * m_columnCount + x].colorIndex = 0;
             }
         }
     }

@@ -5,17 +5,17 @@
 class msAnimationBase
 {
 public:
-	GLint m_delayCount;
-	GLint m_count;
+    GLint m_delayCount;
+    GLint m_count;
 
-	static void _defaultStep(msAnimationBase *anim);
+    static void _defaultStep(msAnimationBase *anim);
 
 public:
 
-	void (*m_performStep)(msAnimationBase*);
+    void (*m_performStep)(msAnimationBase*);
 
-	msAnimationBase(GLint delayCount, GLint count, void (*stepCallback)(msAnimationBase*));
-	~msAnimationBase();
+    msAnimationBase(GLint delayCount, GLint count, void (*stepCallback)(msAnimationBase*));
+    ~msAnimationBase();
 
-	GLint performStep();
+    GLint performStep();
 };

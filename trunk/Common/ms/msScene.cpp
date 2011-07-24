@@ -53,10 +53,10 @@ msScene::msScene()
 
 void msScene::newSize(GLint width, GLint height)
 {
-	m_size.width = width;
-	m_size.height = height;
-	
-	m_shaders.notifySizeChanged(width, height);	
+    m_size.width = width;
+    m_size.height = height;
+    
+    m_shaders.notifySizeChanged(width, height);    
 }
 
 
@@ -71,11 +71,11 @@ void msScene::newSize(GLint width, GLint height)
 msScene::~msScene()
 {
     if(m_palette != 0)
-	    delete m_palette;
+        delete m_palette;
     if(m_boxGrid != 0)
-	    delete m_boxGrid;
+        delete m_boxGrid;
     if(m_renderer != 0)
-	    delete m_renderer;
+        delete m_renderer;
 }
 
 //=================================================================================================================================
@@ -122,24 +122,24 @@ bool msScene::loadData(string filename)
 
 GLfloat colorMap[][4] = 
 {
-	//{1.0f, 1.0f, 1.0f, 1.0f},//temp white
-	{0.000f, 0.000f, 0.000f, 1.0f}, // black
-	{0.851f, 0.851f, 0.851f, 1.0f}, // gray	
-	{1.000f, 0.412f, 0.337f, 1.0f}, // red
-	{0.467f, 0.357f, 1.000f, 1.0f}, // blue
-	{0.502f, 0.824f, 0.776f, 1.0f}, // green	
-	{0.714f, 1.000f, 0.608f, 1.0f}, // lime
-	{0.843f, 0.420f, 1.000f, 1.0f}, // violet
-	{0.478f, 0.824f, 1.000f, 1.0f}, // turquoise
-	{1.000f, 0.757f, 0.369f, 1.0f}, // yellow
+    //{1.0f, 1.0f, 1.0f, 1.0f},//temp white
+    {0.000f, 0.000f, 0.000f, 1.0f}, // black
+    {0.851f, 0.851f, 0.851f, 1.0f}, // gray    
+    {1.000f, 0.412f, 0.337f, 1.0f}, // red
+    {0.467f, 0.357f, 1.000f, 1.0f}, // blue
+    {0.502f, 0.824f, 0.776f, 1.0f}, // green    
+    {0.714f, 1.000f, 0.608f, 1.0f}, // lime
+    {0.843f, 0.420f, 1.000f, 1.0f}, // violet
+    {0.478f, 0.824f, 1.000f, 1.0f}, // turquoise
+    {1.000f, 0.757f, 0.369f, 1.0f}, // yellow
 };
 
 void msScene::init()
 {
-	m_shaders.notifySizeChanged(m_size.width, m_size.height);
+    m_shaders.notifySizeChanged(m_size.width, m_size.height);
 
-	// init palette
-	m_palette = new msPalette(colorMap, 8);    
+    // init palette
+    m_palette = new msPalette(colorMap, 8);    
 }
 
 
@@ -154,23 +154,23 @@ void msScene::mouseClick(int x, int y, int direction)
     if(m_boxGrid == 0 || m_renderer == 0)
         return;
 
-	msPoint3f touchPoint;
-	touchPoint.x = ((GLfloat)x / (GLfloat)m_size.width);
-	touchPoint.y = ((GLfloat)y / (GLfloat)m_size.height);
-	
+    msPoint3f touchPoint;
+    touchPoint.x = ((GLfloat)x / (GLfloat)m_size.width);
+    touchPoint.y = ((GLfloat)y / (GLfloat)m_size.height);
+    
     m_boxGrid->setDirection(direction);
-	m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
+    m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
 }
 
 void msScene::setMainFrameBuffer(GLint id)
 {
-	m_shaders.setMainFrameBuffer(id);
+    m_shaders.setMainFrameBuffer(id);
 }
 
 void msScene::undoLastMove()
 {
-	if(m_boxGrid != 0)
-		m_boxGrid->undo();
+    if(m_boxGrid != 0)
+        m_boxGrid->undo();
 }
 
 void msScene::start()
@@ -189,7 +189,7 @@ void msScene::start()
         delete m_boxGrid;
         delete m_renderer;
     }
-	
+    
     GLint pattern[NUM_ROWS * NUM_COLS] = 
     {
         3, 2, 1, 4,// 5, //6, 7, 2, 1, 4,
@@ -209,13 +209,13 @@ void msScene::start()
         //1,1,
         //2,1,
     };
-	
+    
    //m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
-	m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+    m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
     m_renderer = new msBoxGridRenderer(&m_shaders, m_boxGrid);
    
-	m_boxGrid->setBackPattern(backFaces);
+    m_boxGrid->setBackPattern(backFaces);
     
     
 

@@ -10,25 +10,25 @@ typedef msParticleEmitterList::iterator msParticleEmitterIterator;
 
 class msParticleEmitterBundle
 {
-	// list of particle emitters
-	msParticleEmitterList emitterList;
+    // list of particle emitters
+    msParticleEmitterList emitterList;
 
-	// shared particle data
-	msParticleData *particleData;
+    // shared particle data
+    msParticleData *particleData;
     int particleDataCount;
 
 public:
-	msParticleEmitterBundle(void);
-	~msParticleEmitterBundle(void);
+    msParticleEmitterBundle(void);
+    ~msParticleEmitterBundle(void);
 
-	void removeInactiveEmitters();
+    void removeInactiveEmitters();
 
-	void addParticleEmitter(msParticleEmitterSettings &settings);
+    void addParticleEmitter(msParticleEmitterSettings &settings);
 
-	void update(float delta);
+    void update(float delta);
 
-	msParticleData* getParticleData();
+    msParticleData* getParticleData();
 
-	int getParticleCount();
+    int getParticleCount();
 };
 

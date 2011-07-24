@@ -15,7 +15,7 @@
 
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGrid)
 {
-	m_shaders = shaders;
+    m_shaders = shaders;
 
     // calculate projection matrix
     float fovy = 45.0f / 180.0f * 3.1415926f;
@@ -29,7 +29,10 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGr
     m_projectionMatrix = *transform.getMatrix();
     
     m_boxGrid = boxGrid;
-    
+
+    // buffer for particles array
+    glGenBuffers(1, &this->particleBuffer);
+    this->particleBufferSize = 0;
     
     // buffer for vertices data
     unsigned long size = sizeof(msBoxData) * boxGrid->getRowCount() * boxGrid->getColCount();   
@@ -90,11 +93,12 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGr
 
 msBoxGridRenderer::~msBoxGridRenderer()
 {
-	for(msWaveIterator wi = m_waves.begin(); wi != m_waves.end(); wi ++)
-	{
-		delete (*wi);
-	}
+    for(msWaveIterator wi = m_waves.begin(); wi != m_waves.end(); wi ++)
+    {
+        delete (*wi);
+    }
     
+    glDeleteBuffers(1, &this->particleBuffer);
     glDeleteBuffers(1, &m_indexBuffer);
     glDeleteBuffers(1, &m_vertexBuffer);
     glDeleteBuffers(1, &m_textureOrientationBuffer);
@@ -131,12 +135,12 @@ void msBoxGridRenderer::draw(msSizef size)
         }
     }
     
-	m_boxGrid->getAnimations()->performStep();
+    m_boxGrid->getAnimations()->performStep();
 }
 
 void msBoxGridRenderer::_drawBoxGrid(msShaderProgram *program, msSizef size)
 {
-    glCullFace(GL_FRONT);	
+    glCullFace(GL_FRONT);    
     
     for(int y = 0; y < m_boxGrid->m_rowCount; y ++)
     {
@@ -148,21 +152,21 @@ void msBoxGridRenderer::_drawBoxGrid(msShaderProgram *program, msSizef size)
             if(box->getRequiresExplosion())
             {
                 GLfloat ratio = m_boxGrid->getRowCount() / size.height / 2.0f + m_boxGrid->getColCount() / size.width / 2.0f;
-				explosionsBundle.addParticleEmitter(_createExplosionSettings(box->getExplosionPoint(), ratio));
+                explosionsBundle.addParticleEmitter(_createExplosionSettings(box->getExplosionPoint(), ratio));
             }
             
-			if(box->getRequiresWave())
-			{
-				m_waves.push_back(_createWave(box));
-			}
-            
-			if(box->isVisible())
+            if(box->getRequiresWave())
             {
-				glCullFace(GL_FRONT);
-				_drawBox(program, m_boxGrid->m_palette, box, &box->getVerticesData()->frontFace, true);
-				
-				glCullFace(GL_BACK);
-				_drawBox(program, m_boxGrid->m_palette, box, &box->getVerticesData()->backFace, false);
+                m_waves.push_back(_createWave(box));
+            }
+            
+            if(box->isVisible())
+            {
+                glCullFace(GL_FRONT);
+                _drawBox(program, m_boxGrid->m_palette, box, &box->getVerticesData()->frontFace, true);
+                
+                glCullFace(GL_BACK);
+                _drawBox(program, m_boxGrid->m_palette, box, &box->getVerticesData()->backFace, false);
             }
         }
     }
@@ -171,36 +175,36 @@ void msBoxGridRenderer::_drawBoxGrid(msShaderProgram *program, msSizef size)
 
 void msBoxGridRenderer::_drawBox(msShaderProgram *program, msPalette *palette, msBox *box, msBoxFaceData *faceData, bool front)
 {        
-	program->getUniform("borderExternalLineTex")->set1i(program->getTexture("borderExternalLineTex")->getUnit());
+    program->getUniform("borderExternalLineTex")->set1i(program->getTexture("borderExternalLineTex")->getUnit());
     program->getUniform("borderInternalLineTex")->set1i(program->getTexture("borderInternalLineTex")->getUnit());
-	program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
+    program->getUniform("borderCornerTex")->set1i(program->getTexture("borderCornerTex")->getUnit());
 
-	program->getUniform("lineBorder")->set4iv(1, faceData->getHasBorder());
+    program->getUniform("lineBorder")->set4iv(1, faceData->getHasBorder());
 
-	msColor faceColor = *palette->getColor(faceData->getColorIndex());
-	faceColor.r *= faceData->getColorDisturbance().r;
-	faceColor.g *= faceData->getColorDisturbance().g;
-	faceColor.b *= faceData->getColorDisturbance().b;
-	faceColor.a *= faceData->getColorDisturbance().a;
-	program->getUniform("color")->set4fv(1, (GLfloat*)&faceColor);
+    msColor faceColor = *palette->getColor(faceData->getColorIndex());
+    faceColor.r *= faceData->getColorDisturbance().r;
+    faceColor.g *= faceData->getColorDisturbance().g;
+    faceColor.b *= faceData->getColorDisturbance().b;
+    faceColor.a *= faceData->getColorDisturbance().a;
+    program->getUniform("color")->set4fv(1, (GLfloat*)&faceColor);
 
 
-	msMatrixTransform transform;
+    msMatrixTransform transform;
     float boxAngle = box->getAngle();
     if(boxAngle != 0.0f)
     {
         msPoint3f angleVector = box->getAngleVector();
         msPoint3f center = box->getVerticesData()->getCenter();
-	    transform.translate(-center.x, -center.y, -center.z)
-		    ->rotate(boxAngle, angleVector)
-		    ->translate(center.x, center.y, center.z);
+        transform.translate(-center.x, -center.y, -center.z)
+            ->rotate(boxAngle, angleVector)
+            ->translate(center.x, center.y, center.z);
     }
 
     transform.multiplyMatrix(m_projectionMatrix);
     
-	program->getUniform("mvp")->setMatrix4fv(1, false, transform.getMatrix()->getArray());
-	
-	program->getUniform("cornerBorder")->set4iv(1, faceData->getHasCornerBorder());
+    program->getUniform("mvp")->setMatrix4fv(1, false, transform.getMatrix()->getArray());
+    
+    program->getUniform("cornerBorder")->set4iv(1, faceData->getHasCornerBorder());
     
     
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);    
@@ -208,42 +212,42 @@ void msBoxGridRenderer::_drawBox(msShaderProgram *program, msPalette *palette, m
     program->getAttribute("position")->setPointerAndEnable(3, GL_FLOAT, GL_FALSE, sizeof(msPoint3f), (void*)offset);
     
     glBindBuffer(GL_ARRAY_BUFFER, m_textureOrientationBuffer);    
-	program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)0);
-	program->getAttribute("borderTexelBottom")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 8));
-	program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 16));
-	program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 24));
+    program->getAttribute("borderTexelLeft")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)0);
+    program->getAttribute("borderTexelBottom")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 8));
+    program->getAttribute("borderTexelRight")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 16));
+    program->getAttribute("borderTexelTop")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 24));
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glEnable(GL_BLEND);
-	glEnable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);    
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
 
-	glDisable(GL_BLEND);
-	
-	glDisable(GL_CULL_FACE);	
+    glDisable(GL_BLEND);
+    
+    glDisable(GL_CULL_FACE);    
 }
 
 
 void msBoxGridRenderer::_removeInactiveEmitters()
 {
-	this->explosionsBundle.removeInactiveEmitters();
+    this->explosionsBundle.removeInactiveEmitters();
 
-	msWaveList wavesToDelete;
+    msWaveList wavesToDelete;
 
-	for(msWaveIterator wi = m_waves.begin(); wi != m_waves.end(); wi ++)
-		if(!(*wi)->isAlive())
-			wavesToDelete.push_back(*wi);
+    for(msWaveIterator wi = m_waves.begin(); wi != m_waves.end(); wi ++)
+        if(!(*wi)->isAlive())
+            wavesToDelete.push_back(*wi);
 
-	for(msWaveIterator wi = wavesToDelete.begin(); wi != wavesToDelete.end(); wi ++)
-	{
-		delete (*wi);
-		m_waves.remove(*wi);
-	}
+    for(msWaveIterator wi = wavesToDelete.begin(); wi != wavesToDelete.end(); wi ++)
+    {
+        delete (*wi);
+        m_waves.remove(*wi);
+    }
 }
 
 
@@ -253,25 +257,25 @@ msParticleEmitterSettings msBoxGridRenderer::_createExplosionSettings(msPoint3f 
     float k = 0.03333333f / ratio;
 
     msParticleEmitterSettings settings;
-	settings.position                   = msPoint2f(location.x, location.y);
-	settings.sourcePositionVariance     = msPoint2f(0.031f, 0.031f);
-	settings.speed                      = 0.0001f;
-	settings.speedVariance              = 0.007f;
-	settings.particleLifeSpan           = 0.5f;
-	settings.particleLifeSpanVariance   = 0.25f;
-	settings.angle                      = 0.0f;
-	settings.angleVariance              = 360.0f;
-	settings.gravity                    = msPoint2f(0.0f, -0.0000025f);
-	settings.startColor                 = msColor(1.0f, 0.5f, 0.05f, 1.0f);
-	settings.startColorVariance         = msColor(0.0f, 0.0f, 0.0f, 0.5f);
-	settings.finishColor                = msColor(0.2f, 0.0f, 0.0f, 0.0f);
-	settings.finishColorVariance        = msColor(0.2f, 0.0f, 0.0f, 0.0f);
-	settings.maxParticles               = 200;
-	settings.particleSize               = 50 * k;
-	settings.particleSizeVariance       = 3 * k;
-	settings.duration                   = 0.125f;
-	settings.blendAdditive              = GL_TRUE;
-	return settings;
+    settings.position                   = msPoint2f(location.x, location.y);
+    settings.sourcePositionVariance     = msPoint2f(0.031f, 0.031f);
+    settings.speed                      = 0.0001f;
+    settings.speedVariance              = 0.007f;
+    settings.particleLifeSpan           = 0.5f;
+    settings.particleLifeSpanVariance   = 0.25f;
+    settings.angle                      = 0.0f;
+    settings.angleVariance              = 360.0f;
+    settings.gravity                    = msPoint2f(0.0f, -0.0000025f);
+    settings.startColor                 = msColor(1.0f, 0.5f, 0.05f, 1.0f);
+    settings.startColorVariance         = msColor(0.0f, 0.0f, 0.0f, 0.5f);
+    settings.finishColor                = msColor(0.2f, 0.0f, 0.0f, 0.0f);
+    settings.finishColorVariance        = msColor(0.2f, 0.0f, 0.0f, 0.0f);
+    settings.maxParticles               = 200;
+    settings.particleSize               = 50 * k;
+    settings.particleSizeVariance       = 3 * k;
+    settings.duration                   = 0.125f;
+    settings.blendAdditive              = GL_TRUE;
+    return settings;
 }
 
 
@@ -296,37 +300,37 @@ void msBoxGridRenderer::_drawBoxesWithShockWave()
         _drawBoxGrid(program, m_size);
     }
 
-	// Unbind the FBO so rendering will return to the backbuffer.
-	m_shaders->getMainFrameBuffer()->bind();
+    // Unbind the FBO so rendering will return to the backbuffer.
+    m_shaders->getMainFrameBuffer()->bind();
 
-	// usual renderer
+    // usual renderer
 
-	// Bind updated texture map
+    // Bind updated texture map
     msTexture *renderTex = m_shaders->getProgramByName("boxgrid")->getFrameBuffer("renderTex")->getTexture();
     renderTex->active();
-	renderTex->bind();
+    renderTex->bind();
 
     program = m_shaders->getProgramByName("shockwave");
     program->use();
 
-	program->getUniform("tex")->set1i(renderTex->getUnit());
+    program->getUniform("tex")->set1i(renderTex->getUnit());
     
     glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);    
-	program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, (void*)0);
+    program->getAttribute("position")->setPointerAndEnable(4, GL_FLOAT, 0, 0, (void*)0);
     
     glBindBuffer(GL_ARRAY_BUFFER, m_textureOrientationBuffer);    
-	program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0);
+    program->getAttribute("texcoord")->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);    
 
-	// wave
-	for(msWaveIterator i = m_waves.begin(); i != m_waves.end(); i ++)
-	{
-		(*i)->render(program);
-		(*i)->step();
-	}
+    // wave
+    for(msWaveIterator i = m_waves.begin(); i != m_waves.end(); i ++)
+    {
+        (*i)->render(program);
+        (*i)->step();
+    }
 
-	// draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+    // draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, (void*)0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
@@ -341,7 +345,7 @@ void msBoxGridRenderer::_drawExplosions()
     program->getFrameBuffer("renderTex")->bind();
 
     // FBO attachment is complete?
-    if (program->getFrameBuffer("renderTex")->isComplete())		
+    if (program->getFrameBuffer("renderTex")->isComplete())        
     {
         // Set viewport to size of texture map and erase previous image
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -387,18 +391,35 @@ void msBoxGridRenderer::_drawExplosions()
 
 msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
 {
-	msPoint3f location = box->getVerticesData()->getCenter();	
-	location.x *= m_size.width;
-	location.y = 1.0f - location.y;
-	location.y *= m_size.height;
+    msPoint3f location = box->getVerticesData()->getCenter();    
+    location.x *= m_size.width;
+    location.y = 1.0f - location.y;
+    location.y *= m_size.height;
 
-	return new msWaveEmitter(location, m_size);
+    return new msWaveEmitter(location, m_size);
 }
 
 void msBoxGridRenderer::_drawParticles(msParticleEmitterBundle &particleEmitters, msShaderProgram &particleProgram)
 {
-	if(particleEmitters.getParticleCount() == 0)
-		return;  
+    int particlesCount = particleEmitters.getParticleCount();
+
+    if(particlesCount == 0)
+        return;
+
+    if(this->particleBufferSize < particlesCount)
+    {
+        // if buffer size is not enough than recreate new buffer to fit the size and copy new data into it
+        glBindBuffer(GL_ARRAY_BUFFER, this->particleBuffer);
+        glBufferData(GL_ARRAY_BUFFER, particlesCount * sizeof(msParticleData), particleEmitters.getParticleData(), GL_DYNAMIC_DRAW);
+        this->particleBufferSize = particlesCount;
+    }
+    else
+    {
+        // if buffer size is enough for particles than just copy new data into buffer
+        glBindBuffer(GL_ARRAY_BUFFER, this->particleBuffer);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, particlesCount * sizeof(msParticleData), particleEmitters.getParticleData());
+    }
+
 
     msTexture *particleTexture = particleProgram.getTexture("u_texture");
     glEnable(GL_BLEND);
@@ -407,7 +428,7 @@ void msBoxGridRenderer::_drawParticles(msParticleEmitterBundle &particleEmitters
     particleTexture->active();
     particleTexture->bind();
 
-	// todo: make blendAddictive as global setting for all emitters inside bundle
+    // todo: make blendAddictive as global setting for all emitters inside bundle
     //if(pe->blendAdditive)
     //{
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -415,18 +436,18 @@ void msBoxGridRenderer::_drawParticles(msParticleEmitterBundle &particleEmitters
     //else
     //{
         //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //}
-
-	msParticleData *particleData = particleEmitters.getParticleData();
+    //}    
 
     // Load the vertex attributes
-    particleProgram.getAttribute("a_position")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &particleData[0].position);
-    particleProgram.getAttribute("a_color")->setPointerAndEnable(4, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &particleData[0].color);
-    particleProgram.getAttribute("a_size")->setPointerAndEnable(1, GL_FLOAT, GL_FALSE, sizeof(msParticleData), &particleData[0].size);
+    particleProgram.getAttribute("a_position")->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(msParticleData), (void*)0);
+    particleProgram.getAttribute("a_color")->setPointerAndEnable(4, GL_FLOAT, GL_FALSE, sizeof(msParticleData), (void*)offsetof(msParticleData, color));
+    particleProgram.getAttribute("a_size")->setPointerAndEnable(1, GL_FLOAT, GL_FALSE, sizeof(msParticleData), (void*)offsetof(msParticleData, size));
     particleProgram.getUniform("u_texture")->set1i(particleTexture->getUnit());
 
-    glDrawArrays( GL_POINTS, 0, particleEmitters.getParticleCount());
+    glDrawArrays( GL_POINTS, 0, particlesCount);
 
     glDisable ( GL_TEXTURE_2D );
     glDisable(GL_BLEND);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

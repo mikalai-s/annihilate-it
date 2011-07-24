@@ -6,80 +6,80 @@
 struct msBoxFaceData
 {
 public:
-	// color information
-	int colorIndex;
+    // color information
+    int colorIndex;
 
-	// color disturbance
-	msColor colorDisturbance;
+    // color disturbance
+    msColor colorDisturbance;
 
-	// borders
-	int hasBorder[4]; // left, top, right, bottom
-	int hasCornerBorder[4]; // LeftTop, TopRight, RightBottom, BottomLeft
+    // borders
+    int hasBorder[4]; // left, top, right, bottom
+    int hasCornerBorder[4]; // LeftTop, TopRight, RightBottom, BottomLeft
 
 public:
 
-	int *getHasBorder() const
-	{
-		return (int*)hasBorder;
-	}
+    int *getHasBorder() const
+    {
+        return (int*)hasBorder;
+    }
 
-	int *getHasCornerBorder() const
-	{
-		return (int*)hasCornerBorder;
-	}
+    int *getHasCornerBorder() const
+    {
+        return (int*)hasCornerBorder;
+    }
 
-	bool hasLeft()
-	{
-		return !hasBorder[0];
-	}
+    bool hasLeft()
+    {
+        return !hasBorder[0];
+    }
 
-	bool hasTop()
-	{
-		return !hasBorder[1];
-	}
+    bool hasTop()
+    {
+        return !hasBorder[1];
+    }
 
-	bool hasRight()
-	{
-		return !hasBorder[2];
-	}
+    bool hasRight()
+    {
+        return !hasBorder[2];
+    }
 
-	bool hasBottom()
-	{
-		return !hasBorder[3];
-	}
+    bool hasBottom()
+    {
+        return !hasBorder[3];
+    }
 
-	int getColorIndex() const 
-	{
-		return colorIndex;
-	}
+    int getColorIndex() const 
+    {
+        return colorIndex;
+    }
 
-	msColor getColorDisturbance() const
-	{
-		return colorDisturbance;
-	}
+    msColor getColorDisturbance() const
+    {
+        return colorDisturbance;
+    }
 };
 
 struct msBoxData
 {
-	// todo: make provate
+    // todo: make provate
 public:
-	// vertices
-    msPoint3f vertices[4];	
+    // vertices
+    msPoint3f vertices[4];    
 
-	// rotation angle and vector
-	float angle;
-	msPoint3f angleVector;
+    // rotation angle and vector
+    float angle;
+    msPoint3f angleVector;
 
-	// front face
-	msBoxFaceData frontFace;	
+    // front face
+    msBoxFaceData frontFace;    
 
-	// back face
-	msBoxFaceData backFace;
+    // back face
+    msBoxFaceData backFace;
 
 public:
-	msBoxData()
-	{
-	}
+    msBoxData()
+    {
+    }
 
     bool isInside(msPoint3f *point)
     {
@@ -94,7 +94,7 @@ public:
 
     void copy( msBoxData *data );
 
-	void exchange( msBoxData *source );
+    void exchange( msBoxData *source );
 
     void move(msPoint3f d)
     {
@@ -114,124 +114,124 @@ public:
         vertices[3].y = vertices[0].y + height;
     }
 
-	void copyVertices( msBoxData *source )
-	{
-		memcpy(this->vertices, source->vertices, sizeof(this->vertices));
-	}
+    void copyVertices( msBoxData *source )
+    {
+        memcpy(this->vertices, source->vertices, sizeof(this->vertices));
+    }
 };
 
 
 class msBox
 {
-	friend class  msBoxGrid;
+    friend class  msBoxGrid;
 
 private:
 
-	msPoint3f *m_location;
+    msPoint3f *m_location;
 
-	// animations related
-	msAnimationBundle *m_animations;
+    // animations related
+    msAnimationBundle *m_animations;
 
-	GLboolean m_requiresExplosion;
-	msPoint3f m_explosionPoint;
+    GLboolean m_requiresExplosion;
+    msPoint3f m_explosionPoint;
 
     GLboolean m_requiresWave;
 
-	bool m_visible;
+    bool m_visible;
 
 private:
 
-	msBoxData *m_verticesData;
+    msBoxData *m_verticesData;
 
 private:
 
-	static void _linearFalling(msAnimationContext *c);
+    static void _linearFalling(msAnimationContext *c);
 
     static void _finishLinearFalling(msAnimationContext *c);
 
-	static void _appearing(msAnimationContext *c);
+    static void _appearing(msAnimationContext *c);
 
     
 
-	template <class T>
-	static void _setFlagCallback(msAnimationContext *c)
-	{
-		msKeyValueAnimationContext<T, GLfloat> *context = (msKeyValueAnimationContext<T, GLfloat>*)c;
-		*(context->getKey()) = context->getValue();
-	}
+    template <class T>
+    static void _setFlagCallback(msAnimationContext *c)
+    {
+        msKeyValueAnimationContext<T, GLfloat> *context = (msKeyValueAnimationContext<T, GLfloat>*)c;
+        *(context->getKey()) = context->getValue();
+    }
 
     
 
-	template <class T>
-	void _setFlag(GLint delay, T *flag, T value)
-	{
-		msKeyValueAnimationContext<T*, GLfloat> *context = new msKeyValueAnimationContext<T*, GLfloat>(flag, value);
-		getAnimations()->add(new msAnimation(delay, 1, context, _setFlagCallback<T*>));
-	}
+    template <class T>
+    void _setFlag(GLint delay, T *flag, T value)
+    {
+        msKeyValueAnimationContext<T*, GLfloat> *context = new msKeyValueAnimationContext<T*, GLfloat>(flag, value);
+        getAnimations()->add(new msAnimation(delay, 1, context, _setFlagCallback<T*>));
+    }
 
 protected:
-	msBox();
+    msBox();
 
 public:
-	msBox(float x, float y, float width, float height);
+    msBox(float x, float y, float width, float height);
 
-	msBox(msBoxData *verticesData);
+    msBox(msBoxData *verticesData);
 
-	~msBox();
+    ~msBox();
 
-	void makeInvisible();
+    void makeInvisible();
 
-	GLboolean isVisible();
+    GLboolean isVisible();
 
-	msAnimationBundle *getAnimations();
+    msAnimationBundle *getAnimations();
 
-	static void unitTest();
+    static void unitTest();
 
-	void fall(GLint delay, GLint direction, msPoint3f *newVertices);
+    void fall(GLint delay, GLint direction, msPoint3f *newVertices);
 
     void unfall( int delay, int  direction, msPoint3f *newVertices);
 
     void hide(int delay);
 
-	void show( int delay );
+    void show( int delay );
 
     void wave(GLint delay);
 
-	void _init(msBoxData *verticesData);
+    void _init(msBoxData *verticesData);
 
-	
-	int getColorIndex() const
-	{
-		return m_verticesData->frontFace.getColorIndex();
-	}
+    
+    int getColorIndex() const
+    {
+        return m_verticesData->frontFace.getColorIndex();
+    }
 
-	msColor getColorDisturbance() const
-	{
-		return m_verticesData->frontFace.getColorDisturbance();
-	}
-	
+    msColor getColorDisturbance() const
+    {
+        return m_verticesData->frontFace.getColorDisturbance();
+    }
+    
 
-	msPoint3f *getLocation() const
-	{
-		return m_location;
-	}	
+    msPoint3f *getLocation() const
+    {
+        return m_location;
+    }    
 
-	
-	
-	msPoint3f getExplosionPoint() const
-	{
-		return m_explosionPoint;
-	}
+    
+    
+    msPoint3f getExplosionPoint() const
+    {
+        return m_explosionPoint;
+    }
 
-	GLboolean getRequiresExplosion()
-	{
-		return m_requiresExplosion;
-	}
+    GLboolean getRequiresExplosion()
+    {
+        return m_requiresExplosion;
+    }
 
-	GLboolean getRequiresWave()
-	{
-		return m_requiresWave;
-	}
+    GLboolean getRequiresWave()
+    {
+        return m_requiresWave;
+    }
 
     msBoxData *getVerticesData() const
     {

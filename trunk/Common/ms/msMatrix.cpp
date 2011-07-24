@@ -21,19 +21,19 @@ msMatrix::~msMatrix(void)
 
 void msMatrix::multiply(msMatrix &m)
 {
-	msMatrix tmp;
-	for (int i = 0; i < 4; i ++)
-	{
-		tmp.m_value[i][0] =	
-			(m_value[i][0] * m.m_value[0][0]) + (m_value[i][1] * m.m_value[1][0]) + (m_value[i][2] * m.m_value[2][0]) + (m_value[i][3] * m.m_value[3][0]) ;
-		tmp.m_value[i][1] =	
-			(m_value[i][0] * m.m_value[0][1]) + (m_value[i][1] * m.m_value[1][1]) + (m_value[i][2] * m.m_value[2][1]) + (m_value[i][3] * m.m_value[3][1]) ;
-		tmp.m_value[i][2] =	
-			(m_value[i][0] * m.m_value[0][2]) + (m_value[i][1] * m.m_value[1][2]) + (m_value[i][2] * m.m_value[2][2]) + (m_value[i][3] * m.m_value[3][2]) ;
-		tmp.m_value[i][3] =	
-			(m_value[i][0] * m.m_value[0][3]) + (m_value[i][1] * m.m_value[1][3]) + (m_value[i][2] * m.m_value[2][3]) + (m_value[i][3] * m.m_value[3][3]) ;
-	}
-	memcpy(this->m_value, tmp.m_value, sizeof(float) * 16);
+    msMatrix tmp;
+    for (int i = 0; i < 4; i ++)
+    {
+        tmp.m_value[i][0] =    
+            (m_value[i][0] * m.m_value[0][0]) + (m_value[i][1] * m.m_value[1][0]) + (m_value[i][2] * m.m_value[2][0]) + (m_value[i][3] * m.m_value[3][0]) ;
+        tmp.m_value[i][1] =    
+            (m_value[i][0] * m.m_value[0][1]) + (m_value[i][1] * m.m_value[1][1]) + (m_value[i][2] * m.m_value[2][1]) + (m_value[i][3] * m.m_value[3][1]) ;
+        tmp.m_value[i][2] =    
+            (m_value[i][0] * m.m_value[0][2]) + (m_value[i][1] * m.m_value[1][2]) + (m_value[i][2] * m.m_value[2][2]) + (m_value[i][3] * m.m_value[3][2]) ;
+        tmp.m_value[i][3] =    
+            (m_value[i][0] * m.m_value[0][3]) + (m_value[i][1] * m.m_value[1][3]) + (m_value[i][2] * m.m_value[2][3]) + (m_value[i][3] * m.m_value[3][3]) ;
+    }
+    memcpy(this->m_value, tmp.m_value, sizeof(float) * 16);
 }
 
 msPoint3f msMatrix::multiply(msPoint3f &p)
@@ -47,11 +47,11 @@ msPoint3f msMatrix::multiply(msPoint3f &p)
 
 msMatrix msMatrix::identity()
 {
-	msMatrix identity;
-	memset(identity.m_value, 0, sizeof(msMatrix));
-	identity.m_value[0][0] = 1.0f;
-	identity.m_value[1][1] = 1.0f;
-	identity.m_value[2][2] = 1.0f;
-	identity.m_value[3][3] = 1.0f;
-	return identity;
+    msMatrix identity;
+    memset(identity.m_value, 0, sizeof(msMatrix));
+    identity.m_value[0][0] = 1.0f;
+    identity.m_value[1][1] = 1.0f;
+    identity.m_value[2][2] = 1.0f;
+    identity.m_value[3][3] = 1.0f;
+    return identity;
 }

@@ -101,7 +101,7 @@ void RedirectIOToConsole()
 //=================================================================================================================================
 void ResizeScene( int nWidth, int nHeight )
 {
-	g_scene->newSize(nWidth, nHeight);
+    g_scene->newSize(nWidth, nHeight);
    glViewport( 0, 0, nWidth, nHeight);
 }
 
@@ -344,11 +344,11 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
    case WM_KEYDOWN:
       {
         g_keys[wParam] = TRUE;
-	    if(wParam == 8)
-	    {
-		    // Backspace is pressed then undo
-		    g_scene->undoLastMove();
-	    } 
+        if(wParam == 8)
+        {
+            // Backspace is pressed then undo
+            g_scene->undoLastMove();
+        } 
         else if(wParam == 13)
         {
             g_scene->start();
@@ -367,10 +367,10 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
       }
 
    case WM_LBUTTONDOWN:
-	   {
-		   g_scene->mouseClick(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), MS_BOX_SHIFT_DOWN);
-		   return 0;
-	   }
+       {
+           g_scene->mouseClick(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), MS_BOX_SHIFT_DOWN);
+           return 0;
+       }
 
    case WM_SIZE:
       {
@@ -385,14 +385,14 @@ LRESULT CALLBACK WndProc( HWND      hWnd, UINT      uMsg, WPARAM    wParam, LPAR
        case 43: 
            
 #ifdef PERFORMANCE_TUNING
-		   double newstart = static_cast <double> (clock ());
+           double newstart = static_cast <double> (clock ());
 
-		   double time = frameCount / ( (newstart - start) / static_cast <double> (CLOCKS_PER_SEC));    
+           double time = frameCount / ( (newstart - start) / static_cast <double> (CLOCKS_PER_SEC));    
 
-		   printf("%f.2\r\n", time);
+           printf("%f.2\r\n", time);
 
-		   frameCount = 0;
-		   start = newstart;
+           frameCount = 0;
+           start = newstart;
 #else
             // process the 60fps timer
             DrawScene();
@@ -436,7 +436,7 @@ int WINAPI WinMain( HINSTANCE  hInstance,
                     LPSTR      lpCmdLine,
                     int        nCmdShow)
 {
-	UINT res = WinExec ("C:\\Program Files (x86)\\NVIDIA Corporation\\win_x86_es2emu\\ait\\esTriangle\\copy.bat", SW_SHOWNORMAL);
+    UINT res = WinExec ("C:\\Program Files (x86)\\NVIDIA Corporation\\win_x86_es2emu\\ait\\esTriangle\\copy.bat", SW_SHOWNORMAL);
 
    MSG  msg;
    BOOL done=FALSE;
@@ -500,16 +500,16 @@ int WINAPI WinMain( HINSTANCE  hInstance,
       else
       {
 #ifdef PERFORMANCE_TUNING
-		  if ( ( g_active && !DrawScene() ) || g_keys[VK_ESCAPE] )
-		  {
-			  done=TRUE;  // ESC or DrawGLScene Signalled A Quit
-		  }
-		  else
-		  {
-			  eglSwapBuffers( g_egl.dsp, g_egl.surf );
+          if ( ( g_active && !DrawScene() ) || g_keys[VK_ESCAPE] )
+          {
+              done=TRUE;  // ESC or DrawGLScene Signalled A Quit
+          }
+          else
+          {
+              eglSwapBuffers( g_egl.dsp, g_egl.surf );
 
-			  frameCount ++;
-		  }
+              frameCount ++;
+          }
 #else
          if ( ( g_active && FALSE ) || g_keys[VK_ESCAPE] )
          {
