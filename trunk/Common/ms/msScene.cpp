@@ -147,8 +147,10 @@ void msScene::init()
 
 void msScene::drawFrame()
 {
-    //if(this->renderer != 0)
-        this->renderer->draw(this->size);
+    if(this->renderer == 0 || this->boxGrid == 0)
+        return;
+
+    this->renderer->draw(this->size);
 }
 
 void msScene::mouseClick(int x, int y, int direction)
