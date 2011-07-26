@@ -359,11 +359,18 @@ void msBoxGridRenderer::_drawBox(msBox *box)
     this->sr.BoxGrid.Attribute.BorderTexelTop->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 24));
 #endif
 
+	float k = 3.5f;
+
 	float maxBRatio = 1.5707963f;
-	float brightnessRatio = 1 - ((abs(boxAngle) > maxBRatio) ? maxBRatio : abs(boxAngle)) / maxBRatio / 4;
+	float angle = abs(boxAngle);
+	float brightnessRatio = 1 - ((angle > maxBRatio) ? maxBRatio : angle) / maxBRatio / k;
       
     glCullFace(GL_FRONT);
     _drawFace(&box->getVerticesData()->frontFace, brightnessRatio);
+
+	angle -= 3.1415926f;
+	angle = abs(angle);
+	brightnessRatio = 1 - ((angle > maxBRatio) ? maxBRatio : angle) / maxBRatio / k;
     
     glCullFace(GL_BACK);
     _drawFace(&box->getVerticesData()->backFace, brightnessRatio);

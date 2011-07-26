@@ -653,14 +653,14 @@ void msBoxGrid::undo()
     _refreshBorders();
 }
 
-    void _rotationStep(msAnimationContext *c)
-    {
-        msKeyValueAnimationContext<float*, float> *context = (msKeyValueAnimationContext<float*, float>*)c;
+void _rotationStep(msAnimationContext *c)
+{
+	msKeyValueAnimationContext<float*, float> *context = (msKeyValueAnimationContext<float*, float>*)c;
 
-        float *angle = context->getKey();
+	float *angle = context->getKey();
 
-        *angle += (context->getValue() - *angle) / context->getAnimation()->getCount();
-    }
+	*angle += (context->getValue() - *angle) / context->getAnimation()->getCount();
+}
 
 void msBoxGrid::show()
 {
@@ -674,12 +674,12 @@ void msBoxGrid::show()
             if(box->getVerticesData()->frontFace.getColorIndex() == box->getVerticesData()->backFace.getColorIndex())
                 continue;
 
-            box->verticesData->angle = 180.0 * 3.1415926f / 180.0f;
+            box->verticesData->angle = 180.0f * 3.1415926f / 180.0f;
 
             msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(&box->verticesData->angle, 0.0f);
-            msAnimation *rotation = new msAnimation(((y + x))  * (double)3 * (double)rand() / (double)RAND_MAX, 15, context, _rotationStep);
+            msAnimation *rotation = new msAnimation(((y + x))  * (double)3 * (double)rand() / (double)RAND_MAX, 50, context, _rotationStep);
             box->getAnimations()->add(rotation);
-        }
+		}
     }
 }
 
