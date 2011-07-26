@@ -582,8 +582,52 @@ void msBoxGrid::_refreshBorders()
     {
         for(int x = 0; x < this->columnCount; x ++)
         {
-            _refreshBoxFaceBorders(y, x, _frontFaceResolver);
-            _refreshBoxFaceBorders(y, x, _backFaceResolver);
+			msBoxFaceData *face = &getItem(y, x)->getVerticesData()->frontFace;
+
+			// the following variables reflects neighbors with the same color
+			bool left = _checkBoxColor(y, x - 1, face->getColorIndex(), _frontFaceResolver);
+			bool leftTop = _checkBoxColor(y - 1, x - 1, face->getColorIndex(), _frontFaceResolver);
+			bool top = _checkBoxColor(y - 1, x, face->getColorIndex(), _frontFaceResolver);
+			bool topRight = _checkBoxColor(y - 1, x + 1, face->getColorIndex(), _frontFaceResolver);
+			bool right = _checkBoxColor(y, x + 1, face->getColorIndex(), _frontFaceResolver);
+			bool rightBottom = _checkBoxColor(y + 1, x + 1, face->getColorIndex(), _frontFaceResolver);
+			bool bottom = _checkBoxColor(y + 1, x, face->getColorIndex(), _frontFaceResolver);
+			bool bottomLeft = _checkBoxColor(y + 1, x - 1, face->getColorIndex(), _frontFaceResolver);
+
+			face->hasBorder[0] = !left;
+			face->hasBorder[1] = !top;
+			face->hasBorder[2] = !right;
+			face->hasBorder[3] = !bottom;
+
+			face->hasCornerBorder[0] = left & top & !leftTop;
+			face->hasCornerBorder[1] = top & right & !topRight;        
+			face->hasCornerBorder[2] = right & bottom & !rightBottom;
+			face->hasCornerBorder[3] = bottom & left & !bottomLeft;
+
+            //_refreshBoxFaceBorders(y, x, _frontFaceResolver);
+            //_refreshBoxFaceBorders(y, x, _backFaceResolver);
+
+			face = &getItem(y, x)->getVerticesData()->backFace;
+
+			// the following variables reflects neighbors with the same color
+			 left = _checkBoxColor(y, x + 1, face->getColorIndex(), _backFaceResolver);
+			 leftTop = _checkBoxColor(y - 1, x + 1, face->getColorIndex(), _backFaceResolver);
+			 top = _checkBoxColor(y - 1, x, face->getColorIndex(), _backFaceResolver);
+			 topRight = _checkBoxColor(y - 1, x - 1, face->getColorIndex(), _backFaceResolver);
+			 right = _checkBoxColor(y, x - 1, face->getColorIndex(), _backFaceResolver);
+			 rightBottom = _checkBoxColor(y + 1, x - 1, face->getColorIndex(), _backFaceResolver);
+			 bottom = _checkBoxColor(y + 1, x, face->getColorIndex(), _backFaceResolver);
+			 bottomLeft = _checkBoxColor(y + 1, x + 1, face->getColorIndex(), _backFaceResolver);
+
+			face->hasBorder[0] = !left;
+			face->hasBorder[1] = !top;
+			face->hasBorder[2] = !right;
+			face->hasBorder[3] = !bottom;
+
+			face->hasCornerBorder[0] = left & top & !leftTop;
+			face->hasCornerBorder[1] = top & right & !topRight;        
+			face->hasCornerBorder[2] = right & bottom & !rightBottom;
+			face->hasCornerBorder[3] = bottom & left & !bottomLeft;
         }
     }
 }
@@ -687,5 +731,3 @@ void msBoxGrid::hide()
 {
     
 }
-
-
