@@ -176,9 +176,9 @@ void msBoxGrid::_animateBoxHiding(msBoxExplMap &boxesMap)
     for(msBoxExplIterator i = boxesMap.begin(); i != boxesMap.end(); i ++)
     {
         msBox *box = (*i).first;
-        int index = (*i).second;
+        int index = (*i).second;     
 
-        int o = offset + offsetStep * index;
+        int o = offset + (RANDOM_0_TO_1() + 1.0f) * index;
 
         box->hide(o);
 

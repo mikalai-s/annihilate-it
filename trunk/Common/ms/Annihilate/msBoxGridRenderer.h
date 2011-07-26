@@ -158,6 +158,8 @@ class msBoxGridRenderer
 {
 private:
     
+    GLuint boxGridVertexArrayObject, shockWaveVertexArrayObject, particleCompleteVertexArrayObject, particleCreateVertexArrayObject;
+    
     msShaderPrograms *m_shaders;
     
     msShaderReferences sr;
@@ -176,6 +178,7 @@ private:
     GLuint m_indexBuffer;
     GLuint m_vertexBuffer;
     GLuint m_textureOrientationBuffer;
+    GLuint m_textureOrientationBuffer2;
     GLuint m_positionBuffer;
     int particleBufferSize;
 private:
