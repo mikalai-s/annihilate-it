@@ -15,13 +15,13 @@ typedef msShaderProgramList::iterator    msShaderProgramIterator;
 
 class msShaderPrograms
 {
-    msFrameBuffer *m_mainFrameBuffer;
+    msFrameBuffer *mainFrameBuffer;
 
 public:
     msShaderPrograms(void);
     ~msShaderPrograms(void);
 
-    msShaderProgramList m_shaderPrograms;
+    msShaderProgramList shaderPrograms;
 
     // load programs description
     bool loadFile(string fileName);

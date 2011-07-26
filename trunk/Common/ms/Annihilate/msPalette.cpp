@@ -15,10 +15,10 @@ msPalette::msPalette(GLfloat colors[][4], GLuint numColors)
 {
     for(GLuint i = 0; i < numColors; i ++)
     {
-        m_colors[i].r = colors[i][0];
-        m_colors[i].g = colors[i][1];
-        m_colors[i].b = colors[i][2];
-        m_colors[i].a = colors[i][3];
+        this->colors[i].r = colors[i][0];
+        this->colors[i].g = colors[i][1];
+        this->colors[i].b = colors[i][2];
+        this->colors[i].a = colors[i][3];
     }
 }
 
@@ -29,23 +29,23 @@ msPalette::~msPalette()
 void msPalette::setColor(GLuint index, msColor *color)
 {
     if(index < MS_PALETTE_MAX_COLORS)
-        m_colors[index] = *color;
+        this->colors[index] = *color;
 }
 
 msColor* msPalette::getColor(GLuint index)
 { 
     if(index < MS_PALETTE_MAX_COLORS)
-        return &m_colors[index];
+        return &this->colors[index];
     return 0;
 }
 
 GLuint msPalette::getFreeIndex()
 {
     for(GLuint i = 0; i < MS_PALETTE_MAX_COLORS; i ++)
-        if(m_colors[i].r == MS_PALETTE_EMPTY_COLOR_R &&
-           m_colors[i].g == MS_PALETTE_EMPTY_COLOR_G &&
-           m_colors[i].b == MS_PALETTE_EMPTY_COLOR_B &&
-           m_colors[i].a == MS_PALETTE_EMPTY_COLOR_A)
+        if(this->colors[i].r == MS_PALETTE_EMPTY_COLOR_R &&
+           this->colors[i].g == MS_PALETTE_EMPTY_COLOR_G &&
+           this->colors[i].b == MS_PALETTE_EMPTY_COLOR_B &&
+           this->colors[i].a == MS_PALETTE_EMPTY_COLOR_A)
             return i;
     return -1;
 }
@@ -54,7 +54,7 @@ GLuint msPalette::getFreeIndex()
 void msPalette::setFreeIndex(GLuint index)
 {
     if(index < MS_PALETTE_MAX_COLORS)
-        m_colors[index] = getEmptyColor();
+        this->colors[index] = getEmptyColor();
 }
 
 

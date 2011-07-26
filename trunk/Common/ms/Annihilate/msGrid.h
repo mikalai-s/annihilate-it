@@ -6,58 +6,58 @@ template <class T>
 class msGrid
 {
 public:
-    GLint m_rowCount;
-    GLint m_columnCount;
-    T* m_items;
+    GLint rowCount;
+    GLint columnCount;
+    T* items;
 
 private: 
     GLint getIndexByYX(GLint y, GLint x)
     {
-        return y * m_columnCount + x;
+        return y * this->columnCount + x;
     }
 
 public:
     msGrid(GLint rowCount, GLint colCount)
     {
-        m_rowCount = rowCount;
-        m_columnCount = colCount;
-        m_items = (T*)calloc(rowCount * colCount, sizeof(T));
+        this->rowCount = rowCount;
+        this->columnCount = colCount;
+        this->items = (T*)calloc(rowCount * colCount, sizeof(T));
     }
 
     ~msGrid()
     {
-        free(m_items);
+        free(this->items);
     }
 
     int getRowCount()
     {
-        return m_rowCount;
+        return this->rowCount;
     }
 
     int getColCount()
     {
-        return m_columnCount;
+        return this->columnCount;
     }
 
     void setItem(GLint y, GLint x, T value)
     {
-        if(y < m_rowCount && x < m_columnCount)
-            m_items[getIndexByYX(y, x)] = value;
+        if(y < this->rowCount && x < this->columnCount)
+            this->items[getIndexByYX(y, x)] = value;
     }
 
     T getItem(GLint y, GLint x)
     {
-        if(y >= 0 && y < m_rowCount && x >= 0 && x < m_columnCount)
-            return m_items[getIndexByYX(y, x)];
+        if(y >= 0 && y < this->rowCount && x >= 0 && x < this->columnCount)
+            return this->items[getIndexByYX(y, x)];
         return 0;
     }
 
     void display()
     {
-        for(GLint y = 0; y < m_rowCount; y ++)
+        for(GLint y = 0; y < this->rowCount; y ++)
         {
-            for(GLint x = 0; x < m_columnCount; x ++)
-                printf("%d ", m_items[getIndexByYX(y, x)]);
+            for(GLint x = 0; x < this->columnCount; x ++)
+                printf("%d ", this->items[getIndexByYX(y, x)]);
             printf("\r\n");
         }        
     }

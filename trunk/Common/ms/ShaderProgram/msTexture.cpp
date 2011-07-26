@@ -16,10 +16,10 @@ msTexture::msTexture(string &name, GLuint unit)
 
 void msTexture::init(string &name, GLuint unit, const char *fileName)
 {
-    m_name = copyString(name);
-    m_unit = unit;
+    this->name = copyString(name);
+    this->unit = unit;
 
-    glGenTextures( 1, &m_id );
+    glGenTextures( 1, &this->id );
     active();
     bind();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
@@ -35,16 +35,16 @@ void msTexture::init(string &name, GLuint unit, const char *fileName)
         pImgObj = imgLoader.LoadImageFile( fileName );
         if ( pImgObj != NULL )
         {
-            m_width = pImgObj->GetWidth();
-            m_height = pImgObj->GetHeight();
+            this->width = pImgObj->GetWidth();
+            this->height = pImgObj->GetHeight();
             if ( pImgObj->GetNumChannels() == 3 )
             {
-                glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
+                glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
             }
             else
             {
                 //            assert( pImgObj->GetNumChannels() == 4 );
-                glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
+                glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, this->width, this->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pImgObj->GetDataPtr() );
             }
             delete pImgObj;
         }
@@ -53,37 +53,37 @@ void msTexture::init(string &name, GLuint unit, const char *fileName)
 
 msTexture::~msTexture(void)
 {
-    glDeleteTextures(1, &m_id);
+    glDeleteTextures(1, &this->id);
 }
 
 void msTexture::setProgram(msShaderProgram *program)
 {
-    m_program = program;
+    this->program = program;
 }
 
 void msTexture::link()
 {
-    m_location = glGetUniformLocation( m_program->getHandle(), m_name);
+    this->location = glGetUniformLocation( this->program->getHandle(), this->name);
 }
 
 GLuint msTexture::getId()
 {
-    return m_id;
+    return this->id;
 }
 
 GLuint msTexture::getUnit()
 {
-    return m_unit;
+    return this->unit;
 }
 
 GLsizei msTexture::getWidth()
 {
-    return m_width;
+    return this->width;
 }
 
 GLsizei msTexture::getHeight()
 {
-    return m_height;
+    return this->height;
 }
 
 void msTexture::bind()

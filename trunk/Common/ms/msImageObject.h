@@ -56,40 +56,40 @@ public:
    /// \brief Changes the main data from RGBA -> ARGB
    bool MakeImageARGB();
 
-   GLuint GetWidth()             { return m_width; }
-   GLuint GetHeight()            { return m_height; }
-   GLuint GetNumChannels()       { return m_numChannels; }
-   GLuint GetBitsPerChannel()    { return m_bitsPerChannel; }
-   GLuint GetBpp()               { return m_numChannels * m_bitsPerChannel; }
-   unsigned char* GetDataPtr()           { return m_data; }
-   GLuint GetCompressedType()    { return m_compressedType; }
-   GLuint GetCompressedSize()    { return m_compressedSize; }
-   unsigned char* GetCompressedDataPtr() { return m_compressedData; }
+   GLuint GetWidth()             { return this->width; }
+   GLuint GetHeight()            { return this->height; }
+   GLuint GetNumChannels()       { return this->numChannels; }
+   GLuint GetBitsPerChannel()    { return this->bitsPerChannel; }
+   GLuint GetBpp()               { return this->numChannels * this->bitsPerChannel; }
+   unsigned char* GetDataPtr()   { return this->data; }
+   GLuint GetCompressedType()    { return this->compressedType; }
+   GLuint GetCompressedSize()    { return this->compressedSize; }
+   unsigned char* GetCompressedDataPtr() { return this->compressedData; }
 
 private:
    /// The width of the texture
-   GLuint m_width;
+   GLuint width;
 
    /// The height of the texture
-   GLuint m_height;
+   GLuint height;
 
    /// The number of channels for the texture
-   GLuint m_numChannels;
+   GLuint numChannels;
 
    /// The bits per channel for the texture
-   GLuint m_bitsPerChannel;
+   GLuint bitsPerChannel;
 
    /// The data (not compressed) for the texture
-   unsigned char *m_data;
+   unsigned char *data;
 
    /// The compressed texture type
-   CompressedType m_compressedType;
+   CompressedType compressedType;
 
    /// The size of the data for the compressed texture
-   GLuint m_compressedSize;
+   GLuint compressedSize;
 
    /// The compressed data for the texture
-   unsigned char  *m_compressedData;
+   unsigned char  *compressedData;
 };
 
 #endif // _IMAGEOBJECT_H_

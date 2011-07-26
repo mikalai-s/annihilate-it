@@ -11,10 +11,10 @@ class msAttribute
 {
 
 protected:
-    const char *m_name;
-    GLint m_location;
+    const char *name;
+    GLint location;
 
-    msShaderProgram *m_program;
+    msShaderProgram *program;
 
     msAttribute();
 
@@ -34,17 +34,17 @@ public:
 
     void enableVertexArray()
     {
-        glEnableVertexAttribArray(m_location);
+        glEnableVertexAttribArray(this->location);
     }
 
     void disableVertexArray()
     {
-        glDisableVertexAttribArray(m_location);
+        glDisableVertexAttribArray(this->location);
     }
 
     void setPointer(GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer)
     {
-        glVertexAttribPointer(m_location, size, type, normalized, stride, pointer);
+        glVertexAttribPointer(this->location, size, type, normalized, stride, pointer);
     }
 
     void setPointerAndEnable(GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer)
@@ -55,41 +55,41 @@ public:
 
     void set1f(GLfloat v0)
     {
-        glVertexAttrib1f(m_location, v0);
+        glVertexAttrib1f(this->location, v0);
     }
 
     void set2f(GLfloat v0, GLfloat v1)
     {
-        glVertexAttrib2f(m_location, v0, v1);
+        glVertexAttrib2f(this->location, v0, v1);
     }
 
     void set3f(GLfloat v0, GLfloat v1, GLfloat v2)
     {
-        glVertexAttrib3f(m_location, v0, v1, v2);
+        glVertexAttrib3f(this->location, v0, v1, v2);
     }
 
     void set4f(GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
     {
-        glVertexAttrib4f(m_location, v0, v1, v2, v3);
+        glVertexAttrib4f(this->location, v0, v1, v2, v3);
     }
 
     void set1fv(const GLfloat *v)
     {
-        glVertexAttrib1fv(m_location, v);
+        glVertexAttrib1fv(this->location, v);
     }
 
     void set2fv(const GLfloat *v)
     {
-        glVertexAttrib2fv(m_location, v);
+        glVertexAttrib2fv(this->location, v);
     }
 
     void set3fv(const GLfloat *v)
     {
-        glVertexAttrib3fv(m_location, v);
+        glVertexAttrib3fv(this->location, v);
     }
 
     void set4fv(const GLfloat *v)
     {
-        glVertexAttrib4fv(m_location, v);
+        glVertexAttrib4fv(this->location, v);
     }
 };

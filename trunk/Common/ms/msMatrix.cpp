@@ -10,7 +10,7 @@ msMatrix::msMatrix(void)
 
 msMatrix::msMatrix(float v[4][4])
 {
-    memcpy(m_value, v, sizeof(float) * 16);
+    memcpy(this->value, v, sizeof(float) * 16);
 }
 
 
@@ -24,34 +24,34 @@ void msMatrix::multiply(msMatrix &m)
     msMatrix tmp;
     for (int i = 0; i < 4; i ++)
     {
-        tmp.m_value[i][0] =    
-            (m_value[i][0] * m.m_value[0][0]) + (m_value[i][1] * m.m_value[1][0]) + (m_value[i][2] * m.m_value[2][0]) + (m_value[i][3] * m.m_value[3][0]) ;
-        tmp.m_value[i][1] =    
-            (m_value[i][0] * m.m_value[0][1]) + (m_value[i][1] * m.m_value[1][1]) + (m_value[i][2] * m.m_value[2][1]) + (m_value[i][3] * m.m_value[3][1]) ;
-        tmp.m_value[i][2] =    
-            (m_value[i][0] * m.m_value[0][2]) + (m_value[i][1] * m.m_value[1][2]) + (m_value[i][2] * m.m_value[2][2]) + (m_value[i][3] * m.m_value[3][2]) ;
-        tmp.m_value[i][3] =    
-            (m_value[i][0] * m.m_value[0][3]) + (m_value[i][1] * m.m_value[1][3]) + (m_value[i][2] * m.m_value[2][3]) + (m_value[i][3] * m.m_value[3][3]) ;
+        tmp.value[i][0] =    
+            (this->value[i][0] * m.value[0][0]) + (this->value[i][1] * m.value[1][0]) + (this->value[i][2] * m.value[2][0]) + (this->value[i][3] * m.value[3][0]) ;
+        tmp.value[i][1] =    
+            (this->value[i][0] * m.value[0][1]) + (this->value[i][1] * m.value[1][1]) + (this->value[i][2] * m.value[2][1]) + (this->value[i][3] * m.value[3][1]) ;
+        tmp.value[i][2] =    
+            (this->value[i][0] * m.value[0][2]) + (this->value[i][1] * m.value[1][2]) + (this->value[i][2] * m.value[2][2]) + (this->value[i][3] * m.value[3][2]) ;
+        tmp.value[i][3] =    
+            (this->value[i][0] * m.value[0][3]) + (this->value[i][1] * m.value[1][3]) + (this->value[i][2] * m.value[2][3]) + (this->value[i][3] * m.value[3][3]) ;
     }
-    memcpy(this->m_value, tmp.m_value, sizeof(float) * 16);
+    memcpy(this->value, tmp.value, sizeof(float) * 16);
 }
 
 msPoint3f msMatrix::multiply(msPoint3f &p)
 {
     return msPoint3f(
-        p.x * m_value[0][0] + p.y * m_value[1][0] + p.z * m_value[2][0] + m_value[3][0],
-        p.x * m_value[0][1] + p.y * m_value[1][1] + p.z * m_value[2][1] + m_value[3][1],
-        p.x * m_value[0][2] + p.y * m_value[1][2] + p.z * m_value[2][1] + m_value[3][2]);
+        p.x * this->value[0][0] + p.y * this->value[1][0] + p.z * this->value[2][0] + this->value[3][0],
+        p.x * this->value[0][1] + p.y * this->value[1][1] + p.z * this->value[2][1] + this->value[3][1],
+        p.x * this->value[0][2] + p.y * this->value[1][2] + p.z * this->value[2][1] + this->value[3][2]);
 }
 
 
 msMatrix msMatrix::identity()
 {
     msMatrix identity;
-    memset(identity.m_value, 0, sizeof(msMatrix));
-    identity.m_value[0][0] = 1.0f;
-    identity.m_value[1][1] = 1.0f;
-    identity.m_value[2][2] = 1.0f;
-    identity.m_value[3][3] = 1.0f;
+    memset(identity.value, 0, sizeof(msMatrix));
+    identity.value[0][0] = 1.0f;
+    identity.value[1][1] = 1.0f;
+    identity.value[2][2] = 1.0f;
+    identity.value[3][3] = 1.0f;
     return identity;
 }

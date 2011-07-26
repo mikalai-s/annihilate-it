@@ -5,11 +5,6 @@
 #include "msBoxGrid.h"
 #include "msGrid.h"
 
-void msBoxGrid::_borderInvertion( msAnimationContext *c )
-{
-    msBorderAnimationContext *context = (msBorderAnimationContext*)c;
-    context->updateColor();
-}
 
 msBoxGrid::msBoxGrid(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth) : msGrid<msBox*>(numRows, numCols)
 {
@@ -27,16 +22,16 @@ msBoxGrid::msBoxGrid(msPalette *palette, GLint numColors, GLint numRows, GLint n
 
 void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint numCols, GLfloat gridHeight, GLfloat gridWidth)
 {
-    m_lastKnownDirection = MS_BOX_SHIFT_DOWN;
+    this->lastKnownDirection = MS_BOX_SHIFT_DOWN;
     
     float width = gridWidth / numCols, height = gridHeight / numRows;
     float curx = 0, cury = 0;
 
-    m_palette = palette;
+    this->palette = palette;
 
-    m_coordinateGrid = new msGrid<msPoint3f*>(numRows, numCols);
+    this->coordinateGrid = new msGrid<msPoint3f*>(numRows, numCols);
 
-    m_boxVertexData = (msBoxData*)malloc(sizeof(msBoxData) * numRows * numCols);
+    this->boxVertexData = (msBoxData*)malloc(sizeof(msBoxData) * numRows * numCols);
 
     size.width = gridWidth;
     size.height = gridHeight;
@@ -46,7 +41,7 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
         curx = 0;
         for(GLint x = 0; x < numCols; x ++)
         {
-            msBoxData* verticesData = &m_boxVertexData[y * numCols + x];
+            msBoxData* verticesData = &this->boxVertexData[y * numCols + x];
             verticesData->vertices[0] = msPoint3f(curx, cury, 0);
             verticesData->vertices[1] = msPoint3f(curx + width, cury, 0);
             verticesData->vertices[2] = msPoint3f(curx, cury + height, 0);
@@ -70,11 +65,11 @@ void msBoxGrid::init(msPalette *palette, GLint *pattern, GLint numRows, GLint nu
             msPoint3f* originalCoords = (msPoint3f*)malloc(sizeof(verticesData->vertices));
             memcpy(originalCoords, verticesData->vertices, sizeof(verticesData->vertices));
 
-            m_coordinateGrid->setItem(y, x, originalCoords);
+            this->coordinateGrid->setItem(y, x, originalCoords);
 
             msBox *box = new msBox(verticesData);
            /* if(palette != 0)
-                box->m_border->color = *palette->getColor(0);*/
+                box->this->border->color = *palette->getColor(0);*/
             setItem(y, x, box);
 
             curx += width;
@@ -104,32 +99,32 @@ GLint* msBoxGrid::_generate_random_pattern(GLint numRows, GLint numCols, GLint n
 
 msBoxGrid::~msBoxGrid()
 {
-    for(GLint y = 0; y < m_rowCount; y ++)
+    for(GLint y = 0; y < this->rowCount; y ++)
     {
-        for(GLint x = 0; x < m_columnCount; x ++)
+        for(GLint x = 0; x < this->columnCount; x ++)
         {
             delete getItem(y, x);
 
-            delete m_coordinateGrid->getItem(y, x);
+            delete this->coordinateGrid->getItem(y, x);
         }
     }
 
-    delete m_coordinateGrid;
+    delete this->coordinateGrid;
 
-    free(m_boxVertexData);
+    free(this->boxVertexData);
 }
 
 
 
 void msBoxGrid::display()
 {
-    for(GLint y = 0; y < m_rowCount; y ++)
+    for(GLint y = 0; y < this->rowCount; y ++)
     {
-        for(GLint x = 0; x < m_columnCount; x ++)
+        for(GLint x = 0; x < this->columnCount; x ++)
         {
             msBox *box = getItem(y, x);
             if(box->isVisible())
-                printf("%d:(%3.0f,%3.0f)  ", box->getColorIndex(), box->m_location->y, box->m_location->x);
+                printf("%d:(%3.0f,%3.0f)  ", box->getColorIndex(), box->location->y, box->location->x);
             else
                 printf("      -      ");
         }
@@ -140,9 +135,9 @@ void msBoxGrid::display()
 
 void msBoxGrid::display2()
 {
-    for(GLint y = 0; y < m_rowCount; y ++)
+    for(GLint y = 0; y < this->rowCount; y ++)
     {
-        for(GLint x = 0; x < m_columnCount; x ++)
+        for(GLint x = 0; x < this->columnCount; x ++)
         {
             msBox *box = getItem(y, x);
             if(box->isVisible())
@@ -157,7 +152,7 @@ void msBoxGrid::display2()
 
 msAnimationBundle* msBoxGrid::getAnimations()
 {
-    return &m_animations;
+    return &this->animations;
 }
 
 void msBoxGrid::doBoxesFallingCallback(msAnimationContext *c)
@@ -186,9 +181,9 @@ void msBoxGrid::_animateBoxHiding(msBoxExplMap &boxesMap)
             maxOffset = o;
     }
 
-    msKeyValueAnimationContext<msBoxGrid*, int> *c = new msKeyValueAnimationContext<msBoxGrid*, int>(this, m_lastKnownDirection);
+    msKeyValueAnimationContext<msBoxGrid*, int> *c = new msKeyValueAnimationContext<msBoxGrid*, int>(this, this->lastKnownDirection);
     msAnimation *a = new msAnimation(maxOffset + 15, 1, c, doBoxesFallingCallback);
-    m_animations.add(a);
+    this->animations.add(a);
 }
 
 
@@ -205,7 +200,7 @@ int contains(msBoxExplMap &removedBoxes, msBox *box)
 void msBoxGrid::_removeSimilarBoxes(GLint y, GLint x, GLint c, msBoxExplMap &removedBoxes, GLint level)
 {
     // out of range
-    if(x < 0 || y < 0 || x >= m_columnCount || y >= m_rowCount)
+    if(x < 0 || y < 0 || x >= this->columnCount || y >= this->rowCount)
         return;
   
     msBox *box = getItem(y, x);
@@ -281,7 +276,7 @@ void msBoxGrid::_moveBox(msMoveAction move)
     setItem(move.from.y, move.from.x, boxTo);
     setItem(move.to.y, move.to.x, boxFrom);
 
-    boxFrom->fall(0, move.direction, m_coordinateGrid->getItem(move.to.y, move.to.x));
+    boxFrom->fall(0, move.direction, this->coordinateGrid->getItem(move.to.y, move.to.x));
 
     boxTo->getVerticesData()->copyVertices(boxFrom->getVerticesData());
 }
@@ -294,16 +289,16 @@ void msBoxGrid::_moveBackBox( msMoveAction move )
     setItem(move.from.y, move.from.x, boxTo);
     setItem(move.to.y, move.to.x, boxFrom);
 
-    boxFrom->unfall(0, move.direction, m_coordinateGrid->getItem(move.to.y, move.to.x));
+    boxFrom->unfall(0, move.direction, this->coordinateGrid->getItem(move.to.y, move.to.x));
 
     boxTo->getVerticesData()->copyVertices(boxFrom->getVerticesData());
 }
 
 void msBoxGrid::_shiftDown(msGrid<msBox*> *grid, msMoveActionList *moves)
 {
-    for(GLint x = 0; x < m_columnCount; x ++)
+    for(GLint x = 0; x < this->columnCount; x ++)
     {
-        GLint y = m_rowCount - 1;
+        GLint y = this->rowCount - 1;
         while(y >= -1)
         {
             if(!grid->getItem(y, x)->isVisible())
@@ -334,23 +329,23 @@ void msBoxGrid::_shiftDown(msGrid<msBox*> *grid, msMoveActionList *moves)
 
 void msBoxGrid::_shiftTop(msGrid<msBox*> *grid, msMoveActionList *moves)
 {  
-    for(GLint x = 0; x < m_columnCount; x ++)
+    for(GLint x = 0; x < this->columnCount; x ++)
     {
         GLint y = 0;
-        while(y < m_rowCount)
+        while(y < this->rowCount)
         {
             if(!grid->getItem(y, x)->isVisible())
             {
                 // y < 0 when there are no empty boxes
-                if(y >= m_rowCount)
+                if(y >= this->rowCount)
                     break;
 
                 GLint yy = y + 1; // note: dependent on direction
-                while(yy <= m_rowCount && !grid->getItem(yy, x)->isVisible())
+                while(yy <= this->rowCount && !grid->getItem(yy, x)->isVisible())
                     yy ++;
 
                 // yy < -1 when there are no items to shift
-                if(yy > m_rowCount - 1)
+                if(yy > this->rowCount - 1)
                     break;
 
                 // shift found box
@@ -366,9 +361,9 @@ void msBoxGrid::_shiftTop(msGrid<msBox*> *grid, msMoveActionList *moves)
 
 void msBoxGrid::_shiftRight(msGrid<msBox*> *grid, msMoveActionList *moves)
 {
-    for(GLint y = 0; y < m_rowCount; y ++)
+    for(GLint y = 0; y < this->rowCount; y ++)
     {
-        GLint x = m_columnCount - 1;
+        GLint x = this->columnCount - 1;
         while(x >= -1)
         {
             if(!grid->getItem(y, x)->isVisible())
@@ -398,23 +393,23 @@ void msBoxGrid::_shiftRight(msGrid<msBox*> *grid, msMoveActionList *moves)
 
 void msBoxGrid::_shiftLeft(msGrid<msBox*> *grid, msMoveActionList *moves)
 {
-    for(GLint y = 0; y < m_rowCount; y ++)
+    for(GLint y = 0; y < this->rowCount; y ++)
     {
         GLint x = 0;
-        while(x < m_columnCount)
+        while(x < this->columnCount)
         {
             if(!grid->getItem(y, x)->isVisible())
             {
                 // y < 0 when there are no empty boxes
-                if(x >= m_columnCount)
+                if(x >= this->columnCount)
                     break;
 
                 GLint xx = x + 1; // note: dependent on direction
-                while(xx <= m_columnCount && !grid->getItem(y, xx)->isVisible())
+                while(xx <= this->columnCount && !grid->getItem(y, xx)->isVisible())
                     xx ++;
 
                 // yy < -1 when there are no items to shift
-                if(xx > m_columnCount - 1)
+                if(xx > this->columnCount - 1)
                     break;
 
                 // shift found box
@@ -431,9 +426,9 @@ void msBoxGrid::_shiftLeft(msGrid<msBox*> *grid, msMoveActionList *moves)
 void msBoxGrid::shiftPendentBoxes(GLint direction)
 {
     // create mirror grid that is going to be used for shifting investigation
-    msGrid<msBox*> mirrorGrid(m_rowCount, m_columnCount);
-    for(int y = 0; y < m_rowCount; y ++)
-        for(int x = 0; x < m_columnCount; x ++)
+    msGrid<msBox*> mirrorGrid(this->rowCount, this->columnCount);
+    for(int y = 0; y < this->rowCount; y ++)
+        for(int x = 0; x < this->columnCount; x ++)
             mirrorGrid.setItem(y, x, getItem(y, x));
 
     // clear undo storage
@@ -521,7 +516,7 @@ void msBoxGrid::unitTest()
     msBoxGrid grid(0, pattern_horiz, 3, 3, 100.0, 100.0);
     grid.display2();
 
-    grid.getItem(0, 0)->m_visible = false;
+    grid.getItem(0, 0)->visible = false;
     grid.display2();
 
     grid.shiftPendentBoxes(MS_BOX_SHIFT_TOP);
@@ -555,9 +550,9 @@ void msBoxGrid::removeSimilarItemsAtPoint( msPoint3f screenPoint )
     point.x = screenPoint.x * this->size.width;
     point.y = screenPoint.y * this->size.height;
 
-    for(int y = 0; y < m_rowCount; y ++)
+    for(int y = 0; y < this->rowCount; y ++)
     {
-        for(int x = 0; x < m_columnCount; x ++)
+        for(int x = 0; x < this->columnCount; x ++)
         {
             msBox *box = getItem(y, x);
 
@@ -583,9 +578,9 @@ msBoxFaceData* _backFaceResolver(msBox *box)
 // updates links between boxes. Boxes have links to each other if they are neighbors and have the same color
 void msBoxGrid::_refreshBorders()
 {
-    for(int y = 0; y < m_rowCount; y ++)
+    for(int y = 0; y < this->rowCount; y ++)
     {
-        for(int x = 0; x < m_columnCount; x ++)
+        for(int x = 0; x < this->columnCount; x ++)
         {
             _refreshBoxFaceBorders(y, x, _frontFaceResolver);
             _refreshBoxFaceBorders(y, x, _backFaceResolver);
@@ -623,7 +618,7 @@ void msBoxGrid::_refreshBoxFaceBorders(int y, int x, msBoxFaceData* (*faceResolv
 // checks whether a box with specified coordinates has given color
 int msBoxGrid::_checkBoxColor(GLint y, GLint x, GLint colorIndex, msBoxFaceData* (*faceResolver)(msBox *))
 {
-    if(x < 0 || x >= m_columnCount || y < 0 || y >= m_rowCount)
+    if(x < 0 || x >= this->columnCount || y < 0 || y >= this->rowCount)
         return 0;
 
     msBox *neigbor = getItem(y, x);
@@ -669,9 +664,9 @@ void msBoxGrid::undo()
 
 void msBoxGrid::show()
 {
-    for(int y = 0; y < m_rowCount; y ++)
+    for(int y = 0; y < this->rowCount; y ++)
     {
-        for(int x = 0; x < m_columnCount; x ++)
+        for(int x = 0; x < this->columnCount; x ++)
         {
             msBox *box = getItem(y, x);
 
@@ -679,9 +674,9 @@ void msBoxGrid::show()
             if(box->getVerticesData()->frontFace.getColorIndex() == box->getVerticesData()->backFace.getColorIndex())
                 continue;
 
-            box->m_verticesData->angle = 180.0 * 3.1415926f / 180.0f;
+            box->verticesData->angle = 180.0 * 3.1415926f / 180.0f;
 
-            msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(&box->m_verticesData->angle, 0.0f);
+            msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(&box->verticesData->angle, 0.0f);
             msAnimation *rotation = new msAnimation(((y + x))  * (double)3 * (double)rand() / (double)RAND_MAX, 15, context, _rotationStep);
             box->getAnimations()->add(rotation);
         }

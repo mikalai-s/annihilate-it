@@ -13,10 +13,10 @@ class msTexture : public msAttribute
 {
     friend class msFrameBuffer;
     
-    GLuint m_unit;
-    GLuint m_id;
-    GLsizei m_width;
-    GLsizei m_height;
+    GLuint unit;
+    GLuint id;
+    GLsizei width;
+    GLsizei height;
 
     void init(string &name, GLuint unit, const char *fileName = 0);
 

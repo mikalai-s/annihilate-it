@@ -9,10 +9,10 @@ public:
     ~msWaveEmitter(void);
     //void render();
     void step();
-    float m_radius;
-    float m_power;
-    msPoint3f m_location;
-    msSizef m_size;
+    float radius;
+    float power;
+    msPoint3f location;
+    msSizef size;
 
     GLboolean isAlive();
 };

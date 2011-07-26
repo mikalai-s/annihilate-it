@@ -3,45 +3,45 @@
 // The constructor is used to wrap existing FBO
 msFrameBuffer::msFrameBuffer(GLuint id)
 {
-    m_name = 0;
-    m_id = id;
-    m_texture = 0;
+    this->name = 0;
+    this->id = id;
+    this->texture = 0;
 
-    m_requiresBufferDeletion = false;
+    this->requiresBufferDeletion = false;
 }
 
 // The constructor is used to create new FBOB
 msFrameBuffer::msFrameBuffer(string &name, GLuint textureUnit)
 {
-    m_name = copyString(name);
-    m_texture = new msTexture(name, textureUnit);
+    this->name = copyString(name);
+    this->texture = new msTexture(name, textureUnit);
 
     // Generate handles for two Frame Buffer Objects
-    glGenFramebuffers(1, &m_id);
+    glGenFramebuffers(1, &this->id);
 
-    m_requiresBufferDeletion = true;
+    this->requiresBufferDeletion = true;
 }
 
 msFrameBuffer::~msFrameBuffer(void)
 {
-    if(m_name != 0)
-        delete m_name;
+    if(this->name != 0)
+        delete this->name;
 
-    if(m_texture != 0)
-        delete m_texture;
+    if(this->texture != 0)
+        delete this->texture;
 
-    if(m_requiresBufferDeletion)
-        glDeleteFramebuffers(1, &m_id);
+    if(this->requiresBufferDeletion)
+        glDeleteFramebuffers(1, &this->id);
 }
 
 const char* msFrameBuffer::getName()
 {
-    return m_name;
+    return this->name;
 }
 
 void msFrameBuffer::bind()
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, m_id);
+    glBindFramebuffer(GL_FRAMEBUFFER, this->id);
 }
 
 bool msFrameBuffer::isComplete()
@@ -51,21 +51,21 @@ bool msFrameBuffer::isComplete()
 
 msTexture* msFrameBuffer::getTexture()
 {
-    return m_texture;
+    return this->texture;
 }
 
 void msFrameBuffer::setSize( GLint width, GLint height )
 {
-    m_width = width;
-    m_height = height;
+    this->width = width;
+    this->height = height;
     
     // init framebuffer and texture to render to (for fire)    
-    m_texture->active();
+    this->texture->active();
     
     // Bind and configure the texture
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);    
     
     // Attach the texture to the first color buffer of an FBO and clear it
-    glBindFramebuffer(GL_FRAMEBUFFER, m_id);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture->getId(), 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, this->id);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->texture->getId(), 0);
 }

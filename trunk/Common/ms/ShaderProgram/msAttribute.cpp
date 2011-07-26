@@ -4,32 +4,32 @@
 
 msAttribute::msAttribute()
 {
-    m_name = 0;
-    m_location = -1;
+    this->name = 0;
+    this->location = -1;
 }
 
 msAttribute::msAttribute(string &name, GLint location)
 {
-    m_name = copyString(name);
-    m_location = location;
+    this->name = copyString(name);
+    this->location = location;
 }
 
 msAttribute::~msAttribute(void)
 {
-    if(m_name != 0)
-        delete m_name;
+    if(this->name != 0)
+        delete this->name;
 }
 
 void msAttribute::setProgram(msShaderProgram *program)
 {
-    m_program = program;
+    this->program = program;
 
-    glBindAttribLocation(program->getHandle(), m_location, m_name);
+    glBindAttribLocation(program->getHandle(), this->location, this->name);
 }
 
 const char* msAttribute::getName()
 {
-    return m_name;
+    return this->name;
 }
 
 void msAttribute::link()
@@ -38,5 +38,5 @@ void msAttribute::link()
 
 const GLint msAttribute::getLocation()
 {
-    return m_location;
+    return this->location;
 }

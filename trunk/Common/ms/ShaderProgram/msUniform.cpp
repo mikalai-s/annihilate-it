@@ -14,56 +14,56 @@
 // constructor for uniform with no initial value
 msUniform::msUniform(string &name)
 {
-    m_name = copyString(name);
-    m_type = -1;
+    this->name = copyString(name);
+    this->type = -1;
 }
 
 msUniform::msUniform(string &name, GLfloat v)
 {
-    m_name = copyString(name);
+    this->name = copyString(name);
 
-    m_floatData[0] = v;
-    m_type = SAMPLE_FLOAT;
+    this->floatData[0] = v;
+    this->type = SAMPLE_FLOAT;
 }
 
 msUniform::msUniform(string &name, GLfloat v[], GLuint size)
 {
-    m_name = copyString(name);
+    this->name = copyString(name);
 
     for(GLuint i = 0; i < size; i ++)
-        m_floatData[i] = v[i];
+        this->floatData[i] = v[i];
 
-    m_type = (size == 2) ? SAMPLE_FLOAT_VEC2 :
+    this->type = (size == 2) ? SAMPLE_FLOAT_VEC2 :
              (size == 3) ? SAMPLE_FLOAT_VEC3 :
              (size == 4) ? SAMPLE_FLOAT_VEC4 : 0;
 }
 
 msUniform::msUniform(string &name, GLfloat matrix[4][4])
 {
-    m_name = copyString(name);
+    this->name = copyString(name);
 
     for(GLuint i = 0; i < 4; i ++)
         for(GLuint j = 0; j < 0; j ++)
-            m_matrixData[i][j] = matrix[i][j];
-    m_type = SAMPLE_FLOAT_MAT4;
+            this->matrixData[i][j] = matrix[i][j];
+    this->type = SAMPLE_FLOAT_MAT4;
 }
 
 msUniform::msUniform(string &name, GLboolean b)
 {
-    m_name = copyString(name);
+    this->name = copyString(name);
 
-    m_floatData[0] = b;
-    m_type = SAMPLE_BOOL;
+    this->floatData[0] = b;
+    this->type = SAMPLE_BOOL;
 }
 
 msUniform::msUniform(string &name, GLboolean b[], GLuint size)
 {
-    m_name = copyString(name);
+    this->name = copyString(name);
 
     for(GLuint i = 0; i < size; i ++)
-        m_boolData[i] = b[i];
+        this->boolData[i] = b[i];
 
-    m_type = (size == 2) ? SAMPLE_BOOL_VEC2 :
+    this->type = (size == 2) ? SAMPLE_BOOL_VEC2 :
              (size == 3) ? SAMPLE_BOOL_VEC3 :
              (size == 4) ? SAMPLE_BOOL_VEC4 : 0;
 }
@@ -75,47 +75,47 @@ msUniform::~msUniform(void)
 
 void msUniform::setProgram(msShaderProgram *program)
 {
-    m_program = program;
+    this->program = program;
 }
 
 void msUniform::link()
 {
-    m_location = glGetUniformLocation( m_program->getHandle(), m_name);
+    this->location = glGetUniformLocation( this->program->getHandle(), this->name);
 
-    if(m_type == SAMPLE_FLOAT)
+    if(this->type == SAMPLE_FLOAT)
     {
-        set1f(m_floatData[0]);
+        set1f(this->floatData[0]);
     }
-    else if (m_type == SAMPLE_FLOAT_VEC2)
+    else if (this->type == SAMPLE_FLOAT_VEC2)
     {
-        set2f(m_floatData[0], m_floatData[1]);
+        set2f(this->floatData[0], this->floatData[1]);
     }
-    else if (m_type == SAMPLE_FLOAT_VEC3)
+    else if (this->type == SAMPLE_FLOAT_VEC3)
     {
-        set3f(m_floatData[0], m_floatData[1], m_floatData[2]);
+        set3f(this->floatData[0], this->floatData[1], this->floatData[2]);
     }
-    else if (m_type == SAMPLE_FLOAT_VEC4)
+    else if (this->type == SAMPLE_FLOAT_VEC4)
     {
-        set4f(m_floatData[0], m_floatData[1], m_floatData[2], m_floatData[3]);
+        set4f(this->floatData[0], this->floatData[1], this->floatData[2], this->floatData[3]);
     }
-    else if (m_type == SAMPLE_FLOAT_MAT4)
+    else if (this->type == SAMPLE_FLOAT_MAT4)
     {
-        setMatrix4fv(1, GL_FALSE, m_floatData);
+        setMatrix4fv(1, GL_FALSE, this->floatData);
     }
-    else if(m_type == SAMPLE_BOOL)
+    else if(this->type == SAMPLE_BOOL)
     {
-        set1i(m_boolData[0]);
+        set1i(this->boolData[0]);
     }
-    else if (m_type == SAMPLE_BOOL_VEC2)
+    else if (this->type == SAMPLE_BOOL_VEC2)
     {
-        set2i(m_boolData[0], m_boolData[1]);
+        set2i(this->boolData[0], this->boolData[1]);
     }
-    else if (m_type == SAMPLE_BOOL_VEC3)
+    else if (this->type == SAMPLE_BOOL_VEC3)
     {
-        set3i(m_boolData[0], m_boolData[1], m_boolData[2]);
+        set3i(this->boolData[0], this->boolData[1], this->boolData[2]);
     }
-    else if (m_type == SAMPLE_BOOL_VEC4)
+    else if (this->type == SAMPLE_BOOL_VEC4)
     {
-        set4i(m_boolData[0], m_boolData[1], m_boolData[2], m_boolData[3]);
+        set4i(this->boolData[0], this->boolData[1], this->boolData[2], this->boolData[3]);
     }
 }

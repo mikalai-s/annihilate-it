@@ -7,10 +7,10 @@ class msAnimationContext;
 class msAnimation
 {
 private:
-    GLint m_delayCount;
-    GLint m_count;
+    GLint delayCount;
+    GLint count;
 
-    msAnimationContext *m_context;
+    msAnimationContext *context;
 
     static void _defaultStep(msAnimationContext *c);
 
@@ -18,7 +18,7 @@ private:
 
 public:
 
-    void (*m_performStepCallback)(msAnimationContext*);
+    void (*performStepCallback)(msAnimationContext*);
 
     msAnimation(GLint delayCount, GLint count, msAnimationContext *context, void (*stepCallback)(msAnimationContext*));
     ~msAnimation();

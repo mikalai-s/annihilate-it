@@ -7,10 +7,10 @@
 
 msWaveEmitter::msWaveEmitter(msPoint3f location, msSizef size)
 {
-    m_radius = RADIUS_MIN;
-    m_power = 1.0f;
-    m_location = location;    
-    m_size = size;
+    this->radius = RADIUS_MIN;
+    this->power = 1.0f;
+    this->location = location;    
+    this->size = size;
 }
 
 
@@ -20,13 +20,13 @@ msWaveEmitter::~msWaveEmitter(void)
 
 void msWaveEmitter::step()
 {
-    m_radius += RADIUS_STEP;    
-    m_power += POWER_STEP;
+    this->radius += RADIUS_STEP;    
+    this->power += POWER_STEP;
 }
 
 GLboolean msWaveEmitter::isAlive()
 {
-    return m_radius < RADIUS_MAX;
+    return this->radius < RADIUS_MAX;
 }
 
 

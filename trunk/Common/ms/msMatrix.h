@@ -6,7 +6,7 @@ struct msMatrix
 {
     friend class msMatrixTransform;
 
-    float m_value[4][4];
+    float value[4][4];
 
 public:
     msMatrix(float v[4][4]);
@@ -21,6 +21,6 @@ public:
 
     float* getArray() const
     {
-        return (float*)m_value;
+        return (float*)this->value;
     }
 };

@@ -4,14 +4,14 @@ using namespace std;
 
 msShaderPrograms::msShaderPrograms(void)
 {
-    m_mainFrameBuffer = new msFrameBuffer(0);
+    this->mainFrameBuffer = new msFrameBuffer(0);
 }
 
 msShaderPrograms::~msShaderPrograms(void)
 {
-    for(msShaderProgramIterator i = m_shaderPrograms.begin(); i != m_shaderPrograms.end(); i ++)
+    for(msShaderProgramIterator i = this->shaderPrograms.begin(); i != this->shaderPrograms.end(); i ++)
         delete (*i);
-    delete m_mainFrameBuffer;
+    delete this->mainFrameBuffer;
 }
 
 bool msShaderPrograms::loadFile(string fileName )
@@ -19,7 +19,7 @@ bool msShaderPrograms::loadFile(string fileName )
     int currentLine = 0;
     msShaderProgram *recentProgram;
 
-    m_shaderPrograms.clear();
+    this->shaderPrograms.clear();
 
     ifstream fin( fileName.c_str(), std::ios_base::binary );
 
@@ -50,7 +50,7 @@ bool msShaderPrograms::loadFile(string fileName )
             msMapDataFileName(vertShader);
             msMapDataFileName(fragShader);
             recentProgram = new msShaderProgram(sKey, vertShader, fragShader);
-            m_shaderPrograms.push_back(recentProgram);
+            this->shaderPrograms.push_back(recentProgram);
         }
         else if ( sItem == "link" )
         {
@@ -168,7 +168,7 @@ bool msShaderPrograms::loadFile(string fileName )
 
 msShaderProgram* msShaderPrograms::getProgramByName( const char *name )
 {
-    for (msShaderProgramIterator iterator = m_shaderPrograms.begin(); iterator != m_shaderPrograms.end() ; ++iterator)
+    for (msShaderProgramIterator iterator = this->shaderPrograms.begin(); iterator != this->shaderPrograms.end() ; ++iterator)
     {
         msShaderProgram* current = *iterator;
         if(strcmp(current->getName(), name) == 0)
@@ -179,21 +179,21 @@ msShaderProgram* msShaderPrograms::getProgramByName( const char *name )
 
 msFrameBuffer* msShaderPrograms::getMainFrameBuffer()
 {
-    return m_mainFrameBuffer;
+    return this->mainFrameBuffer;
 }
 
 void msShaderPrograms::setMainFrameBuffer(GLint frameBufferId)
 {
-    if(m_mainFrameBuffer->m_id != frameBufferId)
+    if(this->mainFrameBuffer->id != frameBufferId)
     {
-        delete m_mainFrameBuffer;
-        m_mainFrameBuffer = new msFrameBuffer(frameBufferId);
+        delete this->mainFrameBuffer;
+        this->mainFrameBuffer = new msFrameBuffer(frameBufferId);
     }
 }
 
 void msShaderPrograms::notifySizeChanged( GLint width, GLint height )
 {
-    for (msShaderProgramIterator i = m_shaderPrograms.begin(); i != m_shaderPrograms.end() ; i++)
+    for (msShaderProgramIterator i = this->shaderPrograms.begin(); i != this->shaderPrograms.end() ; i++)
         (*i)->notifySizeChanged(width, height);
 }
 

@@ -31,32 +31,32 @@
 msScene::msScene()
 {
    GLfloat color[] = { 0.3f, 0.3f, 0.7f, 1.0f };
-   m_clearColor[0] = color[0];
-   m_clearColor[1] = color[1];
-   m_clearColor[2] = color[2];
-   m_clearColor[3] = color[3];
+   this->clearColor[0] = color[0];
+   this->clearColor[1] = color[1];
+   this->clearColor[2] = color[2];
+   this->clearColor[3] = color[3];
 
-   m_afterShockRadius = -1.0f;
-   m_afterShockPower = 1.0f;
-   m_afterShockLocation[0] = 0.0f;
-   m_afterShockLocation[1] = 0.0f;
-   m_animate = 0;
+   this->afterShockRadius = -1.0f;
+   this->afterShockPower = 1.0f;
+   this->afterShockLocation[0] = 0.0f;
+   this->afterShockLocation[1] = 0.0f;
+   this->animate = 0;
 
-   m_afterShockRadiusMin = 0.0f;
-   m_afterShockRadiusMax = 1500.0f;
-   m_afterShockRadiusStep = 37.0f;
+   this->afterShockRadiusMin = 0.0f;
+   this->afterShockRadiusMax = 1500.0f;
+   this->afterShockRadiusStep = 37.0f;
 
-   m_palette = 0;
-   m_boxGrid = 0;
-    m_renderer = 0;
+   this->palette = 0;
+   this->boxGrid = 0;
+    this->renderer = 0;
 }
 
 void msScene::newSize(GLint width, GLint height)
 {
-    m_size.width = width;
-    m_size.height = height;
+    this->size.width = width;
+    this->size.height = height;
     
-    m_shaders.notifySizeChanged(width, height);    
+    this->shaders.notifySizeChanged(width, height);    
 }
 
 
@@ -70,12 +70,12 @@ void msScene::newSize(GLint width, GLint height)
 //=================================================================================================================================
 msScene::~msScene()
 {
-    if(m_palette != 0)
-        delete m_palette;
-    if(m_boxGrid != 0)
-        delete m_boxGrid;
-    if(m_renderer != 0)
-        delete m_renderer;
+    if(this->palette != 0)
+        delete this->palette;
+    if(this->boxGrid != 0)
+        delete this->boxGrid;
+    if(this->renderer != 0)
+        delete this->renderer;
 }
 
 //=================================================================================================================================
@@ -88,8 +88,8 @@ msScene::~msScene()
 //=================================================================================================================================
 bool msScene::loadData(string filename)
 {
-   m_shaders.loadFile(filename);
-    m_renderer = new msBoxGridRenderer(&this->m_shaders, 0);
+   this->shaders.loadFile(filename);
+    this->renderer = new msBoxGridRenderer(&this->shaders, 0);
 
    return true;
 }
@@ -138,41 +138,41 @@ GLfloat colorMap[][4] =
 
 void msScene::init()
 {
-    m_shaders.notifySizeChanged(m_size.width, m_size.height);
+    this->shaders.notifySizeChanged(this->size.width, this->size.height);
 
     // init palette
-    m_palette = new msPalette(colorMap, 8);    
+    this->palette = new msPalette(colorMap, 8);    
 }
 
 
 void msScene::drawFrame()
 {
-    //if(m_renderer != 0)
-        m_renderer->draw(m_size);
+    //if(this->renderer != 0)
+        this->renderer->draw(this->size);
 }
 
 void msScene::mouseClick(int x, int y, int direction)
 {
-    if(m_boxGrid == 0 || m_renderer == 0)
+    if(this->boxGrid == 0 || this->renderer == 0)
         return;
 
     msPoint3f touchPoint;
-    touchPoint.x = ((GLfloat)x / (GLfloat)m_size.width);
-    touchPoint.y = ((GLfloat)y / (GLfloat)m_size.height);
+    touchPoint.x = ((GLfloat)x / (GLfloat)this->size.width);
+    touchPoint.y = ((GLfloat)y / (GLfloat)this->size.height);
     
-    m_boxGrid->setDirection(direction);
-    m_boxGrid->removeSimilarItemsAtPoint(touchPoint);
+    this->boxGrid->setDirection(direction);
+    this->boxGrid->removeSimilarItemsAtPoint(touchPoint);
 }
 
 void msScene::setMainFrameBuffer(GLint id)
 {
-    m_shaders.setMainFrameBuffer(id);
+    this->shaders.setMainFrameBuffer(id);
 }
 
 void msScene::undoLastMove()
 {
-    if(m_boxGrid != 0)
-        m_boxGrid->undo();
+    if(this->boxGrid != 0)
+        this->boxGrid->undo();
 }
 
 void msScene::start()
@@ -184,11 +184,11 @@ void msScene::start()
 
     memset(backFaces, 0, sizeof(backFaces));
 
-    if(m_boxGrid != 0)
+    if(this->boxGrid != 0)
     {
-        m_boxGrid->extractPattern(backFaces);        
+        this->boxGrid->extractPattern(backFaces);        
 
-        delete m_boxGrid;
+        delete this->boxGrid;
      }
     
     GLint pattern[NUM_ROWS * NUM_COLS] = 
@@ -205,22 +205,22 @@ void msScene::start()
         1,1,1,1,1,1,1,1,
     };
     
-   //m_boxGrid = new msBoxGrid(m_palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+   //this->boxGrid = new msBoxGrid(this->palette, pattern, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
 
-    m_boxGrid = new msBoxGrid(m_palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
-    m_renderer->setBoxGrid(m_boxGrid);
+    this->boxGrid = new msBoxGrid(this->palette, 4, NUM_ROWS, NUM_COLS, 1.0f, 1.0f);
+    this->renderer->setBoxGrid(this->boxGrid);
     
-    m_boxGrid->setBackPattern(backFaces);
-    m_boxGrid->show();
+    this->boxGrid->setBackPattern(backFaces);
+    this->boxGrid->show();
 }
 
 void msScene::end()
 {
-    //m_boxGrid->hide();
+    //this->boxGrid->hide();
 
-    delete m_boxGrid;
+    delete this->boxGrid;
 
-    m_boxGrid = 0;
+    this->boxGrid = 0;
 
     
 }

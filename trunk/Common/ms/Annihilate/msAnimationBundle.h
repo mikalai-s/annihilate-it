@@ -13,7 +13,7 @@ typedef msAnimationList::iterator    msAnimationIterator;
 // represents set of animations each animation autoreleases when it's done
 class msAnimationBundle
 {
-    msAnimationList m_list;
+    msAnimationList list;
 
 public:
     static void _lineStep2(msAnimationContext *context);

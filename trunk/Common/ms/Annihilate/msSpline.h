@@ -11,8 +11,8 @@ public:
     msSpline(void);
     ~msSpline(void);
 
-    int m_resolution;
-    int m_count;
+    int resolution;
+    int count;
 
     //msPoints m_controlPoints;
 

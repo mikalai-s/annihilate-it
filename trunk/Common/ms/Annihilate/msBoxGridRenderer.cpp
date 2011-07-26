@@ -15,7 +15,7 @@
 
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGrid)
 {
-    m_shaders = shaders;
+    this->shaders = shaders;
 
     // calculate projection matrix
     float fovy = 45.0f / 180.0f * 3.1415926f;
@@ -26,37 +26,27 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGr
         ->perspective(fovy, 1.0f, -1.0f, 1.0f)
         ->viewport(2.0f, 2.0f)          
         ->translate(-1.0f, -1.0f, 0.0f);
-    m_projectionMatrix = *transform.getMatrix();
+    this->projectionMatrix = *transform.getMatrix();
     
-    m_boxGrid = boxGrid;
-
-    // buffer for particles array
-    glGenBuffers(1, &this->particleBuffer);
-    this->particleBufferSize = 0;
-    
-   
-    
-    
-    
-    
-    glViewport(0, 0, m_size.width, m_size.height);
-    
+    this->boxGrid = boxGrid;  
+        
     prepareShaderReferences();
     
+    prepareBufferObjects();
     
-    // provide some static values
-    glGenVertexArraysOES(1, &this->boxGridVertexArrayObject);
-    glBindVertexArrayOES(this->boxGridVertexArrayObject);
+    glViewport(0, 0, this->size.width, this->size.height);
+}
+
+void msBoxGridRenderer::prepareBufferObjects()
+{
     // buffer for vertices data 
-    glGenBuffers(1, &m_vertexBuffer);
+    glGenBuffers(1, &this->vertexBuffer);
+    
     // buffer for indicies
     GLushort boxIndicies[] = { 0, 1, 2, 3 };    
-    glGenBuffers(1, &m_indexBuffer);
-    // NOTE: there is only one element array buffer, so we bind it only once
-    // be carefull if you created another one
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 4, boxIndicies, GL_STATIC_DRAW);
-    
+    glGenBuffers(1, &this->indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 4, boxIndicies, GL_STATIC_DRAW);    
     
     // buffer for texture texcoords
     GLfloat textureOrientation[] = {
@@ -81,28 +71,10 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGr
         1.f, 1.f, 
         1.f, 0.f,
     };    
-    glGenBuffers(1, &m_textureOrientationBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, m_textureOrientationBuffer);
+    glGenBuffers(1, &this->textureOrientationBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, this->textureOrientationBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 32, textureOrientation, GL_STATIC_DRAW);
     
-    
-    
-    this->sr.BoxGrid.Program->use();
-    this->sr.BoxGrid.Attribute.Position->enableVertexArray();    
-    glBindBuffer(GL_ARRAY_BUFFER, m_textureOrientationBuffer);    
-    this->sr.BoxGrid.Attribute.BorderTexelLeft->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)0);
-    this->sr.BoxGrid.Attribute.BorderTexelBottom->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 8));
-    this->sr.BoxGrid.Attribute.BorderTexelRight->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 16));
-    this->sr.BoxGrid.Attribute.BorderTexelTop->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 24));
-    this->sr.BoxGrid.Uniform.BorderExternalLineTex->set1i(this->sr.BoxGrid.Texture.BorderExternalLineTex->getUnit());
-    this->sr.BoxGrid.Uniform.BorderInternalLineTex->set1i(this->sr.BoxGrid.Texture.BorderInternalLineTex->getUnit());
-    this->sr.BoxGrid.Uniform.BorderCornerTex->set1i(this->sr.BoxGrid.Texture.BorderCornerTex->getUnit());
-   
-    
-    
-    glGenVertexArraysOES(1, &this->shockWaveVertexArrayObject);
-    glBindVertexArrayOES(this->shockWaveVertexArrayObject);
-    this->sr.ShockWave.Program->use();
     // buffer for position attribute
     static const GLfloat vertexPositions[] = {
         -1.f, -1.f, 1.f, 1.f,
@@ -110,57 +82,107 @@ msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGr
         -1.f,  1.f, 1.f, 1.f,
         1.f,  1.f, 1.f, 1.f,
     };
-    glGenBuffers(1, &m_positionBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);
+    glGenBuffers(1, &this->positionBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, this->positionBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 16, vertexPositions, GL_STATIC_DRAW);
-    this->sr.ShockWave.Attribute.Position->setPointerAndEnable(4, GL_FLOAT, 0, 0, (void*)0);
     
-    // buffer for texture texcoords
-    GLfloat textureOrientation2[] = {
-        0.f, 0.f,
-        1.f, 0.f,
-        0.f, 1.f,
-        1.f, 1.f,        
-    };    
-    glGenBuffers(1, &m_textureOrientationBuffer2);
-    glBindBuffer(GL_ARRAY_BUFFER, m_textureOrientationBuffer2);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 8, textureOrientation2, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, m_textureOrientationBuffer2);    
+    // buffer for particles
+    glGenBuffers(1, &this->particleBuffer);
+    this->particleBufferSize = 0;
+    
+
+#ifdef IOS_GL
+    // generate vertex array object for box grid shader
+    glGenVertexArraysOES(1, &this->boxGridVertexArrayObject);
+    glBindVertexArrayOES(this->boxGridVertexArrayObject);
+    this->sr.BoxGrid.Program->use();
+    this->sr.BoxGrid.Attribute.Position->enableVertexArray();    
+    glBindBuffer(GL_ARRAY_BUFFER, this->textureOrientationBuffer);    
+    this->sr.BoxGrid.Attribute.BorderTexelLeft->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)0);
+    this->sr.BoxGrid.Attribute.BorderTexelBottom->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 8));
+    this->sr.BoxGrid.Attribute.BorderTexelRight->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 16));
+    this->sr.BoxGrid.Attribute.BorderTexelTop->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 24));
+    this->sr.BoxGrid.Uniform.BorderExternalLineTex->set1i(this->sr.BoxGrid.Texture.BorderExternalLineTex->getUnit());
+    this->sr.BoxGrid.Uniform.BorderInternalLineTex->set1i(this->sr.BoxGrid.Texture.BorderInternalLineTex->getUnit());
+    this->sr.BoxGrid.Uniform.BorderCornerTex->set1i(this->sr.BoxGrid.Texture.BorderCornerTex->getUnit());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->indexBuffer);
+#else
+    // provide some static values
+    this->sr.BoxGrid.Program->use();
+    this->sr.BoxGrid.Attribute.Position->enableVertexArray();
+    this->sr.BoxGrid.Attribute.BorderTexelLeft->enableVertexArray();
+    this->sr.BoxGrid.Attribute.BorderTexelBottom->enableVertexArray();
+    this->sr.BoxGrid.Attribute.BorderTexelRight->enableVertexArray();
+    this->sr.BoxGrid.Attribute.BorderTexelTop->enableVertexArray();
+    this->sr.BoxGrid.Uniform.BorderExternalLineTex->set1i(this->sr.BoxGrid.Texture.BorderExternalLineTex->getUnit());
+    this->sr.BoxGrid.Uniform.BorderInternalLineTex->set1i(this->sr.BoxGrid.Texture.BorderInternalLineTex->getUnit());
+    this->sr.BoxGrid.Uniform.BorderCornerTex->set1i(this->sr.BoxGrid.Texture.BorderCornerTex->getUnit());
+#endif
+    
+    
+#ifdef IOS_GL   
+    // genereate vertex array object for shcok wave shader
+    glGenVertexArraysOES(1, &this->shockWaveVertexArrayObject);
+    glBindVertexArrayOES(this->shockWaveVertexArrayObject);
+    this->sr.ShockWave.Program->use();
+    glBindBuffer(GL_ARRAY_BUFFER, this->positionBuffer);
+    this->sr.ShockWave.Attribute.Position->setPointerAndEnable(4, GL_FLOAT, 0, 0, (void*)0);   
+    glBindBuffer(GL_ARRAY_BUFFER, this->textureOrientationBuffer);    
     this->sr.ShockWave.Attribute.TexCoord->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0);
     this->sr.ShockWave.Uniform.Tex->set1i(this->sr.BoxGrid.Framebuffer.RenderTex->getTexture()->getUnit());    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->indexBuffer);
+#else
+    this->sr.ShockWave.Program->use();
+    this->sr.ShockWave.Attribute.Position->enableVertexArray();
+    this->sr.ShockWave.Attribute.TexCoord->enableVertexArray();
+    this->sr.ShockWave.Uniform.Tex->set1i(this->sr.BoxGrid.Framebuffer.RenderTex->getTexture()->getUnit());
+#endif
 
     
+#ifdef IOS_GL
+    // generate vertex array object for particle complete shader
     glGenVertexArraysOES(1, &this->particleCompleteVertexArrayObject);
     glBindVertexArrayOES(this->particleCompleteVertexArrayObject);
     this->sr.ParticleComplete.Program->use();
     this->sr.ParticleComplete.Uniform.U2Texture->set1i(this->sr.ParticleCreate.Framebuffer.RenderTex->getTexture()->getUnit());
-    glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);    
+    glBindBuffer(GL_ARRAY_BUFFER, this->positionBuffer);    
     this->sr.ParticleComplete.Attribute.A2Position->setPointerAndEnable(4, GL_FLOAT, 0, 0, (void*)0 );    
-    glBindBuffer(GL_ARRAY_BUFFER, m_textureOrientationBuffer);    
+    glBindBuffer(GL_ARRAY_BUFFER, this->textureOrientationBuffer);    
     this->sr.ParticleComplete.Attribute.A2TexCoord->setPointerAndEnable(2, GL_FLOAT, 0, 0, (void*)0 );
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
- 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->indexBuffer);
+#else
+    this->sr.ParticleComplete.Program->use();
+    this->sr.ParticleComplete.Attribute.A2Position->enableVertexArray();
+    this->sr.ParticleComplete.Attribute.A2TexCoord->enableVertexArray();
+    this->sr.ParticleComplete.Uniform.U2Texture->set1i(this->sr.ParticleCreate.Framebuffer.RenderTex->getTexture()->getUnit());
+#endif
     
+    
+#ifdef IOS_GL
+    // generate vertex array object for particle create shader
     glGenVertexArraysOES(1, &this->particleCreateVertexArrayObject);
     glBindVertexArrayOES(this->particleCreateVertexArrayObject);
     this->sr.ParticleCreate.Program->use();
-    // Load the vertex attributes
     glBindBuffer(GL_ARRAY_BUFFER, this->particleBuffer);
     this->sr.ParticleCreate.Attribute.APosition->setPointerAndEnable(2, GL_FLOAT, GL_FALSE, sizeof(msParticleData), (void*)0);
     this->sr.ParticleCreate.Attribute.AColor->setPointerAndEnable(4, GL_FLOAT, GL_FALSE, sizeof(msParticleData), (void*)offsetof(msParticleData, color));
     this->sr.ParticleCreate.Attribute.ASize->setPointerAndEnable(1, GL_FLOAT, GL_FALSE, sizeof(msParticleData), (void*)offsetof(msParticleData, size));
     this->sr.ParticleCreate.Uniform.UTexture->set1i(this->sr.ParticleCreate.Texture.UTexture->getUnit());
-    glBindVertexArrayOES(0);   
-    
+#else
+    this->sr.ParticleCreate.Program->use();
+    this->sr.ParticleCreate.Attribute.APosition->enableVertexArray();
+    this->sr.ParticleCreate.Attribute.AColor->enableVertexArray();
+    this->sr.ParticleCreate.Attribute.ASize->enableVertexArray();
+    this->sr.ParticleCreate.Uniform.UTexture->set1i(this->sr.ParticleCreate.Texture.UTexture->getUnit());
+#endif
 }
 
 void msBoxGridRenderer::setBoxGrid(msBoxGrid *boxGrid)
 {
-    m_boxGrid = boxGrid;
+    this->boxGrid = boxGrid;
     
     //recreate buffer for vertices because box grid has changed
-    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
     unsigned long size = sizeof(msBoxData) * boxGrid->getRowCount() * boxGrid->getColCount();
     glBufferData(GL_ARRAY_BUFFER, size, 0, GL_DYNAMIC_DRAW);
     
@@ -168,7 +190,7 @@ void msBoxGridRenderer::setBoxGrid(msBoxGrid *boxGrid)
 
 void msBoxGridRenderer::prepareShaderReferences()
 {
-    msShaderProgram *program = m_shaders->getProgramByName("boxgrid");
+    msShaderProgram *program = this->shaders->getProgramByName("boxgrid");
     this->sr.BoxGrid.Program = program;
     this->sr.BoxGrid.Attribute.Position = program->getAttribute("position");
     this->sr.BoxGrid.Attribute.BorderTexelLeft = program->getAttribute("borderTexelLeft");
@@ -187,7 +209,7 @@ void msBoxGridRenderer::prepareShaderReferences()
     this->sr.BoxGrid.Texture.BorderCornerTex = program->getTexture("borderCornerTex");
     this->sr.BoxGrid.Framebuffer.RenderTex = program->getFrameBuffer("renderTex");
     
-    program = m_shaders->getProgramByName("shockwave");
+    program = this->shaders->getProgramByName("shockwave");
     this->sr.ShockWave.Program = program;
     this->sr.ShockWave.Attribute.Position = program->getAttribute("position");
     this->sr.ShockWave.Attribute.TexCoord = program->getAttribute("texcoord");
@@ -196,13 +218,13 @@ void msBoxGridRenderer::prepareShaderReferences()
     this->sr.ShockWave.Uniform.Power = program->getUniform("power");
     this->sr.ShockWave.Uniform.Location = program->getUniform("location");
    
-    program = m_shaders->getProgramByName("particle_complete");
+    program = this->shaders->getProgramByName("particle_complete");
     this->sr.ParticleComplete.Program = program;
     this->sr.ParticleComplete.Attribute.A2Position = program->getAttribute("a2_position");
     this->sr.ParticleComplete.Attribute.A2TexCoord = program->getAttribute("a2_texcoord");
     this->sr.ParticleComplete.Uniform.U2Texture = program->getUniform("u2_texture");
     
-    program = m_shaders->getProgramByName("particle_create");
+    program = this->shaders->getProgramByName("particle_create");
     this->sr.ParticleCreate.Program = program;
     this->sr.ParticleCreate.Attribute.APosition = program->getAttribute("a_position");
     this->sr.ParticleCreate.Attribute.AColor = program->getAttribute("a_color");
@@ -214,30 +236,37 @@ void msBoxGridRenderer::prepareShaderReferences()
 
 msBoxGridRenderer::~msBoxGridRenderer()
 {
-    for(msWaveIterator wi = m_waves.begin(); wi != m_waves.end(); wi ++)
+    for(msWaveIterator wi = this->waves.begin(); wi != this->waves.end(); wi ++)
     {
         delete (*wi);
     }
     
     glDeleteBuffers(1, &this->particleBuffer);
-    glDeleteBuffers(1, &m_indexBuffer);
-    glDeleteBuffers(1, &m_vertexBuffer);
-    glDeleteBuffers(1, &m_textureOrientationBuffer);
-    glDeleteBuffers(1, &m_positionBuffer);
+    glDeleteBuffers(1, &this->indexBuffer);
+    glDeleteBuffers(1, &this->vertexBuffer);
+    glDeleteBuffers(1, &this->textureOrientationBuffer);
+    glDeleteBuffers(1, &this->positionBuffer);
+    
+#ifdef IOS_GL
+    glDeleteVertexArraysOES(1, &this->boxGridVertexArrayObject);
+    glDeleteVertexArraysOES(1, &this->shockWaveVertexArrayObject);
+    glDeleteVertexArraysOES(1, &this->particleCompleteVertexArrayObject);
+    glDeleteVertexArraysOES(1, &this->particleCreateVertexArrayObject);
+#endif
 }
 
 void msBoxGridRenderer::draw(msSizef size)
 {
-    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(msBoxData) * m_boxGrid->getRowCount() * m_boxGrid->getColCount(), m_boxGrid->m_boxVertexData);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(msBoxData) * this->boxGrid->getRowCount() * this->boxGrid->getColCount(), this->boxGrid->boxVertexData);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.f, 0.f, 0.f, 0.f);
     
-    m_size = size;
+    this->size = size;
     
-    if(m_boxGrid == 0)
+    if(this->boxGrid == 0)
         return;
     
     _drawBoxesWithShockWave();
@@ -247,39 +276,41 @@ void msBoxGridRenderer::draw(msSizef size)
     _removeInactiveEmitters();
     
     // update all animations
-    for(int y = 0; y < m_boxGrid->m_rowCount; y ++)
+    for(int y = 0; y < this->boxGrid->rowCount; y ++)
     {
-        for(int x = 0; x < m_boxGrid->m_columnCount; x ++)
+        for(int x = 0; x < this->boxGrid->columnCount; x ++)
         {
-            msBox *box = m_boxGrid->getItem(y, x);
+            msBox *box = this->boxGrid->getItem(y, x);
             box->getAnimations()->performStep();
         }
     }
     
-    m_boxGrid->getAnimations()->performStep();
+    this->boxGrid->getAnimations()->performStep();
 }
 
 void msBoxGridRenderer::_drawBoxGrid(msSizef size)
 {
+#ifdef IOS_GL
     glBindVertexArrayOES(this->boxGridVertexArrayObject);
+#endif
     
-    for(int y = 0; y < m_boxGrid->m_rowCount; y ++)
+    for(int y = 0; y < this->boxGrid->rowCount; y ++)
     {
-        for(int x = 0; x < m_boxGrid->m_columnCount; x ++)
+        for(int x = 0; x < this->boxGrid->columnCount; x ++)
         {
-            msBox *box = m_boxGrid->getItem(y, x);
+            msBox *box = this->boxGrid->getItem(y, x);
             
             // first check for explosion and if box is required one put it into list to be used after grid rendering
             if(box->getRequiresExplosion())
             {
-                GLfloat ratio = m_boxGrid->getRowCount() / size.height / 2.0f + m_boxGrid->getColCount() / size.width / 2.0f;
+                GLfloat ratio = this->boxGrid->getRowCount() / size.height / 2.0f + this->boxGrid->getColCount() / size.width / 2.0f;
                 msParticleEmitterSettings settings = _createExplosionSettings(box->getExplosionPoint(), ratio);
                 explosionsBundle.addParticleEmitter(settings);
             }
             
             if(box->getRequiresWave())
             {
-                m_waves.push_back(_createWave(box));
+                this->waves.push_back(_createWave(box));
             }
             
             if(box->isVisible())
@@ -289,8 +320,6 @@ void msBoxGridRenderer::_drawBoxGrid(msSizef size)
             }
         }
     }
-    
-    glBindVertexArrayOES(0);
 }
 
 void msBoxGridRenderer::_drawBox(msBox *box)
@@ -306,13 +335,21 @@ void msBoxGridRenderer::_drawBox(msBox *box)
         ->translate(center.x, center.y, center.z);
     }
     
-    transform.multiplyMatrix(m_projectionMatrix);
+    transform.multiplyMatrix(this->projectionMatrix);
     
     this->sr.BoxGrid.Uniform.Mvp->setMatrix4fv(1, false, transform.getMatrix()->getArray());
     
-    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);    
-    unsigned long offset = (unsigned long)box->getVerticesData() - (unsigned long)m_boxGrid->m_boxVertexData;
+    glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);    
+    unsigned long offset = (unsigned long)box->getVerticesData() - (unsigned long)this->boxGrid->boxVertexData;
     this->sr.BoxGrid.Attribute.Position->setPointer(3, GL_FLOAT, GL_FALSE, sizeof(msPoint3f), (void*)offset);
+    
+#ifndef IOS_GL
+    glBindBuffer(GL_ARRAY_BUFFER, this->textureOrientationBuffer);    
+    this->sr.BoxGrid.Attribute.BorderTexelLeft->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)0);
+    this->sr.BoxGrid.Attribute.BorderTexelBottom->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 8));
+    this->sr.BoxGrid.Attribute.BorderTexelRight->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 16));
+    this->sr.BoxGrid.Attribute.BorderTexelTop->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 24));
+#endif
     
     glCullFace(GL_FRONT);
     _drawFace(&box->getVerticesData()->frontFace);
@@ -327,7 +364,7 @@ void msBoxGridRenderer::_drawFace(msBoxFaceData *faceData)
     this->sr.BoxGrid.Uniform.LineBorder->set4iv(1, faceData->getHasBorder());
     this->sr.BoxGrid.Uniform.CornerBorder->set4iv(1, faceData->getHasCornerBorder());
 
-    msColor faceColor = *m_boxGrid->m_palette->getColor(faceData->getColorIndex());
+    msColor faceColor = *this->boxGrid->palette->getColor(faceData->getColorIndex());
     faceColor.r *= faceData->getColorDisturbance().r;
     faceColor.g *= faceData->getColorDisturbance().g;
     faceColor.b *= faceData->getColorDisturbance().b;
@@ -350,14 +387,14 @@ void msBoxGridRenderer::_removeInactiveEmitters()
 
     msWaveList wavesToDelete;
 
-    for(msWaveIterator wi = m_waves.begin(); wi != m_waves.end(); wi ++)
+    for(msWaveIterator wi = this->waves.begin(); wi != this->waves.end(); wi ++)
         if(!(*wi)->isAlive())
             wavesToDelete.push_back(*wi);
 
     for(msWaveIterator wi = wavesToDelete.begin(); wi != wavesToDelete.end(); wi ++)
     {
         delete (*wi);
-        m_waves.remove(*wi);
+        this->waves.remove(*wi);
     }
 }
 
@@ -407,33 +444,39 @@ void msBoxGridRenderer::_drawBoxesWithShockWave()
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT );
 
         // render background
-        _drawBoxGrid(m_size);
+        _drawBoxGrid(this->size);
     }
 
     // Unbind the FBO so rendering will return to the backbuffer.
-    m_shaders->getMainFrameBuffer()->bind();
+    this->shaders->getMainFrameBuffer()->bind();
 
     // usual renderer
 
     this->sr.ShockWave.Program->use();
     
+#ifdef IOS_GL
     glBindVertexArrayOES(this->shockWaveVertexArrayObject);
+#else
+    glBindBuffer(GL_ARRAY_BUFFER, this->positionBuffer);    
+    this->sr.ShockWave.Attribute.Position->setPointer(4, GL_FLOAT, 0, 0, (void*)0);    
+    glBindBuffer(GL_ARRAY_BUFFER, this->textureOrientationBuffer);    
+    this->sr.ShockWave.Attribute.TexCoord->setPointer(2, GL_FLOAT, 0, 0, (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);    
+#endif
         
     // wave
-    for(msWaveIterator i = m_waves.begin(); i != m_waves.end(); i ++)
+    for(msWaveIterator i = this->waves.begin(); i != this->waves.end(); i ++)
     {
         msWaveEmitter *we = *i;
-        this->sr.ShockWave.Uniform.Radius->set1f(we->m_radius);
-        this->sr.ShockWave.Uniform.Power->set1f(we->m_power);
-        this->sr.ShockWave.Uniform.Location->set2f(we->m_location.x / we->m_size.width, we->m_location.y / we->m_size.height);
+        this->sr.ShockWave.Uniform.Radius->set1f(we->radius);
+        this->sr.ShockWave.Uniform.Power->set1f(we->power);
+        this->sr.ShockWave.Uniform.Location->set2f(we->location.x / we->size.width, we->location.y / we->size.height);
         
         we->step();
     }
    
     // draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, (void*)0);
-    
-    glBindVertexArrayOES(0);
 }
 
 void msBoxGridRenderer::_drawExplosions()
@@ -457,7 +500,7 @@ void msBoxGridRenderer::_drawExplosions()
     }
 
     // Unbind the FBO so rendering will return to the backbuffer.
-    m_shaders->getMainFrameBuffer()->bind();
+    this->shaders->getMainFrameBuffer()->bind();
 
     // usual renderer
 
@@ -466,8 +509,15 @@ void msBoxGridRenderer::_drawExplosions()
 
     this->sr.ParticleComplete.Program->use();
     
+#ifdef IOS_GL
     glBindVertexArrayOES(this->particleCompleteVertexArrayObject);   
-    
+#else
+    glBindBuffer(GL_ARRAY_BUFFER, this->positionBuffer);    
+    this->sr.ParticleComplete.Attribute.A2Position->setPointer(4, GL_FLOAT, 0, 0, (void*)0);    
+    glBindBuffer(GL_ARRAY_BUFFER, this->textureOrientationBuffer);    
+    this->sr.ParticleComplete.Attribute.A2TexCoord->setPointer(2, GL_FLOAT, 0, 0, (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);    
+#endif    
 
     // draw with client side arrays (in real apps you should use cached VBOs which is much better for performance)
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, (void*)0);
@@ -478,11 +528,11 @@ void msBoxGridRenderer::_drawExplosions()
 msWaveEmitter* msBoxGridRenderer::_createWave( msBox* box)
 {
     msPoint3f location = box->getVerticesData()->getCenter();    
-    location.x *= m_size.width;
+    location.x *= this->size.width;
     location.y = 1.0f - location.y;
-    location.y *= m_size.height;
+    location.y *= this->size.height;
 
-    return new msWaveEmitter(location, m_size);
+    return new msWaveEmitter(location, this->size);
 }
 
 void msBoxGridRenderer::_drawParticles(msParticleEmitterBundle &particleEmitters)
@@ -492,41 +542,36 @@ void msBoxGridRenderer::_drawParticles(msParticleEmitterBundle &particleEmitters
     if(particlesCount == 0)
         return;
     
+#ifdef IOS_GL
     glBindVertexArrayOES(this->particleCreateVertexArrayObject);
+    glBindBuffer(GL_ARRAY_BUFFER, this->particleBuffer);
+#else
+    // Load the vertex attributes
+    glBindBuffer(GL_ARRAY_BUFFER, this->particleBuffer);
+    this->sr.ParticleCreate.Attribute.APosition->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(msParticleData), (void*)0);
+    this->sr.ParticleCreate.Attribute.AColor->setPointer(4, GL_FLOAT, GL_FALSE, sizeof(msParticleData), (void*)offsetof(msParticleData, color));
+    this->sr.ParticleCreate.Attribute.ASize->setPointer(1, GL_FLOAT, GL_FALSE, sizeof(msParticleData), (void*)offsetof(msParticleData, size));
+#endif
 
     if(this->particleBufferSize < particlesCount)
     {
         // if buffer size is not enough than recreate new buffer to fit the size and copy new data into it
-        glBindBuffer(GL_ARRAY_BUFFER, this->particleBuffer);
         glBufferData(GL_ARRAY_BUFFER, particlesCount * sizeof(msParticleData), particleEmitters.getParticleData(), GL_DYNAMIC_DRAW);
         this->particleBufferSize = particlesCount;
     }
     else
     {
-        // if buffer size is enough for particles than just copy new data into buffer
-        glBindBuffer(GL_ARRAY_BUFFER, this->particleBuffer);
+         // if buffer size is enough for particles than just copy new data into buffer
         glBufferSubData(GL_ARRAY_BUFFER, 0, particlesCount * sizeof(msParticleData), particleEmitters.getParticleData());
     }
 
     glEnable(GL_BLEND);
     glEnable ( GL_TEXTURE_2D );
 
-    // todo: make blendAddictive as global setting for all emitters inside bundle
-    //if(pe->blendAdditive)
-    //{
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    //}
-    //else
-    //{
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //}    
-    
-
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     glDrawArrays( GL_POINTS, 0, particlesCount);
 
     glDisable ( GL_TEXTURE_2D );
     glDisable(GL_BLEND);
-
-    //glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

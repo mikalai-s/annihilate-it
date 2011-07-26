@@ -39,19 +39,27 @@ class msScene
 {
 private:
 
-    GLfloat m_afterShockRadius;
-    GLfloat m_afterShockPower;
-    GLfloat m_afterShockLocation[2];
-    GLboolean m_animate;
+    GLfloat afterShockRadius;
+    GLfloat afterShockPower;
+    GLfloat afterShockLocation[2];
+    GLboolean animate;
 
-    GLfloat m_afterShockRadiusMin;
-    GLfloat m_afterShockRadiusMax;
-    GLfloat m_afterShockRadiusStep;
+    GLfloat afterShockRadiusMin;
+    GLfloat afterShockRadiusMax;
+    GLfloat afterShockRadiusStep;
 
 
-    msPalette *m_palette;
-    msBoxGrid *m_boxGrid;
-    msBoxGridRenderer *m_renderer;
+    msPalette *palette;
+    msBoxGrid *boxGrid;
+    msBoxGridRenderer *renderer;    
+    
+    /// Contains all the uniform/texture/attribute/shader data
+    msShaderPrograms shaders;
+    
+    /// Pointer to the clear color
+    GLfloat clearColor[4];
+    
+    msSizef size;
 
 
 public:
@@ -95,16 +103,6 @@ public:
    void start();
 
    void end();
-
-private:
-
-   /// Contains all the uniform/texture/attribute/shader data
-   msShaderPrograms m_shaders;
-
-   /// Pointer to the clear color
-   GLfloat m_clearColor[4];
-
-   msSizef m_size;
 };
 
 

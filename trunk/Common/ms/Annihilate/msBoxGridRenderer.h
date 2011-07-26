@@ -157,29 +157,32 @@ struct msShaderReferences
 class msBoxGridRenderer
 {
 private:
-    
-    GLuint boxGridVertexArrayObject, shockWaveVertexArrayObject, particleCompleteVertexArrayObject, particleCreateVertexArrayObject;
-    
-    msShaderPrograms *m_shaders;
+#ifdef IOS_GL
+    GLuint boxGridVertexArrayObject;
+    GLuint shockWaveVertexArrayObject;
+    GLuint particleCompleteVertexArrayObject;
+    GLuint particleCreateVertexArrayObject;
+#endif
+    GLuint particleBuffer;
+    GLuint indexBuffer;
+    GLuint vertexBuffer;
+    GLuint textureOrientationBuffer;
+    GLuint positionBuffer;
+
+    msShaderPrograms *shaders;
     
     msShaderReferences sr;
 
     msParticleEmitterBundle explosionsBundle;
 
-    msWaveList m_waves;
+    msWaveList waves;
 
-    msSizef m_size;
+    msSizef size;
 
-    msMatrix m_projectionMatrix;
+    msMatrix projectionMatrix;
     
-    msBoxGrid *m_boxGrid;
+    msBoxGrid *boxGrid;
     
-    GLuint particleBuffer;
-    GLuint m_indexBuffer;
-    GLuint m_vertexBuffer;
-    GLuint m_textureOrientationBuffer;
-    GLuint m_textureOrientationBuffer2;
-    GLuint m_positionBuffer;
     int particleBufferSize;
 private:
     void _drawBoxGrid(msSizef size);
@@ -195,6 +198,7 @@ private:
 
     void _removeInactiveEmitters();  
     void prepareShaderReferences();
+    void prepareBufferObjects();
 
 public:
     msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGrid);
@@ -203,6 +207,5 @@ public:
     void draw(msSizef size);
     
     void setBoxGrid(msBoxGrid *boxgrid);
-    
 };
 

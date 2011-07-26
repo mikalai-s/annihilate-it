@@ -7,7 +7,7 @@ class msAnimationContext
 {
     friend class msAnimation;
 
-    msAnimation *m_animation;
+    msAnimation *animation;
 
 public:
     msAnimationContext(void);
@@ -19,14 +19,14 @@ public:
 template <class T>
 class msFromToAnimationContext : public msAnimationContext
 {
-    T m_from;
-    T m_to;
+    T from;
+    T to;
 
 public:
     msFromToAnimationContext(T from, T to)
     {
-        m_from = from;
-        m_to = to;
+        this->from = from;
+        this->to = to;
     }
 
     ~msFromToAnimationContext()
@@ -35,29 +35,29 @@ public:
 
     T getFrom()
     {
-        return m_from;
+        return this->from;
     }
 
     void setFrom(T value)
     {
-        m_from = value;
+        this->from = value;
     }
 
     T getTo()
     {
-        return m_to;
+        return this->to;
     }
 
     void setTo(T value)
     {
-        m_to = value;
+        this->to = value;
     }
 };
 
 class msPointMoveAnimationContext : public msAnimationContext
 {
-    msPoint3f *m_point;
-    GLint m_direction;
+    msPoint3f *point;
+    GLint direction;
 
 public:
     msPointMoveAnimationContext(msPoint3f *point, GLint direction);
@@ -70,12 +70,12 @@ public:
 template <class T>
 class msValueAnimationContext: public msAnimationContext
 {
-    T m_value;
+    T value;
 
 public:
     msValueAnimationContext(T value)
     {
-        m_value = value;
+        this->value = value;
     }
 
     ~msValueAnimationContext()
@@ -84,21 +84,21 @@ public:
 
     T getValue()
     {
-        return m_value;
+        return this->value;
     }
 };
 
 template <class TKey, class TValue>
 class msKeyValueAnimationContext: public msAnimationContext
 {
-    TKey m_key;
-    TValue m_value;
+    TKey key;
+    TValue value;
 
 public:
     msKeyValueAnimationContext(TKey key, TValue value)
     {
-        m_key = key;
-        m_value = value;
+        this->key = key;
+        this->value = value;
     }
 
     ~msKeyValueAnimationContext()
@@ -107,11 +107,11 @@ public:
 
     TKey getKey()
     {
-        return m_key;
+        return this->key;
     }
 
     TValue getValue()
     {
-        return m_value;
+        return this->value;
     }
 };

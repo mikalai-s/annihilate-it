@@ -10,15 +10,15 @@ msAnimationContext::~msAnimationContext(void)
 
 msAnimation* msAnimationContext::getAnimation()
 {
-    return m_animation;
+    return this->animation;
 }
 
 
 
 msPointMoveAnimationContext::msPointMoveAnimationContext(msPoint3f *point, GLint direction)
 {
-    m_point = point;
-    m_direction = direction;
+    this->point = point;
+    this->direction = direction;
 }
 
 msPointMoveAnimationContext::~msPointMoveAnimationContext()
@@ -27,10 +27,10 @@ msPointMoveAnimationContext::~msPointMoveAnimationContext()
 
 msPoint3f* msPointMoveAnimationContext::getPoint()
 {
-    return m_point;
+    return this->point;
 }
 
 GLint msPointMoveAnimationContext::getDirection()
 {
-    return m_direction;
+    return this->direction;
 }

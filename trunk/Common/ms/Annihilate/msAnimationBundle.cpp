@@ -11,7 +11,7 @@ void msAnimationBundle::performStep()
 {
     // perform next animation step
     msAnimationList animationsToDelete;
-    for(msAnimationIterator i = m_list.begin(); i != m_list.end(); i ++)
+    for(msAnimationIterator i = this->list.begin(); i != this->list.end(); i ++)
     {
         msAnimation *animation = *i;
         if(animation->performStep() == 0)
@@ -23,17 +23,17 @@ void msAnimationBundle::performStep()
     // delete expired animations
     for(msAnimationIterator i = animationsToDelete.begin(); i != animationsToDelete.end(); i ++)
     {
-        m_list.remove(*i);
+        this->list.remove(*i);
         delete (*i);
     }
 }
 
 msAnimationBundle::~msAnimationBundle()
 {
-    while(m_list.size() > 0)
+    while(this->list.size() > 0)
     {
-        msAnimation *a = m_list.front();
-        m_list.remove(a);
+        msAnimation *a = this->list.front();
+        this->list.remove(a);
         delete a;
     }
 }
@@ -56,13 +56,13 @@ void msAnimationBundle::unitTest()
     msAnimation *a2 = new msAnimation(0, times2, new msFromToAnimationContext<GLfloat*>(&from2, &to2), _lineStep2);
 
     msAnimationBundle bundle;
-    bundle.m_list.push_back(a1);
-    bundle.m_list.push_back(a2);
+    bundle.list.push_back(a1);
+    bundle.list.push_back(a2);
 
     for(int i = 0; i < 15; i ++)
     {
         int j = 0;
-        for(msAnimationIterator a = bundle.m_list.begin(); a != bundle.m_list.end(); j ++, a ++)
+        for(msAnimationIterator a = bundle.list.begin(); a != bundle.list.end(); j ++, a ++)
         {
             msFromToAnimationContext<GLfloat*> *context = (msFromToAnimationContext<GLfloat*>*) (*a)->getContext();
             printf("value%d: %f\r\n", j, *context->getFrom());            
@@ -74,20 +74,20 @@ void msAnimationBundle::unitTest()
 
 GLint msAnimationBundle::getCount()
 {
-    return m_list.size();
+    return this->list.size();
 }
 
 void msAnimationBundle::add(msAnimation *animation)
 {
-    m_list.push_back(animation);
+    this->list.push_back(animation);
 }
 
 msAnimationIterator msAnimationBundle::getFirst()
 {
-    return m_list.begin();
+    return this->list.begin();
 }
 
 msAnimationIterator msAnimationBundle::getLast()
 {
-    return m_list.end();
+    return this->list.end();
 }

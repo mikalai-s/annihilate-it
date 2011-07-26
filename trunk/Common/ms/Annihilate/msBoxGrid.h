@@ -81,18 +81,11 @@ typedef msHideActionList::iterator msHideActionIterator;
 class msBoxGrid : public msGrid<msBox*>
 {
     msSizef size;
-
-    msGrid<msPoint3f*> *m_coordinateGrid;
-
+    msGrid<msPoint3f*> *coordinateGrid;
     msMoveActionList _lastMovedBoxes;
     msHideActionList _lastHiddenBoxes;
-    
-    int m_lastKnownDirection;
-
-
-
-
-
+    msAnimationBundle animations;    
+    int lastKnownDirection;
     void _refreshBorders();
 
   
@@ -129,15 +122,13 @@ class msBoxGrid : public msGrid<msBox*>
 
     void _shiftRight(msGrid<msBox*> *grid, msMoveActionList *moves);
 
-    msAnimationBundle m_animations;
-
     static void doBoxesFallingCallback(msAnimationContext *c);
 
 public:
 
-    msBoxData *m_boxVertexData;
+    msBoxData *boxVertexData;
 
-    msPalette *m_palette;
+    msPalette *palette;
 
     msAnimationBundle *getAnimations();
 
@@ -153,7 +144,7 @@ public:
     
     void setDirection(int direction)
     {
-        m_lastKnownDirection = direction;
+        this->lastKnownDirection = direction;
     }
 
     void removeSimilarItems(GLint y, GLint x);
@@ -174,44 +165,23 @@ public:
 
     void setBackPattern(msBoxFaceData *faces)
     {
-        for(int y = 0; y < m_rowCount; y ++)
-            for(int x = 0; x < m_columnCount; x ++)
-                memcpy(&getItem(y, x)->m_verticesData->backFace, &faces[y * m_columnCount + x], sizeof(msBoxFaceData));                
+        for(int y = 0; y < this->rowCount; y ++)
+            for(int x = 0; x < this->columnCount; x ++)
+                memcpy(&getItem(y, x)->verticesData->backFace, &faces[y * this->columnCount + x], sizeof(msBoxFaceData));                
     }
 
     void extractPattern(msBoxFaceData *faces)
     {
-        for(int y = 0; y < m_rowCount; y ++)
+        for(int y = 0; y < this->rowCount; y ++)
         {
-            for(int x = 0; x < m_columnCount; x ++)
+            for(int x = 0; x < this->columnCount; x ++)
             {
                 msBox *box = getItem(y, x);
-                memcpy(&faces[y * m_columnCount + x], &box->getVerticesData()->frontFace, sizeof(msBoxFaceData));
+                memcpy(&faces[y * this->columnCount + x], &box->getVerticesData()->frontFace, sizeof(msBoxFaceData));
                 
                 if(!box->isVisible())
-                    faces[y * m_columnCount + x].colorIndex = 0;
+                    faces[y * this->columnCount + x].colorIndex = 0;
             }
         }
-    }
-};
-
-class msBorderAnimationContext : public msAnimationContext
-{
-    msColor *m_color;
-    GLfloat m_step;
-
-public:
-    msBorderAnimationContext(msColor *color, GLfloat step)
-    {
-        m_color = color;
-        m_step = step;
-    }
-
-    void updateColor()
-    {
-        /*m_color->r += m_step;
-        m_color->g += m_step;
-        m_color->b += m_step;*/
-        m_color->a += m_step;
     }
 };

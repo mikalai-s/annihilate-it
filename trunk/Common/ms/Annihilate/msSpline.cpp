@@ -3,8 +3,8 @@
 
 msSpline::msSpline(void)
 {
-    m_resolution = 3;
-    m_count = 0;
+    this->resolution = 3;
+    this->count = 0;
 }
 
 
@@ -46,25 +46,25 @@ void msSpline::draw()
     CtrlPt[1] = CtrlPt[2];
 
     // close b-spline
-    CtrlPt[m_count+2] = CtrlPt[2];
-    CtrlPt[m_count+3] = CtrlPt[3];
-    CtrlPt[m_count+4] = CtrlPt[4];
+    CtrlPt[this->count+2] = CtrlPt[2];
+    CtrlPt[this->count+3] = CtrlPt[3];
+    CtrlPt[this->count+4] = CtrlPt[4];
 
     // duplicate last two points
-    CtrlPt[m_count+5] = CtrlPt[m_count+4];
-    CtrlPt[m_count+6] = CtrlPt[m_count+4];
+    CtrlPt[this->count+5] = CtrlPt[this->count+4];
+    CtrlPt[this->count+6] = CtrlPt[this->count+4];
 
     msPoint3f Ap, Bp, Cp, Dp;
 
-    for(int i = 2; i < m_count + 2; i ++)
+    for(int i = 2; i < this->count + 2; i ++)
     {
         BSpline_ComputeCoeffs(i, &Ap, &Bp, &Cp, &Dp);
 
         msPoint3f p1 = Spline_Calc(Ap, Bp, Cp, Dp, 0.0f, 6.0f);
 
-        for(int j = 1; j < m_resolution + 1; j ++)
+        for(int j = 1; j < this->resolution + 1; j ++)
         {
-            msPoint3f p2 = Spline_Calc(Ap, Bp, Cp, Dp, (float)j / (float)m_resolution, 6.0f);
+            msPoint3f p2 = Spline_Calc(Ap, Bp, Cp, Dp, (float)j / (float)this->resolution, 6.0f);
 
             printf("(%f, %f)-(%f,%f)\r\n", p1.x, p1.y, p2.x, p2.y);
 
@@ -80,20 +80,20 @@ void msSpline::getSplinePoints(int resolution, msPoint3f *points, int *count, in
     CtrlPt[1] = CtrlPt[2];
 
     // close b-spline
-    CtrlPt[m_count+2] = CtrlPt[2];
-    CtrlPt[m_count+3] = CtrlPt[3];
-    CtrlPt[m_count+4] = CtrlPt[4];
+    CtrlPt[this->count+2] = CtrlPt[2];
+    CtrlPt[this->count+3] = CtrlPt[3];
+    CtrlPt[this->count+4] = CtrlPt[4];
 
     // duplicate last two points
-    CtrlPt[m_count+5] = CtrlPt[m_count+4];
-    CtrlPt[m_count+6] = CtrlPt[m_count+4];
+    CtrlPt[this->count+5] = CtrlPt[this->count+4];
+    CtrlPt[this->count+6] = CtrlPt[this->count+4];
 
     msPoint3f Ap, Bp, Cp, Dp;
 
     int firstIndex = startIndex;
     *count = 0;
 
-    for(int i = 2; i < m_count + 2; i ++)
+    for(int i = 2; i < this->count + 2; i ++)
     {
         BSpline_ComputeCoeffs(i, &Ap, &Bp, &Cp, &Dp);
 
@@ -109,8 +109,8 @@ void msSpline::getSplinePoints(int resolution, msPoint3f *points, int *count, in
 
 void msSpline::addControlPoint(msPoint3f p)
 {
-    CtrlPt[m_count + 2] = p;
-    m_count ++;
+    CtrlPt[this->count + 2] = p;
+    this->count ++;
 }
 
 void msSpline::addControlPoint(float x, float y)

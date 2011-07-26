@@ -20,7 +20,7 @@
 
 class msPalette
 {
-    msColor m_colors[MS_PALETTE_MAX_COLORS];
+    msColor colors[MS_PALETTE_MAX_COLORS];
 
 public:
     msPalette(GLfloat[][4], GLuint numColors);    

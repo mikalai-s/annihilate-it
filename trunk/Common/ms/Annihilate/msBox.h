@@ -127,21 +127,21 @@ class msBox
 
 private:
 
-    msPoint3f *m_location;
+    msPoint3f *location;
 
     // animations related
-    msAnimationBundle *m_animations;
+    msAnimationBundle *animations;
 
-    GLboolean m_requiresExplosion;
-    msPoint3f m_explosionPoint;
+    GLboolean requiresExplosion;
+    msPoint3f explosionPoint;
 
-    GLboolean m_requiresWave;
+    GLboolean requiresWave;
 
-    bool m_visible;
+    bool visible;
 
 private:
 
-    msBoxData *m_verticesData;
+    msBoxData *verticesData;
 
 private:
 
@@ -202,49 +202,49 @@ public:
     
     int getColorIndex() const
     {
-        return m_verticesData->frontFace.getColorIndex();
+        return this->verticesData->frontFace.getColorIndex();
     }
 
     msColor getColorDisturbance() const
     {
-        return m_verticesData->frontFace.getColorDisturbance();
+        return this->verticesData->frontFace.getColorDisturbance();
     }
     
 
     msPoint3f *getLocation() const
     {
-        return m_location;
+        return this->location;
     }    
 
     
     
     msPoint3f getExplosionPoint() const
     {
-        return m_explosionPoint;
+        return this->explosionPoint;
     }
 
     GLboolean getRequiresExplosion()
     {
-        return m_requiresExplosion;
+        return this->requiresExplosion;
     }
 
     GLboolean getRequiresWave()
     {
-        return m_requiresWave;
+        return this->requiresWave;
     }
 
     msBoxData *getVerticesData() const
     {
-        return m_verticesData;
+        return this->verticesData;
     }
 
     float getAngle()
     {
-        return m_verticesData->angle;
+        return this->verticesData->angle;
     }
 
     msPoint3f getAngleVector()
     {
-        return m_verticesData->angleVector;
+        return this->verticesData->angleVector;
     }
 };

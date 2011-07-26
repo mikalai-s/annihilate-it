@@ -6,7 +6,7 @@
 
 class msMatrixTransform
 {
-    msMatrix *m_matrix;
+    msMatrix *matrix;
 
 public:
     msMatrixTransform();
@@ -41,7 +41,7 @@ public:
 
     msMatrix* getMatrix() const
     {
-        return m_matrix;
+        return this->matrix;
     }
 
 };

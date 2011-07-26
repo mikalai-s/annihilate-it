@@ -3,17 +3,17 @@
 
 msAnimation::msAnimation(GLint delayCount, GLint count, msAnimationContext *context, void (*stepCallback)(msAnimationContext*))
 {
-    m_delayCount = delayCount;
-    m_count = count;
-    m_context = context;
-    m_performStepCallback = (stepCallback == 0) ? _defaultStep : stepCallback;
+    this->delayCount = delayCount;
+    this->count = count;
+    this->context = context;
+    this->performStepCallback = (stepCallback == 0) ? _defaultStep : stepCallback;
 
-    m_context->m_animation = this;
+    this->context->animation = this;
 }
 
 msAnimation::~msAnimation()
 {
-    delete m_context;
+    delete this->context;
 }
 
 void msAnimation::_defaultStep(msAnimationContext *context)
@@ -26,33 +26,33 @@ void msAnimation::_defaultStep(msAnimationContext *context)
 // NOTE:    don't forget to delete animation object after the last perform step has executed
 GLint msAnimation::performStep()
 {
-    if(m_performStepCallback == 0)
+    if(this->performStepCallback == 0)
         return 0;
 
-    if(m_count <= 0)
+    if(this->count <= 0)
         return 0;
 
-    if(m_delayCount > 0)
+    if(this->delayCount > 0)
     {
-        m_delayCount --;
+        this->delayCount --;
         return 1;
     }
 
-    m_performStepCallback(m_context);
+    this->performStepCallback(this->context);
 
-    m_count --;
+    this->count --;
 
-    return (m_count >= 0);
+    return (this->count >= 0);
 }
 
 msAnimationContext* msAnimation::getContext()
 {
-    return m_context;
+    return this->context;
 }
 
 GLint msAnimation::getCount()
 {
-    return m_count;
+    return this->count;
 }
 
 void msAnimation::_unitTestLineStep(msAnimationContext *c)

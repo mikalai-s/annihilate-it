@@ -14,14 +14,14 @@ class msFrameBuffer
 
 private:
 
-    const char *m_name;
-    msTexture *m_texture;
-    GLuint m_id;
+    const char *name;
+    msTexture *texture;
+    GLuint id;
 
-    GLsizei m_width;
-    GLsizei m_height;
+    GLsizei width;
+    GLsizei height;
 
-    GLboolean m_requiresBufferDeletion;
+    GLboolean requiresBufferDeletion;
 
     msFrameBuffer(GLuint id);
 

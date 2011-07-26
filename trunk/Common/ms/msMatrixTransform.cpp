@@ -5,41 +5,41 @@
 
 msMatrixTransform::msMatrixTransform()
 {
-    m_matrix = new msMatrix();
-    memcpy(m_matrix->m_value, msMatrix::identity().m_value, sizeof(float) * 16);
+    this->matrix = new msMatrix();
+    memcpy(this->matrix->value, msMatrix::identity().value, sizeof(float) * 16);
 }
 
 msMatrixTransform::msMatrixTransform(msMatrix &m)
 {
-    m_matrix = new msMatrix();
-    memcpy(m_matrix->m_value, m.m_value, sizeof(float) * 16);
+    this->matrix = new msMatrix();
+    memcpy(this->matrix->value, m.value, sizeof(float) * 16);
 }
 
 msMatrixTransform::~msMatrixTransform(void)
 {
-    delete m_matrix;
+    delete this->matrix;
 }
 
 msMatrixTransform* msMatrixTransform::scale(float sx, float sy, float sz)
 {
     msMatrix m = msMatrix::identity();
 
-    m.m_value[0][0] *= sx;
-    m.m_value[0][1] *= sx;
-    m.m_value[0][2] *= sx;
-    m.m_value[0][3] *= sx;
+    m.value[0][0] *= sx;
+    m.value[0][1] *= sx;
+    m.value[0][2] *= sx;
+    m.value[0][3] *= sx;
 
-    m.m_value[1][0] *= sy;
-    m.m_value[1][1] *= sy;
-    m.m_value[1][2] *= sy;
-    m.m_value[1][3] *= sy;
+    m.value[1][0] *= sy;
+    m.value[1][1] *= sy;
+    m.value[1][2] *= sy;
+    m.value[1][3] *= sy;
 
-    m.m_value[2][0] *= sz;
-    m.m_value[2][1] *= sz;
-    m.m_value[2][2] *= sz;
-    m.m_value[2][3] *= sz;
+    m.value[2][0] *= sz;
+    m.value[2][1] *= sz;
+    m.value[2][2] *= sz;
+    m.value[2][3] *= sz;
 
-    m_matrix->multiply(m);
+    this->matrix->multiply(m);
 
     return this;
 }
@@ -48,12 +48,12 @@ msMatrixTransform* msMatrixTransform::translate(float tx, float ty, float tz)
 {
     msMatrix m = msMatrix::identity();
 
-    m.m_value[3][0] += (m.m_value[0][0] * tx + m.m_value[1][0] * ty + m.m_value[2][0] * tz);
-    m.m_value[3][1] += (m.m_value[0][1] * tx + m.m_value[1][1] * ty + m.m_value[2][1] * tz);
-    m.m_value[3][2] += (m.m_value[0][2] * tx + m.m_value[1][2] * ty + m.m_value[2][2] * tz);
-    m.m_value[3][3] += (m.m_value[0][3] * tx + m.m_value[1][3] * ty + m.m_value[2][3] * tz);
+    m.value[3][0] += (m.value[0][0] * tx + m.value[1][0] * ty + m.value[2][0] * tz);
+    m.value[3][1] += (m.value[0][1] * tx + m.value[1][1] * ty + m.value[2][1] * tz);
+    m.value[3][2] += (m.value[0][2] * tx + m.value[1][2] * ty + m.value[2][2] * tz);
+    m.value[3][3] += (m.value[0][3] * tx + m.value[1][3] * ty + m.value[2][3] * tz);
 
-    m_matrix->multiply(m);
+    this->matrix->multiply(m);
 
     return this;
 }
@@ -86,27 +86,27 @@ msMatrixTransform* msMatrixTransform::rotate(float angle, float x, float y, floa
         zs = z * sinAngle;
         oneMinusCos = 1.0f - cosAngle;
 
-        rotMat.m_value[0][0] = (oneMinusCos * xx) + cosAngle;
-        rotMat.m_value[0][1] = (oneMinusCos * xy) - zs;
-        rotMat.m_value[0][2] = (oneMinusCos * zx) + ys;
-        rotMat.m_value[0][3] = 0.0F; 
+        rotMat.value[0][0] = (oneMinusCos * xx) + cosAngle;
+        rotMat.value[0][1] = (oneMinusCos * xy) - zs;
+        rotMat.value[0][2] = (oneMinusCos * zx) + ys;
+        rotMat.value[0][3] = 0.0F; 
 
-        rotMat.m_value[1][0] = (oneMinusCos * xy) + zs;
-        rotMat.m_value[1][1] = (oneMinusCos * yy) + cosAngle;
-        rotMat.m_value[1][2] = (oneMinusCos * yz) - xs;
-        rotMat.m_value[1][3] = 0.0F;
+        rotMat.value[1][0] = (oneMinusCos * xy) + zs;
+        rotMat.value[1][1] = (oneMinusCos * yy) + cosAngle;
+        rotMat.value[1][2] = (oneMinusCos * yz) - xs;
+        rotMat.value[1][3] = 0.0F;
 
-        rotMat.m_value[2][0] = (oneMinusCos * zx) - ys;
-        rotMat.m_value[2][1] = (oneMinusCos * yz) + xs;
-        rotMat.m_value[2][2] = (oneMinusCos * zz) + cosAngle;
-        rotMat.m_value[2][3] = 0.0F; 
+        rotMat.value[2][0] = (oneMinusCos * zx) - ys;
+        rotMat.value[2][1] = (oneMinusCos * yz) + xs;
+        rotMat.value[2][2] = (oneMinusCos * zz) + cosAngle;
+        rotMat.value[2][3] = 0.0F; 
 
-        rotMat.m_value[3][0] = 0.0F;
-        rotMat.m_value[3][1] = 0.0F;
-        rotMat.m_value[3][2] = 0.0F;
-        rotMat.m_value[3][3] = 1.0F;
+        rotMat.value[3][0] = 0.0F;
+        rotMat.value[3][1] = 0.0F;
+        rotMat.value[3][2] = 0.0F;
+        rotMat.value[3][3] = 1.0F;
 
-        m_matrix->multiply( rotMat );
+        this->matrix->multiply( rotMat );
     }
 
     return this;
@@ -123,21 +123,21 @@ msMatrixTransform* msMatrixTransform::frustum(float left, float right, float bot
         (deltaX <= 0.0f) || (deltaY <= 0.0f) || (deltaZ <= 0.0f) )
         return this;
 
-    frust.m_value[0][0] = 2.0f * nearZ / deltaX;
-    frust.m_value[0][1] = frust.m_value[0][2] = frust.m_value[0][3] = 0.0f;
+    frust.value[0][0] = 2.0f * nearZ / deltaX;
+    frust.value[0][1] = frust.value[0][2] = frust.value[0][3] = 0.0f;
 
-    frust.m_value[1][1] = 2.0f * nearZ / deltaY;
-    frust.m_value[1][0] = frust.m_value[1][2] = frust.m_value[1][3] = 0.0f;
+    frust.value[1][1] = 2.0f * nearZ / deltaY;
+    frust.value[1][0] = frust.value[1][2] = frust.value[1][3] = 0.0f;
 
-    frust.m_value[2][0] = (right + left) / deltaX;
-    frust.m_value[2][1] = (top + bottom) / deltaY;
-    frust.m_value[2][2] = -(nearZ + farZ) / deltaZ;
-    frust.m_value[2][3] = -1.0f;
+    frust.value[2][0] = (right + left) / deltaX;
+    frust.value[2][1] = (top + bottom) / deltaY;
+    frust.value[2][2] = -(nearZ + farZ) / deltaZ;
+    frust.value[2][3] = -1.0f;
 
-    frust.m_value[3][2] = -2.0f * nearZ * farZ / deltaZ;
-    frust.m_value[3][0] = frust.m_value[3][1] = frust.m_value[3][3] = 0.0f;
+    frust.value[3][2] = -2.0f * nearZ * farZ / deltaZ;
+    frust.value[3][0] = frust.value[3][1] = frust.value[3][3] = 0.0f;
 
-    m_matrix->multiply(frust);
+    this->matrix->multiply(frust);
 
     return this;
 }
@@ -154,14 +154,14 @@ msMatrixTransform* msMatrixTransform::ortho(float left, float right, float botto
 
     msMatrix ortho = msMatrix::identity();
 
-    ortho.m_value[0][0] = 2.0f / deltaX;
-    ortho.m_value[3][0] = -(right + left) / deltaX;
-    ortho.m_value[1][1] = 2.0f / deltaY;
-    ortho.m_value[3][1] = -(top + bottom) / deltaY;
-    ortho.m_value[2][2] = -2.0f / deltaZ;
-    ortho.m_value[3][2] = -(nearZ + farZ) / deltaZ;
+    ortho.value[0][0] = 2.0f / deltaX;
+    ortho.value[3][0] = -(right + left) / deltaX;
+    ortho.value[1][1] = 2.0f / deltaY;
+    ortho.value[3][1] = -(top + bottom) / deltaY;
+    ortho.value[2][2] = -2.0f / deltaZ;
+    ortho.value[3][2] = -(nearZ + farZ) / deltaZ;
 
-    m_matrix->multiply(ortho);
+    this->matrix->multiply(ortho);
 
     return this;
 }
@@ -182,7 +182,7 @@ msMatrixTransform* msMatrixTransform::perspective(float fieldOfViewY, float aspe
     };
 
     msMatrix m(mv);
-    m_matrix->multiply(m);    
+    this->matrix->multiply(m);    
 
     return this;
 }
@@ -198,14 +198,14 @@ msMatrixTransform* msMatrixTransform::viewport(float width, float height)
     };
 
     msMatrix m(mv);
-    m_matrix->multiply(m);
+    this->matrix->multiply(m);
 
     return this;
 }
 
 void msMatrixTransform::multiplyMatrix( msMatrix &matrix )
 {
-    m_matrix->multiply(matrix);
+    this->matrix->multiply(matrix);
 }
 
 

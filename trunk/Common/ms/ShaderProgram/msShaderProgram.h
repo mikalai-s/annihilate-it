@@ -30,15 +30,15 @@ typedef msFrameBufferList::iterator msFrameBufferIterator;
 
 class msShaderProgram
 {
-    const char *m_name;
-    GLuint m_handle;
-    GLuint m_vertexShaderHandle;
-    GLuint m_fragmentShaderHandle;
+    const char *name;
+    GLuint handle;
+    GLuint vertexShaderHandle;
+    GLuint fragmentShaderHandle;
 
-    msUniformList m_uniforms;
-    msAttributeList m_attributes;
-    msTextureList m_textures;
-    msFrameBufferList m_frameBuffers;
+    msUniformList uniforms;
+    msAttributeList attributes;
+    msTextureList textures;
+    msFrameBufferList frameBuffers;
 
     bool loadShader( string &fileName, GLuint shaderHandle );
 
