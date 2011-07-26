@@ -358,25 +358,28 @@ void msBoxGridRenderer::_drawBox(msBox *box)
     this->sr.BoxGrid.Attribute.BorderTexelRight->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 16));
     this->sr.BoxGrid.Attribute.BorderTexelTop->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 24));
 #endif
+
+	float maxBRatio = 1.5707963f;
+	float brightnessRatio = 1 - ((abs(boxAngle) > maxBRatio) ? maxBRatio : abs(boxAngle)) / maxBRatio / 4;
       
     glCullFace(GL_FRONT);
-    _drawFace(&box->getVerticesData()->frontFace);
+    _drawFace(&box->getVerticesData()->frontFace, brightnessRatio);
     
     glCullFace(GL_BACK);
-    _drawFace(&box->getVerticesData()->backFace);
+    _drawFace(&box->getVerticesData()->backFace, brightnessRatio);
 }
 
 
-void msBoxGridRenderer::_drawFace(msBoxFaceData *faceData)
+void msBoxGridRenderer::_drawFace(msBoxFaceData *faceData, float bRatio)
 {        
     this->sr.BoxGrid.Uniform.LineBorder->set4iv(1, faceData->getHasBorder());
     this->sr.BoxGrid.Uniform.CornerBorder->set4iv(1, faceData->getHasCornerBorder());
 
     msColor faceColor = *this->boxGrid->palette->getColor(faceData->getColorIndex());
-    faceColor.r *= faceData->getColorDisturbance().r;
-    faceColor.g *= faceData->getColorDisturbance().g;
-    faceColor.b *= faceData->getColorDisturbance().b;
-    faceColor.a *= faceData->getColorDisturbance().a;
+    faceColor.r *= faceData->getColorDisturbance().r * bRatio;
+    faceColor.g *= faceData->getColorDisturbance().g * bRatio;
+    faceColor.b *= faceData->getColorDisturbance().b * bRatio;
+    faceColor.a *= faceData->getColorDisturbance().a * bRatio;
     this->sr.BoxGrid.Uniform.Color->set4fv(1, (GLfloat*)&faceColor);    
     
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, (void*)0);

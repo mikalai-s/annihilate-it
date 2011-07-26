@@ -188,7 +188,7 @@ private:
     void _drawBoxGrid(msSizef size);
     void _drawExplosions();
     void _drawBox(msBox *box);
-    void _drawFace(msBoxFaceData *faceData);
+    void _drawFace(msBoxFaceData *faceData, float bRatio);
     void _drawBoxesWithShockWave();
     void _drawBoxGrid();
     void _drawParticles(msParticleEmitterBundle &particleEmitters);
