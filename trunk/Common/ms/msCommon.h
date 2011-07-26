@@ -119,6 +119,15 @@ struct msPoint3f
         y = yy;
         z = zz;
     }
+
+	static float angle(msPoint3f p1, msPoint3f p2)
+	{
+		float d = (p1.x*p2.x + p1.y*p2.y + p1.z*p2.z);
+		float l1 = sqrtf(p1.x*p1.x + p1.y*p1.y + p1.z*p1.z);
+		float l2 = sqrtf(p2.x*p2.x + p2.y*p2.y + p2.z*p2.z);
+		float cos = d / (l1 * l2);
+		return acos(cos);
+	}
 };
 
 struct msPointi
