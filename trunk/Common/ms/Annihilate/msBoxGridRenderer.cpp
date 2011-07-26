@@ -262,7 +262,6 @@ void msBoxGridRenderer::draw(msSizef size)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0.f, 0.f, 0.f, 0.f);
     
     this->size = size;
     
@@ -292,7 +291,11 @@ void msBoxGridRenderer::_drawBoxGrid(msSizef size)
 {
 #ifdef IOS_GL
     glBindVertexArrayOES(this->boxGridVertexArrayObject);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
 #endif
+    
+    glEnable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
     
     for(int y = 0; y < this->boxGrid->rowCount; y ++)
     {
@@ -320,6 +323,9 @@ void msBoxGridRenderer::_drawBoxGrid(msSizef size)
             }
         }
     }
+    
+    glDisable(GL_BLEND);    
+    glDisable(GL_CULL_FACE);    
 }
 
 void msBoxGridRenderer::_drawBox(msBox *box)
@@ -331,26 +337,28 @@ void msBoxGridRenderer::_drawBox(msBox *box)
         msPoint3f angleVector = box->getAngleVector();
         msPoint3f center = box->getVerticesData()->getCenter();
         transform.translate(-center.x, -center.y, -center.z)
-        ->rotate(boxAngle, angleVector)
-        ->translate(center.x, center.y, center.z);
+            ->rotate(boxAngle, angleVector)
+            ->translate(center.x, center.y, center.z);
     }
     
     transform.multiplyMatrix(this->projectionMatrix);
     
     this->sr.BoxGrid.Uniform.Mvp->setMatrix4fv(1, false, transform.getMatrix()->getArray());
     
-    glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);    
+#ifdef IOS_GL
     unsigned long offset = (unsigned long)box->getVerticesData() - (unsigned long)this->boxGrid->boxVertexData;
     this->sr.BoxGrid.Attribute.Position->setPointer(3, GL_FLOAT, GL_FALSE, sizeof(msPoint3f), (void*)offset);
-    
-#ifndef IOS_GL
+#else
+    glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
+    unsigned long offset = (unsigned long)box->getVerticesData() - (unsigned long)this->boxGrid->boxVertexData;
+    this->sr.BoxGrid.Attribute.Position->setPointer(3, GL_FLOAT, GL_FALSE, sizeof(msPoint3f), (void*)offset);   
     glBindBuffer(GL_ARRAY_BUFFER, this->textureOrientationBuffer);    
     this->sr.BoxGrid.Attribute.BorderTexelLeft->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)0);
     this->sr.BoxGrid.Attribute.BorderTexelBottom->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 8));
     this->sr.BoxGrid.Attribute.BorderTexelRight->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 16));
     this->sr.BoxGrid.Attribute.BorderTexelTop->setPointer(2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, (void*)(sizeof(GLfloat) * 24));
 #endif
-    
+      
     glCullFace(GL_FRONT);
     _drawFace(&box->getVerticesData()->frontFace);
     
@@ -369,15 +377,9 @@ void msBoxGridRenderer::_drawFace(msBoxFaceData *faceData)
     faceColor.g *= faceData->getColorDisturbance().g;
     faceColor.b *= faceData->getColorDisturbance().b;
     faceColor.a *= faceData->getColorDisturbance().a;
-    this->sr.BoxGrid.Uniform.Color->set4fv(1, (GLfloat*)&faceColor);
-
-    glEnable(GL_BLEND);
-    glEnable(GL_CULL_FACE);
+    this->sr.BoxGrid.Uniform.Color->set4fv(1, (GLfloat*)&faceColor);    
     
-    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, (void*)0);       
-
-    glDisable(GL_BLEND);    
-    glDisable(GL_CULL_FACE);    
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, (void*)0);
 }
 
 
@@ -496,7 +498,7 @@ void msBoxGridRenderer::_drawExplosions()
 
         // render particles        
         _drawParticles(explosionsBundle);
-        explosionsBundle.update(0.015f);
+        explosionsBundle.update(0.03f);
     }
 
     // Unbind the FBO so rendering will return to the backbuffer.
@@ -561,7 +563,7 @@ void msBoxGridRenderer::_drawParticles(msParticleEmitterBundle &particleEmitters
     }
     else
     {
-         // if buffer size is enough for particles than just copy new data into buffer
+        // if buffer size is enough for particles than just copy new data into buffer
         glBufferSubData(GL_ARRAY_BUFFER, 0, particlesCount * sizeof(msParticleData), particleEmitters.getParticleData());
     }
 
