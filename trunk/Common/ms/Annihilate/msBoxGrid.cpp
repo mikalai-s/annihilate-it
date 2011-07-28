@@ -157,8 +157,7 @@ msAnimationBundle* msBoxGrid::getAnimations()
 
 void msBoxGrid::doBoxesFallingCallback(msAnimationContext *c)
 {
-    msKeyValueAnimationContext<msBoxGrid*, int> *context = (msKeyValueAnimationContext<msBoxGrid*, int>*)c;
-    msBoxGrid *boxGrid = (msBoxGrid*)context->getOwner();
+    msBoxGrid *boxGrid = (msBoxGrid*)c->getOwner();
     boxGrid->shiftPendentBoxes(boxGrid->lastKnownDirection);
 }
 
