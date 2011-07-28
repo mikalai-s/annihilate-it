@@ -213,19 +213,18 @@ int getShiftDirection()
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
+{/*
     CGPoint current = [[touches anyObject] locationInView:self.view];
     float dif = (current.x - touchStartLocation.x) * (current.x - touchStartLocation.x) + (current.y - touchStartLocation.y) * (current.y - touchStartLocation.y);
     
     if(dif > 1000)
-        m_scene.start();
+        m_scene.start();*/
 }
 
 - (IBAction)onNew:(id)sender
 {
     m_scene.start();
 }
-
 
 - (IBAction)onUndo:(id)sender
 {
