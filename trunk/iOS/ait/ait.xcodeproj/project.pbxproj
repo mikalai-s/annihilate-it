@@ -122,7 +122,6 @@
 		9791C92B13D2809100060949 /* border-internal-line.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "border-internal-line.tga"; sourceTree = "<group>"; };
 		CE4C2CE3135FF8D70071F1C9 /* msAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msAnimation.cpp; sourceTree = "<group>"; };
 		CE4C2CE4135FF8D70071F1C9 /* msAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAnimation.h; sourceTree = "<group>"; };
-		CE4C2CE5135FF8D70071F1C9 /* msAnimationBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAnimationBase.h; sourceTree = "<group>"; };
 		CE4C2CE6135FF8D70071F1C9 /* msAnimationBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msAnimationBundle.cpp; sourceTree = "<group>"; };
 		CE4C2CE7135FF8D70071F1C9 /* msAnimationBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msAnimationBundle.h; sourceTree = "<group>"; };
 		CE4C2CE8135FF8D70071F1C9 /* msAnimationContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = msAnimationContext.cpp; sourceTree = "<group>"; };
@@ -265,7 +264,6 @@
 				CE4C2E5913628C6A0071F1C9 /* data */,
 				CE4C2CE3135FF8D70071F1C9 /* msAnimation.cpp */,
 				CE4C2CE4135FF8D70071F1C9 /* msAnimation.h */,
-				CE4C2CE5135FF8D70071F1C9 /* msAnimationBase.h */,
 				CE4C2CE6135FF8D70071F1C9 /* msAnimationBundle.cpp */,
 				CE4C2CE7135FF8D70071F1C9 /* msAnimationBundle.h */,
 				CE4C2CE8135FF8D70071F1C9 /* msAnimationContext.cpp */,

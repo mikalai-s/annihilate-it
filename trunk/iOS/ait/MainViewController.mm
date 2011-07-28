@@ -37,6 +37,7 @@
 	[aContext release];
     
     EAGLView *eaglView = [self.view viewWithTag:101];
+    eaglView.multipleTouchEnabled = YES;
 	
     [eaglView setContext:context];
     [eaglView setFramebuffer];
@@ -207,9 +208,12 @@ int getShiftDirection()
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    touchStartLocation = [[touches anyObject] locationInView:self.view];
-    
-    m_scene.mouseClick(touchStartLocation.x, touchStartLocation.y, getShiftDirection());
+    NSArray *points = [touches allObjects];
+    for(int i = 0; i < [points count]; i++)
+    {
+        CGPoint point = [[points objectAtIndex:i] locationInView:self.view];
+        m_scene.mouseClick(point.x, point.y, getShiftDirection());
+    }    
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
