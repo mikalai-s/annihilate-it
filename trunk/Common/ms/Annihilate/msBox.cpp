@@ -33,6 +33,8 @@ void msBox::_init(msBoxData *verticesData)
     this->requiresWave = false;
 
     this->visible = true;
+    
+    this->falling = false;
 }
 
 msBox::~msBox()
@@ -64,8 +66,8 @@ void msBox::unitTest()
     msBox *box = new msBox(0, 0, 100, 100);
     msAnimationBundle *anims = box->getAnimations();
 
-    anims->add(new msAnimation(0, 5, new msFromToAnimationContext<GLfloat>(0, 2.5), 0));
-    anims->add(new msAnimation(0, 10, new msFromToAnimationContext<GLfloat>(1, 7), 0));
+    anims->add(new msAnimation(0, 5, new msFromToAnimationContext<GLfloat>(0, 0, 2.5), 0));
+    anims->add(new msAnimation(0, 10, new msFromToAnimationContext<GLfloat>(0, 1, 7), 0));
 
     for(GLuint i = 0; i < 100; i ++)
     {
@@ -84,17 +86,37 @@ void msBox::unitTest()
 
 
 
+void msBox::_linearFallingWithCheck(msAnimationContext *c)
+{
+    // stop animation when box falling stopped otherwise continue falling auimation with usual callback
+    msBox *owner = (msBox*)c->getOwner();
+    if(owner->falling)
+        _linearFalling(c);
+    else
+        c->getAnimation()->stop();
+}
+
 void msBox::_linearFalling(msAnimationContext *c)
 {
     msKeyValueAnimationContext<msBoxData*, msPoint3f> *context = (msKeyValueAnimationContext<msBoxData*, msPoint3f> *)c;
-
+    
     msBoxData *vertexData = context->getKey();
     msPoint3f to = context->getValue();
-
+    
     float dx = (to.x - vertexData->vertices[0].x) / context->getAnimation()->getCount();
     float dy = (to.y - vertexData->vertices[0].y) / context->getAnimation()->getCount();
+    
+    vertexData->translate(msPoint3f(dx, dy, 0));
+}
 
-    vertexData->move(msPoint3f(dx, dy, 0));
+void msBox::_finishLinearFallingWithCheck(msAnimationContext *c)
+{
+    // stop animation when box falling stopped otherwise continue falling animation with usual callback
+    msBox *owner = (msBox*)c->getOwner();
+    if(owner->falling)
+        _finishLinearFalling(c);
+    else
+        c->getAnimation()->stop();
 }
 
 void msBox::_finishLinearFalling(msAnimationContext *c)
@@ -105,16 +127,19 @@ void msBox::_finishLinearFalling(msAnimationContext *c)
     msPoint3f *toVertices = context->getValue();
 
     memcpy(fromVertexData->vertices, toVertices, sizeof(fromVertexData->vertices));
+    
+    msBox *owner = (msBox*)c->getOwner();
+    owner->falling = false;
 }
 
 
 void msBox::fall(GLint delay, GLint direction, msPoint3f *newVertices)
 {
-    int times = 10;
+    this->falling = true;
 
     // moving from top to bottom
-    msKeyValueAnimationContext<msBoxData*, msPoint3f> *c2 = new msKeyValueAnimationContext<msBoxData*, msPoint3f>(this->verticesData, newVertices[0]);
-    getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
+    msKeyValueAnimationContext<msBoxData*, msPoint3f> *c2 = new msKeyValueAnimationContext<msBoxData*, msPoint3f>(this, this->verticesData, newVertices[0]);
+    getAnimations()->addAnimation(delay, 10, c2, _linearFallingWithCheck);
     
     // move a little bit up for effect of bounce
     msPoint3f bouncePoint(newVertices[0].x, newVertices[0].y, newVertices[0].z);
@@ -135,24 +160,27 @@ void msBox::fall(GLint delay, GLint direction, msPoint3f *newVertices)
         default:
             bouncePoint.y -= MS_BOUNCE_OFFSET;
     }    
-    msKeyValueAnimationContext<msBoxData*, msPoint3f> *c3 = new msKeyValueAnimationContext<msBoxData*, msPoint3f>(this->verticesData, bouncePoint);
-    getAnimations()->add(new msAnimation(delay + times, 4, c3, _linearFalling));
+    msKeyValueAnimationContext<msBoxData*, msPoint3f> *c3 = new msKeyValueAnimationContext<msBoxData*, msPoint3f>(this, this->verticesData, bouncePoint);
+    getAnimations()->addSerialAnimation(4, c3, _linearFallingWithCheck);
     
     // final falling (very fast and accurate)
-    msKeyValueAnimationContext<msBoxData*, msPoint3f*> *c4 = new msKeyValueAnimationContext<msBoxData*, msPoint3f*>(this->verticesData, newVertices);
-    getAnimations()->add(new msAnimation(delay + times + 4, 1, c4, _finishLinearFalling));
+    msKeyValueAnimationContext<msBoxData*, msPoint3f*> *c4 = new msKeyValueAnimationContext<msBoxData*, msPoint3f*>(this, this->verticesData, newVertices);
+    getAnimations()->addSerialAnimation(1, c4, _finishLinearFallingWithCheck);
 }
 
 void msBox::unfall( int delay, int direction,  msPoint3f *newVertices)
 {
+    // if box is currently falling and we need to stop it
+    this->falling = false;
+    
     int times = 10;
 
     // moving from top to bottom
-    msKeyValueAnimationContext<msPoint3f*, msPoint3f> *c2 = new msKeyValueAnimationContext<msPoint3f*, msPoint3f>(this->location, newVertices[0]);
+    msKeyValueAnimationContext<msPoint3f*, msPoint3f> *c2 = new msKeyValueAnimationContext<msPoint3f*, msPoint3f>(this, this->location, newVertices[0]);
     getAnimations()->add(new msAnimation(delay, times, c2, _linearFalling));
 
     // final falling (very fast and accurate)
-    msKeyValueAnimationContext<msBoxData*, msPoint3f*> *c4 = new msKeyValueAnimationContext<msBoxData*, msPoint3f*>(this->verticesData, newVertices);
+    msKeyValueAnimationContext<msBoxData*, msPoint3f*> *c4 = new msKeyValueAnimationContext<msBoxData*, msPoint3f*>(this, this->verticesData, newVertices);
     getAnimations()->add(new msAnimation(delay + times, 1, c4, _finishLinearFalling));
 }
 
@@ -165,13 +193,13 @@ void msBox::hide(GLint delay)
 
     // store coordinates of explosion
     this->explosionPoint = getVerticesData()->getCenter();
-
-    _setFlag<GLboolean>(delay + 1, &this->requiresExplosion, true);
+    
+    getAnimations()->setValueLazily<GLboolean>(delay + 1, &this->requiresExplosion, true);
 
     // the following animation will be called only once and it will just reset the requires explosion flag to stop its animation
-    _setFlag<GLboolean>(delay + 2, &this->requiresExplosion, false);
+    getAnimations()->setValueLazily<GLboolean>(delay + 2, &this->requiresExplosion, false);
 
-    _setFlag<bool>(delay + 2, &this->visible, false);
+    getAnimations()->setValueLazily<bool>(delay + 2, &this->visible, false);
 }
 
 void rotate(msAnimationContext *c)
@@ -189,12 +217,12 @@ void msBox::show( int delay )
     this->verticesData->frontFace.colorDisturbance.a = 0.0;
     
     // moving from top to bottom
-    msKeyValueAnimationContext<float*, float> *c = new msKeyValueAnimationContext<float*, float>(&this->verticesData->frontFace.colorDisturbance.a, 1.0);
+    msKeyValueAnimationContext<float*, float> *c = new msKeyValueAnimationContext<float*, float>(this, &this->verticesData->frontFace.colorDisturbance.a, 1.0);
     getAnimations()->add(new msAnimation(delay, 15, c, _appearing));    
 
     this->verticesData->angle = 90.0f * 3.1415926f / 180.0f * 2.0f;
 
-    msValueAnimationContext<float*> *c2 = new msValueAnimationContext<float*>(&this->verticesData->angle);
+    msValueAnimationContext<float*> *c2 = new msValueAnimationContext<float*>(this, &this->verticesData->angle);
     msAnimation *a = new msAnimation(0, 10, c2, rotate);
     getAnimations()->add(a);
 }
@@ -213,8 +241,8 @@ void msBox::wave(GLint delay)
 {
     this->requiresWave = false;
 
-    _setFlag<GLboolean>(delay, &this->requiresWave, true);
-    _setFlag<GLboolean>(delay + 1, &this->requiresWave, false);
+    getAnimations()->setValueLazily<GLboolean>(delay, &this->requiresWave, true);
+    getAnimations()->setValueLazily<GLboolean>(delay + 1, &this->requiresWave, false);
 }
 
 void msBoxData::copy( msBoxData *source )

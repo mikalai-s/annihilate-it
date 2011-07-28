@@ -96,7 +96,7 @@ public:
 
     void exchange( msBoxData *source );
 
-    void move(msPoint3f d)
+    void translate(msPoint3f d)
     {
         float width = vertices[1].x - vertices[0].x;
         float height = vertices[2].y - vertices[0].y;
@@ -113,6 +113,25 @@ public:
         vertices[3].x = vertices[0].x + width;
         vertices[3].y = vertices[0].y + height;
     }
+    
+    void move(msPoint3f p)
+    {
+        float width = vertices[1].x - vertices[0].x;
+        float height = vertices[2].y - vertices[0].y;
+        
+        vertices[0] = p;
+        
+        vertices[1].x = p.x + width;
+        vertices[1].y = p.y;
+        
+        vertices[2].x = p.x;
+        vertices[2].y = p.y + height;
+        
+        vertices[3].x = p.x + width;
+        vertices[3].y = p.y + height;
+    }
+    
+    
 
     void copyVertices( msBoxData *source )
     {
@@ -136,7 +155,8 @@ private:
     msPoint3f explosionPoint;
 
     GLboolean requiresWave;
-
+    
+    bool falling;
     bool visible;
 
 private:
@@ -146,29 +166,16 @@ private:
 private:
 
     static void _linearFalling(msAnimationContext *c);
+    
+    static void _linearFallingWithCheck(msAnimationContext *c);
 
     static void _finishLinearFalling(msAnimationContext *c);
+    
+    static void _finishLinearFallingWithCheck(msAnimationContext *c);
 
     static void _appearing(msAnimationContext *c);
 
     
-
-    template <class T>
-    static void _setFlagCallback(msAnimationContext *c)
-    {
-        msKeyValueAnimationContext<T, GLfloat> *context = (msKeyValueAnimationContext<T, GLfloat>*)c;
-        *(context->getKey()) = context->getValue();
-    }
-
-    
-
-    template <class T>
-    void _setFlag(GLint delay, T *flag, T value)
-    {
-        msKeyValueAnimationContext<T*, GLfloat> *context = new msKeyValueAnimationContext<T*, GLfloat>(flag, value);
-        getAnimations()->add(new msAnimation(delay, 1, context, _setFlagCallback<T*>));
-    }
-
 protected:
     msBox();
 

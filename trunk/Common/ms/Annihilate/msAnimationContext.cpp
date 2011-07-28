@@ -1,7 +1,8 @@
 #include "msAnimationContext.h"
 
-msAnimationContext::msAnimationContext(void)
+msAnimationContext::msAnimationContext(void *owner)
 {
+    this->owner = owner;
 }
 
 msAnimationContext::~msAnimationContext(void)
@@ -13,9 +14,14 @@ msAnimation* msAnimationContext::getAnimation()
     return this->animation;
 }
 
+void* msAnimationContext::getOwner()
+{
+    return this->owner;
+}
 
 
-msPointMoveAnimationContext::msPointMoveAnimationContext(msPoint3f *point, GLint direction)
+
+msPointMoveAnimationContext::msPointMoveAnimationContext(void *owner, msPoint3f *point, GLint direction) : msAnimationContext(owner)
 {
     this->point = point;
     this->direction = direction;

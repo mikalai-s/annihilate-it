@@ -11,7 +11,7 @@
 #include "msSpline.h"
 #include "../msMatrix.h"
 #include "../msMatrixTransform.h"
-
+#include "math.h"
 
 msBoxGridRenderer::msBoxGridRenderer(msShaderPrograms *shaders, msBoxGrid *boxGrid)
 {
@@ -362,14 +362,14 @@ void msBoxGridRenderer::_drawBox(msBox *box)
 	float k = 3.5f;
 
 	float maxBRatio = 1.5707963f;
-	float angle = abs(boxAngle);
+	float angle = (boxAngle > 0) ? boxAngle : -boxAngle;
 	float brightnessRatio = 1 - ((angle > maxBRatio) ? maxBRatio : angle) / maxBRatio / k;
       
     glCullFace(GL_FRONT);
     _drawFace(&box->getVerticesData()->frontFace, brightnessRatio);
 
 	angle -= 3.1415926f;
-	angle = abs(angle);
+	angle = (angle > 0) ? angle : -angle;
 	brightnessRatio = 1 - ((angle > maxBRatio) ? maxBRatio : angle) / maxBRatio / k;
     
     glCullFace(GL_BACK);

@@ -158,7 +158,7 @@ msAnimationBundle* msBoxGrid::getAnimations()
 void msBoxGrid::doBoxesFallingCallback(msAnimationContext *c)
 {
     msKeyValueAnimationContext<msBoxGrid*, int> *context = (msKeyValueAnimationContext<msBoxGrid*, int>*)c;
-    msBoxGrid *boxGrid = context->getKey();
+    msBoxGrid *boxGrid = (msBoxGrid*)context->getOwner();
     int direction = context->getValue();
     boxGrid->shiftPendentBoxes(direction);
 }
@@ -181,7 +181,7 @@ void msBoxGrid::_animateBoxHiding(msBoxExplMap &boxesMap)
             maxOffset = o;
     }
 
-    msKeyValueAnimationContext<msBoxGrid*, int> *c = new msKeyValueAnimationContext<msBoxGrid*, int>(this, this->lastKnownDirection);
+    msValueAnimationContext<int> *c = new msValueAnimationContext<int>(this, this->lastKnownDirection);
     msAnimation *a = new msAnimation(maxOffset + 15, 1, c, doBoxesFallingCallback);
     this->animations.add(a);
 }
@@ -291,7 +291,8 @@ void msBoxGrid::_moveBackBox( msMoveAction move )
 
     boxFrom->unfall(0, move.direction, this->coordinateGrid->getItem(move.to.y, move.to.x));
 
-    boxTo->getVerticesData()->copyVertices(boxFrom->getVerticesData());
+    //boxTo->getVerticesData()->copyVertices(boxFrom->getVerticesData());
+    boxTo->getVerticesData()->move(*this->coordinateGrid->getItem(move.from.y, move.from.x));
 }
 
 void msBoxGrid::_shiftDown(msGrid<msBox*> *grid, msMoveActionList *moves)
@@ -720,8 +721,8 @@ void msBoxGrid::show()
 
             box->verticesData->angle = 180.0f * 3.1415926f / 180.0f;
 
-            msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(&box->verticesData->angle, 0.0f);
-            msAnimation *rotation = new msAnimation(((y + x))  * (double)3 * (double)rand() / (double)RAND_MAX, 50, context, _rotationStep);
+            msKeyValueAnimationContext<float*, float> *context = new msKeyValueAnimationContext<float*, float>(this, &box->verticesData->angle, 0.0f);
+            msAnimation *rotation = new msAnimation(((y + x))  * (double)3 * (double)rand() / (double)RAND_MAX, 20, context, _rotationStep);
             box->getAnimations()->add(rotation);
 		}
     }

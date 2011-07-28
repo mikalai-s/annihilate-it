@@ -7,8 +7,8 @@ class msAnimationContext;
 class msAnimation
 {
 private:
-    GLint delayCount;
-    GLint count;
+    int delayCount;
+    int count;
 
     msAnimationContext *context;
 
@@ -22,12 +22,17 @@ public:
 
     msAnimation(GLint delayCount, GLint count, msAnimationContext *context, void (*stepCallback)(msAnimationContext*));
     ~msAnimation();
+    
+    int getDelayCount();
+    
+    int getCount();
 
     msAnimationContext *getContext();
 
-    GLint getCount();
-
     GLint performStep();
+    
+    // stops current animation
+    void stop();
 
     static void unitTest();
 };

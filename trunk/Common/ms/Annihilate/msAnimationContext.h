@@ -8,12 +8,14 @@ class msAnimationContext
     friend class msAnimation;
 
     msAnimation *animation;
+    void *owner;
 
 public:
-    msAnimationContext(void);
+    msAnimationContext(void *owner);
     ~msAnimationContext(void);
 
     msAnimation* getAnimation();
+    void *getOwner();    
 };
 
 template <class T>
@@ -23,7 +25,7 @@ class msFromToAnimationContext : public msAnimationContext
     T to;
 
 public:
-    msFromToAnimationContext(T from, T to)
+    msFromToAnimationContext(void *owner, T from, T to) : msAnimationContext(owner)
     {
         this->from = from;
         this->to = to;
@@ -60,7 +62,7 @@ class msPointMoveAnimationContext : public msAnimationContext
     GLint direction;
 
 public:
-    msPointMoveAnimationContext(msPoint3f *point, GLint direction);
+    msPointMoveAnimationContext(void *owner, msPoint3f *point, GLint direction);
     ~msPointMoveAnimationContext();
 
     msPoint3f* getPoint();
@@ -73,7 +75,7 @@ class msValueAnimationContext: public msAnimationContext
     T value;
 
 public:
-    msValueAnimationContext(T value)
+    msValueAnimationContext(void *owner, T value) : msAnimationContext(owner)
     {
         this->value = value;
     }
@@ -95,7 +97,7 @@ class msKeyValueAnimationContext: public msAnimationContext
     TValue value;
 
 public:
-    msKeyValueAnimationContext(TKey key, TValue value)
+    msKeyValueAnimationContext(void *owner, TKey key, TValue value) : msAnimationContext(owner)
     {
         this->key = key;
         this->value = value;
