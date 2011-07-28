@@ -159,8 +159,7 @@ void msBoxGrid::doBoxesFallingCallback(msAnimationContext *c)
 {
     msKeyValueAnimationContext<msBoxGrid*, int> *context = (msKeyValueAnimationContext<msBoxGrid*, int>*)c;
     msBoxGrid *boxGrid = (msBoxGrid*)context->getOwner();
-    int direction = context->getValue();
-    boxGrid->shiftPendentBoxes(direction);
+    boxGrid->shiftPendentBoxes(boxGrid->lastKnownDirection);
 }
 
 void msBoxGrid::_animateBoxHiding(msBoxExplMap &boxesMap)
@@ -181,9 +180,7 @@ void msBoxGrid::_animateBoxHiding(msBoxExplMap &boxesMap)
             maxOffset = o;
     }
 
-    msValueAnimationContext<int> *c = new msValueAnimationContext<int>(this, this->lastKnownDirection);
-    msAnimation *a = new msAnimation(maxOffset + 15, 1, c, doBoxesFallingCallback);
-    this->animations.add(a);
+    this->animations.addAnimation(maxOffset + 15, 1, new msAnimationContext(this), doBoxesFallingCallback);
 }
 
 
@@ -291,7 +288,6 @@ void msBoxGrid::_moveBackBox( msMoveAction move )
 
     boxFrom->unfall(0, move.direction, this->coordinateGrid->getItem(move.to.y, move.to.x));
 
-    //boxTo->getVerticesData()->copyVertices(boxFrom->getVerticesData());
     boxTo->getVerticesData()->move(*this->coordinateGrid->getItem(move.from.y, move.from.x));
 }
 
