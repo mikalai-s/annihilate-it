@@ -1,1 +1,0 @@
-xcopy "C:\Program Files (x86)\NVIDIA Corporation\win_x86_es2emu\ait\ms\Annihilate\data" "C:\Program Files (x86)\NVIDIA Corporation\win_x86_es2emu\ait\esTriangle\Debug\data\" /E /Y
