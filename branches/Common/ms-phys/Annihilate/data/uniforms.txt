@@ -1,0 +1,40 @@
+program shockwave /data/shockwave_vertex.c /data/shockwave_fragment.c
+attribute position 0
+attribute texcoord 1
+uniform_float radius
+uniform_float power
+uniform_vec2 location
+
+link shockwave
+
+
+program particle_create /data/particle_create_vertex.c /data/particle_create_fragment.c
+texture u_texture 0 /data/expl.tga
+attribute a_position 0
+attribute a_color 1
+attribute a_size 2
+colorTexFbo renderTex 1
+link particle_create
+
+
+program particle_complete /data/particle_complete_vertex.c /data/particle_complete_fragment.c
+texture u2_texture 2 /data/expl.tga
+attribute a2_position 0
+attribute a2_texcoord 1
+link particle_complete
+
+
+program boxgrid /data/boxgrid_vertex.c /data/boxgrid_fragment.c
+attribute position 0
+
+attribute borderTexelLeft 1
+attribute borderTexelBottom 2
+attribute borderTexelRight 3
+attribute borderTexelTop 4
+
+texture borderExternalLineTex 3 /data/border-external-line.tga
+texture borderInternalLineTex 4 /data/border-internal-line.tga
+texture borderCornerTex 5 /data/border-corner.tga
+
+colorTexFbo renderTex 6
+link boxgrid
