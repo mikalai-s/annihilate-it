@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class aitViewController;
+@class MainViewController;
 
 @interface aitAppDelegate : NSObject <UIApplicationDelegate> {
 
@@ -16,6 +16,6 @@
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
-@property (nonatomic, retain) IBOutlet aitViewController *viewController;
+@property (nonatomic, retain) IBOutlet MainViewController *viewController;
 
 @end

@@ -10,7 +10,7 @@
 
 #import "EAGLView.h"
 
-#import "aitViewController.h"
+#import "MainViewController.h"
 
 @implementation aitAppDelegate
 
