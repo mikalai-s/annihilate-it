@@ -440,13 +440,15 @@
 			name = aitTests;
 			productName = aitTests;
 			productReference = CE8D89F2135E94B700C083EA /* aitTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		CE8D89BA135E94B600C083EA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = CE8D89BD135E94B600C083EA /* Build configuration list for PBXProject "ait" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -638,10 +640,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ait/ait-Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				GCC_VERSION = "";
 				INFOPLIST_FILE = "ait/ait-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -653,9 +657,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ait/ait-Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				GCC_VERSION = "";
 				INFOPLIST_FILE = "ait/ait-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALIDATE_PRODUCT = YES;
